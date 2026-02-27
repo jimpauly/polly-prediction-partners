@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern-webpage" data-mode="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=944, initial-scale=1.0">
+  <title>Polly Prediction Partners v0.03.01</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/illumination.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+<div class="app-root" id="app-root">
+
+  <!-- Precision Rulers (hidden by default) -->
+  <canvas id="ruler-x" class="precision-ruler-x" aria-hidden="true"></canvas>
+  <canvas id="ruler-y" class="precision-ruler-y" aria-hidden="true"></canvas>
+  <div id="grid-overlay" class="precision-grid-overlay" aria-hidden="true"></div>
+
+  <!-- 1. HEADER BAR -->
+  <header class="region region-header-bar glow-bars-primary" id="region-header" role="banner" aria-label="Application Header">
+    <div class="bezel-outer bezel-inner" style="display:flex; align-items:center; justify-content:space-between; height:100%;">
+      <!-- LEFT: App title -->
+      <div>
+        <h1 class="glow-text-primary label-etched" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
+          POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7;">v0.03.01</span>
+        </h1>
+        <div class="glow-text-secondary" style="font-size:11px; opacity:0.6; letter-spacing:0.15em; margin-top:2px;">
+          MODEL PPP-ALPHA-001 · TRADING INTELLIGENCE SYSTEM
+        </div>
+      </div>
+
+      <!-- RIGHT: Illumination Control Panel -->
+      <div class="illumination-panel card" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
+        <!-- DAY/NVG toggle -->
+        <div class="illumination-channel">
+          <div class="illumination-channel-label label-etched">DAY/NVG</div>
+          <div class="flip-switch-group" role="group" aria-label="Day/NVG Mode">
+            <button class="day-nvg-btn active" id="btn-day" onclick="illumination.setDayNVG('day')" aria-pressed="true">DAY</button>
+            <button class="day-nvg-btn" id="btn-nvg" onclick="illumination.setDayNVG('nvg')" aria-pressed="false">NVG</button>
+          </div>
+        </div>
+
+        <!-- MASTER -->
+        <div class="illumination-channel">
+          <div class="illumination-channel-label label-etched">MASTER</div>
+          <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()" role="switch" aria-checked="false" aria-label="Master Illumination Switch">
+            <div class="flip-switch-label">OFF</div>
+            <div class="flip-switch-body switch-off" id="switch-body-master">
+              <div class="flip-switch-lever"></div>
+            </div>
+            <div class="flip-switch-label">ON</div>
+          </div>
+          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;" title="Master Dimmer" role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+        <!-- TEXT channel -->
+        <div class="illumination-channel">
+          <div class="illumination-channel-label label-etched">TEXT</div>
+          <div class="channel-switches" role="group" aria-label="Text Illumination Switches">
+            <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')" role="switch" aria-checked="true" aria-label="Text Primary Switch">
+              <div class="flip-switch-label">PRI</div>
+              <div class="flip-switch-body switch-on" id="switch-body-text-primary"><div class="flip-switch-lever"></div></div>
+            </div>
+            <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')" role="switch" aria-checked="true" aria-label="Text Secondary Switch">
+              <div class="flip-switch-label">SEC</div>
+              <div class="flip-switch-body switch-on" id="switch-body-text-secondary"><div class="flip-switch-lever"></div></div>
+            </div>
+          </div>
+          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;" title="Text Dimmer" role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+        <!-- BARS channel -->
+        <div class="illumination-channel">
+          <div class="illumination-channel-label label-etched">BARS</div>
+          <div class="channel-switches" role="group" aria-label="Bars Illumination Switches">
+            <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')" role="switch" aria-checked="true" aria-label="Bars Primary Switch">
+              <div class="flip-switch-label">PRI</div>
+              <div class="flip-switch-body switch-on" id="switch-body-bars-primary"><div class="flip-switch-lever"></div></div>
+            </div>
+            <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')" role="switch" aria-checked="true" aria-label="Bars Secondary Switch">
+              <div class="flip-switch-label">SEC</div>
+              <div class="flip-switch-body switch-on" id="switch-body-bars-secondary"><div class="flip-switch-lever"></div></div>
+            </div>
+          </div>
+          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;" title="Bars Dimmer" role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+        <!-- FLOOD channel -->
+        <div class="illumination-channel">
+          <div class="illumination-channel-label label-etched">FLOOD</div>
+          <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')" role="switch" aria-checked="true" aria-label="Flood Switch">
+            <div class="flip-switch-body switch-on" id="switch-body-flood"><div class="flip-switch-lever"></div></div>
+          </div>
+          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;" title="Flood Dimmer" role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+        <!-- DISPLAY channel -->
+        <div class="illumination-channel">
+          <div class="illumination-channel-label label-etched">DISP</div>
+          <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')" role="switch" aria-checked="true" aria-label="Display Switch">
+            <div class="flip-switch-body switch-on" id="switch-body-display"><div class="flip-switch-lever"></div></div>
+          </div>
+          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;" title="Display Dimmer" role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. NAV BAR -->
+  <nav class="region region-navbar glow-bars-primary" id="region-navbar" aria-label="Main Navigation">
+    <div style="display:flex; align-items:center; justify-content:space-between; height:100%; padding:0 12px;">
+      <!-- LEFT: Navigation label -->
+      <span class="label-etched glow-text-secondary" style="font-size:11px;">NAVIGATION</span>
+
+      <!-- CENTER: Studio selector -->
+      <div class="studio-selector card" id="studio-selector" style="display:flex; gap:4px; padding:4px;" role="tablist" aria-label="Studio Selector">
+        <button class="studio-btn active" id="studio-btn-design" onclick="studios.select('design')" data-studio="design" role="tab" aria-selected="true" aria-controls="studio-design">
+          ◆ DESIGN
+        </button>
+        <button class="studio-btn" id="studio-btn-trade" onclick="studios.select('trade')" data-studio="trade" role="tab" aria-selected="false" aria-controls="studio-trade">
+          ◈ TRADE
+        </button>
+        <button class="studio-btn" id="studio-btn-fly" onclick="studios.select('fly')" data-studio="fly" role="tab" aria-selected="false" aria-controls="studio-fly">
+          ◉ FLY
+        </button>
+      </div>
+
+      <!-- RIGHT: Telemetry -->
+      <div class="telemetry-bar card" id="telemetry-bar" style="display:flex; align-items:center; gap:16px; padding:4px 12px;" role="status" aria-label="System Telemetry">
+        <div class="telemetry-item">
+          <span class="label-etched">PING</span>
+          <canvas id="ping-sparkline" width="60" height="20" aria-label="Ping Sparkline"></canvas>
+        </div>
+        <div class="telemetry-item">
+          <span class="label-etched">SPD</span>
+          <span class="value-mono" id="telemetry-spd" aria-label="Speed">MACH 4.20</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label-etched">LOAD</span>
+          <span class="value-mono" id="telemetry-load" aria-label="System Load">—</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label-etched">DAT</span>
+          <span class="value-mono" id="telemetry-dat" aria-label="Data Status">—</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label-etched">TIM</span>
+          <span class="value-mono" id="telemetry-tim" aria-label="Time">—</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. LEFT SIDEBAR -->
+  <aside class="region region-lsidebar glow-bars-secondary" id="region-lsidebar" aria-label="System Design Panel">
+    <div class="region-panel-label label-etched">SYSTEM DESIGN</div>
+
+    <!-- Mode Toggle -->
+    <div class="card" style="margin-bottom:12px;">
+      <div class="label-etched" style="margin-bottom:8px;">MODE</div>
+      <div style="display:flex; gap:4px;" role="group" aria-label="Display Mode">
+        <button class="toggle-btn active" id="mode-btn-light" onclick="themes.setMode('light')" style="flex:1;" aria-pressed="true">☀ LIGHT</button>
+        <button class="toggle-btn" id="mode-btn-dark" onclick="themes.setMode('dark')" style="flex:1;" aria-pressed="false">☾ DARK</button>
+      </div>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="card">
+      <div class="label-etched" style="margin-bottom:8px;">SYSTEM THEME</div>
+      <div id="theme-buttons-container" style="display:grid; grid-template-columns:1fr 1fr; gap:4px;" role="group" aria-label="Theme Selector">
+        <!-- 26 theme buttons injected by JS (each self-styled) -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- 4. MAIN REGION -->
+  <main class="region region-main" id="region-main" aria-label="Main Viewing Port">
+    <div class="region-panel-label label-etched">VIEWING PORT</div>
+
+    <!-- Design Studio -->
+    <div class="studio-content studio-design" id="studio-design" role="tabpanel" aria-labelledby="studio-btn-design" style="display:flex; flex-wrap:wrap; gap:12px; padding:8px; overflow:hidden; align-content:flex-start;">
+
+      <!-- Hero Card (compact) -->
+      <div class="card glow-bars-secondary" style="width:100%; display:flex; align-items:center; padding:12px 20px; gap:20px;">
+        <div>
+          <div class="label-etched" style="font-size:9px;">ACTIVE SYSTEM</div>
+          <div class="glow-text-primary" style="font-size:18px; font-weight:900; letter-spacing:0.05em;">POLLY PREDICTION PARTNERS</div>
+          <div class="glow-text-secondary" style="font-size:11px; opacity:0.7;">Cockpit-Class Trading Intelligence · Model PPP-α-001 · All Systems Nominal</div>
+        </div>
+        <div style="margin-left:auto; display:flex; gap:12px; align-items:center;" role="group" aria-label="System Status Indicators">
+          <div class="indicator-light light-on" style="--indicator-color:#00ff88;" title="System Online" aria-label="System Online"></div>
+          <div class="indicator-light light-blink" style="--indicator-color:#ffaa00;" title="API Disconnected" aria-label="API Disconnected"></div>
+          <div class="indicator-light" style="--indicator-color:#ff4444;" title="Agents Offline" aria-label="Agents Offline"></div>
+        </div>
+      </div>
+
+      <!-- Row 1: Gauges + Terminal + Dev Logs -->
+      <div style="display:flex; gap:12px; width:100%; min-height:160px; max-height:160px;">
+
+        <!-- System Gauges -->
+        <div class="card display-component glow-bars-secondary" style="flex:0 0 280px;" aria-label="System Gauges">
+          <div class="label-etched" style="margin-bottom:8px;">SYSTEM GAUGES</div>
+          <div style="display:flex; gap:12px; align-items:center; justify-content:space-around; height:calc(100% - 28px);">
+            <div style="text-align:center;">
+              <canvas id="gauge-battery" width="60" height="60" aria-label="Battery Gauge"></canvas>
+              <div class="label-etched" style="font-size:9px; margin-top:2px;">BATTERY</div>
+            </div>
+            <div style="text-align:center;">
+              <canvas id="gauge-network" width="60" height="60" aria-label="Network Gauge"></canvas>
+              <div class="label-etched" style="font-size:9px; margin-top:2px;">NETWORK</div>
+            </div>
+            <div style="text-align:center;">
+              <canvas id="gauge-memory" width="60" height="60" aria-label="Memory Gauge"></canvas>
+              <div class="label-etched" style="font-size:9px; margin-top:2px;">MEMORY</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Event Log Terminal -->
+        <div class="card display-component terminal-display glow-display" style="flex:1; min-width:0; font-size:10px; overflow:hidden;" aria-label="Live Event Log">
+          <div class="label-etched" style="margin-bottom:4px;">LIVE EVENT LOG</div>
+          <div id="event-log" style="height:calc(100% - 24px); overflow:hidden; font-family:var(--font-mono); font-size:10px; line-height:1.6;" role="log" aria-live="polite" aria-label="Event Log Output"></div>
+        </div>
+
+        <!-- Dev Logs -->
+        <div class="card display-component glow-display" style="flex:0 0 260px; overflow:hidden;" aria-label="Developer Logs">
+          <div class="label-etched" style="margin-bottom:4px;">DEV LOGS</div>
+          <div id="dev-log" style="height:calc(100% - 24px); overflow:hidden; font-family:var(--font-mono); font-size:10px; line-height:1.6;" role="log" aria-live="polite" aria-label="Dev Log Output"></div>
+        </div>
+      </div>
+
+      <!-- Row 2: Manometers + Palette + MS Paint + Web Elements -->
+      <div style="display:flex; gap:12px; width:100%; flex:1; min-height:0; max-height:420px;">
+
+        <!-- Manometers (in a triangle card) -->
+        <div class="card glow-bars-secondary" style="flex:0 0 220px; display:flex; align-items:center; justify-content:center; position:relative;" aria-label="Pressure Array Manometers">
+          <div class="label-etched" style="position:absolute; top:8px; left:12px; font-size:9px;">PRESSURE ARRAY</div>
+          <svg id="manometer-svg" width="200" height="180" viewBox="0 0 200 180" aria-label="Manometer Pressure Array" role="img">
+            <!-- Three manometers in triangle arrangement -->
+            <!-- Top center -->
+            <g transform="translate(100, 50)"><use href="#manometer-template"/></g>
+            <!-- Bottom left -->
+            <g transform="translate(45, 135)"><use href="#manometer-template"/></g>
+            <!-- Bottom right -->
+            <g transform="translate(155, 135)"><use href="#manometer-template"/></g>
+            <defs>
+              <g id="manometer-template">
+                <!-- Outer ring -->
+                <circle cx="0" cy="0" r="35" fill="none" stroke="currentColor" stroke-width="3" opacity="0.8"/>
+                <circle cx="0" cy="0" r="30" fill="rgba(0,0,0,0.2)" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+                <!-- Tick marks (no numbers) -->
+                <line x1="0" y1="-28" x2="0" y2="-22" stroke="currentColor" stroke-width="2" transform="rotate(-120)"/>
+                <line x1="0" y1="-28" x2="0" y2="-24" stroke="currentColor" stroke-width="1.5" transform="rotate(-90)"/>
+                <line x1="0" y1="-28" x2="0" y2="-22" stroke="currentColor" stroke-width="2" transform="rotate(-60)"/>
+                <line x1="0" y1="-28" x2="0" y2="-24" stroke="currentColor" stroke-width="1.5" transform="rotate(-30)"/>
+                <line x1="0" y1="-28" x2="0" y2="-22" stroke="currentColor" stroke-width="2" transform="rotate(0)"/>
+                <line x1="0" y1="-28" x2="0" y2="-24" stroke="currentColor" stroke-width="1.5" transform="rotate(30)"/>
+                <line x1="0" y1="-28" x2="0" y2="-22" stroke="currentColor" stroke-width="2" transform="rotate(60)"/>
+                <line x1="0" y1="-28" x2="0" y2="-24" stroke="currentColor" stroke-width="1.5" transform="rotate(90)"/>
+                <line x1="0" y1="-28" x2="0" y2="-22" stroke="currentColor" stroke-width="2" transform="rotate(120)"/>
+                <!-- Needle (animated via JS) -->
+                <line class="manometer-needle" x1="0" y1="5" x2="0" y2="-22" stroke="#ff4444" stroke-width="2" stroke-linecap="round" transform="rotate(-60)"/>
+                <!-- Center pivot -->
+                <circle cx="0" cy="0" r="4" fill="currentColor"/>
+                <circle cx="0" cy="0" r="2" fill="#ff4444"/>
+              </g>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Palette Viewer -->
+        <div class="card glow-bars-secondary" style="flex:0 0 200px; overflow:hidden;" aria-label="Active Colour Palette">
+          <div class="label-etched" style="margin-bottom:8px; font-size:9px;">ACTIVE PALETTE</div>
+          <div id="palette-viewer" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; overflow-y:auto; max-height:calc(100% - 28px);" role="list" aria-label="Palette Colour Swatches"></div>
+        </div>
+
+        <!-- MS Paint 1998 -->
+        <div class="card display-component" id="mspaint-container" style="flex:1; min-width:0; overflow:hidden; padding:0;" aria-label="MS Paint Canvas">
+          <!-- MS Paint content injected by paint.js -->
+        </div>
+
+        <!-- Web Elements Sampler -->
+        <div class="card glow-bars-secondary" style="flex:0 0 180px; overflow:hidden;" aria-label="Web Elements Sampler">
+          <div class="label-etched" style="margin-bottom:8px; font-size:9px;">WEB ELEMENTS</div>
+          <div style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; max-height:calc(100% - 28px);">
+            <button class="btn">Primary Button</button>
+            <button class="btn" disabled aria-disabled="true">Disabled</button>
+            <input type="text" class="input" placeholder="Text input..." style="font-size:11px;" aria-label="Text Input Sample">
+            <select class="input dropdown-panel" style="font-size:11px;" aria-label="Dropdown Sample">
+              <option>Dropdown</option>
+              <option>Option 2</option>
+            </select>
+            <div style="display:flex; gap:4px; align-items:center;">
+              <input type="checkbox" id="chk1" checked aria-label="Checkbox Sample"> <label for="chk1" style="font-size:11px;">Checkbox</label>
+            </div>
+            <div style="display:flex; gap:4px; align-items:center;" role="group" aria-label="Radio Button Sample">
+              <input type="radio" name="r1" id="r1"> <label for="r1" style="font-size:11px;">Radio A</label>
+              <input type="radio" name="r1" id="r2"> <label for="r2" style="font-size:11px;">Radio B</label>
+            </div>
+            <div class="indicator-light light-on" style="--indicator-color:var(--color-state-success);" aria-label="Success Indicator"></div>
+            <progress value="65" max="100" style="width:100%;" aria-label="Progress Sample" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></progress>
+            <a href="#" style="font-size:11px;" class="glow-text-primary">Link example</a>
+            <code class="value-mono" style="font-size:10px; background:var(--color-code-bg); color:var(--color-code-fg); padding:2px 4px; border-radius:2px;">code block</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trade Studio (hidden by default) -->
+    <div class="studio-content studio-trade" id="studio-trade" role="tabpanel" aria-labelledby="studio-btn-trade" style="display:none; flex-direction:column; height:100%; overflow:hidden;">
+      <div id="trade-no-data" style="display:flex; align-items:center; justify-content:center; height:100%; flex-direction:column; gap:16px;" aria-live="polite">
+        <div class="glow-text-primary" style="font-size:32px; opacity:0.4; letter-spacing:0.2em;">⚠ NO DATA</div>
+        <div class="label-etched" style="opacity:0.6;">Connect API keys in Hangar Bay to engage trading systems</div>
+      </div>
+      <div id="trade-content" style="display:none; flex-direction:column; height:100%;" aria-label="Trade Content">
+        <!-- Injected by trading.js -->
+      </div>
+    </div>
+
+    <!-- Fly Studio (hidden by default) -->
+    <div class="studio-content studio-fly" id="studio-fly" role="tabpanel" aria-labelledby="studio-btn-fly" style="display:none; align-items:center; justify-content:center; height:100%;">
+      <div style="text-align:center; opacity:0.5;">
+        <div class="glow-text-primary" style="font-size:48px; letter-spacing:0.3em; margin-bottom:16px;" aria-hidden="true">✈</div>
+        <div class="glow-text-primary" style="font-size:28px; letter-spacing:0.2em; font-weight:900;">NO FLIGHT PLAN</div>
+        <div class="label-etched" style="margin-top:8px; opacity:0.7;">Agents must generate revenue before flight sim unlocks</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 5. RIGHT SIDEBAR -->
+  <aside class="region region-rsidebar glow-bars-secondary" id="region-rsidebar" aria-label="Inspector Panel">
+    <div class="region-panel-label label-etched">INSPECTOR PANEL</div>
+
+    <!-- To-Do List (spiral notebook) -->
+    <div class="card" id="todo-container" style="margin-bottom:12px; padding:0; overflow:hidden;" aria-label="To-Do List">
+      <div id="todo-app">
+        <!-- Injected by todo.js -->
+      </div>
+    </div>
+
+    <!-- Visibility Toggles -->
+    <div class="card">
+      <div class="label-etched" style="margin-bottom:8px;">PRECISION TOOLS</div>
+      <div style="display:flex; flex-direction:column; gap:6px;" role="group" aria-label="Precision Tools Toggles">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12px;">
+          <input type="checkbox" id="toggle-rulers" onchange="precisionTools.toggleRulers(this.checked)" aria-label="Toggle Rulers">
+          <span>Rulers</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12px;">
+          <input type="checkbox" id="toggle-grid" onchange="precisionTools.toggleGrid(this.checked)" aria-label="Toggle Grid">
+          <span>Grid (60×60px)</span>
+        </label>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 6. ACTION BAR -->
+  <section class="region region-actionbar glow-bars-secondary" id="region-actionbar" aria-label="Ignition Action Bar">
+    <div class="region-panel-label label-etched">IGNITION</div>
+    <div style="display:flex; align-items:center; justify-content:center; height:calc(100% - 24px); opacity:0.3;" aria-label="Awaiting Ignition Sequence">
+      <div style="text-align:center;">
+        <div style="font-size:24px; margin-bottom:4px;" aria-hidden="true">🔥</div>
+        <div class="label-etched" style="font-size:10px;">AWAITING IGNITION SEQUENCE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. BOTTOM BAR -->
+  <section class="region region-bottombar glow-bars-primary" id="region-bottombar" aria-label="Hangar Bay">
+    <div class="region-panel-label label-etched">HANGAR BAY</div>
+    <div style="display:flex; gap:12px; height:calc(100% - 24px); overflow-x:auto; align-items:stretch; padding-bottom:4px;">
+
+      <!-- API Keys Card -->
+      <div class="card glow-bars-secondary" style="flex:0 0 320px; display:flex; flex-direction:column; gap:6px;" aria-label="API Keys">
+        <div class="label-etched" style="margin-bottom:4px;">API KEYS</div>
+        <div id="api-no-keys-msg" class="label-etched" style="font-size:10px; opacity:0.6; text-align:center; padding:8px 0;" aria-live="polite">
+          Connect API Keys to engage
+        </div>
+        <!-- LIVE Keys -->
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.05em; opacity:0.7;">LIVE</div>
+        <input type="text" class="input" id="live-api-key" placeholder="Live API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Live API Key">
+        <textarea class="input" id="live-rsa-key" placeholder="Live RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Live RSA Private Key"></textarea>
+        <!-- DEMO Keys -->
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.05em; opacity:0.7;">DEMO</div>
+        <input type="text" class="input" id="demo-api-key" placeholder="Demo API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Demo API Key">
+        <textarea class="input" id="demo-rsa-key" placeholder="Demo RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Demo RSA Private Key"></textarea>
+        <div style="display:flex; gap:6px;">
+          <button class="btn" onclick="trading.connect()" style="flex:1; font-size:10px;" aria-label="Connect to Trading API">CONNECT</button>
+          <button class="btn" onclick="trading.disconnect()" style="flex:1; font-size:10px; opacity:0.5;" aria-label="Disconnect from Trading API">DISCONNECT</button>
+        </div>
+      </div>
+
+      <!-- Live/Demo Indicator Lights -->
+      <div class="card" style="flex:0 0 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;" aria-label="Connection Status Indicators">
+        <div style="text-align:center;">
+          <div class="indicator-light" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
+          <div class="label-etched" style="font-size:9px;">LIVE</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="indicator-light" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 4px;" aria-label="Demo Connection Status"></div>
+          <div class="label-etched" style="font-size:9px;">DEMO</div>
+        </div>
+      </div>
+
+      <!-- Agent Access Card -->
+      <div class="card glow-bars-secondary" style="flex:0 0 280px; display:flex; flex-direction:column; gap:8px;" aria-label="Agent Access Control">
+        <div class="label-etched">AGENT ACCESS</div>
+        <!-- Global Permission Dial -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="label-etched" style="font-size:9px; width:60px;">GLOBAL</div>
+          <div class="permission-dial-group" id="global-permission" role="group" aria-label="Global Permission Level">
+            <button class="perm-btn active" data-perm="full-stop" onclick="trading.setGlobalPermission('full-stop')" aria-pressed="true">FULL-STOP</button>
+            <button class="perm-btn" data-perm="semi-auto" onclick="trading.setGlobalPermission('semi-auto')" aria-pressed="false">SEMI-AUTO</button>
+            <button class="perm-btn" data-perm="auto" onclick="trading.setGlobalPermission('auto')" aria-pressed="false">AUTO</button>
+          </div>
+        </div>
+        <!-- Agent Prime -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="label-etched" style="font-size:9px; width:60px;">PRIME</div>
+          <div class="indicator-light" id="agent-prime-status" style="--indicator-color:#888;" aria-label="Agent Prime Status"></div>
+          <div class="permission-dial-group" id="prime-permission" role="group" aria-label="Agent Prime Permission Level">
+            <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('prime', 'full-stop')" aria-pressed="true" aria-label="Prime Full Stop">⛔</button>
+            <button class="perm-btn" data-perm="semi-auto" onclick="trading.setAgentPermission('prime', 'semi-auto')" aria-pressed="false" aria-label="Prime Semi-Auto">⚠</button>
+            <button class="perm-btn" data-perm="auto" onclick="trading.setAgentPermission('prime', 'auto')" aria-pressed="false" aria-label="Prime Auto">✓</button>
+          </div>
+          <span class="label-etched" id="agent-prime-label" style="font-size:9px;" aria-live="polite">OFFLINE</span>
+        </div>
+        <!-- Agent Peritia -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="label-etched" style="font-size:9px; width:60px;">PERITIA</div>
+          <div class="indicator-light" id="agent-peritia-status" style="--indicator-color:#888;" aria-label="Agent Peritia Status"></div>
+          <div class="permission-dial-group" id="peritia-permission" role="group" aria-label="Agent Peritia Permission Level">
+            <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('peritia', 'full-stop')" aria-pressed="true" aria-label="Peritia Full Stop">⛔</button>
+            <button class="perm-btn" data-perm="semi-auto" onclick="trading.setAgentPermission('peritia', 'semi-auto')" aria-pressed="false" aria-label="Peritia Semi-Auto">⚠</button>
+            <button class="perm-btn" data-perm="auto" onclick="trading.setAgentPermission('peritia', 'auto')" aria-pressed="false" aria-label="Peritia Auto">✓</button>
+          </div>
+          <span class="label-etched" id="agent-peritia-label" style="font-size:9px;" aria-live="polite">OFFLINE</span>
+        </div>
+      </div>
+
+      <!-- P/L Graph -->
+      <div class="card display-component glow-display" style="flex:1; min-width:240px; display:flex; flex-direction:column;" aria-label="Profit and Loss Performance Chart">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+          <div class="label-etched">P/L PERFORMANCE</div>
+          <div style="display:flex; gap:3px;" role="group" aria-label="P/L Time Range">
+            <button class="btn-sm active" id="pl-btn-24h" onclick="trading.setPLView('24h')" aria-pressed="true">24H</button>
+            <button class="btn-sm" id="pl-btn-1w" onclick="trading.setPLView('1w')" aria-pressed="false">1W</button>
+            <button class="btn-sm" id="pl-btn-1m" onclick="trading.setPLView('1m')" aria-pressed="false">1M</button>
+            <button class="btn-sm" id="pl-btn-1y" onclick="trading.setPLView('1y')" aria-pressed="false">1Y</button>
+            <button class="btn-sm" id="pl-btn-all" onclick="trading.setPLView('all')" aria-pressed="false">ALL</button>
+          </div>
+        </div>
+        <canvas id="pl-chart" style="flex:1; width:100%;" aria-label="P/L Chart Canvas"></canvas>
+        <div style="display:flex; gap:3px; margin-top:4px; justify-content:flex-end;" role="group" aria-label="P/L Y-Axis Scale">
+          <button class="btn-sm active" id="pl-y-10" onclick="trading.setPLYAxis('10')" aria-pressed="true">$10</button>
+          <button class="btn-sm" id="pl-y-100" onclick="trading.setPLYAxis('100')" aria-pressed="false">$100</button>
+          <button class="btn-sm" id="pl-y-1k" onclick="trading.setPLYAxis('1k')" aria-pressed="false">$1K</button>
+          <button class="btn-sm" id="pl-y-10k" onclick="trading.setPLYAxis('10k')" aria-pressed="false">$10K</button>
+          <button class="btn-sm" id="pl-y-all" onclick="trading.setPLYAxis('all')" aria-pressed="false">ALL</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<script src="js/themes.js"></script>
+<script src="js/illumination.js"></script>
+<script src="js/studios.js"></script>
+<script src="js/telemetry.js"></script>
+<script src="js/todo.js"></script>
+<script src="js/trading.js"></script>
+<script src="js/paint.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
