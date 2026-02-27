@@ -1,0 +1,1365 @@
+/* ============================================================
+   THEMES.CSS — Theme Palette Definitions
+   Polly Prediction Partners v0.03.01
+   Applied via: html[data-theme="..."][data-mode="light|dark"]
+   Precedence: base defaults (tokens.css) → theme → mode
+   ============================================================ */
+
+
+/* ============================================================
+   1. MODERN-WEBPAGE
+   Light: Clean white, Google blue, professional
+   Dark:  Google dark #1a1a2e, muted blue links
+   ============================================================ */
+html[data-theme="modern-webpage"] {
+  --color-state-success: #1e8e3e;
+  --color-state-warning: #f9ab00;
+  --color-state-error:   #d93025;
+  --color-state-info:    #1a73e8;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="modern-webpage"][data-mode="light"] {
+  --color-bg-canvas:      #f8f9fa;
+  --color-bg-surface:     #ffffff;
+  --color-bg-brand:       #1a73e8;
+  --color-fg-default:     #202124;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #5f6368;
+  --color-border-default: #dadce0;
+  --color-border-muted:   #e8eaed;
+  --color-border-focus:   #1a73e8;
+  --color-link-default:   #1a73e8;
+  --color-link-visited:   #7c3aed;
+  --color-code-bg:        #f1f3f4;
+  --color-code-fg:        #202124;
+  --color-selection-bg:   #c2e0ff;
+  --fx-glow-color:        rgba(26, 115, 232, 0.7);
+  --fx-flood-color:       rgba(26, 115, 232, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="modern-webpage"][data-mode="dark"] {
+  --color-bg-canvas:      #1a1a2e;
+  --color-bg-surface:     #16213e;
+  --color-bg-brand:       #8ab4f8;
+  --color-fg-default:     #e8eaed;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #9aa0a6;
+  --color-border-default: #3c4043;
+  --color-border-muted:   #2d2f31;
+  --color-border-focus:   #8ab4f8;
+  --color-link-default:   #8ab4f8;
+  --color-link-visited:   #c58af9;
+  --color-code-bg:        #2d2f31;
+  --color-code-fg:        #e8eaed;
+  --color-selection-bg:   #174ea6;
+  --fx-glow-color:        rgba(138, 180, 248, 0.8);
+  --fx-flood-color:       rgba(138, 180, 248, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   2. MOSAIC-1993
+   Light: Windows 3.1 teal desktop, silver chrome, chiseled
+   Dark:  Near-black bg, bright teal accents
+   ============================================================ */
+html[data-theme="mosaic-1993"] {
+  --color-state-success: #008000;
+  --color-state-warning: #808000;
+  --color-state-error:   #800000;
+  --color-state-info:    #000080;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="mosaic-1993"][data-mode="light"] {
+  --color-bg-canvas:      #008080;
+  --color-bg-surface:     #c0c0c0;
+  --color-bg-brand:       #000080;
+  --color-fg-default:     #000000;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #404040;
+  --color-border-default: #808080;
+  --color-border-muted:   #a0a0a0;
+  --color-border-focus:   #000080;
+  --color-link-default:   #0000ff;
+  --color-link-visited:   #800080;
+  --color-code-bg:        #ffffff;
+  --color-code-fg:        #000000;
+  --color-selection-bg:   #000080;
+  --fx-glow-color:        rgba(0, 0, 128, 0.6);
+  --fx-flood-color:       rgba(0, 128, 128, 0.06);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="mosaic-1993"][data-mode="dark"] {
+  --color-bg-canvas:      #0a0f0f;
+  --color-bg-surface:     #0d1a1a;
+  --color-bg-brand:       #00cccc;
+  --color-fg-default:     #00ffff;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #4dd9d9;
+  --color-border-default: #006666;
+  --color-border-muted:   #003333;
+  --color-border-focus:   #00ffff;
+  --color-link-default:   #00ffff;
+  --color-link-visited:   #cc44ff;
+  --color-code-bg:        #001a1a;
+  --color-code-fg:        #00ffff;
+  --color-selection-bg:   #005555;
+  --fx-glow-color:        rgba(0, 255, 255, 0.75);
+  --fx-flood-color:       rgba(0, 255, 255, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   3. GEN7-COCKPIT
+   Light: Dark Gull Gray canvas, MFD Green accents, military
+   Dark:  Deep charcoal, NVG Green glow
+   ============================================================ */
+html[data-theme="gen7-cockpit"] {
+  --color-state-success: #00ff41;
+  --color-state-warning: #ffcc00;
+  --color-state-error:   #ff3300;
+  --color-state-info:    #00ccff;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="gen7-cockpit"][data-mode="light"] {
+  --color-bg-canvas:      #4a5568;
+  --color-bg-surface:     #2d3748;
+  --color-bg-brand:       #00ff41;
+  --color-fg-default:     #e2e8f0;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #a0aec0;
+  --color-border-default: #718096;
+  --color-border-muted:   #4a5568;
+  --color-border-focus:   #00ff41;
+  --color-link-default:   #00ff41;
+  --color-link-visited:   #68d391;
+  --color-code-bg:        #1a202c;
+  --color-code-fg:        #00ff41;
+  --color-selection-bg:   #2f855a;
+  --fx-glow-color:        rgba(0, 255, 65, 0.75);
+  --fx-flood-color:       rgba(0, 255, 65, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="gen7-cockpit"][data-mode="dark"] {
+  --color-bg-canvas:      #0d1117;
+  --color-bg-surface:     #161b22;
+  --color-bg-brand:       #39ff14;
+  --color-fg-default:     #c9d1d9;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #8b949e;
+  --color-border-default: #30363d;
+  --color-border-muted:   #21262d;
+  --color-border-focus:   #39ff14;
+  --color-link-default:   #39ff14;
+  --color-link-visited:   #7ee787;
+  --color-code-bg:        #0d1117;
+  --color-code-fg:        #39ff14;
+  --color-selection-bg:   #1a4731;
+  --fx-glow-color:        rgba(57, 255, 20, 0.85);
+  --fx-flood-color:       rgba(57, 255, 20, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   4. USSR-COCKPIT
+   Light: MiG Turquoise surface, cream fg, Soviet style
+   Dark:  Near-black bg, turquoise region bodies, Night Intercept
+   ============================================================ */
+html[data-theme="ussr-cockpit"] {
+  --color-state-success: #4caf50;
+  --color-state-warning: #ff9800;
+  --color-state-error:   #f44336;
+  --color-state-info:    #3d90a2;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="ussr-cockpit"][data-mode="light"] {
+  --color-bg-canvas:      #3d90a2;
+  --color-bg-surface:     #4aa8bc;
+  --color-bg-brand:       #c0392b;
+  --color-fg-default:     #f5f0e0;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #cce4ea;
+  --color-border-default: #2a6b7a;
+  --color-border-muted:   #5ab4c8;
+  --color-border-focus:   #c0392b;
+  --color-link-default:   #ffd700;
+  --color-link-visited:   #ffaa00;
+  --color-code-bg:        #2a6b7a;
+  --color-code-fg:        #f5f0e0;
+  --color-selection-bg:   #c0392b;
+  --fx-glow-color:        rgba(192, 57, 43, 0.7);
+  --fx-flood-color:       rgba(61, 144, 162, 0.06);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="ussr-cockpit"][data-mode="dark"] {
+  --color-bg-canvas:      #060c0e;
+  --color-bg-surface:     #0c1a1f;
+  --color-bg-brand:       #3d90a2;
+  --color-fg-default:     #b0d4dc;
+  --color-fg-strong:      #e0f0f4;
+  --color-fg-muted:       #5a8a96;
+  --color-border-default: #1e4a56;
+  --color-border-muted:   #102830;
+  --color-border-focus:   #3d90a2;
+  --color-link-default:   #3d90a2;
+  --color-link-visited:   #ffd700;
+  --color-code-bg:        #0a1a20;
+  --color-code-fg:        #3d90a2;
+  --color-selection-bg:   #1e4a56;
+  --fx-glow-color:        rgba(61, 144, 162, 0.8);
+  --fx-flood-color:       rgba(61, 144, 162, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   5. NEONVICE-1985
+   Light: Miami pastel canvas, coral brand, art deco
+   Dark:  Ocean Drive Midnight, hot pink, cyan
+   ============================================================ */
+html[data-theme="neonvice-1985"] {
+  --color-state-success: #00e5a0;
+  --color-state-warning: #ffcc00;
+  --color-state-error:   #ff2d78;
+  --color-state-info:    #00f5d4;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="neonvice-1985"][data-mode="light"] {
+  --color-bg-canvas:      #fde8d8;
+  --color-bg-surface:     #fff5ee;
+  --color-bg-brand:       #ff6b9d;
+  --color-fg-default:     #2d1b2e;
+  --color-fg-strong:      #1a0a1e;
+  --color-fg-muted:       #a06080;
+  --color-border-default: #f0b8d0;
+  --color-border-muted:   #fad0e0;
+  --color-border-focus:   #ff6b9d;
+  --color-link-default:   #e0007a;
+  --color-link-visited:   #8b00b0;
+  --color-code-bg:        #fce4ec;
+  --color-code-fg:        #2d1b2e;
+  --color-selection-bg:   #ffb3d1;
+  --fx-glow-color:        rgba(255, 107, 157, 0.7);
+  --fx-flood-color:       rgba(255, 107, 157, 0.05);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="neonvice-1985"][data-mode="dark"] {
+  --color-bg-canvas:      #0d0221;
+  --color-bg-surface:     #1a0533;
+  --color-bg-brand:       #ff2d78;
+  --color-fg-default:     #f0c0d8;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #9060a0;
+  --color-border-default: #4d0a3d;
+  --color-border-muted:   #2a0520;
+  --color-border-focus:   #ff2d78;
+  --color-link-default:   #ff2d78;
+  --color-link-visited:   #00f5d4;
+  --color-code-bg:        #120230;
+  --color-code-fg:        #00f5d4;
+  --color-selection-bg:   #5c0040;
+  --fx-glow-color:        rgba(255, 45, 120, 0.85);
+  --fx-flood-color:       rgba(0, 245, 212, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   6. NEONCITY-2085
+   Light: Light chrome canvas, electric blue brand, utopia
+   Dark:  Netrunner bg, laser cyan, hot magenta
+   ============================================================ */
+html[data-theme="neoncity-2085"] {
+  --color-state-success: #00ff88;
+  --color-state-warning: #ffcc00;
+  --color-state-error:   #ff0055;
+  --color-state-info:    #00ffff;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="neoncity-2085"][data-mode="light"] {
+  --color-bg-canvas:      #e8ecf0;
+  --color-bg-surface:     #f4f6f8;
+  --color-bg-brand:       #0066ff;
+  --color-fg-default:     #0a0a1e;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #5060a0;
+  --color-border-default: #b0bcd4;
+  --color-border-muted:   #d0d8e8;
+  --color-border-focus:   #0066ff;
+  --color-link-default:   #0066ff;
+  --color-link-visited:   #8800cc;
+  --color-code-bg:        #e0e4f0;
+  --color-code-fg:        #0a0a1e;
+  --color-selection-bg:   #b3d1ff;
+  --fx-glow-color:        rgba(0, 102, 255, 0.7);
+  --fx-flood-color:       rgba(0, 102, 255, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="neoncity-2085"][data-mode="dark"] {
+  --color-bg-canvas:      #050510;
+  --color-bg-surface:     #0a0a20;
+  --color-bg-brand:       #00ffff;
+  --color-fg-default:     #b0c8e8;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #5080b0;
+  --color-border-default: #1a1a40;
+  --color-border-muted:   #0f0f28;
+  --color-border-focus:   #00ffff;
+  --color-link-default:   #00ffff;
+  --color-link-visited:   #ff00aa;
+  --color-code-bg:        #050510;
+  --color-code-fg:        #00ffff;
+  --color-selection-bg:   #003366;
+  --fx-glow-color:        rgba(0, 255, 255, 0.85);
+  --fx-flood-color:       rgba(255, 0, 170, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   7. CONIFOREST
+   Light: Mt Rainier mist canvas, pine brand, granite, khaki
+   Dark:  PNW Night bg, deep evergreen surface, cold shadows
+   ============================================================ */
+html[data-theme="coniforest"] {
+  --color-state-success: #2d8a47;
+  --color-state-warning: #b8860b;
+  --color-state-error:   #c0392b;
+  --color-state-info:    #2980b9;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="coniforest"][data-mode="light"] {
+  --color-bg-canvas:      #e8ede8;
+  --color-bg-surface:     #f4f7f4;
+  --color-bg-brand:       #2d5a27;
+  --color-fg-default:     #1e2e1e;
+  --color-fg-strong:      #0a180a;
+  --color-fg-muted:       #6b7d6b;
+  --color-border-default: #b0c4b0;
+  --color-border-muted:   #ccdacc;
+  --color-border-focus:   #2d5a27;
+  --color-link-default:   #2d5a27;
+  --color-link-visited:   #6b4c1e;
+  --color-code-bg:        #dce8dc;
+  --color-code-fg:        #1e2e1e;
+  --color-selection-bg:   #a8c8a8;
+  --fx-glow-color:        rgba(45, 90, 39, 0.6);
+  --fx-flood-color:       rgba(45, 90, 39, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="coniforest"][data-mode="dark"] {
+  --color-bg-canvas:      #0a160a;
+  --color-bg-surface:     #1a3d1a;
+  --color-bg-brand:       #4a9e44;
+  --color-fg-default:     #a0c8a0;
+  --color-fg-strong:      #d0e8d0;
+  --color-fg-muted:       #507050;
+  --color-border-default: #1e3c1e;
+  --color-border-muted:   #122012;
+  --color-border-focus:   #4a9e44;
+  --color-link-default:   #4a9e44;
+  --color-link-visited:   #c8a050;
+  --color-code-bg:        #0d1f0d;
+  --color-code-fg:        #4a9e44;
+  --color-selection-bg:   #1a3d1a;
+  --fx-glow-color:        rgba(74, 158, 68, 0.75);
+  --fx-flood-color:       rgba(74, 158, 68, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   8. RANEFOREST
+   Light: Hot humid canvas, parrot green brand, pith helmet fg
+   Dark:  Amazon Night bg, deep canopy, bioluminescent
+   ============================================================ */
+html[data-theme="raneforest"] {
+  --color-state-success: #00aa44;
+  --color-state-warning: #d4a017;
+  --color-state-error:   #cc2200;
+  --color-state-info:    #00aacc;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="raneforest"][data-mode="light"] {
+  --color-bg-canvas:      #f0f7e8;
+  --color-bg-surface:     #f8fdf2;
+  --color-bg-brand:       #00aa44;
+  --color-fg-default:     #1a2e0e;
+  --color-fg-strong:      #0a1a04;
+  --color-fg-muted:       #d4b896;
+  --color-border-default: #b8d4a0;
+  --color-border-muted:   #d4e8c0;
+  --color-border-focus:   #00aa44;
+  --color-link-default:   #007733;
+  --color-link-visited:   #8b5e00;
+  --color-code-bg:        #e0f0d0;
+  --color-code-fg:        #1a2e0e;
+  --color-selection-bg:   #a0d880;
+  --fx-glow-color:        rgba(0, 170, 68, 0.65);
+  --fx-flood-color:       rgba(0, 170, 68, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="raneforest"][data-mode="dark"] {
+  --color-bg-canvas:      #020f02;
+  --color-bg-surface:     #0a1f0a;
+  --color-bg-brand:       #7fff00;
+  --color-fg-default:     #88cc66;
+  --color-fg-strong:      #ccff88;
+  --color-fg-muted:       #336633;
+  --color-border-default: #0f2e0f;
+  --color-border-muted:   #081808;
+  --color-border-focus:   #7fff00;
+  --color-link-default:   #7fff00;
+  --color-link-visited:   #00ff88;
+  --color-code-bg:        #050f05;
+  --color-code-fg:        #7fff00;
+  --color-selection-bg:   #1a4a1a;
+  --fx-glow-color:        rgba(127, 255, 0, 0.8);
+  --fx-flood-color:       rgba(127, 255, 0, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   9. STREAMLINE-MODERNE (Art Deco)
+   Light: Ivory canvas, lacquer black fg, champagne gold brand
+   Dark:  Piano black bg, brass, emerald
+   ============================================================ */
+html[data-theme="streamline-moderne"] {
+  --color-state-success: #00a86b;
+  --color-state-warning: #c9a84c;
+  --color-state-error:   #cc2200;
+  --color-state-info:    #007a9e;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="streamline-moderne"][data-mode="light"] {
+  --color-bg-canvas:      #f5f0e0;
+  --color-bg-surface:     #fdfaf2;
+  --color-bg-brand:       #c9a84c;
+  --color-fg-default:     #1a1008;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #7a6a50;
+  --color-border-default: #d4c4a0;
+  --color-border-muted:   #e8ddc8;
+  --color-border-focus:   #c9a84c;
+  --color-link-default:   #8b6914;
+  --color-link-visited:   #5c3a8c;
+  --color-code-bg:        #ede8d8;
+  --color-code-fg:        #1a1008;
+  --color-selection-bg:   #f0dfa0;
+  --fx-glow-color:        rgba(201, 168, 76, 0.7);
+  --fx-flood-color:       rgba(201, 168, 76, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="streamline-moderne"][data-mode="dark"] {
+  --color-bg-canvas:      #0a0805;
+  --color-bg-surface:     #140f08;
+  --color-bg-brand:       #b8860b;
+  --color-fg-default:     #d4b878;
+  --color-fg-strong:      #f0d890;
+  --color-fg-muted:       #7a6040;
+  --color-border-default: #3a2e18;
+  --color-border-muted:   #201808;
+  --color-border-focus:   #b8860b;
+  --color-link-default:   #b8860b;
+  --color-link-visited:   #00a86b;
+  --color-code-bg:        #080603;
+  --color-code-fg:        #c9a84c;
+  --color-selection-bg:   #3a2e18;
+  --fx-glow-color:        rgba(184, 134, 11, 0.8);
+  --fx-flood-color:       rgba(0, 168, 107, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   10. CHROME
+   Light: Brushed aluminum canvas, clean white surface, cool blue
+   Dark:  Gunmetal bg, smoked glass surface, cold cyan
+   ============================================================ */
+html[data-theme="chrome"] {
+  --color-state-success: #34a853;
+  --color-state-warning: #fbbc04;
+  --color-state-error:   #ea4335;
+  --color-state-info:    #4285f4;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="chrome"][data-mode="light"] {
+  --color-bg-canvas:      #e8eaed;
+  --color-bg-surface:     #f8f9fa;
+  --color-bg-brand:       #4285f4;
+  --color-fg-default:     #202124;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #6a6e72;
+  --color-border-default: #c8cacd;
+  --color-border-muted:   #dcdee0;
+  --color-border-focus:   #4285f4;
+  --color-link-default:   #1a73e8;
+  --color-link-visited:   #7c3aed;
+  --color-code-bg:        #e4e6e9;
+  --color-code-fg:        #202124;
+  --color-selection-bg:   #c2d7ff;
+  --fx-glow-color:        rgba(66, 133, 244, 0.65);
+  --fx-flood-color:       rgba(66, 133, 244, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="chrome"][data-mode="dark"] {
+  --color-bg-canvas:      #1c1c1e;
+  --color-bg-surface:     #2c2c2e;
+  --color-bg-brand:       #00d4ff;
+  --color-fg-default:     #d0d4d8;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #8a8e92;
+  --color-border-default: #3a3a3c;
+  --color-border-muted:   #2a2a2c;
+  --color-border-focus:   #00d4ff;
+  --color-link-default:   #00d4ff;
+  --color-link-visited:   #bf88ff;
+  --color-code-bg:        #161618;
+  --color-code-fg:        #00d4ff;
+  --color-selection-bg:   #004466;
+  --fx-glow-color:        rgba(0, 212, 255, 0.8);
+  --fx-flood-color:       rgba(0, 212, 255, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   11. HOLOGRAPHIC
+   Light: Pearl canvas, iridescent teal brand, shifting shimmer
+   Dark:  Prism noir bg, charcoal surface, spectral brand
+   ============================================================ */
+html[data-theme="holographic"] {
+  --color-state-success: #00e676;
+  --color-state-warning: #ffea00;
+  --color-state-error:   #ff1744;
+  --color-state-info:    #00b4d8;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="holographic"][data-mode="light"] {
+  --color-bg-canvas:      #f0f4f8;
+  --color-bg-surface:     #fafcfe;
+  --color-bg-brand:       #00b4d8;
+  --color-fg-default:     #0a1020;
+  --color-fg-strong:      #000010;
+  --color-fg-muted:       #6080a0;
+  --color-border-default: #c0d0e0;
+  --color-border-muted:   #d8e4f0;
+  --color-border-focus:   #00b4d8;
+  --color-link-default:   #007fa8;
+  --color-link-visited:   #8800cc;
+  --color-code-bg:        #e4ecf4;
+  --color-code-fg:        #0a1020;
+  --color-selection-bg:   #b3e8f8;
+  --fx-glow-color:        rgba(0, 180, 216, 0.65);
+  --fx-flood-color:       rgba(0, 180, 216, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="holographic"][data-mode="dark"] {
+  --color-bg-canvas:      #0a0a0f;
+  --color-bg-surface:     #1a1a2e;
+  --color-bg-brand:       #ff6ec7;
+  --color-fg-default:     #c0c8e0;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #6070a0;
+  --color-border-default: #2a2a4a;
+  --color-border-muted:   #16162a;
+  --color-border-focus:   #ff6ec7;
+  --color-link-default:   #ff6ec7;
+  --color-link-visited:   #00e5ff;
+  --color-code-bg:        #08080e;
+  --color-code-fg:        #ff6ec7;
+  --color-selection-bg:   #3a1a4a;
+  --fx-glow-color:        rgba(255, 110, 199, 0.8);
+  --fx-flood-color:       rgba(0, 229, 255, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   12. VAPOR
+   Light: Pastel arcade canvas, mint brand, peach, sky blue
+   Dark:  Deep navy bg, hot pink brand, cyan
+   ============================================================ */
+html[data-theme="vapor"] {
+  --color-state-success: #98f5e1;
+  --color-state-warning: #ffb347;
+  --color-state-error:   #ff2979;
+  --color-state-info:    #87ceeb;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="vapor"][data-mode="light"] {
+  --color-bg-canvas:      #fef3e2;
+  --color-bg-surface:     #fff8f0;
+  --color-bg-brand:       #98f5e1;
+  --color-fg-default:     #2a1a3e;
+  --color-fg-strong:      #180e2e;
+  --color-fg-muted:       #907080;
+  --color-border-default: #f0d8e8;
+  --color-border-muted:   #f8ecf4;
+  --color-border-focus:   #ff80b0;
+  --color-link-default:   #cc0060;
+  --color-link-visited:   #6a0080;
+  --color-code-bg:        #fce4f4;
+  --color-code-fg:        #2a1a3e;
+  --color-selection-bg:   #ffb3d8;
+  --fx-glow-color:        rgba(152, 245, 225, 0.65);
+  --fx-flood-color:       rgba(255, 179, 71, 0.05);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="vapor"][data-mode="dark"] {
+  --color-bg-canvas:      #1a0533;
+  --color-bg-surface:     #240a44;
+  --color-bg-brand:       #ff2979;
+  --color-fg-default:     #e0b8d8;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #806090;
+  --color-border-default: #4a1a5a;
+  --color-border-muted:   #2c0a38;
+  --color-border-focus:   #ff2979;
+  --color-link-default:   #ff2979;
+  --color-link-visited:   #00ffff;
+  --color-code-bg:        #14032a;
+  --color-code-fg:        #00ffff;
+  --color-selection-bg:   #5c1a6a;
+  --fx-glow-color:        rgba(255, 41, 121, 0.8);
+  --fx-flood-color:       rgba(0, 255, 255, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   13. PAPER
+   Light: Copier white canvas, toner black fg, ballpoint blue
+   Dark:  Carbon bg, deep indigo surface, faint blue
+   ============================================================ */
+html[data-theme="paper"] {
+  --color-state-success: #16a34a;
+  --color-state-warning: #d97706;
+  --color-state-error:   #dc2626;
+  --color-state-info:    #2563eb;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="paper"][data-mode="light"] {
+  --color-bg-canvas:      #fafafa;
+  --color-bg-surface:     #ffffff;
+  --color-bg-brand:       #2563eb;
+  --color-fg-default:     #1a1a1a;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #6b7280;
+  --color-border-default: #d1d5db;
+  --color-border-muted:   #e5e7eb;
+  --color-border-focus:   #2563eb;
+  --color-link-default:   #2563eb;
+  --color-link-visited:   #7c3aed;
+  --color-code-bg:        #f3f4f6;
+  --color-code-fg:        #111827;
+  --color-selection-bg:   #bfdbfe;
+  --fx-glow-color:        rgba(37, 99, 235, 0.55);
+  --fx-flood-color:       rgba(37, 99, 235, 0.03);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="paper"][data-mode="dark"] {
+  --color-bg-canvas:      #0d1117;
+  --color-bg-surface:     #1e1b4b;
+  --color-bg-brand:       #3b82f6;
+  --color-fg-default:     #c9d1d9;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #8b949e;
+  --color-border-default: #30363d;
+  --color-border-muted:   #21262d;
+  --color-border-focus:   #3b82f6;
+  --color-link-default:   #3b82f6;
+  --color-link-visited:   #a78bfa;
+  --color-code-bg:        #0d1117;
+  --color-code-fg:        #c9d1d9;
+  --color-selection-bg:   #1e3a8a;
+  --fx-glow-color:        rgba(59, 130, 246, 0.7);
+  --fx-flood-color:       rgba(59, 130, 246, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   14. LEDGER-1920
+   Light: Manila canvas, banker green surface, typewriter brown
+   Dark:  Matte black bg, gold foil, Jazz Moderne
+   ============================================================ */
+html[data-theme="ledger-1920"] {
+  --color-state-success: #2d5a3d;
+  --color-state-warning: #c9a84c;
+  --color-state-error:   #8b2020;
+  --color-state-info:    #1a4a6e;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="ledger-1920"][data-mode="light"] {
+  --color-bg-canvas:      #f4e8cc;
+  --color-bg-surface:     #e8f0e8;
+  --color-bg-brand:       #2d5a3d;
+  --color-fg-default:     #1a0e08;
+  --color-fg-strong:      #000000;
+  --color-fg-muted:       #5c3d2e;
+  --color-border-default: #b8a070;
+  --color-border-muted:   #d4c4a0;
+  --color-border-focus:   #2d5a3d;
+  --color-link-default:   #2d5a3d;
+  --color-link-visited:   #5c3d2e;
+  --color-code-bg:        #ebe0c4;
+  --color-code-fg:        #1a0e08;
+  --color-selection-bg:   #c8b080;
+  --fx-glow-color:        rgba(45, 90, 61, 0.6);
+  --fx-flood-color:       rgba(45, 90, 61, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="ledger-1920"][data-mode="dark"] {
+  --color-bg-canvas:      #0a0a0a;
+  --color-bg-surface:     #121008;
+  --color-bg-brand:       #c9a84c;
+  --color-fg-default:     #c8b080;
+  --color-fg-strong:      #f0d890;
+  --color-fg-muted:       #706040;
+  --color-border-default: #2a2010;
+  --color-border-muted:   #181008;
+  --color-border-focus:   #c9a84c;
+  --color-link-default:   #c9a84c;
+  --color-link-visited:   #2d5a3d;
+  --color-code-bg:        #080805;
+  --color-code-fg:        #c9a84c;
+  --color-selection-bg:   #3a2a10;
+  --fx-glow-color:        rgba(201, 168, 76, 0.8);
+  --fx-flood-color:       rgba(201, 168, 76, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   15. BLUEPRINT
+   Light: Drafting white canvas, prussian blue fg
+   Dark:  AutoCAD black bg, blueprint blue fg, terminal green
+   ============================================================ */
+html[data-theme="blueprint"] {
+  --color-state-success: #00a550;
+  --color-state-warning: #f5a623;
+  --color-state-error:   #d0021b;
+  --color-state-info:    #003153;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="blueprint"][data-mode="light"] {
+  --color-bg-canvas:      #fafbff;
+  --color-bg-surface:     #ffffff;
+  --color-bg-brand:       #003153;
+  --color-fg-default:     #003153;
+  --color-fg-strong:      #001a33;
+  --color-fg-muted:       #3a6080;
+  --color-border-default: #a0b8cc;
+  --color-border-muted:   #c8d8e8;
+  --color-border-focus:   #003153;
+  --color-link-default:   #003153;
+  --color-link-visited:   #4a0080;
+  --color-code-bg:        #edf4f8;
+  --color-code-fg:        #003153;
+  --color-selection-bg:   #b3d0e8;
+  --fx-glow-color:        rgba(0, 49, 83, 0.55);
+  --fx-flood-color:       rgba(0, 49, 83, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="blueprint"][data-mode="dark"] {
+  --color-bg-canvas:      #0a0e17;
+  --color-bg-surface:     #0f1624;
+  --color-bg-brand:       #00bfff;
+  --color-fg-default:     #80c8e8;
+  --color-fg-strong:      #c8e8f8;
+  --color-fg-muted:       #406080;
+  --color-border-default: #1a2a3a;
+  --color-border-muted:   #101820;
+  --color-border-focus:   #00bfff;
+  --color-link-default:   #00bfff;
+  --color-link-visited:   #39ff14;
+  --color-code-bg:        #080c14;
+  --color-code-fg:        #00bfff;
+  --color-selection-bg:   #003a5a;
+  --fx-glow-color:        rgba(0, 191, 255, 0.8);
+  --fx-flood-color:       rgba(0, 191, 255, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   16. CHALKBOARD
+   Light: Greenboard canvas, chalk white fg, aluminum
+   Dark:  Slate black bg, dusty chalk fg
+   ============================================================ */
+html[data-theme="chalkboard"] {
+  --color-state-success: #7ec8a0;
+  --color-state-warning: #f5d76e;
+  --color-state-error:   #e74c3c;
+  --color-state-info:    #5dade2;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="chalkboard"][data-mode="light"] {
+  --color-bg-canvas:      #3d6b4f;
+  --color-bg-surface:     #2d5a40;
+  --color-bg-brand:       #f5f5dc;
+  --color-fg-default:     #f5f5dc;
+  --color-fg-strong:      #ffffff;
+  --color-fg-muted:       #9ec8b0;
+  --color-border-default: #4a8060;
+  --color-border-muted:   #2a5040;
+  --color-border-focus:   #f5f5dc;
+  --color-link-default:   #add8e6;
+  --color-link-visited:   #dda0dd;
+  --color-code-bg:        #2a5038;
+  --color-code-fg:        #f5f5dc;
+  --color-selection-bg:   #5a9070;
+  --fx-glow-color:        rgba(245, 245, 220, 0.55);
+  --fx-flood-color:       rgba(245, 245, 220, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="chalkboard"][data-mode="dark"] {
+  --color-bg-canvas:      #1a1a1a;
+  --color-bg-surface:     #222222;
+  --color-bg-brand:       #e8e8d8;
+  --color-fg-default:     #e8e8d8;
+  --color-fg-strong:      #f8f8f0;
+  --color-fg-muted:       #909090;
+  --color-border-default: #3a3a3a;
+  --color-border-muted:   #2a2a2a;
+  --color-border-focus:   #e8e8d8;
+  --color-link-default:   #add8e6;
+  --color-link-visited:   #dda0dd;
+  --color-code-bg:        #141414;
+  --color-code-fg:        #e8e8d8;
+  --color-selection-bg:   #404040;
+  --fx-glow-color:        rgba(232, 232, 216, 0.7);
+  --fx-flood-color:       rgba(232, 232, 216, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   17. PHOSPHOR
+   Light: Amber CRT bg, P3 amber fg, warm glow
+   Dark:  Green CRT bg, phosphor green fg
+   ============================================================ */
+html[data-theme="phosphor"] {
+  --color-state-success: #33ff00;
+  --color-state-warning: #ffcc00;
+  --color-state-error:   #ff3300;
+  --color-state-info:    #ffb000;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="phosphor"][data-mode="light"] {
+  --color-bg-canvas:      #1a0f00;
+  --color-bg-surface:     #221400;
+  --color-bg-brand:       #ffb000;
+  --color-fg-default:     #ffb000;
+  --color-fg-strong:      #ffd060;
+  --color-fg-muted:       #a06800;
+  --color-border-default: #3a2200;
+  --color-border-muted:   #281800;
+  --color-border-focus:   #ffb000;
+  --color-link-default:   #ffcc44;
+  --color-link-visited:   #cc8800;
+  --color-code-bg:        #140c00;
+  --color-code-fg:        #ffb000;
+  --color-selection-bg:   #4a2c00;
+  --fx-glow-color:        rgba(255, 176, 0, 0.85);
+  --fx-flood-color:       rgba(255, 176, 0, 0.06);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="phosphor"][data-mode="dark"] {
+  --color-bg-canvas:      #001a00;
+  --color-bg-surface:     #002200;
+  --color-bg-brand:       #33ff00;
+  --color-fg-default:     #33ff00;
+  --color-fg-strong:      #88ff44;
+  --color-fg-muted:       #1a8800;
+  --color-border-default: #003a00;
+  --color-border-muted:   #002200;
+  --color-border-focus:   #33ff00;
+  --color-link-default:   #66ff33;
+  --color-link-visited:   #00ffcc;
+  --color-code-bg:        #001200;
+  --color-code-fg:        #33ff00;
+  --color-selection-bg:   #004400;
+  --fx-glow-color:        rgba(51, 255, 0, 0.9);
+  --fx-flood-color:       rgba(51, 255, 0, 0.06);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   18. VOLCANO
+   Light: Ash gray canvas, sulfur yellow, magma brand
+   Dark:  Basalt black bg, flowing lava, heat shimmer
+   ============================================================ */
+html[data-theme="volcano"] {
+  --color-state-success: #4a9e44;
+  --color-state-warning: #e8d44d;
+  --color-state-error:   #ff4500;
+  --color-state-info:    #5080a0;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="volcano"][data-mode="light"] {
+  --color-bg-canvas:      #8c8680;
+  --color-bg-surface:     #a09a92;
+  --color-bg-brand:       #ff4500;
+  --color-fg-default:     #1a1208;
+  --color-fg-strong:      #0a0802;
+  --color-fg-muted:       #4a3a2a;
+  --color-border-default: #706860;
+  --color-border-muted:   #807870;
+  --color-border-focus:   #ff4500;
+  --color-link-default:   #cc2200;
+  --color-link-visited:   #880044;
+  --color-code-bg:        #7a7470;
+  --color-code-fg:        #1a1208;
+  --color-selection-bg:   #e8800040;
+  --fx-glow-color:        rgba(255, 69, 0, 0.75);
+  --fx-flood-color:       rgba(255, 107, 0, 0.06);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="volcano"][data-mode="dark"] {
+  --color-bg-canvas:      #0d0905;
+  --color-bg-surface:     #1a100a;
+  --color-bg-brand:       #ff6b00;
+  --color-fg-default:     #e0a060;
+  --color-fg-strong:      #ffc080;
+  --color-fg-muted:       #7a4a20;
+  --color-border-default: #3a1a08;
+  --color-border-muted:   #200e04;
+  --color-border-focus:   #ff6b00;
+  --color-link-default:   #ff6b00;
+  --color-link-visited:   #e8d44d;
+  --color-code-bg:        #0a0603;
+  --color-code-fg:        #ff6b00;
+  --color-selection-bg:   #4a1a00;
+  --fx-glow-color:        rgba(255, 107, 0, 0.85);
+  --fx-flood-color:       rgba(232, 212, 77, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   19. OCEANIC
+   Light: Yacht white canvas, navy brand, brass, coral
+   Dark:  Abyss bg, black-blue surface, bioluminescent coral
+   ============================================================ */
+html[data-theme="oceanic"] {
+  --color-state-success: #00aa88;
+  --color-state-warning: #b8860b;
+  --color-state-error:   #ff4757;
+  --color-state-info:    #0077cc;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="oceanic"][data-mode="light"] {
+  --color-bg-canvas:      #f0f5ff;
+  --color-bg-surface:     #fafcff;
+  --color-bg-brand:       #003087;
+  --color-fg-default:     #001a40;
+  --color-fg-strong:      #000d20;
+  --color-fg-muted:       #4060a0;
+  --color-border-default: #a0b8d8;
+  --color-border-muted:   #c8d8f0;
+  --color-border-focus:   #003087;
+  --color-link-default:   #003087;
+  --color-link-visited:   #660066;
+  --color-code-bg:        #e4eff8;
+  --color-code-fg:        #001a40;
+  --color-selection-bg:   #b3ccff;
+  --fx-glow-color:        rgba(0, 48, 135, 0.6);
+  --fx-flood-color:       rgba(0, 48, 135, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="oceanic"][data-mode="dark"] {
+  --color-bg-canvas:      #010714;
+  --color-bg-surface:     #0a1628;
+  --color-bg-brand:       #ff4757;
+  --color-fg-default:     #80aacc;
+  --color-fg-strong:      #c0d8f0;
+  --color-fg-muted:       #304060;
+  --color-border-default: #0f2040;
+  --color-border-muted:   #081428;
+  --color-border-focus:   #ff4757;
+  --color-link-default:   #4488ff;
+  --color-link-visited:   #ff4757;
+  --color-code-bg:        #060f1e;
+  --color-code-fg:        #4488ff;
+  --color-selection-bg:   #0a2040;
+  --fx-glow-color:        rgba(255, 71, 87, 0.75);
+  --fx-flood-color:       rgba(68, 136, 255, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   20. GLACIER
+   Light: Blinding white canvas, sharp slate border, ice blue
+   Dark:  Deep freeze bg, oxygen-starved blue surface
+   ============================================================ */
+html[data-theme="glacier"] {
+  --color-state-success: #00aa88;
+  --color-state-warning: #7090a0;
+  --color-state-error:   #cc4444;
+  --color-state-info:    #4488cc;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="glacier"][data-mode="light"] {
+  --color-bg-canvas:      #f8fbff;
+  --color-bg-surface:     #ffffff;
+  --color-bg-brand:       #4488cc;
+  --color-fg-default:     #1a2a3a;
+  --color-fg-strong:      #0a1520;
+  --color-fg-muted:       #64748b;
+  --color-border-default: #cce7ff;
+  --color-border-muted:   #e4f0ff;
+  --color-border-focus:   #4488cc;
+  --color-link-default:   #2266aa;
+  --color-link-visited:   #5544aa;
+  --color-code-bg:        #eef5ff;
+  --color-code-fg:        #1a2a3a;
+  --color-selection-bg:   #cce7ff;
+  --fx-glow-color:        rgba(68, 136, 204, 0.55);
+  --fx-flood-color:       rgba(204, 231, 255, 0.06);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="glacier"][data-mode="dark"] {
+  --color-bg-canvas:      #020b1a;
+  --color-bg-surface:     #003d7a;
+  --color-bg-brand:       #88ccff;
+  --color-fg-default:     #a0c8e8;
+  --color-fg-strong:      #d0e8f8;
+  --color-fg-muted:       #3a6080;
+  --color-border-default: #0a2040;
+  --color-border-muted:   #051020;
+  --color-border-focus:   #88ccff;
+  --color-link-default:   #88ccff;
+  --color-link-visited:   #bb88ff;
+  --color-code-bg:        #020810;
+  --color-code-fg:        #88ccff;
+  --color-selection-bg:   #003060;
+  --fx-glow-color:        rgba(136, 204, 255, 0.8);
+  --fx-flood-color:       rgba(136, 204, 255, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   21. STEAMPUNK
+   Light: Parchment canvas, brass brand, mahogany, steam
+   Dark:  London fog bg, gaslight, soot surface
+   ============================================================ */
+html[data-theme="steampunk"] {
+  --color-state-success: #4a7a3a;
+  --color-state-warning: #c8960a;
+  --color-state-error:   #8b2020;
+  --color-state-info:    #4a6080;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="steampunk"][data-mode="light"] {
+  --color-bg-canvas:      #f2e8d0;
+  --color-bg-surface:     #fdf5e0;
+  --color-bg-brand:       #8b6914;
+  --color-fg-default:     #2a1a10;
+  --color-fg-strong:      #180c06;
+  --color-fg-muted:       #7a5a3a;
+  --color-border-default: #c8a870;
+  --color-border-muted:   #ddc8a0;
+  --color-border-focus:   #8b6914;
+  --color-link-default:   #6a4e10;
+  --color-link-visited:   #4a2820;
+  --color-code-bg:        #e8d8b8;
+  --color-code-fg:        #2a1a10;
+  --color-selection-bg:   #d4b870;
+  --fx-glow-color:        rgba(139, 105, 20, 0.65);
+  --fx-flood-color:       rgba(139, 105, 20, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="steampunk"][data-mode="dark"] {
+  --color-bg-canvas:      #1a1208;
+  --color-bg-surface:     #2d2416;
+  --color-bg-brand:       #ffb347;
+  --color-fg-default:     #d4a860;
+  --color-fg-strong:      #f0c880;
+  --color-fg-muted:       #7a6040;
+  --color-border-default: #3a2a14;
+  --color-border-muted:   #221808;
+  --color-border-focus:   #ffb347;
+  --color-link-default:   #ffb347;
+  --color-link-visited:   #c8963c;
+  --color-code-bg:        #100c06;
+  --color-code-fg:        #ffb347;
+  --color-selection-bg:   #4a3018;
+  --fx-glow-color:        rgba(255, 179, 71, 0.8);
+  --fx-flood-color:       rgba(255, 179, 71, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   22. DIESELPUNK
+   Light: Khaki canvas, grease black fg, riveted steel, olive
+   Dark:  Noir city bg, oily steel surface, smog yellow
+   ============================================================ */
+html[data-theme="dieselpunk"] {
+  --color-state-success: #556b2f;
+  --color-state-warning: #8b7355;
+  --color-state-error:   #8b3030;
+  --color-state-info:    #4a6070;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="dieselpunk"][data-mode="light"] {
+  --color-bg-canvas:      #c8b99a;
+  --color-bg-surface:     #d8c8b0;
+  --color-bg-brand:       #556b2f;
+  --color-fg-default:     #2d2520;
+  --color-fg-strong:      #1a1510;
+  --color-fg-muted:       #6b5c4a;
+  --color-border-default: #8a7a68;
+  --color-border-muted:   #a89880;
+  --color-border-focus:   #556b2f;
+  --color-link-default:   #3a4a1e;
+  --color-link-visited:   #5c3a2e;
+  --color-code-bg:        #b8a88a;
+  --color-code-fg:        #2d2520;
+  --color-selection-bg:   #a09070;
+  --fx-glow-color:        rgba(85, 107, 47, 0.6);
+  --fx-flood-color:       rgba(85, 107, 47, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="dieselpunk"][data-mode="dark"] {
+  --color-bg-canvas:      #0d0a08;
+  --color-bg-surface:     #3d3530;
+  --color-bg-brand:       #8b7355;
+  --color-fg-default:     #c8b090;
+  --color-fg-strong:      #e0c8a8;
+  --color-fg-muted:       #6a5840;
+  --color-border-default: #2a2218;
+  --color-border-muted:   #181410;
+  --color-border-focus:   #8b7355;
+  --color-link-default:   #8b7355;
+  --color-link-visited:   #556b2f;
+  --color-code-bg:        #080605;
+  --color-code-fg:        #8b7355;
+  --color-selection-bg:   #3a2e1e;
+  --fx-glow-color:        rgba(139, 115, 85, 0.75);
+  --fx-flood-color:       rgba(139, 115, 85, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   23. SOLARPUNK
+   Light: Cream ceramic canvas, lush green brand, solar gold
+   Dark:  Night garden bg, bioluminescent teal, deep teal
+   ============================================================ */
+html[data-theme="solarpunk"] {
+  --color-state-success: #2d8a47;
+  --color-state-warning: #f5c842;
+  --color-state-error:   #cc3300;
+  --color-state-info:    #00a8b5;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="solarpunk"][data-mode="light"] {
+  --color-bg-canvas:      #f5f2e8;
+  --color-bg-surface:     #fdfcf5;
+  --color-bg-brand:       #2d8a47;
+  --color-fg-default:     #1a2e1a;
+  --color-fg-strong:      #0a1a0a;
+  --color-fg-muted:       #607a60;
+  --color-border-default: #b8d0b0;
+  --color-border-muted:   #d4e4cc;
+  --color-border-focus:   #2d8a47;
+  --color-link-default:   #1e6030;
+  --color-link-visited:   #7a5a00;
+  --color-code-bg:        #e8f0e0;
+  --color-code-fg:        #1a2e1a;
+  --color-selection-bg:   #c8e8c0;
+  --fx-glow-color:        rgba(45, 138, 71, 0.6);
+  --fx-flood-color:       rgba(245, 200, 66, 0.04);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="solarpunk"][data-mode="dark"] {
+  --color-bg-canvas:      #0a1a0f;
+  --color-bg-surface:     #0a2a1f;
+  --color-bg-brand:       #00e5b0;
+  --color-fg-default:     #88ccaa;
+  --color-fg-strong:      #c0f0d8;
+  --color-fg-muted:       #305040;
+  --color-border-default: #0f2a1a;
+  --color-border-muted:   #081810;
+  --color-border-focus:   #00e5b0;
+  --color-link-default:   #00e5b0;
+  --color-link-visited:   #f5c842;
+  --color-code-bg:        #081008;
+  --color-code-fg:        #00e5b0;
+  --color-selection-bg:   #1a4030;
+  --fx-glow-color:        rgba(0, 229, 176, 0.8);
+  --fx-flood-color:       rgba(0, 229, 176, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   24. STONEPUNK
+   Light: Sandstone canvas, slate brand, leather, clay
+   Dark:  Cave fire bg, torch orange, ash white
+   ============================================================ */
+html[data-theme="stonepunk"] {
+  --color-state-success: #6a8a5a;
+  --color-state-warning: #c8a050;
+  --color-state-error:   #a04040;
+  --color-state-info:    #5a6a7a;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="stonepunk"][data-mode="light"] {
+  --color-bg-canvas:      #d4b896;
+  --color-bg-surface:     #e4caa8;
+  --color-bg-brand:       #4a5568;
+  --color-fg-default:     #2a1a10;
+  --color-fg-strong:      #180e08;
+  --color-fg-muted:       #8b6248;
+  --color-border-default: #a08060;
+  --color-border-muted:   #baa080;
+  --color-border-focus:   #4a5568;
+  --color-link-default:   #3a4550;
+  --color-link-visited:   #6a4030;
+  --color-code-bg:        #c4a888;
+  --color-code-fg:        #2a1a10;
+  --color-selection-bg:   #c0a070;
+  --fx-glow-color:        rgba(74, 85, 104, 0.6);
+  --fx-flood-color:       rgba(160, 92, 71, 0.05);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="stonepunk"][data-mode="dark"] {
+  --color-bg-canvas:      #0a0805;
+  --color-bg-surface:     #1a1008;
+  --color-bg-brand:       #ff6b35;
+  --color-fg-default:     #d4cfc9;
+  --color-fg-strong:      #ede8e2;
+  --color-fg-muted:       #706050;
+  --color-border-default: #2a1c10;
+  --color-border-muted:   #181008;
+  --color-border-focus:   #ff6b35;
+  --color-link-default:   #ff6b35;
+  --color-link-visited:   #c8a050;
+  --color-code-bg:        #080603;
+  --color-code-fg:        #ff6b35;
+  --color-selection-bg:   #3a1a08;
+  --fx-glow-color:        rgba(255, 107, 53, 0.8);
+  --fx-flood-color:       rgba(212, 207, 201, 0.04);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   25. DREAMCORE
+   Light: Pastel clouds canvas, cotton candy pink brand
+   Dark:  Nightmare void bg, static purple, watching red
+   ============================================================ */
+html[data-theme="dreamcore"] {
+  --color-state-success: #80e080;
+  --color-state-warning: #ffe080;
+  --color-state-error:   #ff4488;
+  --color-state-info:    #80c0ff;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="dreamcore"][data-mode="light"] {
+  --color-bg-canvas:      #fce4ec;
+  --color-bg-surface:     #fff0f5;
+  --color-bg-brand:       #ff80ab;
+  --color-fg-default:     #2a0a2a;
+  --color-fg-strong:      #1a0618;
+  --color-fg-muted:       #a060a0;
+  --color-border-default: #f0b8d8;
+  --color-border-muted:   #f8d4e8;
+  --color-border-focus:   #ff80ab;
+  --color-link-default:   #cc3388;
+  --color-link-visited:   #8800cc;
+  --color-code-bg:        #f8d4ec;
+  --color-code-fg:        #2a0a2a;
+  --color-selection-bg:   #ffb3d4;
+  --fx-glow-color:        rgba(255, 128, 171, 0.7);
+  --fx-flood-color:       rgba(255, 128, 171, 0.05);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="dreamcore"][data-mode="dark"] {
+  --color-bg-canvas:      #050005;
+  --color-bg-surface:     #0f000f;
+  --color-bg-brand:       #ff0044;
+  --color-fg-default:     #d080d0;
+  --color-fg-strong:      #ff88ff;
+  --color-fg-muted:       #6b006b;
+  --color-border-default: #2a002a;
+  --color-border-muted:   #180018;
+  --color-border-focus:   #ff0044;
+  --color-link-default:   #ff0044;
+  --color-link-visited:   #6b006b;
+  --color-code-bg:        #030003;
+  --color-code-fg:        #ff88ff;
+  --color-selection-bg:   #440022;
+  --fx-glow-color:        rgba(255, 0, 68, 0.85);
+  --fx-flood-color:       rgba(107, 0, 107, 0.06);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   26. FRUTIGER-AERO
+   Light: Vista sky blue canvas, glossy green brand, bubbly white
+   Dark:  Midnight aurora bg, glowing cyan, deep blue
+   ============================================================ */
+html[data-theme="frutiger-aero"] {
+  --color-state-success: #4caf50;
+  --color-state-warning: #ff9800;
+  --color-state-error:   #f44336;
+  --color-state-info:    #00bcd4;
+  --color-debug-marker:  #ff00ff;
+}
+html[data-theme="frutiger-aero"][data-mode="light"] {
+  --color-bg-canvas:      #e8f4fd;
+  --color-bg-surface:     #f8fcff;
+  --color-bg-brand:       #4caf50;
+  --color-fg-default:     #0a1a2e;
+  --color-fg-strong:      #040e1e;
+  --color-fg-muted:       #3a6080;
+  --color-border-default: #b0d4f0;
+  --color-border-muted:   #d0e8f8;
+  --color-border-focus:   #4caf50;
+  --color-link-default:   #0077cc;
+  --color-link-visited:   #6644aa;
+  --color-code-bg:        #daeef8;
+  --color-code-fg:        #0a1a2e;
+  --color-selection-bg:   #b3d9ff;
+  --fx-glow-color:        rgba(76, 175, 80, 0.65);
+  --fx-flood-color:       rgba(0, 153, 255, 0.05);
+  --mode-max-intensity:   0.6;
+}
+html[data-theme="frutiger-aero"][data-mode="dark"] {
+  --color-bg-canvas:      #050a14;
+  --color-bg-surface:     #0a1628;
+  --color-bg-brand:       #00e5ff;
+  --color-fg-default:     #90c8e8;
+  --color-fg-strong:      #c8e8f8;
+  --color-fg-muted:       #305870;
+  --color-border-default: #0f2038;
+  --color-border-muted:   #08121e;
+  --color-border-focus:   #00e5ff;
+  --color-link-default:   #00e5ff;
+  --color-link-visited:   #88aaff;
+  --color-code-bg:        #030810;
+  --color-code-fg:        #00e5ff;
+  --color-selection-bg:   #003358;
+  --fx-glow-color:        rgba(0, 229, 255, 0.85);
+  --fx-flood-color:       rgba(0, 229, 255, 0.05);
+  --mode-max-intensity:   1.0;
+}
+
+
+/* ============================================================
+   Theme button self-rendering: each .theme-btn[data-theme-self="X"]
+   renders in its own colors.
+   These are handled inline via JS injected style attributes.
+   ============================================================ */

@@ -1,0 +1,570 @@
+/* ============================================================
+   ILLUMINATION.CSS — Cockpit Lighting & Glow Effects System
+   Polly Prediction Partners v0.03.01
+
+   Simulates cockpit lighting physics using an inverse-square
+   approximation: radii are layered at 1×, 2×, and 4× the base
+   radius so intensity falls off naturally with distance.
+
+   Architecture
+   ─────────────
+   All effects are driven by CSS custom properties from tokens.css:
+     --fx-master-enabled    (0 | 1)   — global kill-switch
+     --fx-master-scale      (number)  — global intensity multiplier
+     --fx-master-dimmer     (0.25–1)  — global brightness dimmer
+     --fx-glow-text-primary   (0–1)   — TEXT channel, primary
+     --fx-glow-text-secondary (0–1)   — TEXT channel, secondary
+     --fx-glow-bars-primary   (0–1)   — BARS channel, region borders
+     --fx-glow-bars-secondary (0–1)   — BARS channel, cards
+     --fx-glow-flood          (0–1)   — FLOOD channel
+     --fx-glow-display        (0–1)   — DISPLAY channel (self-illum.)
+     --fx-glow-color          (color) — glow hue (set by theme)
+     --fx-flood-color         (color) — flood hue (set by theme)
+     --mode-max-intensity     (0–1)   — mode ceiling
+
+   Channel enable flags (from tokens.css):
+     --fx-text-primary-enabled, --fx-text-secondary-enabled,
+     --fx-bars-primary-enabled, --fx-bars-secondary-enabled,
+     --fx-flood-enabled, --fx-display-enabled
+
+   Per-channel dimmers:
+     --fx-text-dimmer, --fx-bars-dimmer,
+     --fx-flood-dimmer, --fx-display-dimmer
+
+   Precedence stack (low → high):
+     base defaults (tokens.css) → theme → mode → JS runtime
+   ============================================================ */
+
+
+/* ============================================================
+   SECTION 1 — INTERNAL SHORTHAND VARIABLES
+   Computed once here; all effect rules reference these.
+   ============================================================ */
+
+:root {
+  /*
+   * Combined scale = master_scale × master_dimmer × master_enabled
+   * When master is off (--fx-master-enabled: 0) this collapses to 0,
+   * zeroing every downstream calc() automatically.
+   */
+  --_fx-combined-scale:
+    calc(var(--fx-master-scale, 1)
+       * var(--fx-master-dimmer, 1)
+       * var(--fx-master-enabled, 0));
+
+  /* Per-channel effective intensities */
+  --_fx-tp: calc(var(--fx-glow-text-primary,   0) * var(--fx-text-primary-enabled,  1) * var(--fx-text-dimmer,    1) * var(--_fx-combined-scale));
+  --_fx-ts: calc(var(--fx-glow-text-secondary, 0) * var(--fx-text-secondary-enabled,1) * var(--fx-text-dimmer,    1) * var(--_fx-combined-scale));
+  --_fx-bp: calc(var(--fx-glow-bars-primary,   0) * var(--fx-bars-primary-enabled,  1) * var(--fx-bars-dimmer,    1) * var(--_fx-combined-scale));
+  --_fx-bs: calc(var(--fx-glow-bars-secondary, 0) * var(--fx-bars-secondary-enabled,1) * var(--fx-bars-dimmer,    1) * var(--_fx-combined-scale));
+  --_fx-fl: calc(var(--fx-glow-flood,          0) * var(--fx-flood-enabled,          1) * var(--fx-flood-dimmer,   1) * var(--_fx-combined-scale));
+  --_fx-dp: calc(var(--fx-glow-display,        0) * var(--fx-display-enabled,        1) * var(--fx-display-dimmer, 1) * var(--_fx-combined-scale));
+}
+
+
+/* ============================================================
+   SECTION 2 — TEXT CHANNEL
+   text-shadow glow applied to readable text elements.
+   Three-layer stack: tight halo → mid bloom → far corona.
+   ============================================================ */
+
+/* --- Primary text: headings, labels, H1–H4 --- */
+.glow-text-primary,
+h1.glow-text-primary,
+h2.glow-text-primary,
+h3.glow-text-primary,
+h4.glow-text-primary {
+  text-shadow:
+    /* Layer 1: tight halo (4px) */
+    0 0 calc(4px  * var(--_fx-tp)) var(--fx-glow-color),
+    /* Layer 2: mid bloom (8px) */
+    0 0 calc(8px  * var(--_fx-tp)) var(--fx-glow-color),
+    /* Layer 3: far corona (16px) — inverse-square fall-off */
+    0 0 calc(16px * var(--_fx-tp)) var(--fx-glow-color);
+
+  transition:
+    text-shadow var(--transition-slow),
+    color       var(--transition-slow);
+}
+
+/* Convenience: auto-apply to all headings inside a lit region */
+.glow-text-primary h1,
+.glow-text-primary h2,
+.glow-text-primary h3,
+.glow-text-primary h4 {
+  text-shadow:
+    0 0 calc(4px  * var(--_fx-tp)) var(--fx-glow-color),
+    0 0 calc(8px  * var(--_fx-tp)) var(--fx-glow-color),
+    0 0 calc(16px * var(--_fx-tp)) var(--fx-glow-color);
+  transition: text-shadow var(--transition-slow), color var(--transition-slow);
+}
+
+/* --- Secondary text: descriptions, metadata, small text --- */
+.glow-text-secondary,
+.glow-text-secondary p,
+.glow-text-secondary small,
+.glow-text-secondary span {
+  text-shadow:
+    /* Softer — secondary text sits one tier below primary */
+    0 0 calc(3px  * var(--_fx-ts)) var(--fx-glow-color),
+    0 0 calc(6px  * var(--_fx-ts)) var(--fx-glow-color),
+    0 0 calc(12px * var(--_fx-ts)) var(--fx-glow-color);
+
+  transition:
+    text-shadow var(--transition-slow),
+    color       var(--transition-slow);
+}
+
+
+/* ============================================================
+   SECTION 3 — BARS CHANNEL
+   box-shadow border glow on structural elements.
+   Positive spread simulates light leaking outward from a lit
+   panel edge; the inner negative-spread shadow adds depth.
+   ============================================================ */
+
+/* --- Primary bars: region wrappers, .region --- */
+.glow-bars-primary,
+.region.glow-bars-primary {
+  box-shadow:
+    /* Inner edge catch-light */
+    inset 0 0 calc(6px  * var(--_fx-bp)) var(--fx-glow-color),
+    /* Outer near glow */
+          0 0 calc(8px  * var(--_fx-bp)) var(--fx-glow-color),
+    /* Outer mid glow */
+          0 0 calc(18px * var(--_fx-bp)) var(--fx-glow-color),
+    /* Outer far corona */
+          0 0 calc(36px * var(--_fx-bp)) var(--fx-glow-color);
+
+  transition: box-shadow var(--transition-slow), border-color var(--transition-slow);
+}
+
+/* --- Secondary bars: cards --- */
+.glow-bars-secondary,
+.card.glow-bars-secondary {
+  box-shadow:
+    inset 0 0 calc(4px  * var(--_fx-bs)) var(--fx-glow-color),
+          0 0 calc(6px  * var(--_fx-bs)) var(--fx-glow-color),
+          0 0 calc(12px * var(--_fx-bs)) var(--fx-glow-color);
+
+  transition: box-shadow var(--transition-slow), border-color var(--transition-slow);
+}
+
+
+/* ============================================================
+   SECTION 4 — FLOOD CHANNEL
+   Ambient background glow — a radial gradient pseudo-element
+   overlaid on .app-root that simulates cockpit overhead fill.
+   ============================================================ */
+
+.glow-flood.app-root,
+.app-root.glow-flood {
+  position: relative; /* ensure stacking context */
+}
+
+.glow-flood.app-root::before,
+.app-root.glow-flood::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* below content, above raw canvas bg */
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      var(--fx-flood-color),
+      transparent 70%
+    );
+
+  /* Opacity is driven by the flood intensity */
+  opacity: calc(var(--_fx-fl) * var(--mode-max-intensity, 1));
+
+  transition: opacity var(--transition-slow);
+}
+
+/* Standalone flood overlay class (can be placed on any container) */
+.glow-flood {
+  position: relative;
+}
+.glow-flood::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      var(--fx-flood-color),
+      transparent 70%
+    );
+  opacity: calc(var(--_fx-fl) * var(--mode-max-intensity, 1));
+  transition: opacity var(--transition-slow);
+}
+
+
+/* ============================================================
+   SECTION 5 — DISPLAY CHANNEL
+   Self-illumination on display-like components.
+   Combines inset glow (phosphor bloom from behind the screen
+   glass) with a subtle outer halo.
+   ============================================================ */
+
+.glow-display,
+.display-component,
+.display-component.glow-display {
+  box-shadow:
+    /* Inset phosphor bloom */
+    inset 0 0 calc(12px * var(--_fx-dp)) var(--fx-glow-color),
+    inset 0 0 calc(24px * var(--_fx-dp)) var(--fx-glow-color),
+    /* Outer halo — light escaping at bezel edges */
+          0 0 calc(8px  * var(--_fx-dp)) var(--fx-glow-color),
+          0 0 calc(20px * var(--_fx-dp)) var(--fx-glow-color);
+
+  transition: box-shadow var(--transition-slow);
+}
+
+/* Apply display glow to semantic display-like elements */
+.terminal-display,
+.graph-container,
+.chart-container,
+.dropdown-panel,
+.data-log,
+.ticker-display,
+.price-display {
+  box-shadow:
+    inset 0 0 calc(12px * var(--_fx-dp)) var(--fx-glow-color),
+    inset 0 0 calc(24px * var(--_fx-dp)) var(--fx-glow-color),
+          0 0 calc(8px  * var(--_fx-dp)) var(--fx-glow-color),
+          0 0 calc(20px * var(--_fx-dp)) var(--fx-glow-color);
+
+  transition: box-shadow var(--transition-slow);
+}
+
+
+/* ============================================================
+   SECTION 6 — ILLUMINATION PANEL
+   The overhead lighting control panel — mounts above the main
+   viewport and houses channel groups with switches and dials.
+   ============================================================ */
+
+.illumination-panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 1px solid #444;
+  border-radius: var(--layout-radius, 6px);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Divider between panel sections */
+.illumination-panel-divider {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(180deg, transparent, #555, transparent);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* Panel title badge */
+.illumination-panel-title {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #888;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  user-select: none;
+  padding: 0 2px;
+}
+
+
+/* ============================================================
+   SECTION 7 — ILLUMINATION CHANNEL
+   Individual control group: label + switch + dial + value readout.
+   ============================================================ */
+
+.illumination-channel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 36px;
+}
+
+/* Channel name plate */
+.illumination-channel-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aaa;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Numeric readout under the dial */
+.illumination-channel-value {
+  font-family: var(--font-mono, monospace);
+  font-size: 9px;
+  color: #ffdd66;
+  min-width: 26px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+
+/* ============================================================
+   SECTION 8 — FLIP SWITCH
+   Aircraft-style physical panel toggle.
+   Guard element simulates a flip-guard on dangerous switches.
+   ============================================================ */
+
+.flip-switch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Engraved text label above/below the switch body */
+.flip-switch-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #999;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* The housing/body of the switch */
+.flip-switch-body {
+  width: 12px;
+  height: 24px;
+  background: #888;
+  border-radius: 2px;
+  position: relative;
+  border: 1px solid #555;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: background var(--transition-fast);
+}
+
+/* The lever that moves */
+.flip-switch-lever {
+  width: 8px;
+  height: 10px;
+  background: linear-gradient(135deg, #ddd, #aaa);
+  border-radius: 1px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: top 0.15s ease, background 0.15s ease;
+  border: 1px solid #666;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* ON state — lever rides high, body brightens */
+.flip-switch-body.switch-on {
+  background: #777;
+}
+.flip-switch-body.switch-on .flip-switch-lever {
+  top: 2px;
+  background: linear-gradient(135deg, #fff, #ccc);
+  box-shadow: 0 0 4px rgba(255, 255, 200, 0.4);
+}
+
+/* OFF state — lever drops low */
+.flip-switch-body.switch-off .flip-switch-lever {
+  top: 12px;
+}
+
+/* Safety guard (optional flip-guard cover) */
+.flip-switch-guard {
+  width: 16px;
+  height: 14px;
+  background: linear-gradient(180deg, #e44 0%, #c22 100%);
+  border-radius: 2px 2px 0 0;
+  border: 1px solid #911;
+  transform-origin: bottom center;
+  transform: rotateX(0deg);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+.flip-switch-guard.guard-open {
+  transform: rotateX(-60deg);
+}
+
+/* Hover + active feedback */
+.flip-switch:hover .flip-switch-body {
+  border-color: #888;
+}
+.flip-switch:active .flip-switch-lever {
+  filter: brightness(0.9);
+}
+
+
+/* ============================================================
+   SECTION 9 — ROTARY DIAL (ILLUMINATION DIMMER KNOB)
+   CSS-only rotary knob. Rotation angle is applied via
+   --dial-angle (set by JS) on the element itself.
+   ============================================================ */
+
+.rotary-dial {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #666, #1a1a1a);
+  border: 2px solid #444;
+  position: relative;
+  cursor: grab;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transform: rotate(var(--dial-angle, -135deg));
+  transition: transform 0.05s linear, box-shadow var(--transition-fast);
+  user-select: none;
+  -webkit-user-drag: none;
+  will-change: transform;
+}
+
+.rotary-dial:active {
+  cursor: grabbing;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Indicator pip (yellow line pointing toward 12 o'clock) */
+.rotary-dial::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background: #ffdd44;
+  top: 3px;
+  left: 50%;
+  /* translateX centres the 2px bar; transform-origin at bottom
+     means the pip pivots around the knob's centre as it rotates */
+  transform: translateX(-50%);
+  transform-origin: bottom center;
+  border-radius: 1px;
+  box-shadow: 0 0 3px rgba(255, 221, 68, 0.6);
+}
+
+/* Detent marks around the outer rim */
+.rotary-dial::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Larger "precision" variant */
+.rotary-dial-lg {
+  width: 48px;
+  height: 48px;
+}
+.rotary-dial-lg::after {
+  height: 16px;
+  top: 4px;
+}
+
+
+/* ============================================================
+   SECTION 10 — MASTER ILLUMINATION SWITCH
+   The big MASTER ON/OFF toggle — styled as an oversized
+   guarded aircraft master switch.
+   ============================================================ */
+
+.illumination-master-switch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.illumination-master-switch .flip-switch-body {
+  width: 16px;
+  height: 32px;
+}
+.illumination-master-switch .flip-switch-lever {
+  width: 12px;
+  height: 14px;
+}
+.illumination-master-switch .flip-switch-body.switch-on {
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.5),
+    0 0 8px rgba(255, 230, 100, 0.3);
+}
+
+.illumination-master-label {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #cc9900;
+  text-shadow: 0 0 6px rgba(200, 150, 0, 0.4);
+}
+
+
+/* ============================================================
+   SECTION 11 — TRANSITION SMOOTHING
+   Scoped to glow-bearing classes and physical controls so the
+   rule does not touch every element on the page.
+   ============================================================ */
+
+/* Smooth glow changes on all illumination-channel classes */
+[class*="glow-"],
+.region,
+.card,
+.display-component,
+.terminal-display,
+.graph-container,
+.chart-container,
+.data-log,
+.dropdown-panel,
+.illumination-panel,
+.illumination-channel,
+.indicator-light {
+  transition-property:
+    text-shadow,
+    box-shadow,
+    opacity,
+    background-color,
+    border-color,
+    color;
+  transition-duration: var(--transition-slow, 300ms);
+  transition-timing-function: ease;
+}
+
+/* Interactive controls snap faster so they still feel responsive */
+.flip-switch,
+.flip-switch-lever,
+.flip-switch-body,
+.rotary-dial,
+button,
+input,
+select,
+[role="button"],
+[role="switch"] {
+  transition-duration: var(--transition-fast, 80ms);
+}
