@@ -376,18 +376,26 @@ Last update: 02-27-26
 | Webpage Dark         | Modern Default Normal "Night Mode" reading. Like google's dark mode        |
 | Mosaic 1993 Light    | Windows 3.1 Silver chrome, chiseled borders. Teal bg (0, 128, 128)         |
 | Mosaic 1993 Dark     | Exact Inverse of mosaic 1993 light mode                                    |
-| NeonVice 1985 Light  | GTA NeonVice NeonCity. Miami pastels, linen suits, art deco pinks.         |
-| NeonVice 1985 Dark   | Ocean Drive Midnight. Misty purple haze, humid glow.                       |
-| NeonCity 2085 Light  | 2085 Utopia. Hopeful, Chromium, Electric neon.                             |
-| NeonCity 2085 Dark   | 2085 Dystopia. Netrunner. sharp laser edges.                               |
+| Gen7 Cockpit Light   | Gen 7 Fighter. Dark Gull Gray (FS 36231), MFD Green.                       |
+| Gen7 Cockpit Dark    | Night Vision/Stealth. Deep charcoal, NVG Green glow.                       |
+| USSR Cockpit Light   | Soviet Cold War. MiG Turquoise (#3d90a2). Stress-reducing blue.            |
+| USSR Cockpit Dark    | Night Intercept. region bodies still (#3d90a2).                            |
+| Neon Vice 1985 Light | GTA Neon Vice Neon City. Miami pastels, linen suits, art deco pinks.       |
+| Neon Vice 1985 Dark  | Ocean Drive Midnight. Wide misty purple haze, humid glow.                  |
+| Neon City 2085 Light | 2085 Utopia. Hopeful, Chromium, Electric neon.                             |
+| Neon City 2085 Dark  | 2085 Dystopia. Netrunner. sharp laser edges.                               |
 | Coniforest Light     | Evergreens. Mt. Rainier (Cold green). Mist, Granite, Pine, and Khaki.      |
 | Coniforest Dark      | PNW Night. Deep evergreen, cold shadows, campfire ash.                     |
 | Raneforest Light     | Amazon (Hot green). Humid, Pith Helmet Beige, Parrot Green.                |
 | Raneforest Dark      | Amazon Night. Deep canopy, bioluminescence, toxic accents.                 |
-| Gen7 Cockpit Light   | Gen 7 Fighter. Dark Gull Gray (FS 36231), MFD Green.                       |
-| Gen7 Cockpit Dark    | Night Vision/Stealth. Deep charcoal, NVG Green glow.                       |
-| USSR Cockpit Light   | Soviet Cold War. MiG Turquoise (#3d90a2). Stress-reducing blue.            |
-| USSR Cockpit Dark    | Night Intercept. region bodies stll (#3d90a2).                             |
+| Art Deco Light       | Roaring Twenties. Ivory, lacquer black, champagne gold, geometric trim.    |
+| Art Deco Dark        | Ballroom. Piano black, brass lines, emerald accents, sharp symmetry.       |
+| Chrome Light         | Polished studio metal. Brushed aluminum, clean white, cool blue reflections|
+| Chrome Dark          | Gunmetal and smoked glass. Cold cyan edge lights with mirror-like contrast.|
+| Holographic Light    | Iridescent daylight. Pearl base with shifting teal spectral shimmer        |
+| Holographic Dark     | Prism noir. Charcoal base, spectral highlights, neon refraction edges.     |
+| Vapor Light          | Pastel arcade sunrise. Mint, peach, sky blue haze, soft retro gradients.   |
+| Vapor Dark           | Late-night vaporwave. Deep navy, hot pink, cyan glow, retro grid ambience. |
 | Paper Light          | The Office. Copier paper, toner black, ballpoint blue.                     |
 | Paper Dark           | Carbon. Deep indigo back, faint blue transfer text.                        |
 | Ledger 1920 Light    | Wall St Ledger. Manila folder, Banker Green, Typewriter.                   |
@@ -1844,4 +1852,3 @@ A: We are doing tht right now. Little by little i will integrate these updated i
 ---
 
 *End Chapter 7*
-
