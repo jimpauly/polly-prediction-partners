@@ -116,6 +116,7 @@ html[data-theme="mosaic-1993"][data-mode="dark"] {
    Dark:  Deep charcoal, NVG Green glow
    ============================================================ */
 html[data-theme="gen7-cockpit"] {
+  --font-sans: 'Courier New', Courier, monospace;
   --color-state-success: #00ff41;
   --color-state-warning: #ffcc00;
   --color-state-error:   #ff3300;
@@ -168,6 +169,7 @@ html[data-theme="gen7-cockpit"][data-mode="dark"] {
    Dark:  Near-black bg, turquoise region bodies, Night Intercept
    ============================================================ */
 html[data-theme="ussr-cockpit"] {
+  --font-sans: 'Courier New', Courier, monospace;
   --color-state-success: #4caf50;
   --color-state-warning: #ff9800;
   --color-state-error:   #f44336;
@@ -428,6 +430,7 @@ html[data-theme="raneforest"][data-mode="dark"] {
    Dark:  Piano black bg, brass, emerald
    ============================================================ */
 html[data-theme="streamline-moderne"] {
+  --font-sans: Georgia, 'Times New Roman', serif;
   --color-state-success: #00a86b;
   --color-state-warning: #c9a84c;
   --color-state-error:   #cc2200;
@@ -688,6 +691,7 @@ html[data-theme="paper"][data-mode="dark"] {
    Dark:  Matte black bg, gold foil, Jazz Moderne
    ============================================================ */
 html[data-theme="ledger-1920"] {
+  --font-sans: Georgia, 'Times New Roman', serif;
   --color-state-success: #2d5a3d;
   --color-state-warning: #c9a84c;
   --color-state-error:   #8b2020;
@@ -740,6 +744,7 @@ html[data-theme="ledger-1920"][data-mode="dark"] {
    Dark:  AutoCAD black bg, blueprint blue fg, terminal green
    ============================================================ */
 html[data-theme="blueprint"] {
+  --font-sans: 'Courier New', Courier, monospace;
   --color-state-success: #00a550;
   --color-state-warning: #f5a623;
   --color-state-error:   #d0021b;
@@ -844,6 +849,7 @@ html[data-theme="chalkboard"][data-mode="dark"] {
    Dark:  Green CRT bg, phosphor green fg
    ============================================================ */
 html[data-theme="phosphor"] {
+  --font-sans: 'Courier New', Courier, monospace;
   --color-state-success: #33ff00;
   --color-state-warning: #ffcc00;
   --color-state-error:   #ff3300;
@@ -1052,6 +1058,7 @@ html[data-theme="glacier"][data-mode="dark"] {
    Dark:  London fog bg, gaslight, soot surface
    ============================================================ */
 html[data-theme="steampunk"] {
+  --font-sans: Georgia, 'Times New Roman', serif;
   --color-state-success: #4a7a3a;
   --color-state-warning: #c8960a;
   --color-state-error:   #8b2020;
@@ -1296,7 +1303,7 @@ html[data-theme="dreamcore"][data-mode="dark"] {
   --color-border-muted:   #180018;
   --color-border-focus:   #ff0044;
   --color-link-default:   #ff0044;
-  --color-link-visited:   #6b006b;
+  --color-link-visited:   #cc44ff;
   --color-code-bg:        #030003;
   --color-code-fg:        #ff88ff;
   --color-selection-bg:   #440022;
