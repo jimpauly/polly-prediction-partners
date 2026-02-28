@@ -109,6 +109,30 @@ body {
   z-index: 1;
 }
 
+/* ============================================================
+   STUDIO LAYOUT OVERRIDES
+   Trade and Fly studios: sidebars phase out, main expands to
+   full width giving maximum space to the live data interface.
+   ============================================================ */
+
+/* Trade studio: hide sidebars, main spans all three columns */
+.app-root[data-active-studio="trade"],
+.app-root[data-active-studio="fly"] {
+  grid-template-columns: 0 1fr 0;
+  grid-template-areas:
+    "header    header    header"
+    "navbar    navbar    navbar"
+    "main      main      main"
+    "bottombar bottombar actionbar";
+}
+
+.app-root[data-active-studio="trade"] .region-lsidebar,
+.app-root[data-active-studio="trade"] .region-rsidebar,
+.app-root[data-active-studio="fly"]   .region-lsidebar,
+.app-root[data-active-studio="fly"]   .region-rsidebar {
+  display: none;
+}
+
 
 /* ============================================================
    SECTION 3 — REGION BASE

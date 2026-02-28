@@ -50,6 +50,10 @@ const studios = (() => {
       activeBtn.setAttribute('aria-pressed', 'true');
     }
 
+    // Update app-root data attribute for CSS-driven layout changes (sidebar visibility)
+    const appRoot = document.getElementById('app-root');
+    if (appRoot) appRoot.dataset.activeStudio = studioName;
+
     // Trigger studio-specific init
     if (studioName === 'design' && window.designStudio) {
       window.designStudio.onShow();
