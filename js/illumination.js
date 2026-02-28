@@ -77,12 +77,16 @@ const illumination = (() => {
   function toggleChannel(channel) {
     if (!state.channels[channel]) return;
     state.channels[channel].enabled = !state.channels[channel].enabled;
+    const enabled = state.channels[channel].enabled;
     const switchId = `switch-body-${channel}`;
     const body = document.getElementById(switchId);
     if (body) {
-      body.classList.toggle('switch-on', state.channels[channel].enabled);
-      body.classList.toggle('switch-off', !state.channels[channel].enabled);
+      body.classList.toggle('switch-on', enabled);
+      body.classList.toggle('switch-off', !enabled);
     }
+    // Keep aria-checked in sync on the parent switch element
+    const switchEl = document.getElementById(`switch-${channel}`);
+    if (switchEl) switchEl.setAttribute('aria-checked', enabled);
     applyAll();
   }
 
@@ -182,6 +186,21 @@ const illumination = (() => {
   function init() {
     applyAll();
     initDials();
+    initSwitches();
+  }
+
+  // Make flip-switches keyboard-accessible (Enter/Space to toggle)
+  function initSwitches() {
+    document.querySelectorAll('.flip-switch[role="switch"]').forEach(sw => {
+      // Ensure focusable
+      if (!sw.hasAttribute('tabindex')) sw.setAttribute('tabindex', '0');
+      sw.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          sw.click();
+        }
+      });
+    });
   }
 
   return { init, toggleMaster, toggleChannel, setDimmer, setDayNVG, syncDayNvg, updateMaxIntensity, applyAll, state };

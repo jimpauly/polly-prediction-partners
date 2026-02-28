@@ -120,8 +120,14 @@ const themes = (() => {
   function updateModeButtons() {
     const lightBtn = document.getElementById('mode-btn-light');
     const darkBtn = document.getElementById('mode-btn-dark');
-    if (lightBtn) lightBtn.classList.toggle('active', currentMode === 'light');
-    if (darkBtn) darkBtn.classList.toggle('active', currentMode === 'dark');
+    if (lightBtn) {
+      lightBtn.classList.toggle('active', currentMode === 'light');
+      lightBtn.setAttribute('aria-pressed', currentMode === 'light');
+    }
+    if (darkBtn) {
+      darkBtn.classList.toggle('active', currentMode === 'dark');
+      darkBtn.setAttribute('aria-pressed', currentMode === 'dark');
+    }
   }
 
   function updateActiveButton() {

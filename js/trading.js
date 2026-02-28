@@ -368,7 +368,9 @@ const trading = (() => {
   function setGlobalPermission(perm) {
     globalPermission = perm;
     document.querySelectorAll('#global-permission .perm-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.perm === perm);
+      const active = btn.dataset.perm === perm;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active);
     });
   }
 
@@ -376,7 +378,9 @@ const trading = (() => {
     agentPermissions[agent] = perm;
     const containerId = `${agent}-permission`;
     document.querySelectorAll(`#${containerId} .perm-btn`).forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.perm === perm);
+      const active = btn.dataset.perm === perm;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active);
     });
   }
 
@@ -384,7 +388,10 @@ const trading = (() => {
     plTimeView = view;
     ['24h', '1w', '1m', '1y', 'all'].forEach(v => {
       const btn = document.getElementById(`pl-btn-${v}`);
-      if (btn) btn.classList.toggle('active', v === view);
+      if (btn) {
+        btn.classList.toggle('active', v === view);
+        btn.setAttribute('aria-pressed', v === view);
+      }
     });
     renderPLChart();
   }
@@ -393,7 +400,10 @@ const trading = (() => {
     plYAxisView = view;
     ['10', '100', '1k', '10k', 'all'].forEach(v => {
       const btn = document.getElementById(`pl-y-${v}`);
-      if (btn) btn.classList.toggle('active', v === view);
+      if (btn) {
+        btn.classList.toggle('active', v === view);
+        btn.setAttribute('aria-pressed', v === view);
+      }
     });
     renderPLChart();
   }

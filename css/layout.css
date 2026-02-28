@@ -1521,3 +1521,32 @@ html {
     outline: 2px solid Highlight;
   }
 }
+
+
+/* ============================================================
+   SECTION 28 — FOCUS-VISIBLE: ALL REMAINING INTERACTIVE ELEMENTS
+   Ensures every focusable control shows a clear keyboard-focus
+   outline. Uses :focus-visible so mouse clicks don't show it.
+   ============================================================ */
+
+.toggle-btn:focus-visible,
+.day-nvg-btn:focus-visible,
+.studio-btn:focus-visible,
+.perm-btn:focus-visible,
+.btn-sm:focus-visible,
+.theme-btn:focus-visible,
+.notebook-tool-btn:focus-visible,
+.notebook-add-btn:focus-visible,
+.notebook-check:focus-visible,
+.notebook-delete:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.25);
+}
+
+/* Flip switches use role="switch" — keyboard focus ring matches dial style */
+[role="switch"]:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
