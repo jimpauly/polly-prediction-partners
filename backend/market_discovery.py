@@ -57,6 +57,7 @@ class MarketDiscovery:
         self._ws = ws_client
         self._cache = cache
         self._db = db
+        self._env = rest_client._env
         self._running = False
 
         # Tickers we have already subscribed to avoid redundant subscribe calls
@@ -160,6 +161,6 @@ class MarketDiscovery:
     async def _persist_market(self, market: dict, internal_state: str) -> None:
         """Upsert market record in the database."""
         try:
-            await self._db.upsert_market(market, internal_state)
+            await self._db.upsert_market(market, internal_state, self._env)
         except Exception as exc:
             logger.warning("Failed to persist market", extra={"ticker": market.get("ticker"), "error": str(exc)})

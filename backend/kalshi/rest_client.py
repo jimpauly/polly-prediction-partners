@@ -15,7 +15,7 @@ from typing import Any
 
 import aiohttp
 
-from kalshi.auth import build_headers, load_private_key
+from kalshi.auth import build_headers, load_private_key, load_private_key_from_pem
 import config
 
 logger = logging.getLogger(__name__)

@@ -108,6 +108,9 @@ async def _dispatch_messages(
                     await engine.handle_order_update(inner, env)
 
             elif msg_type == "user:position":
+                engine = engines.get(env)
+                if engine:
+                    await engine.handle_position_update(inner, env)
                 await broadcaster.broadcast({"type": "position_update", **inner, "environment": env})
 
         except Exception as exc:

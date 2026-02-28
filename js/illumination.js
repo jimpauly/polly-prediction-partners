@@ -77,12 +77,16 @@ const illumination = (() => {
   function toggleChannel(channel) {
     if (!state.channels[channel]) return;
     state.channels[channel].enabled = !state.channels[channel].enabled;
+    const enabled = state.channels[channel].enabled;
     const switchId = `switch-body-${channel}`;
     const body = document.getElementById(switchId);
     if (body) {
-      body.classList.toggle('switch-on', state.channels[channel].enabled);
-      body.classList.toggle('switch-off', !state.channels[channel].enabled);
+      body.classList.toggle('switch-on', enabled);
+      body.classList.toggle('switch-off', !enabled);
     }
+    // Keep aria-checked in sync on the parent switch element
+    const switchEl = document.getElementById(`switch-${channel}`);
+    if (switchEl) switchEl.setAttribute('aria-checked', enabled);
     applyAll();
   }
 
@@ -146,12 +150,57 @@ const illumination = (() => {
       });
 
       document.addEventListener('mouseup', () => { isDragging = false; });
+
+      // Phase 6: Keyboard control — ↑/↓ arrows adjust value, Home/End jump to min/max
+      const DIAL_STEP_SMALL = 0.05; // 5% per key press
+      const DIAL_STEP_LARGE = 0.10; // 10% per key press (with Shift)
+      dial.addEventListener('keydown', e => {
+        const step = e.shiftKey ? DIAL_STEP_LARGE : DIAL_STEP_SMALL;
+        let val = parseFloat(dial.dataset.value) || 1.0;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          val = Math.min(1.0, val + step);
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          val = Math.max(0.25, val - step);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          val = 0.25;
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          val = 1.0;
+        } else {
+          return;
+        }
+        dial.dataset.value = val.toFixed(2);
+        const angle = ((val - 0.25) / 0.75) * 270 - 135;
+        dial.style.setProperty('--dial-angle', `${angle}deg`);
+        // Update aria-valuenow (0–100 scale)
+        dial.setAttribute('aria-valuenow', Math.round((val - 0.25) / 0.75 * 100));
+        const channelId = dial.id.replace('dial-', '');
+        setDimmer(channelId, val);
+      });
     });
   }
 
   function init() {
     applyAll();
     initDials();
+    initSwitches();
+  }
+
+  // Make flip-switches keyboard-accessible (Enter/Space to toggle)
+  function initSwitches() {
+    document.querySelectorAll('.flip-switch[role="switch"]').forEach(sw => {
+      // Ensure focusable
+      if (!sw.hasAttribute('tabindex')) sw.setAttribute('tabindex', '0');
+      sw.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          sw.click();
+        }
+      });
+    });
   }
 
   return { init, toggleMaster, toggleChannel, setDimmer, setDayNVG, syncDayNvg, updateMaxIntensity, applyAll, state };
