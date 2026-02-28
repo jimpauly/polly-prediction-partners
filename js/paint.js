@@ -509,6 +509,9 @@ const paintApp = (() => {
     data[idx] = rgb[0]; data[idx + 1] = rgb[1]; data[idx + 2] = rgb[2]; data[idx + 3] = 255;
   }
 
+  // tolerance: per-channel RGB difference (0–255) allowed when comparing colors.
+  // A value of 30 handles minor anti-aliasing / compression artefacts without
+  // being so loose that visually distinct colors are treated as equal.
   function colorsMatch(a, b, tolerance = 30) {
     return Math.abs(a[0] - b[0]) <= tolerance &&
            Math.abs(a[1] - b[1]) <= tolerance &&
