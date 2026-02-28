@@ -263,6 +263,7 @@ const trading = (() => {
     renderSeriesCards();
   }
 
+  // Placeholder: filter/sort logic will be implemented when live API data is available
   function applyFilters() {}
 
   function setGlobalPermission(perm) {

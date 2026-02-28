@@ -285,7 +285,7 @@ const devLogs = (() => {
 
   function addLog(type, msg) {
     const now = new Date();
-    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
     logs.unshift({ type, msg: String(msg).slice(0, 80), time });
     if (logs.length > MAX_LOGS) logs.pop();
     render();

@@ -648,7 +648,8 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--indicator-color, currentColor);
+  color: var(--indicator-color, currentColor);
   flex-shrink: 0;
   position: relative;
   transition:
@@ -1129,3 +1130,167 @@ html {
 .region-rsidebar {
   contain: layout style;
 }
+
+/* ============================================================
+   COMPONENT EXTENSIONS
+   ============================================================ */
+
+/* .active alias for toggle-active (used across buttons) */
+.toggle-btn.active,
+.btn.active,
+.btn-sm.active {
+  background: var(--color-bg-brand);
+  border-color: var(--color-bg-brand);
+  color: #ffffff;
+}
+
+/* Studio selector chunky radio buttons */
+.studio-selector {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  align-items: center;
+}
+
+.studio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 18px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 2px solid var(--color-border-default);
+  border-radius: var(--layout-radius);
+  background: var(--color-bg-surface);
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-fast);
+  position: relative;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.studio-btn:hover {
+  border-color: var(--color-border-focus);
+  color: var(--color-fg-default);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.studio-btn.active,
+.studio-btn[aria-selected="true"] {
+  background: var(--color-bg-brand);
+  border-color: var(--color-bg-brand);
+  color: #ffffff;
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* DAY/NVG toggle buttons */
+.day-nvg-btn {
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid var(--color-border-default);
+  border-radius: 3px;
+  background: var(--color-bg-surface);
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.05em;
+}
+
+.day-nvg-btn.active {
+  background: var(--color-bg-brand);
+  border-color: var(--color-bg-brand);
+  color: white;
+}
+
+/* Telemetry bar */
+.telemetry-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 3px 12px;
+}
+
+.telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+}
+
+/* Theme buttons container */
+.theme-btn {
+  font-size: 11px;
+  padding: 5px 4px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.15s, transform 0.1s;
+  border: 2px solid transparent;
+}
+
+.theme-btn:hover { opacity: 0.85; transform: scale(1.03); }
+.theme-btn.active { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
+
+/* Permission dial buttons */
+.permission-dial-group {
+  display: flex;
+  gap: 2px;
+}
+
+.perm-btn {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid var(--color-border-default);
+  border-radius: 3px;
+  background: var(--color-bg-surface);
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.03em;
+}
+
+.perm-btn:hover { border-color: var(--color-border-focus); }
+
+.perm-btn.active[data-perm="auto"] {
+  background: var(--color-state-success);
+  border-color: var(--color-state-success);
+  color: white;
+}
+.perm-btn.active[data-perm="semi-auto"] {
+  background: var(--color-state-warning);
+  border-color: var(--color-state-warning);
+  color: white;
+}
+.perm-btn.active[data-perm="full-stop"] {
+  background: var(--color-state-error);
+  border-color: var(--color-state-error);
+  color: white;
+}
+
+/* Category buttons in trading studio */
+.category-btn {
+  white-space: nowrap;
+}
+
+/* Fade-in toast animation */
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(10px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Studio content visibility */
+.studio-content { width: 100%; }
