@@ -1236,11 +1236,11 @@ html {
 .studio-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 20px;
-  font-size: 12px;
+  gap: 5px;
+  padding: 5px 15px;
+  font-size: 11px;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   border: 2px solid var(--color-border-default);
   border-radius: var(--layout-radius);
@@ -1251,7 +1251,7 @@ html {
   transition: all var(--transition-fast);
   position: relative;
   box-shadow: 0 2px 0 rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.15);
-  min-width: 90px;
+  min-width: 80px;
   justify-content: center;
 }
 
@@ -1269,6 +1269,15 @@ html {
   color: #ffffff;
   transform: translateY(1px);
   box-shadow: 0 1px 0 rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Offline / not-yet-implemented studio button */
+.studio-btn-offline {
+  opacity: 0.35;
+  border-style: dashed;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
 }
 
 /* DAY/NVG toggle buttons */

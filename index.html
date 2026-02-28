@@ -30,11 +30,11 @@
 
       <!-- LEFT: App title (flex:1 so it balances against right side) -->
       <div style="flex:1; min-width:0;">
-        <h1 class="glow-text-primary" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
-          POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7; text-transform:none;">v0.03.01</span>
+        <h1 class="glow-text-primary" style="font-size:20px; font-weight:900; letter-spacing:0.22em; word-spacing:0.18em; margin:0; text-transform:uppercase;">
+          POLLY PREDICTION PARTNERS <span style="font-family:ui-monospace,monospace; font-size:12px; font-weight:500; opacity:0.5; text-transform:none; letter-spacing:0.12em;">v0.03.01</span>
         </h1>
-        <div class="glow-text-secondary" style="font-size:11px; opacity:0.6; letter-spacing:0.15em; margin-top:2px;">
-          MODEL CLAUDE SONNET · ANTHROPIC
+        <div class="glow-text-secondary" style="font-family:ui-monospace,monospace; font-size:10px; opacity:0.52; letter-spacing:0.3em; margin-top:3px;">
+          MDL·CLAUDE·SONNET&nbsp;&nbsp;—&nbsp;&nbsp;ANTHROPIC
         </div>
       </div>
 
@@ -209,6 +209,9 @@
         <button class="studio-btn" id="studio-btn-fly" onclick="studios.select('fly')" data-studio="fly" role="tab" aria-selected="false" aria-controls="studio-fly">
           ◉ FLY
         </button>
+        <button class="studio-btn studio-btn-offline" id="studio-btn-editor" data-studio="editor" role="tab" aria-selected="false" aria-disabled="true" tabindex="-1">
+          ◧ EDITOR
+        </button>
       </div>
 
       <!-- RIGHT: Telemetry -->
@@ -278,7 +281,7 @@
       </div>
 
       <!-- Row 1: Gauges + Terminal + Dev Logs -->
-      <div style="display:flex; gap:12px; width:100%; height:160px; flex-shrink:0;">
+      <div style="display:flex; gap:12px; width:100%; height:182px; flex-shrink:0;">
 
         <!-- System Gauges -->
         <div class="card display-component glow-bars-secondary" style="flex:0 0 280px;" aria-label="System Gauges">
@@ -316,9 +319,9 @@
       <div style="display:flex; gap:12px; width:100%; flex:1; min-height:0;">
 
         <!-- Manometers (in a triangle card) -->
-        <div class="card glow-bars-secondary" style="flex:0 0 220px; display:flex; align-items:center; justify-content:center; position:relative;" aria-label="Pressure Array Manometers">
+        <div class="card glow-bars-secondary" style="flex:0 0 185px; display:flex; align-items:center; justify-content:center; position:relative;" aria-label="Pressure Array Manometers">
           <div class="label-etched" style="position:absolute; top:8px; left:12px; font-size:9px;">PRESSURE ARRAY</div>
-          <svg id="manometer-svg" width="200" height="180" viewBox="0 0 200 180" aria-label="Manometer Pressure Array" role="img">
+          <svg id="manometer-svg" width="166" height="152" viewBox="0 0 200 180" aria-label="Manometer Pressure Array" role="img">
             <!-- Three manometers in triangle arrangement -->
             <!-- Top center -->
             <g transform="translate(100, 50)"><use href="#manometer-template"/></g>
@@ -352,7 +355,7 @@
         </div>
 
         <!-- Palette Viewer -->
-        <div class="card glow-bars-secondary" style="flex:0 0 200px; overflow:hidden;" aria-label="Active Colour Palette">
+        <div class="card glow-bars-secondary" style="flex:0 0 170px; overflow:hidden;" aria-label="Active Colour Palette">
           <div class="label-etched" style="margin-bottom:8px; font-size:9px;">ACTIVE PALETTE</div>
           <div id="palette-viewer" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:4px; overflow-y:auto; max-height:calc(100% - 28px);" role="list" aria-label="Palette Colour Swatches"></div>
         </div>
@@ -363,7 +366,7 @@
         </div>
 
         <!-- Web Elements Sampler -->
-        <div class="card glow-bars-secondary" style="flex:0 0 180px; overflow:hidden;" aria-label="Web Elements Sampler">
+        <div class="card glow-bars-secondary" style="flex:0 0 150px; overflow:hidden;" aria-label="Web Elements Sampler">
           <div class="label-etched" style="margin-bottom:8px; font-size:9px;">WEB ELEMENTS</div>
           <div style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; max-height:calc(100% - 28px);">
             <button class="btn">Primary Button</button>

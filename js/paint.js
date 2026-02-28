@@ -44,6 +44,7 @@ const paintApp = (() => {
     const container = document.getElementById('mspaint-container');
     if (!container) return;
     renderApp(container);
+    requestAnimationFrame(() => requestAnimationFrame(initCanvasSize));
   }
 
   function renderApp(container) {
@@ -721,6 +722,21 @@ const paintApp = (() => {
     ctx.drawImage(tempCanvas, 0, 0);
   }
 
+  function initCanvasSize() {
+    const wrapper = document.getElementById('paint-canvas-wrapper');
+    if (!wrapper || !canvas) return;
+    const w = Math.max(wrapper.clientWidth - 8, 100);
+    const h = Math.max(wrapper.clientHeight - 8, 80);
+    if (w === canvas.width && h === canvas.height) return;
+    canvas.width = w;
+    canvas.height = h;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    updateStatus();
+  }
+
   function minimize() { const el = document.getElementById('mspaint-container'); if (el) el.style.height = '20px'; }
   function maximize() { const el = document.getElementById('mspaint-container'); if (el) el.style.height = ''; }
   function closeApp() { const el = document.getElementById('paint-app'); if (el) el.style.display = 'none'; }
@@ -728,6 +744,6 @@ const paintApp = (() => {
   return {
     init, setTool, setPrimaryColor, setSecondaryColor, swapColors,
     setBrushSize, zoomIn, zoomOut, handleImageUpload, showMenu,
-    minimize, maximize, closeApp
+    minimize, maximize, closeApp, initCanvasSize
   };
 })();
