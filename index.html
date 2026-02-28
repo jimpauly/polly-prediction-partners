@@ -446,6 +446,18 @@
 
   <!-- 7. BOTTOM BAR -->
   <section class="region region-bottombar glow-bars-primary" id="region-bottombar" aria-label="Hangar Bay">
+    <div class="region-panel-label label-etched" style="text-align:center; width:100%; padding-bottom:4px;">HANGAR BAY</div>
+    <div class="bottombar-cards-container">
+
+      <!-- API Keys Card -->
+      <div class="card card-sm glow-bars-secondary" style="flex:0 0 300px; display:flex; flex-direction:column; gap:3px;" aria-label="API Keys">
+        <div class="label-etched">API KEYS</div>
+        <div id="api-no-keys-msg" class="label-etched" style="font-size:10px; opacity:0.6; text-align:center;" aria-live="polite">Connect API Keys to engage</div>
+        <!-- LIVE row -->
+        <div style="display:flex; align-items:center; gap:4px;">
+          <div style="font-size:9px; font-weight:700; letter-spacing:0.05em; opacity:0.7; flex-shrink:0; width:28px;">LIVE</div>
+          <input type="text" class="input" id="live-api-key" placeholder="API Key (UUID)" style="flex:1; font-size:9px; padding:3px 6px; min-width:0;" aria-label="Live API Key" autocomplete="off" spellcheck="false">
+          <textarea class="input" id="live-rsa-key" placeholder="RSA Key (PEM)" rows="1" style="flex:1; font-size:8px; padding:3px 6px; resize:none; font-family:var(--font-mono); min-width:0;" aria-label="Live RSA Private Key" title="Paste your Live RSA Private Key in PEM format" autocomplete="off" spellcheck="false"></textarea>
     <div class="region-panel-label label-etched">HANGAR BAY</div>
     <div style="display:flex; gap:12px; flex:1; min-height:0; overflow-x:auto; overflow-y:hidden; align-items:stretch;">
 
@@ -455,22 +467,21 @@
         <div id="api-no-keys-msg" class="label-etched" style="font-size:10px; opacity:0.6; text-align:center; padding:8px 0;" aria-live="polite">
           Connect API Keys to engage
         </div>
-        <!-- LIVE Keys -->
-        <div style="font-size:10px; font-weight:700; letter-spacing:0.05em; opacity:0.7;">LIVE</div>
-        <input type="text" class="input" id="live-api-key" placeholder="Live API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Live API Key" autocomplete="off" spellcheck="false">
-        <textarea class="input" id="live-rsa-key" placeholder="Live RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Live RSA Private Key" autocomplete="off" spellcheck="false"></textarea>
-        <!-- DEMO Keys -->
-        <div style="font-size:10px; font-weight:700; letter-spacing:0.05em; opacity:0.7;">DEMO</div>
-        <input type="text" class="input" id="demo-api-key" placeholder="Demo API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Demo API Key" autocomplete="off" spellcheck="false">
-        <textarea class="input" id="demo-rsa-key" placeholder="Demo RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Demo RSA Private Key" autocomplete="off" spellcheck="false"></textarea>
-        <div style="display:flex; gap:6px;">
+        <!-- DEMO row -->
+        <div style="display:flex; align-items:center; gap:4px;">
+          <div style="font-size:9px; font-weight:700; letter-spacing:0.05em; opacity:0.7; flex-shrink:0; width:28px;">DEMO</div>
+          <input type="text" class="input" id="demo-api-key" placeholder="API Key (UUID)" style="flex:1; font-size:9px; padding:3px 6px; min-width:0;" aria-label="Demo API Key" autocomplete="off" spellcheck="false">
+          <textarea class="input" id="demo-rsa-key" placeholder="RSA Key (PEM)" rows="1" style="flex:1; font-size:8px; padding:3px 6px; resize:none; font-family:var(--font-mono); min-width:0;" aria-label="Demo RSA Private Key" title="Paste your Demo RSA Private Key in PEM format" autocomplete="off" spellcheck="false"></textarea>
+        </div>
+        <!-- Buttons -->
+        <div style="display:flex; gap:6px; margin-top:2px;">
           <button class="btn" onclick="trading.connect()" style="flex:1; font-size:10px;" aria-label="Connect to Trading API">CONNECT</button>
           <button class="btn" onclick="trading.disconnect()" style="flex:1; font-size:10px; opacity:0.5;" aria-label="Disconnect from Trading API">DISCONNECT</button>
         </div>
       </div>
 
       <!-- Live/Demo Indicator Lights -->
-      <div class="card" style="flex:0 0 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;" aria-label="Connection Status Indicators">
+      <div class="card card-sm" style="flex:0 0 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;" aria-label="Connection Status Indicators">
         <div style="text-align:center;">
           <div class="indicator-light light-off" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">LIVE</div>
@@ -482,7 +493,7 @@
       </div>
 
       <!-- Agent Access Card -->
-      <div class="card glow-bars-secondary" style="flex:0 0 280px; display:flex; flex-direction:column; gap:8px;" aria-label="Agent Access Control">
+      <div class="card card-sm glow-bars-secondary" style="flex:0 0 280px; display:flex; flex-direction:column; gap:8px;" aria-label="Agent Access Control">
         <div class="label-etched">AGENT ACCESS</div>
         <!-- Global Permission Dial -->
         <div style="display:flex; align-items:center; gap:8px;">
@@ -518,7 +529,7 @@
       </div>
 
       <!-- P/L Graph -->
-      <div class="card display-component glow-display" style="flex:1; min-width:240px; display:flex; flex-direction:column;" aria-label="Profit and Loss Performance Chart">
+      <div class="card card-sm display-component glow-display" style="flex:1; min-width:240px; display:flex; flex-direction:column;" aria-label="Profit and Loss Performance Chart">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
           <div class="label-etched">P/L PERFORMANCE</div>
           <div style="display:flex; gap:3px;" role="group" aria-label="P/L Time Range">
