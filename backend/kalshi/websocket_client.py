@@ -22,7 +22,7 @@ from typing import Callable, Set, Tuple
 import websockets
 from websockets.exceptions import ConnectionClosed
 
-from kalshi.auth import build_ws_login_payload, load_private_key
+from kalshi.auth import build_ws_login_payload, load_private_key, load_private_key_from_pem
 import config
 
 logger = logging.getLogger(__name__)
@@ -69,6 +69,11 @@ class KalshiWebSocketClient:
     def configure(self, api_key: str, private_key_pem_path: str) -> None:
         self._api_key = api_key
         self._private_key = load_private_key(private_key_pem_path)
+
+    def configure_from_pem(self, api_key: str, private_key_pem: str) -> None:
+        """Load credentials directly from a PEM string (no disk write)."""
+        self._api_key = api_key
+        self._private_key = load_private_key_from_pem(private_key_pem)
 
     def is_configured(self) -> bool:
         return bool(self._api_key and self._private_key)

@@ -24,6 +24,12 @@ def load_private_key(pem_path: str):
     return serialization.load_pem_private_key(pem_data, password=None, backend=default_backend())
 
 
+def load_private_key_from_pem(pem_string: str):
+    """Load an RSA private key directly from a PEM string (no disk I/O)."""
+    pem_data = pem_string.encode("utf-8") if isinstance(pem_string, str) else pem_string
+    return serialization.load_pem_private_key(pem_data, password=None, backend=default_backend())
+
+
 def sign_message(private_key, timestamp: str, method: str, path: str) -> str:
     """Sign `timestamp + METHOD + path` with RSA-PSS / SHA-256.
 

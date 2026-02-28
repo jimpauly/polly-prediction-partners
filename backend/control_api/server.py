@@ -225,22 +225,15 @@ class ControlAPIServer:
         if not api_key or not private_key_pem:
             return web.json_response({"error": "api_key and private_key are required"}, status=400)
 
-        # Write the PEM to a temp file so rest/ws clients can load it
-        import tempfile, os
-        tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".pem", delete=False)
-        tmp.write(private_key_pem)
-        tmp.close()
-
+        # Load the key in memory — never write it to disk
         try:
             if env in self._rest:
-                self._rest[env].configure(api_key, tmp.name)
+                self._rest[env].configure_from_pem(api_key, private_key_pem)
             if env in self._ws:
-                self._ws[env].configure(api_key, tmp.name)
+                self._ws[env].configure_from_pem(api_key, private_key_pem)
             self._permissions.set_keys_loaded(env, True)
         except Exception as exc:
             return web.json_response({"error": str(exc)}, status=500)
-        finally:
-            os.unlink(tmp.name)
 
         await self._broadcaster.broadcast({"type": "system_status", "api_keys_loaded": True, "environment": env})
         return web.json_response({"status": "ok", "environment": env})

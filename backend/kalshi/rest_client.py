@@ -82,9 +82,14 @@ class KalshiRestClient:
         self._write_bucket = TokenBucket(capacity=10, refill_rate=10)
 
     def configure(self, api_key: str, private_key_pem_path: str) -> None:
-        """Load credentials (called after keys are provided via the Control API)."""
+        """Load credentials from a PEM file path (used at startup from env vars)."""
         self._api_key = api_key
         self._private_key = load_private_key(private_key_pem_path)
+
+    def configure_from_pem(self, api_key: str, private_key_pem: str) -> None:
+        """Load credentials directly from a PEM string (no disk write)."""
+        self._api_key = api_key
+        self._private_key = load_private_key_from_pem(private_key_pem)
 
     def is_configured(self) -> bool:
         return bool(self._api_key and self._private_key)
