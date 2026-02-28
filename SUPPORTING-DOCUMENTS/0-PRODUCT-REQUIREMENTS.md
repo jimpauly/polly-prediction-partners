@@ -92,7 +92,7 @@ Last update: 02-27-26
 - Tools
 
     - This PRD.
-    - Photos for inspiration — photos located in the root folder.
+    - Photos for inspiration — photos located in the SUPPORT-PHOTOS folder.
     - The Internet — search the internet.
     - Your feelings.
     - The hunger for unlimited money for people we love.
