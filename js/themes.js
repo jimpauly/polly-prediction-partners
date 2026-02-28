@@ -82,14 +82,14 @@ const themes = (() => {
     currentMode = document.documentElement.dataset.mode || 'light';
     renderThemeButtons();
     updateModeButtons();
-    updateActivButton();
+    updateActiveButton();
   }
 
   function setTheme(themeName) {
     if (!THEMES.includes(themeName)) return;
     currentTheme = themeName;
     document.documentElement.dataset.theme = themeName;
-    updateActivButton();
+    updateActiveButton();
     // Notify palette viewer
     if (window.paletteViewer) window.paletteViewer.update();
   }
@@ -118,7 +118,7 @@ const themes = (() => {
     if (darkBtn) darkBtn.classList.toggle('active', currentMode === 'dark');
   }
 
-  function updateActivButton() {
+  function updateActiveButton() {
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.themeTarget === currentTheme);
     });
@@ -171,7 +171,7 @@ const themes = (() => {
     document.querySelectorAll('.theme-btn[data-theme-self]').forEach(btn => {
       applyThemeSelfStyle(btn, btn.dataset.themeSelf);
     });
-    updateActivButton();
+    updateActiveButton();
   }
 
   return { init, setTheme, setMode, toggleMode, getMode, getTheme, renderThemeButtons, refreshThemeButtonStyles };

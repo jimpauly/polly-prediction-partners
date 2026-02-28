@@ -39,9 +39,7 @@ const studios = (() => {
     // Show selected studio
     const selected = document.getElementById(STUDIO_IDS[studioName]);
     if (selected) {
-      // Use flex for design/trade/fly
-      selected.style.display = studioName === 'design' ? 'flex' : 
-                                studioName === 'trade' ? 'flex' : 'flex';
+      selected.style.display = 'flex';
     }
 
     // Update buttons
