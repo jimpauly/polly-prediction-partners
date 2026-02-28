@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1920, height=944, initial-scale=1.0">
   <title>Polly Prediction Partners v0.03.01</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/themes.css">
   <link rel="stylesheet" href="css/illumination.css">
@@ -27,91 +26,164 @@
 
   <!-- 1. HEADER BAR -->
   <header class="region region-header glow-bars-primary" id="region-header" role="banner" aria-label="Application Header">
-    <div class="bezel-outer bezel-inner" style="display:flex; align-items:center; justify-content:space-between; height:100%;">
-      <!-- LEFT: App title -->
-      <div>
-        <h1 class="glow-text-primary label-etched" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
-          POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7;">v0.03.01</span>
+    <div class="bezel-outer" style="display:flex; align-items:center; height:100%; flex:1;">
+
+      <!-- LEFT: App title (flex:1 so it balances against right side) -->
+      <div style="flex:1; min-width:0;">
+        <h1 class="glow-text-primary" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
+          POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7; text-transform:none;">v0.03.01</span>
         </h1>
         <div class="glow-text-secondary" style="font-size:11px; opacity:0.6; letter-spacing:0.15em; margin-top:2px;">
-          MODEL PPP-ALPHA-001 · TRADING INTELLIGENCE SYSTEM
+          MODEL CLAUDE SONNET · ANTHROPIC
         </div>
       </div>
 
-      <!-- RIGHT: Illumination Control Panel -->
-      <div class="illumination-panel card" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
-        <!-- DAY/NVG toggle -->
+      <!-- CENTER: Insignia flair (natural width, auto margins keep it centered) -->
+      <div style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; pointer-events:none; user-select:none;" aria-hidden="true">
+        <svg width="220" height="76" viewBox="0 0 220 76" fill="none">
+          <!-- Outer dashed orbital ring -->
+          <circle cx="110" cy="38" r="34" stroke="currentColor" stroke-width="0.6" stroke-dasharray="2 5" opacity="0.2"/>
+          <!-- Middle solid ring -->
+          <circle cx="110" cy="38" r="24" stroke="currentColor" stroke-width="0.9" opacity="0.28"/>
+          <!-- Inner ring -->
+          <circle cx="110" cy="38" r="13" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <!-- Horizontal crosshair arms outside rings -->
+          <line x1="4"   y1="38" x2="75"  y2="38" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <line x1="145" y1="38" x2="216" y2="38" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <!-- Vertical crosshair stubs outside rings -->
+          <line x1="110" y1="3"  x2="110" y2="13" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <line x1="110" y1="63" x2="110" y2="73" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <!-- Inner crosshair (inside inner ring) -->
+          <line x1="87"  y1="38" x2="99"  y2="38" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <line x1="121" y1="38" x2="133" y2="38" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <line x1="110" y1="15" x2="110" y2="27" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <line x1="110" y1="49" x2="110" y2="61" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <!-- 45° diagonal tick marks on middle ring -->
+          <line x1="127" y1="21" x2="124" y2="24" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <line x1="93"  y1="21" x2="96"  y2="24" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <line x1="127" y1="55" x2="124" y2="52" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <line x1="93"  y1="55" x2="96"  y2="52" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <!-- Cardinal tick marks on middle ring -->
+          <line x1="110" y1="14" x2="110" y2="17" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <line x1="110" y1="59" x2="110" y2="62" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <line x1="86"  y1="38" x2="89"  y2="38" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <line x1="131" y1="38" x2="134" y2="38" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <!-- Arrow tips on horizontal arms -->
+          <polyline points="9,34 4,38 9,42"     stroke="currentColor" stroke-width="0.85" opacity="0.35" fill="none"/>
+          <polyline points="211,34 216,38 211,42" stroke="currentColor" stroke-width="0.85" opacity="0.35" fill="none"/>
+          <!-- Center dot -->
+          <circle cx="110" cy="38" r="2.5" fill="currentColor" opacity="0.5"/>
+          <!-- PPP monogram -->
+          <text x="112" y="41" text-anchor="middle" fill="currentColor"
+                font-size="9" font-weight="900" letter-spacing="0.45em"
+                font-family="ui-monospace,monospace" opacity="0.52">PPP</text>
+        </svg>
+      </div>
+
+      <!-- RIGHT: Illumination Control Panel — flex:1 + justify-content:flex-end keeps it flush right -->
+      <div style="flex:1; display:flex; justify-content:flex-end; align-items:center;">
+      <div class="illumination-panel" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
+
+        <!-- DAY/NVG — physical flip switch (NVG=up, DAY=down) -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">DAY/NVG</div>
-          <div class="flip-switch-group" role="group" aria-label="Day/NVG Mode">
-            <button class="day-nvg-btn active" id="btn-day" onclick="illumination.setDayNVG('day')" aria-pressed="true">DAY</button>
-            <button class="day-nvg-btn" id="btn-nvg" onclick="illumination.setDayNVG('nvg')" aria-pressed="false">NVG</button>
+          <div class="illumination-channel-label">DAY/NVG</div>
+          <div class="flip-switch" id="switch-day-nvg"
+               onclick="illumination.setDayNVG(illumination.state.dayNvg==='day'?'nvg':'day')"
+               role="switch" aria-checked="false" aria-label="Day/NVG Mode Switch" tabindex="0">
+            <div class="flip-switch-label">NVG</div>
+            <div class="flip-switch-body switch-off" id="switch-body-day-nvg">
+              <div class="flip-switch-lever"></div>
+            </div>
+            <div class="flip-switch-label">DAY</div>
           </div>
         </div>
+
+        <div class="illumination-panel-divider"></div>
 
         <!-- MASTER -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">MASTER</div>
-          <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()" role="switch" aria-checked="false" aria-label="Master Illumination Switch">
-            <div class="flip-switch-label">OFF</div>
+          <div class="illumination-channel-label">MASTER</div>
+          <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()"
+               role="switch" aria-checked="false" aria-label="Master Illumination Switch" tabindex="0">
             <div class="flip-switch-body switch-off" id="switch-body-master">
               <div class="flip-switch-lever"></div>
             </div>
-            <div class="flip-switch-label">ON</div>
           </div>
-          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;" title="Master Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Master Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
+
+        <div class="illumination-panel-divider"></div>
 
         <!-- TEXT channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">TEXT</div>
+          <div class="illumination-channel-label">TEXT</div>
           <div class="channel-switches" role="group" aria-label="Text Illumination Switches">
-            <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')" role="switch" aria-checked="true" aria-label="Text Primary Switch">
+            <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')"
+                 role="switch" aria-checked="true" aria-label="Text Primary Switch" tabindex="0">
               <div class="flip-switch-label">PRI</div>
               <div class="flip-switch-body switch-on" id="switch-body-text-primary"><div class="flip-switch-lever"></div></div>
             </div>
-            <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')" role="switch" aria-checked="true" aria-label="Text Secondary Switch">
+            <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')"
+                 role="switch" aria-checked="true" aria-label="Text Secondary Switch" tabindex="0">
               <div class="flip-switch-label">SEC</div>
               <div class="flip-switch-body switch-on" id="switch-body-text-secondary"><div class="flip-switch-lever"></div></div>
             </div>
           </div>
-          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;" title="Text Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Text Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- BARS channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">BARS</div>
+          <div class="illumination-channel-label">BARS</div>
           <div class="channel-switches" role="group" aria-label="Bars Illumination Switches">
-            <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')" role="switch" aria-checked="true" aria-label="Bars Primary Switch">
+            <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')"
+                 role="switch" aria-checked="true" aria-label="Bars Primary Switch" tabindex="0">
               <div class="flip-switch-label">PRI</div>
               <div class="flip-switch-body switch-on" id="switch-body-bars-primary"><div class="flip-switch-lever"></div></div>
             </div>
-            <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')" role="switch" aria-checked="true" aria-label="Bars Secondary Switch">
+            <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')"
+                 role="switch" aria-checked="true" aria-label="Bars Secondary Switch" tabindex="0">
               <div class="flip-switch-label">SEC</div>
               <div class="flip-switch-body switch-on" id="switch-body-bars-secondary"><div class="flip-switch-lever"></div></div>
             </div>
           </div>
-          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;" title="Bars Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Bars Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
+
+        <div class="illumination-panel-divider"></div>
 
         <!-- FLOOD channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">FLOOD</div>
-          <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')" role="switch" aria-checked="true" aria-label="Flood Switch">
+          <div class="illumination-channel-label">FLOOD</div>
+          <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')"
+               role="switch" aria-checked="true" aria-label="Flood Switch" tabindex="0">
             <div class="flip-switch-body switch-on" id="switch-body-flood"><div class="flip-switch-lever"></div></div>
           </div>
-          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;" title="Flood Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Flood Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- DISPLAY channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">DISP</div>
-          <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')" role="switch" aria-checked="true" aria-label="Display Switch">
+          <div class="illumination-channel-label">DISP</div>
+          <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')"
+               role="switch" aria-checked="true" aria-label="Display Switch" tabindex="0">
             <div class="flip-switch-body switch-on" id="switch-body-display"><div class="flip-switch-lever"></div></div>
           </div>
-          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;" title="Display Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Display Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
-      </div>
+
+      </div><!-- /illumination-panel -->
+      </div><!-- /right wrapper -->
     </div>
   </header>
 
@@ -122,7 +194,7 @@
       <span class="label-etched glow-text-secondary" style="font-size:11px;">NAVIGATION</span>
 
       <!-- CENTER: Studio selector -->
-      <div class="studio-selector card" id="studio-selector" style="display:flex; gap:4px; padding:4px;" role="tablist" aria-label="Studio Selector">
+      <div class="studio-selector card" id="studio-selector" role="tablist" aria-label="Studio Selector">
         <button class="studio-btn active" id="studio-btn-design" onclick="studios.select('design')" data-studio="design" role="tab" aria-selected="true" aria-controls="studio-design">
           ◆ DESIGN
         </button>
@@ -135,7 +207,7 @@
       </div>
 
       <!-- RIGHT: Telemetry -->
-      <div class="telemetry-bar card" id="telemetry-bar" style="display:flex; align-items:center; gap:16px; padding:4px 12px;" role="status" aria-label="System Telemetry">
+      <div class="telemetry-bar card" id="telemetry-bar" style="display:flex; align-items:center; gap:12px; padding:4px 12px;" role="status" aria-label="System Telemetry">
         <div class="telemetry-item">
           <span class="label-etched">PING</span>
           <canvas id="ping-sparkline" width="60" height="20" aria-label="Ping Sparkline"></canvas>
@@ -149,11 +221,9 @@
           <span class="value-mono" id="telemetry-load" aria-label="System Load">—</span>
         </div>
         <div class="telemetry-item">
-          <span class="label-etched">DAT</span>
-          <span class="value-mono" id="telemetry-dat" aria-label="Data Status">—</span>
-        </div>
-        <div class="telemetry-item">
-          <span class="label-etched">TIM</span>
+          <span class="label-etched">DAT/TIM</span>
+          <span class="value-mono" id="telemetry-dat" aria-label="Date">—</span>
+          <span class="value-mono" style="opacity:0.4; margin:0 1px;">·</span>
           <span class="value-mono" id="telemetry-tim" aria-label="Time">—</span>
         </div>
       </div>
@@ -165,7 +235,7 @@
     <div class="region-panel-label label-etched">SYSTEM DESIGN</div>
 
     <!-- Mode Toggle -->
-    <div class="card" style="margin-bottom:12px;">
+    <div class="card">
       <div class="label-etched" style="margin-bottom:8px;">MODE</div>
       <div style="display:flex; gap:4px;" role="group" aria-label="Display Mode">
         <button class="toggle-btn active" id="mode-btn-light" onclick="themes.setModeManual('light')" style="flex:1;" aria-pressed="true">☀ LIGHT</button>
@@ -187,7 +257,7 @@
     <div class="region-panel-label label-etched">VIEWING PORT</div>
 
     <!-- Design Studio -->
-    <div class="studio-content studio-design" id="studio-design" role="tabpanel" aria-labelledby="studio-btn-design" style="display:flex; flex-wrap:wrap; gap:12px; padding:8px; overflow:hidden; align-content:flex-start;">
+    <div class="studio-content studio-design" id="studio-design" role="tabpanel" aria-labelledby="studio-btn-design" style="display:flex; flex-direction:column; gap:12px; overflow-y:auto; flex:1; min-height:0;">
 
       <!-- Hero Card (compact) -->
       <div class="card glow-bars-secondary" style="width:100%; display:flex; align-items:center; padding:12px 20px; gap:20px;">
@@ -204,7 +274,7 @@
       </div>
 
       <!-- Row 1: Gauges + Terminal + Dev Logs -->
-      <div style="display:flex; gap:12px; width:100%; min-height:160px; max-height:160px;">
+      <div style="display:flex; gap:12px; width:100%; height:160px; flex-shrink:0;">
 
         <!-- System Gauges -->
         <div class="card display-component glow-bars-secondary" style="flex:0 0 280px;" aria-label="System Gauges">
@@ -239,7 +309,7 @@
       </div>
 
       <!-- Row 2: Manometers + Palette + MS Paint + Web Elements -->
-      <div style="display:flex; gap:12px; width:100%; flex:1; min-height:0; max-height:420px;">
+      <div style="display:flex; gap:12px; width:100%; flex:1; min-height:0;">
 
         <!-- Manometers (in a triangle card) -->
         <div class="card glow-bars-secondary" style="flex:0 0 220px; display:flex; align-items:center; justify-content:center; position:relative;" aria-label="Pressure Array Manometers">
@@ -295,7 +365,7 @@
             <button class="btn">Primary Button</button>
             <button class="btn" disabled aria-disabled="true">Disabled</button>
             <input type="text" class="input" placeholder="Text input..." style="font-size:11px;" aria-label="Text Input Sample">
-            <select class="input dropdown-panel" style="font-size:11px;" aria-label="Dropdown Sample">
+            <select class="input" style="font-size:11px;" aria-label="Dropdown Sample">
               <option>Dropdown</option>
               <option>Option 2</option>
             </select>
@@ -341,7 +411,7 @@
     <div class="region-panel-label label-etched">INSPECTOR PANEL</div>
 
     <!-- To-Do List (spiral notebook) -->
-    <div class="card" id="todo-container" style="margin-bottom:12px; padding:0; overflow:hidden;" aria-label="To-Do List">
+    <div class="card" id="todo-container" style="padding:0; overflow:hidden;" aria-label="To-Do List">
       <div id="todo-app">
         <!-- Injected by todo.js -->
       </div>
@@ -366,7 +436,7 @@
   <!-- 6. ACTION BAR -->
   <section class="region region-actionbar glow-bars-secondary" id="region-actionbar" aria-label="Ignition Action Bar">
     <div class="region-panel-label label-etched">IGNITION</div>
-    <div style="display:flex; align-items:center; justify-content:center; height:calc(100% - 24px); opacity:0.3;" aria-label="Awaiting Ignition Sequence">
+    <div style="display:flex; align-items:center; justify-content:center; flex:1; opacity:0.3;" aria-label="Awaiting Ignition Sequence">
       <div style="text-align:center;">
         <div style="font-size:24px; margin-bottom:4px;" aria-hidden="true">🔥</div>
         <div class="label-etched" style="font-size:10px;">AWAITING IGNITION SEQUENCE</div>
@@ -388,6 +458,14 @@
           <div style="font-size:9px; font-weight:700; letter-spacing:0.05em; opacity:0.7; flex-shrink:0; width:28px;">LIVE</div>
           <input type="text" class="input" id="live-api-key" placeholder="API Key (UUID)" style="flex:1; font-size:9px; padding:3px 6px; min-width:0;" aria-label="Live API Key" autocomplete="off" spellcheck="false">
           <textarea class="input" id="live-rsa-key" placeholder="RSA Key (PEM)" rows="1" style="flex:1; font-size:8px; padding:3px 6px; resize:none; font-family:var(--font-mono); min-width:0;" aria-label="Live RSA Private Key" title="Paste your Live RSA Private Key in PEM format" autocomplete="off" spellcheck="false"></textarea>
+    <div class="region-panel-label label-etched">HANGAR BAY</div>
+    <div style="display:flex; gap:12px; flex:1; min-height:0; overflow-x:auto; overflow-y:hidden; align-items:stretch;">
+
+      <!-- API Keys Card -->
+      <div class="card glow-bars-secondary" style="flex:0 0 320px; display:flex; flex-direction:column; gap:6px; overflow-y:auto;" aria-label="API Keys">
+        <div class="label-etched" style="margin-bottom:4px;">API KEYS</div>
+        <div id="api-no-keys-msg" class="label-etched" style="font-size:10px; opacity:0.6; text-align:center; padding:8px 0;" aria-live="polite">
+          Connect API Keys to engage
         </div>
         <!-- DEMO row -->
         <div style="display:flex; align-items:center; gap:4px;">
@@ -405,11 +483,11 @@
       <!-- Live/Demo Indicator Lights -->
       <div class="card card-sm" style="flex:0 0 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;" aria-label="Connection Status Indicators">
         <div style="text-align:center;">
-          <div class="indicator-light" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
+          <div class="indicator-light light-off" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">LIVE</div>
         </div>
         <div style="text-align:center;">
-          <div class="indicator-light" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 4px;" aria-label="Demo Connection Status"></div>
+          <div class="indicator-light light-off" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 4px;" aria-label="Demo Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">DEMO</div>
         </div>
       </div>
@@ -429,7 +507,7 @@
         <!-- Agent Prime -->
         <div style="display:flex; align-items:center; gap:8px;">
           <div class="label-etched" style="font-size:9px; width:60px;">PRIME</div>
-          <div class="indicator-light" id="agent-prime-status" style="--indicator-color:#888;" aria-label="Agent Prime Status"></div>
+          <div class="indicator-light light-off" id="agent-prime-status" style="--indicator-color:#888;" aria-label="Agent Prime Status"></div>
           <div class="permission-dial-group" id="prime-permission" role="group" aria-label="Agent Prime Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('prime', 'full-stop')" aria-pressed="true" aria-label="Prime Full Stop">⛔</button>
             <button class="perm-btn" data-perm="semi-auto" onclick="trading.setAgentPermission('prime', 'semi-auto')" aria-pressed="false" aria-label="Prime Semi-Auto">⚠</button>
@@ -440,7 +518,7 @@
         <!-- Agent Peritia -->
         <div style="display:flex; align-items:center; gap:8px;">
           <div class="label-etched" style="font-size:9px; width:60px;">PERITIA</div>
-          <div class="indicator-light" id="agent-peritia-status" style="--indicator-color:#888;" aria-label="Agent Peritia Status"></div>
+          <div class="indicator-light light-off" id="agent-peritia-status" style="--indicator-color:#888;" aria-label="Agent Peritia Status"></div>
           <div class="permission-dial-group" id="peritia-permission" role="group" aria-label="Agent Peritia Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('peritia', 'full-stop')" aria-pressed="true" aria-label="Peritia Full Stop">⛔</button>
             <button class="perm-btn" data-perm="semi-auto" onclick="trading.setAgentPermission('peritia', 'semi-auto')" aria-pressed="false" aria-label="Peritia Semi-Auto">⚠</button>

@@ -164,8 +164,8 @@ const themes = (() => {
       background: ${bg};
       color: ${fg};
       border: 2px solid ${border};
-      font-size: 11px;
-      padding: 5px 4px;
+      font-size: 12px;
+      padding: 6px 2px 4px 2px;
       font-weight: 700;
       text-align: center;
       border-radius: 4px;

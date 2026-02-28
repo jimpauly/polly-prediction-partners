@@ -102,20 +102,27 @@ const illumination = (() => {
 
   function setDayNVG(mode) {
     state.dayNvg = mode;
-    const btnDay = document.getElementById('btn-day');
-    const btnNvg = document.getElementById('btn-nvg');
-    if (btnDay) btnDay.classList.toggle('active', mode === 'day');
-    if (btnNvg) btnNvg.classList.toggle('active', mode === 'nvg');
+    // Drive the physical flip switch (NVG=switch-on/lever-up, DAY=switch-off/lever-down)
+    const body = document.getElementById('switch-body-day-nvg');
+    if (body) {
+      body.classList.toggle('switch-on', mode === 'nvg');
+      body.classList.toggle('switch-off', mode === 'day');
+    }
+    const sw = document.getElementById('switch-day-nvg');
+    if (sw) sw.setAttribute('aria-checked', mode === 'nvg');
     // Sync to light/dark mode
     if (window.themes) themes.setMode(mode === 'day' ? 'light' : 'dark');
   }
 
   function syncDayNvg(mode) {
     state.dayNvg = mode === 'light' ? 'day' : 'nvg';
-    const btnDay = document.getElementById('btn-day');
-    const btnNvg = document.getElementById('btn-nvg');
-    if (btnDay) btnDay.classList.toggle('active', state.dayNvg === 'day');
-    if (btnNvg) btnNvg.classList.toggle('active', state.dayNvg === 'nvg');
+    const body = document.getElementById('switch-body-day-nvg');
+    if (body) {
+      body.classList.toggle('switch-on', state.dayNvg === 'nvg');
+      body.classList.toggle('switch-off', state.dayNvg === 'day');
+    }
+    const sw = document.getElementById('switch-day-nvg');
+    if (sw) sw.setAttribute('aria-checked', state.dayNvg === 'nvg');
   }
 
   function updateMaxIntensity() {
