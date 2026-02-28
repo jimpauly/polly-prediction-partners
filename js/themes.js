@@ -104,6 +104,12 @@ const themes = (() => {
     if (window.illumination) window.illumination.syncDayNvg(mode);
   }
 
+  // Called from UI buttons — also marks that the user chose manually
+  function setModeManual(mode) {
+    document.documentElement.dataset.userMode = 'manual';
+    setMode(mode);
+  }
+
   function toggleMode() {
     setMode(currentMode === 'light' ? 'dark' : 'light');
   }
@@ -174,5 +180,5 @@ const themes = (() => {
     updateActiveButton();
   }
 
-  return { init, setTheme, setMode, toggleMode, getMode, getTheme, renderThemeButtons, refreshThemeButtonStyles };
+  return { init, setTheme, setMode, setModeManual, toggleMode, getMode, getTheme, renderThemeButtons, refreshThemeButtonStyles };
 })();

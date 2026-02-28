@@ -146,6 +146,36 @@ const illumination = (() => {
       });
 
       document.addEventListener('mouseup', () => { isDragging = false; });
+
+      // Phase 6: Keyboard control — ↑/↓ arrows adjust value, Home/End jump to min/max
+      const DIAL_STEP_SMALL = 0.05; // 5% per key press
+      const DIAL_STEP_LARGE = 0.10; // 10% per key press (with Shift)
+      dial.addEventListener('keydown', e => {
+        const step = e.shiftKey ? DIAL_STEP_LARGE : DIAL_STEP_SMALL;
+        let val = parseFloat(dial.dataset.value) || 1.0;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          val = Math.min(1.0, val + step);
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          val = Math.max(0.25, val - step);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          val = 0.25;
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          val = 1.0;
+        } else {
+          return;
+        }
+        dial.dataset.value = val.toFixed(2);
+        const angle = ((val - 0.25) / 0.75) * 270 - 135;
+        dial.style.setProperty('--dial-angle', `${angle}deg`);
+        // Update aria-valuenow (0–100 scale)
+        dial.setAttribute('aria-valuenow', Math.round((val - 0.25) / 0.75 * 100));
+        const channelId = dial.id.replace('dial-', '');
+        setDimmer(channelId, val);
+      });
     });
   }
 

@@ -351,6 +351,23 @@ const manometers = (() => {
 function initApp() {
   // Initialize all modules
   themes.init();
+
+  // Phase 7: Auto-apply dark mode if OS prefers it and no explicit mode is set
+  if (!document.documentElement.dataset.mode) {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      themes.setMode('dark');
+    }
+  }
+  // Listen for OS-level color-scheme changes at runtime
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      // Only auto-follow if the user hasn't manually picked a mode
+      if (!document.documentElement.dataset.userMode) {
+        themes.setMode(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+
   illumination.init();
   studios.init();
   telemetry.init();
@@ -387,7 +404,12 @@ function initApp() {
 
   // Keyboard shortcuts
   document.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.key === 'd') { e.preventDefault(); themes.toggleMode(); }
+    if (e.ctrlKey && e.key === 'd') {
+      e.preventDefault();
+      themes.toggleMode();
+      // Mark that user manually toggled mode so auto-follow stops
+      document.documentElement.dataset.userMode = 'manual';
+    }
   });
 
   // Log initialization

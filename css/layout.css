@@ -1318,3 +1318,206 @@ html {
 
 /* Studio content visibility */
 .studio-content { width: 100%; }
+
+
+/* ============================================================
+   SECTION 21 — LOADING SPINNER (Phase 1/3)
+   Used on async buttons (e.g. Connect).
+   ============================================================ */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+.btn.btn-loading {
+  pointer-events: none;
+  cursor: wait;
+  opacity: 0.75;
+}
+
+
+/* ============================================================
+   SECTION 22 — FORM VALIDATION STATES (Phase 1/3)
+   ============================================================ */
+
+.input.input-invalid {
+  border-color: var(--color-state-error) !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.18) !important;
+}
+
+.input.input-valid {
+  border-color: var(--color-state-success) !important;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15) !important;
+}
+
+@keyframes input-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-3px); }
+  80%       { transform: translateX(3px); }
+}
+
+.input.input-shake {
+  animation: input-shake 0.35s ease;
+}
+
+
+/* ============================================================
+   SECTION 23 — STUDIO FADE TRANSITION (Phase 3)
+   Replacing the hard show/hide with a soft fade-in.
+   ============================================================ */
+
+@keyframes studio-fade-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.studio-content.studio-entering {
+  animation: studio-fade-in var(--transition-base, 150ms) ease forwards;
+}
+
+
+/* ============================================================
+   SECTION 24 — SKIP NAVIGATION (Phase 4)
+   Visible only on keyboard focus — screen reader / tab users.
+   ============================================================ */
+
+.skip-nav {
+  position: fixed;
+  top: -120%;
+  left: 18px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--color-bg-brand);
+  color: #ffffff;
+  border-radius: var(--layout-radius, 6px);
+  font-size: var(--font-size-sm, 11px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: top var(--transition-fast, 80ms);
+}
+
+.skip-nav:focus {
+  top: 18px;
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+
+/* ============================================================
+   SECTION 25 — CURSOR UTILITIES (Phase 2)
+   ============================================================ */
+
+/* Rotary dials: vertical drag = value change */
+.rotary-dial {
+  cursor: ns-resize;
+}
+
+.rotary-dial:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+
+/* ============================================================
+   SECTION 26 — ACCESSIBILITY: REDUCED MOTION (Phase 7)
+   Strips all animations/transitions when the user has
+   "Reduce motion" enabled at the OS level.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 27 — ACCESSIBILITY: HIGH CONTRAST (Phase 7)
+   Windows "High Contrast" / Forced Colors mode overrides.
+   ============================================================ */
+
+@media (forced-colors: active) {
+  .region,
+  .card {
+    border: 1px solid ButtonText;
+  }
+
+  .indicator-light {
+    border: 2px solid ButtonText;
+    background: ButtonFace;
+    box-shadow: none;
+  }
+
+  .indicator-light.light-on {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .btn,
+  .studio-btn,
+  .toggle-btn,
+  .perm-btn,
+  .day-nvg-btn,
+  .btn-sm {
+    border: 1px solid ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: none;
+  }
+
+  .btn:hover,
+  .studio-btn:hover,
+  .toggle-btn:hover {
+    border-color: Highlight;
+    color: Highlight;
+  }
+
+  .btn.active,
+  .studio-btn.active,
+  .toggle-btn.active,
+  .btn[aria-selected="true"],
+  .studio-btn[aria-selected="true"],
+  .toggle-btn[aria-pressed="true"],
+  .perm-btn.active {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  .flip-switch-body {
+    border: 2px solid ButtonText;
+  }
+
+  .input {
+    border: 1px solid ButtonText;
+    background: Field;
+    color: FieldText;
+  }
+
+  .input:focus {
+    border-color: Highlight;
+    outline: 2px solid Highlight;
+  }
+}

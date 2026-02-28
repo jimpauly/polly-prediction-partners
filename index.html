@@ -11,6 +11,13 @@
   <link rel="stylesheet" href="css/layout.css">
 </head>
 <body>
+<!-- Skip navigation — visible only on keyboard focus (Phase 4/5) -->
+<a href="#region-main" class="skip-nav">Skip to main content</a>
+
+<!-- ARIA live announcer — silent region for screen-reader status messages (Phase 5) -->
+<div id="aria-announcer" role="status" aria-live="polite" aria-atomic="true"
+     style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;padding:0;margin:0;"></div>
+
 <div class="app-root" id="app-root">
 
   <!-- Precision Rulers (hidden by default) -->
@@ -52,7 +59,7 @@
             </div>
             <div class="flip-switch-label">ON</div>
           </div>
-          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;" title="Master Dimmer" role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;" title="Master Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- TEXT channel -->
@@ -68,7 +75,7 @@
               <div class="flip-switch-body switch-on" id="switch-body-text-secondary"><div class="flip-switch-lever"></div></div>
             </div>
           </div>
-          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;" title="Text Dimmer" role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;" title="Text Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- BARS channel -->
@@ -84,7 +91,7 @@
               <div class="flip-switch-body switch-on" id="switch-body-bars-secondary"><div class="flip-switch-lever"></div></div>
             </div>
           </div>
-          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;" title="Bars Dimmer" role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;" title="Bars Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- FLOOD channel -->
@@ -93,7 +100,7 @@
           <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')" role="switch" aria-checked="true" aria-label="Flood Switch">
             <div class="flip-switch-body switch-on" id="switch-body-flood"><div class="flip-switch-lever"></div></div>
           </div>
-          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;" title="Flood Dimmer" role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;" title="Flood Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- DISPLAY channel -->
@@ -102,7 +109,7 @@
           <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')" role="switch" aria-checked="true" aria-label="Display Switch">
             <div class="flip-switch-body switch-on" id="switch-body-display"><div class="flip-switch-lever"></div></div>
           </div>
-          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;" title="Display Dimmer" role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;" title="Display Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
       </div>
     </div>
@@ -161,8 +168,8 @@
     <div class="card" style="margin-bottom:12px;">
       <div class="label-etched" style="margin-bottom:8px;">MODE</div>
       <div style="display:flex; gap:4px;" role="group" aria-label="Display Mode">
-        <button class="toggle-btn active" id="mode-btn-light" onclick="themes.setMode('light')" style="flex:1;" aria-pressed="true">☀ LIGHT</button>
-        <button class="toggle-btn" id="mode-btn-dark" onclick="themes.setMode('dark')" style="flex:1;" aria-pressed="false">☾ DARK</button>
+        <button class="toggle-btn active" id="mode-btn-light" onclick="themes.setModeManual('light')" style="flex:1;" aria-pressed="true">☀ LIGHT</button>
+        <button class="toggle-btn" id="mode-btn-dark" onclick="themes.setModeManual('dark')" style="flex:1;" aria-pressed="false">☾ DARK</button>
       </div>
     </div>
 
@@ -380,12 +387,12 @@
         </div>
         <!-- LIVE Keys -->
         <div style="font-size:10px; font-weight:700; letter-spacing:0.05em; opacity:0.7;">LIVE</div>
-        <input type="text" class="input" id="live-api-key" placeholder="Live API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Live API Key">
-        <textarea class="input" id="live-rsa-key" placeholder="Live RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Live RSA Private Key"></textarea>
+        <input type="text" class="input" id="live-api-key" placeholder="Live API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Live API Key" autocomplete="off" spellcheck="false">
+        <textarea class="input" id="live-rsa-key" placeholder="Live RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Live RSA Private Key" autocomplete="off" spellcheck="false"></textarea>
         <!-- DEMO Keys -->
         <div style="font-size:10px; font-weight:700; letter-spacing:0.05em; opacity:0.7;">DEMO</div>
-        <input type="text" class="input" id="demo-api-key" placeholder="Demo API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Demo API Key">
-        <textarea class="input" id="demo-rsa-key" placeholder="Demo RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Demo RSA Private Key"></textarea>
+        <input type="text" class="input" id="demo-api-key" placeholder="Demo API Key (UUID)" style="font-size:10px; padding:4px 8px;" aria-label="Demo API Key" autocomplete="off" spellcheck="false">
+        <textarea class="input" id="demo-rsa-key" placeholder="Demo RSA Private Key (PEM)" rows="2" style="font-size:9px; padding:4px 8px; resize:none; font-family:var(--font-mono);" aria-label="Demo RSA Private Key" autocomplete="off" spellcheck="false"></textarea>
         <div style="display:flex; gap:6px;">
           <button class="btn" onclick="trading.connect()" style="flex:1; font-size:10px;" aria-label="Connect to Trading API">CONNECT</button>
           <button class="btn" onclick="trading.disconnect()" style="flex:1; font-size:10px; opacity:0.5;" aria-label="Disconnect from Trading API">DISCONNECT</button>

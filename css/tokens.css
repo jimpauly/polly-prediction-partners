@@ -97,3 +97,14 @@
   /* --- Mode (set by JS via data-mode) --- */
   --mode-max-intensity: 0.6; /* light mode default */
 }
+
+/* ============================================================
+   ACCESSIBILITY: PREFERS-COLOR-SCHEME (Phase 7)
+   Sets the dark-mode token ceiling when the OS is in dark mode
+   and no explicit data-mode override has been applied by JS.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode]) {
+    --mode-max-intensity: 1.0;
+  }
+}
