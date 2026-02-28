@@ -8,7 +8,7 @@
    Grid anatomy
    ─────────────
    ┌───────────────────────────────────────────────┐
-   │  HEADER BAR          (full width, 78px)        │
+   │  HEADER BAR          (full width, 120px)       │
    ├───────────────────────────────────────────────┤
    │  NAV BAR             (full width, 39px)        │
    ├──────────┬──────────────────────┬─────────────┤
@@ -16,7 +16,7 @@
    │  SIDEBAR │    MAIN STAGE        │  SIDEBAR     │
    │  (320px) │    (fluid)           │  (320px)     │
    ├──────────┴──────────────────────┴─────────────┤
-   │  BOTTOM BAR (4/6)    │  ACTION BAR (2/6) 157px │
+   │  BOTTOM BAR (4/6)    │  ACTION BAR (2/6) 200px │
    └─────────────────────────────────────────────── ┘
 
    Gutter: 18px between every region.
@@ -84,7 +84,7 @@ body {
   padding: var(--layout-gutter, 18px);
   gap: var(--layout-gutter, 18px);
   grid-template-columns: 320px 1fr 320px;
-  grid-template-rows: 78px 39px 1fr 157px;
+  grid-template-rows: 120px 39px 1fr 200px;
   grid-template-areas:
     "header    header    header"
     "navbar    navbar    navbar"

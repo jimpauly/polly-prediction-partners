@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1920, height=944, initial-scale=1.0">
   <title>Polly Prediction Partners v0.03.01</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/themes.css">
   <link rel="stylesheet" href="css/illumination.css">
@@ -27,10 +26,10 @@
 
   <!-- 1. HEADER BAR -->
   <header class="region region-header glow-bars-primary" id="region-header" role="banner" aria-label="Application Header">
-    <div class="bezel-outer bezel-inner" style="display:flex; align-items:center; justify-content:space-between; height:100%;">
+    <div class="bezel-outer" style="display:flex; align-items:center; justify-content:space-between; height:100%;">
       <!-- LEFT: App title -->
       <div>
-        <h1 class="glow-text-primary label-etched" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
+        <h1 class="glow-text-primary" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
           POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7;">v0.03.01</span>
         </h1>
         <div class="glow-text-secondary" style="font-size:11px; opacity:0.6; letter-spacing:0.15em; margin-top:2px;">
@@ -39,7 +38,7 @@
       </div>
 
       <!-- RIGHT: Illumination Control Panel -->
-      <div class="illumination-panel card" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
+      <div class="illumination-panel" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
         <!-- DAY/NVG toggle -->
         <div class="illumination-channel">
           <div class="illumination-channel-label label-etched">DAY/NVG</div>
@@ -185,7 +184,7 @@
     <div class="region-panel-label label-etched">VIEWING PORT</div>
 
     <!-- Design Studio -->
-    <div class="studio-content studio-design" id="studio-design" role="tabpanel" aria-labelledby="studio-btn-design" style="display:flex; flex-direction:column; gap:12px; padding:8px; overflow-y:auto; flex:1; min-height:0;">
+    <div class="studio-content studio-design" id="studio-design" role="tabpanel" aria-labelledby="studio-btn-design" style="display:flex; flex-direction:column; gap:12px; overflow-y:auto; flex:1; min-height:0;">
 
       <!-- Hero Card (compact) -->
       <div class="card glow-bars-secondary" style="width:100%; display:flex; align-items:center; padding:12px 20px; gap:20px;">
@@ -293,7 +292,7 @@
             <button class="btn">Primary Button</button>
             <button class="btn" disabled aria-disabled="true">Disabled</button>
             <input type="text" class="input" placeholder="Text input..." style="font-size:11px;" aria-label="Text Input Sample">
-            <select class="input dropdown-panel" style="font-size:11px;" aria-label="Dropdown Sample">
+            <select class="input" style="font-size:11px;" aria-label="Dropdown Sample">
               <option>Dropdown</option>
               <option>Option 2</option>
             </select>
@@ -339,7 +338,7 @@
     <div class="region-panel-label label-etched">INSPECTOR PANEL</div>
 
     <!-- To-Do List (spiral notebook) -->
-    <div class="card" id="todo-container" style="margin-bottom:12px; padding:0; overflow:hidden;" aria-label="To-Do List">
+    <div class="card" id="todo-container" style="padding:0; overflow:hidden;" aria-label="To-Do List">
       <div id="todo-app">
         <!-- Injected by todo.js -->
       </div>
@@ -378,7 +377,7 @@
     <div style="display:flex; gap:12px; flex:1; min-height:0; overflow-x:auto; overflow-y:hidden; align-items:stretch;">
 
       <!-- API Keys Card -->
-      <div class="card glow-bars-secondary" style="flex:0 0 320px; display:flex; flex-direction:column; gap:6px;" aria-label="API Keys">
+      <div class="card glow-bars-secondary" style="flex:0 0 320px; display:flex; flex-direction:column; gap:6px; overflow-y:auto;" aria-label="API Keys">
         <div class="label-etched" style="margin-bottom:4px;">API KEYS</div>
         <div id="api-no-keys-msg" class="label-etched" style="font-size:10px; opacity:0.6; text-align:center; padding:8px 0;" aria-live="polite">
           Connect API Keys to engage
@@ -400,11 +399,11 @@
       <!-- Live/Demo Indicator Lights -->
       <div class="card" style="flex:0 0 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;" aria-label="Connection Status Indicators">
         <div style="text-align:center;">
-          <div class="indicator-light" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
+          <div class="indicator-light light-off" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">LIVE</div>
         </div>
         <div style="text-align:center;">
-          <div class="indicator-light" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 4px;" aria-label="Demo Connection Status"></div>
+          <div class="indicator-light light-off" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 4px;" aria-label="Demo Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">DEMO</div>
         </div>
       </div>
@@ -424,7 +423,7 @@
         <!-- Agent Prime -->
         <div style="display:flex; align-items:center; gap:8px;">
           <div class="label-etched" style="font-size:9px; width:60px;">PRIME</div>
-          <div class="indicator-light" id="agent-prime-status" style="--indicator-color:#888;" aria-label="Agent Prime Status"></div>
+          <div class="indicator-light light-off" id="agent-prime-status" style="--indicator-color:#888;" aria-label="Agent Prime Status"></div>
           <div class="permission-dial-group" id="prime-permission" role="group" aria-label="Agent Prime Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('prime', 'full-stop')" aria-pressed="true" aria-label="Prime Full Stop">⛔</button>
             <button class="perm-btn" data-perm="semi-auto" onclick="trading.setAgentPermission('prime', 'semi-auto')" aria-pressed="false" aria-label="Prime Semi-Auto">⚠</button>
@@ -435,7 +434,7 @@
         <!-- Agent Peritia -->
         <div style="display:flex; align-items:center; gap:8px;">
           <div class="label-etched" style="font-size:9px; width:60px;">PERITIA</div>
-          <div class="indicator-light" id="agent-peritia-status" style="--indicator-color:#888;" aria-label="Agent Peritia Status"></div>
+          <div class="indicator-light light-off" id="agent-peritia-status" style="--indicator-color:#888;" aria-label="Agent Peritia Status"></div>
           <div class="permission-dial-group" id="peritia-permission" role="group" aria-label="Agent Peritia Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('peritia', 'full-stop')" aria-pressed="true" aria-label="Peritia Full Stop">⛔</button>
             <button class="perm-btn" data-perm="semi-auto" onclick="trading.setAgentPermission('peritia', 'semi-auto')" aria-pressed="false" aria-label="Peritia Semi-Auto">⚠</button>

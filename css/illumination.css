@@ -484,6 +484,23 @@ h4.glow-text-primary {
 }
 
 
+/* Grouped switches side-by-side (e.g. PRI + SEC) */
+.channel-switches {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+}
+
+/* DAY/NVG mode button row */
+.flip-switch-group {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+}
+
+
 /* ============================================================
    SECTION 10 — MASTER ILLUMINATION SWITCH
    The big MASTER ON/OFF toggle — styled as an oversized
