@@ -273,7 +273,8 @@ class KalshiWebSocketClient:
                             extra={"env": self._env, "ticker": ticker, "expected": expected, "got": seq},
                         )
                         del self._ob_seq[ticker]
-                        # Trigger re-subscription for orderbook channel
+                        # Force re-subscribe: discard so subscribe() sends the command
+                        self._subscriptions.discard(("orderbook_delta", ticker))
                         asyncio.create_task(
                             self.subscribe(["orderbook_delta"], [ticker])
                         )

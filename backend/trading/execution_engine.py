@@ -235,6 +235,15 @@ class ExecutionEngine:
             if self._broadcaster:
                 await self._broadcaster.broadcast({"type": event_type, **msg, "environment": environment})
 
+    async def handle_position_update(self, msg: dict, environment: str) -> None:
+        """Process a user:position WebSocket event, keeping in-memory state current."""
+        ticker = msg.get("market_id") or msg.get("market_ticker")
+        if not ticker:
+            return
+        self._positions[ticker] = msg
+        if self._db:
+            asyncio.create_task(self._db.upsert_position(ticker, environment, msg))
+
     # ── State queries ─────────────────────────────────────────────────────────
 
     def get_open_orders(self) -> list[dict]:

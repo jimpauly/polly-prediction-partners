@@ -118,7 +118,7 @@ class StateReconciliation:
             if order_id not in kalshi_ids:
                 # Order is open locally but not on Kalshi — mark as cancelled
                 discrepancies.append(f"Order {order_id} open locally but missing on Kalshi → marking CANCELLED")
-                await self._db.update_order_status(order_id, "cancelled")
+                await self._db.update_order_status(order_id, "cancelled", self._env)
             else:
                 kalshi_order = kalshi_ids[order_id]
                 kalshi_status = kalshi_order.get("status", "")
@@ -127,7 +127,7 @@ class StateReconciliation:
                     discrepancies.append(
                         f"Order {order_id} status mismatch: local={local_status} kalshi={kalshi_status}"
                     )
-                    await self._db.update_order_status(order_id, kalshi_status)
+                    await self._db.update_order_status(order_id, kalshi_status, self._env)
 
         return discrepancies
 
