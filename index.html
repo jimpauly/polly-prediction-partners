@@ -40,7 +40,7 @@
 
       <!-- CENTER: Insignia flair (natural width, auto margins keep it centered) -->
       <div style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; pointer-events:none; user-select:none;" aria-hidden="true">
-        <svg width="220" height="76" viewBox="0 0 220 76" fill="none">
+        <svg width="145" height="50" viewBox="0 0 220 76" fill="none">
           <!-- Outer dashed orbital ring -->
           <circle cx="110" cy="38" r="34" stroke="currentColor" stroke-width="0.6" stroke-dasharray="2 5" opacity="0.2"/>
           <!-- Middle solid ring -->
@@ -84,17 +84,17 @@
       <div style="flex:1; display:flex; justify-content:flex-end; align-items:center;">
       <div class="illumination-panel" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
 
-        <!-- DAY/NVG — physical flip switch (NVG=up, DAY=down) -->
+        <!-- DAY/NVG — rotary mode selector (knob rotates between day/nvg positions) -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label">DAY/NVG</div>
-          <div class="flip-switch" id="switch-day-nvg"
+          <div class="mode-knob" id="switch-day-nvg" data-mode="day"
                onclick="illumination.setDayNVG(illumination.state.dayNvg==='day'?'nvg':'day')"
-               role="switch" aria-checked="false" aria-label="Day/NVG Mode Switch" tabindex="0">
-            <div class="flip-switch-label">NVG</div>
-            <div class="flip-switch-body switch-off" id="switch-body-day-nvg">
-              <div class="flip-switch-lever"></div>
+               role="switch" aria-checked="false" aria-label="Day/NVG Mode" tabindex="0">
+            <div class="mode-knob-body" id="switch-body-day-nvg">
+              <div class="mode-knob-indicator"></div>
             </div>
-            <div class="flip-switch-label">DAY</div>
+            <div class="mode-knob-labels">
+              <span>DAY</span><span>NVG</span>
+            </div>
           </div>
         </div>
 
@@ -103,15 +103,17 @@
         <!-- MASTER -->
         <div class="illumination-channel">
           <div class="illumination-channel-label">MASTER</div>
-          <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()"
-               role="switch" aria-checked="false" aria-label="Master Illumination Switch" tabindex="0">
-            <div class="flip-switch-body switch-off" id="switch-body-master">
-              <div class="flip-switch-lever"></div>
+          <div class="channel-body">
+            <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()"
+                 role="switch" aria-checked="false" aria-label="Master Illumination Switch" tabindex="0">
+              <div class="flip-switch-body switch-off" id="switch-body-master">
+                <div class="flip-switch-lever"></div>
+              </div>
             </div>
+            <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;"
+                 title="Master Dimmer — drag up/down or use ↑/↓ keys"
+                 role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
           </div>
-          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;"
-               title="Master Dimmer — drag up/down or use ↑/↓ keys"
-               role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <div class="illumination-panel-divider"></div>
@@ -119,41 +121,41 @@
         <!-- TEXT channel -->
         <div class="illumination-channel">
           <div class="illumination-channel-label">TEXT</div>
-          <div class="channel-switches" role="group" aria-label="Text Illumination Switches">
-            <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')"
-                 role="switch" aria-checked="true" aria-label="Text Primary Switch" tabindex="0">
-              <div class="flip-switch-label">PRI</div>
-              <div class="flip-switch-body switch-on" id="switch-body-text-primary"><div class="flip-switch-lever"></div></div>
+          <div class="channel-body">
+            <div class="channel-switches" role="group" aria-label="Text Illumination Switches">
+              <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')"
+                   role="switch" aria-checked="true" aria-label="Text Primary Switch" tabindex="0">
+                <div class="flip-switch-body switch-on" id="switch-body-text-primary"><div class="flip-switch-lever"></div></div>
+              </div>
+              <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')"
+                   role="switch" aria-checked="true" aria-label="Text Secondary Switch" tabindex="0">
+                <div class="flip-switch-body switch-on" id="switch-body-text-secondary"><div class="flip-switch-lever"></div></div>
+              </div>
             </div>
-            <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')"
-                 role="switch" aria-checked="true" aria-label="Text Secondary Switch" tabindex="0">
-              <div class="flip-switch-label">SEC</div>
-              <div class="flip-switch-body switch-on" id="switch-body-text-secondary"><div class="flip-switch-lever"></div></div>
-            </div>
+            <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;"
+                 title="Text Dimmer — drag up/down or use ↑/↓ keys"
+                 role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
           </div>
-          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;"
-               title="Text Dimmer — drag up/down or use ↑/↓ keys"
-               role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- BARS channel -->
         <div class="illumination-channel">
           <div class="illumination-channel-label">BARS</div>
-          <div class="channel-switches" role="group" aria-label="Bars Illumination Switches">
-            <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')"
-                 role="switch" aria-checked="true" aria-label="Bars Primary Switch" tabindex="0">
-              <div class="flip-switch-label">PRI</div>
-              <div class="flip-switch-body switch-on" id="switch-body-bars-primary"><div class="flip-switch-lever"></div></div>
+          <div class="channel-body">
+            <div class="channel-switches" role="group" aria-label="Bars Illumination Switches">
+              <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')"
+                   role="switch" aria-checked="true" aria-label="Bars Primary Switch" tabindex="0">
+                <div class="flip-switch-body switch-on" id="switch-body-bars-primary"><div class="flip-switch-lever"></div></div>
+              </div>
+              <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')"
+                   role="switch" aria-checked="true" aria-label="Bars Secondary Switch" tabindex="0">
+                <div class="flip-switch-body switch-on" id="switch-body-bars-secondary"><div class="flip-switch-lever"></div></div>
+              </div>
             </div>
-            <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')"
-                 role="switch" aria-checked="true" aria-label="Bars Secondary Switch" tabindex="0">
-              <div class="flip-switch-label">SEC</div>
-              <div class="flip-switch-body switch-on" id="switch-body-bars-secondary"><div class="flip-switch-lever"></div></div>
-            </div>
+            <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;"
+                 title="Bars Dimmer — drag up/down or use ↑/↓ keys"
+                 role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
           </div>
-          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;"
-               title="Bars Dimmer — drag up/down or use ↑/↓ keys"
-               role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <div class="illumination-panel-divider"></div>
@@ -161,25 +163,29 @@
         <!-- FLOOD channel -->
         <div class="illumination-channel">
           <div class="illumination-channel-label">FLOOD</div>
-          <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')"
-               role="switch" aria-checked="true" aria-label="Flood Switch" tabindex="0">
-            <div class="flip-switch-body switch-on" id="switch-body-flood"><div class="flip-switch-lever"></div></div>
+          <div class="channel-body">
+            <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')"
+                 role="switch" aria-checked="true" aria-label="Flood Switch" tabindex="0">
+              <div class="flip-switch-body switch-on" id="switch-body-flood"><div class="flip-switch-lever"></div></div>
+            </div>
+            <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;"
+                 title="Flood Dimmer — drag up/down or use ↑/↓ keys"
+                 role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
           </div>
-          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;"
-               title="Flood Dimmer — drag up/down or use ↑/↓ keys"
-               role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- DISPLAY channel -->
         <div class="illumination-channel">
           <div class="illumination-channel-label">DISP</div>
-          <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')"
-               role="switch" aria-checked="true" aria-label="Display Switch" tabindex="0">
-            <div class="flip-switch-body switch-on" id="switch-body-display"><div class="flip-switch-lever"></div></div>
+          <div class="channel-body">
+            <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')"
+                 role="switch" aria-checked="true" aria-label="Display Switch" tabindex="0">
+              <div class="flip-switch-body switch-on" id="switch-body-display"><div class="flip-switch-lever"></div></div>
+            </div>
+            <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;"
+                 title="Display Dimmer — drag up/down or use ↑/↓ keys"
+                 role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
           </div>
-          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;"
-               title="Display Dimmer — drag up/down or use ↑/↓ keys"
-               role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
       </div><!-- /illumination-panel -->
@@ -189,7 +195,6 @@
 
   <!-- 2. NAV BAR -->
   <nav class="region region-navbar glow-bars-primary" id="region-navbar" aria-label="Main Navigation">
-    <div style="display:flex; align-items:center; justify-content:space-between; height:100%; padding:0 12px;">
       <!-- LEFT: Navigation label -->
       <span class="label-etched glow-text-secondary" style="font-size:11px;">NAVIGATION</span>
 
@@ -207,7 +212,7 @@
       </div>
 
       <!-- RIGHT: Telemetry -->
-      <div class="telemetry-bar card" id="telemetry-bar" style="display:flex; align-items:center; gap:12px; padding:4px 12px;" role="status" aria-label="System Telemetry">
+      <div class="telemetry-bar card" id="telemetry-bar" role="status" aria-label="System Telemetry">
         <div class="telemetry-item">
           <span class="label-etched">PING</span>
           <canvas id="ping-sparkline" width="60" height="20" aria-label="Ping Sparkline"></canvas>
@@ -223,11 +228,10 @@
         <div class="telemetry-item">
           <span class="label-etched">DAT/TIM</span>
           <span class="value-mono" id="telemetry-dat" aria-label="Date">—</span>
-          <span class="value-mono" style="opacity:0.4; margin:0 1px;">·</span>
+          <span class="telemetry-sep">·</span>
           <span class="value-mono" id="telemetry-tim" aria-label="Time">—</span>
         </div>
       </div>
-    </div>
   </nav>
 
   <!-- 3. LEFT SIDEBAR -->
@@ -237,10 +241,9 @@
     <!-- Mode Toggle -->
     <div class="card">
       <div class="label-etched" style="margin-bottom:8px;">MODE</div>
-      <div style="display:flex; gap:4px;" role="group" aria-label="Display Mode">
-        <button class="toggle-btn active" id="mode-btn-system" onclick="themes.setModeSystem()" style="flex:1;" aria-pressed="true">⊙ AUTO</button>
-        <button class="toggle-btn" id="mode-btn-light" onclick="themes.setModeManual('light')" style="flex:1;" aria-pressed="false">☀ LIGHT</button>
-        <button class="toggle-btn" id="mode-btn-dark" onclick="themes.setModeManual('dark')" style="flex:1;" aria-pressed="false">☾ DARK</button>
+      <div class="toggle-group mode-toggle" role="group" aria-label="Display Mode">
+        <button class="toggle-btn" id="mode-btn-light" onclick="themes.setModeManual('light')" aria-pressed="false">☀ LIGHT</button>
+        <button class="toggle-btn" id="mode-btn-dark" onclick="themes.setModeManual('dark')" aria-pressed="false">☾ DARK</button>
       </div>
     </div>
 
@@ -459,14 +462,6 @@
           <div style="font-size:9px; font-weight:700; letter-spacing:0.05em; opacity:0.7; flex-shrink:0; width:28px;">LIVE</div>
           <input type="text" class="input" id="live-api-key" placeholder="API Key (UUID)" style="flex:1; font-size:9px; padding:3px 6px; min-width:0;" aria-label="Live API Key" autocomplete="off" spellcheck="false">
           <textarea class="input" id="live-rsa-key" placeholder="RSA Key (PEM)" rows="1" style="flex:1; font-size:8px; padding:3px 6px; resize:none; font-family:var(--font-mono); min-width:0;" aria-label="Live RSA Private Key" title="Paste your Live RSA Private Key in PEM format" autocomplete="off" spellcheck="false"></textarea>
-    <div class="region-panel-label label-etched">HANGAR BAY</div>
-    <div style="display:flex; gap:12px; flex:1; min-height:0; overflow-x:auto; overflow-y:hidden; align-items:stretch;">
-
-      <!-- API Keys Card -->
-      <div class="card glow-bars-secondary" style="flex:0 0 320px; display:flex; flex-direction:column; gap:6px; overflow-y:auto;" aria-label="API Keys">
-        <div class="label-etched" style="margin-bottom:4px;">API KEYS</div>
-        <div id="api-no-keys-msg" class="label-etched" style="font-size:10px; opacity:0.6; text-align:center; padding:8px 0;" aria-live="polite">
-          Connect API Keys to engage
         </div>
         <!-- DEMO row -->
         <div style="display:flex; align-items:center; gap:4px;">
@@ -475,30 +470,30 @@
           <textarea class="input" id="demo-rsa-key" placeholder="RSA Key (PEM)" rows="1" style="flex:1; font-size:8px; padding:3px 6px; resize:none; font-family:var(--font-mono); min-width:0;" aria-label="Demo RSA Private Key" title="Paste your Demo RSA Private Key in PEM format" autocomplete="off" spellcheck="false"></textarea>
         </div>
         <!-- Buttons -->
-        <div style="display:flex; gap:6px; margin-top:2px;">
+        <div style="display:flex; gap:4px; margin-top:2px;">
           <button class="btn" onclick="trading.connect()" style="flex:1; font-size:10px;" aria-label="Connect to Trading API">CONNECT</button>
           <button class="btn" onclick="trading.disconnect()" style="flex:1; font-size:10px; opacity:0.5;" aria-label="Disconnect from Trading API">DISCONNECT</button>
         </div>
       </div>
 
       <!-- Live/Demo Indicator Lights -->
-      <div class="card card-sm" style="flex:0 0 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;" aria-label="Connection Status Indicators">
+      <div class="card card-sm" style="flex:0 0 72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;" aria-label="Connection Status Indicators">
         <div style="text-align:center;">
-          <div class="indicator-light light-off" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 4px;" aria-label="Live Connection Status"></div>
+          <div class="indicator-light light-off" id="indicator-live" style="--indicator-color:#00ff88; margin:0 auto 3px;" aria-label="Live Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">LIVE</div>
         </div>
         <div style="text-align:center;">
-          <div class="indicator-light light-off" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 4px;" aria-label="Demo Connection Status"></div>
+          <div class="indicator-light light-off" id="indicator-demo" style="--indicator-color:#ffaa00; margin:0 auto 3px;" aria-label="Demo Connection Status"></div>
           <div class="label-etched" style="font-size:9px;">DEMO</div>
         </div>
       </div>
 
       <!-- Agent Access Card -->
-      <div class="card card-sm glow-bars-secondary" style="flex:0 0 280px; display:flex; flex-direction:column; gap:8px;" aria-label="Agent Access Control">
+      <div class="card card-sm glow-bars-secondary" style="flex:0 0 270px; display:flex; flex-direction:column; gap:5px;" aria-label="Agent Access Control">
         <div class="label-etched">AGENT ACCESS</div>
         <!-- Global Permission Dial -->
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div class="label-etched" style="font-size:9px; width:60px;">GLOBAL</div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="label-etched" style="font-size:9px; width:52px;">GLOBAL</div>
           <div class="permission-dial-group" id="global-permission" role="group" aria-label="Global Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setGlobalPermission('full-stop')" aria-pressed="true">FULL-STOP</button>
             <button class="perm-btn" data-perm="semi-auto" onclick="trading.setGlobalPermission('semi-auto')" aria-pressed="false">SEMI-AUTO</button>
@@ -506,8 +501,8 @@
           </div>
         </div>
         <!-- Agent Prime -->
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div class="label-etched" style="font-size:9px; width:60px;">PRIME</div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="label-etched" style="font-size:9px; width:52px;">PRIME</div>
           <div class="indicator-light light-off" id="agent-prime-status" style="--indicator-color:#888;" aria-label="Agent Prime Status"></div>
           <div class="permission-dial-group" id="prime-permission" role="group" aria-label="Agent Prime Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('prime', 'full-stop')" aria-pressed="true" aria-label="Prime Full Stop">⛔</button>
@@ -517,8 +512,8 @@
           <span class="label-etched" id="agent-prime-label" style="font-size:9px;" aria-live="polite">OFFLINE</span>
         </div>
         <!-- Agent Peritia -->
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div class="label-etched" style="font-size:9px; width:60px;">PERITIA</div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="label-etched" style="font-size:9px; width:52px;">PERITIA</div>
           <div class="indicator-light light-off" id="agent-peritia-status" style="--indicator-color:#888;" aria-label="Agent Peritia Status"></div>
           <div class="permission-dial-group" id="peritia-permission" role="group" aria-label="Agent Peritia Permission Level">
             <button class="perm-btn active" data-perm="full-stop" onclick="trading.setAgentPermission('peritia', 'full-stop')" aria-pressed="true" aria-label="Peritia Full Stop">⛔</button>
@@ -530,10 +525,10 @@
       </div>
 
       <!-- P/L Graph -->
-      <div class="card card-sm display-component glow-display" style="flex:1; min-width:240px; display:flex; flex-direction:column;" aria-label="Profit and Loss Performance Chart">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+      <div class="card card-sm display-component glow-display" style="flex:1; min-width:220px; display:flex; flex-direction:column;" aria-label="Profit and Loss Performance Chart">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3px;">
           <div class="label-etched">P/L PERFORMANCE</div>
-          <div style="display:flex; gap:3px;" role="group" aria-label="P/L Time Range">
+          <div style="display:flex; gap:2px;" role="group" aria-label="P/L Time Range">
             <button class="btn-sm active" id="pl-btn-24h" onclick="trading.setPLView('24h')" aria-pressed="true">24H</button>
             <button class="btn-sm" id="pl-btn-1w" onclick="trading.setPLView('1w')" aria-pressed="false">1W</button>
             <button class="btn-sm" id="pl-btn-1m" onclick="trading.setPLView('1m')" aria-pressed="false">1M</button>
@@ -542,7 +537,7 @@
           </div>
         </div>
         <canvas id="pl-chart" style="flex:1; width:100%;" aria-label="P/L Chart Canvas"></canvas>
-        <div style="display:flex; gap:3px; margin-top:4px; justify-content:flex-end;" role="group" aria-label="P/L Y-Axis Scale">
+        <div style="display:flex; gap:2px; margin-top:3px; justify-content:flex-end;" role="group" aria-label="P/L Y-Axis Scale">
           <button class="btn-sm active" id="pl-y-10" onclick="trading.setPLYAxis('10')" aria-pressed="true">$10</button>
           <button class="btn-sm" id="pl-y-100" onclick="trading.setPLYAxis('100')" aria-pressed="false">$100</button>
           <button class="btn-sm" id="pl-y-1k" onclick="trading.setPLYAxis('1k')" aria-pressed="false">$1K</button>

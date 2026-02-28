@@ -102,27 +102,23 @@ const illumination = (() => {
 
   function setDayNVG(mode) {
     state.dayNvg = mode;
-    // Drive the physical flip switch (NVG=switch-on/lever-up, DAY=switch-off/lever-down)
-    const body = document.getElementById('switch-body-day-nvg');
-    if (body) {
-      body.classList.toggle('switch-on', mode === 'nvg');
-      body.classList.toggle('switch-off', mode === 'day');
+    // Drive the mode knob — data-mode attribute triggers CSS rotation transition
+    const knob = document.getElementById('switch-day-nvg');
+    if (knob) {
+      knob.dataset.mode = mode;
+      knob.setAttribute('aria-checked', mode === 'nvg');
     }
-    const sw = document.getElementById('switch-day-nvg');
-    if (sw) sw.setAttribute('aria-checked', mode === 'nvg');
     // Sync to light/dark mode
     if (window.themes) themes.setMode(mode === 'day' ? 'light' : 'dark');
   }
 
   function syncDayNvg(mode) {
     state.dayNvg = mode === 'light' ? 'day' : 'nvg';
-    const body = document.getElementById('switch-body-day-nvg');
-    if (body) {
-      body.classList.toggle('switch-on', state.dayNvg === 'nvg');
-      body.classList.toggle('switch-off', state.dayNvg === 'day');
+    const knob = document.getElementById('switch-day-nvg');
+    if (knob) {
+      knob.dataset.mode = state.dayNvg;
+      knob.setAttribute('aria-checked', state.dayNvg === 'nvg');
     }
-    const sw = document.getElementById('switch-day-nvg');
-    if (sw) sw.setAttribute('aria-checked', state.dayNvg === 'nvg');
   }
 
   function updateMaxIntensity() {
@@ -196,9 +192,9 @@ const illumination = (() => {
     initSwitches();
   }
 
-  // Make flip-switches keyboard-accessible (Enter/Space to toggle)
+  // Make flip-switches and mode-knob keyboard-accessible (Enter/Space to toggle)
   function initSwitches() {
-    document.querySelectorAll('.flip-switch[role="switch"]').forEach(sw => {
+    document.querySelectorAll('.flip-switch[role="switch"], .mode-knob[role="switch"]').forEach(sw => {
       // Ensure focusable
       if (!sw.hasAttribute('tabindex')) sw.setAttribute('tabindex', '0');
       sw.addEventListener('keydown', e => {

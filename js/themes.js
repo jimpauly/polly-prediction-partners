@@ -160,20 +160,15 @@ const themes = (() => {
   function getTheme() { return currentTheme; }
 
   function updateModeButtons() {
-    const systemBtn = document.getElementById('mode-btn-system');
     const lightBtn = document.getElementById('mode-btn-light');
     const darkBtn = document.getElementById('mode-btn-dark');
-    if (systemBtn) {
-      systemBtn.classList.toggle('active', modePreference === 'system');
-      systemBtn.setAttribute('aria-pressed', modePreference === 'system');
-    }
     if (lightBtn) {
-      lightBtn.classList.toggle('active', modePreference === 'light');
-      lightBtn.setAttribute('aria-pressed', modePreference === 'light');
+      lightBtn.classList.toggle('active', currentMode === 'light');
+      lightBtn.setAttribute('aria-pressed', currentMode === 'light');
     }
     if (darkBtn) {
-      darkBtn.classList.toggle('active', modePreference === 'dark');
-      darkBtn.setAttribute('aria-pressed', modePreference === 'dark');
+      darkBtn.classList.toggle('active', currentMode === 'dark');
+      darkBtn.setAttribute('aria-pressed', currentMode === 'dark');
     }
   }
 

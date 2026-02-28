@@ -8,7 +8,7 @@
    Grid anatomy
    ─────────────
    ┌───────────────────────────────────────────────┐
-   │  HEADER BAR          (full width, 120px)       │
+   │  HEADER BAR          (full width, ~80px  ≈ 1/12 vh)   │
    ├───────────────────────────────────────────────┤
    │  NAV BAR             (full width, 39px)        │
    ├──────────┬──────────────────────┬─────────────┤
@@ -84,7 +84,7 @@ body {
   padding: var(--layout-gutter, 18px);
   gap: var(--layout-gutter, 18px);
   grid-template-columns: 320px 1fr 320px;
-  grid-template-rows: 120px 39px 1fr 200px;
+  grid-template-rows: 80px 39px 1fr 220px;
   grid-template-areas:
     "header    header    header"
     "navbar    navbar    navbar"
@@ -172,7 +172,8 @@ body {
 .region-navbar {
   grid-area: navbar;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: space-between;
   padding: 0 var(--layout-bezel-outer, 12px);
   gap: 8px;
   overflow: hidden;
@@ -225,15 +226,14 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: var(--layout-bezel-inner, 6px) var(--layout-bezel-outer, 12px);
-  gap: 6px;
-  padding: var(--layout-bezel-outer, 12px);
+  padding: 8px var(--layout-bezel-outer, 12px);
+  gap: 4px;
 }
 
 /* Horizontal scroll container that holds all bottom bar cards */
 .bottombar-cards-container {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex: 1;
   min-height: 0;
   overflow-x: auto;
@@ -929,6 +929,37 @@ body {
 }
 
 
+/* Mode toggle (light / dark) */
+.mode-toggle {
+  display: flex;
+  width: 100%;
+}
+
+.mode-toggle .toggle-btn {
+  flex: 1;
+  justify-content: center;
+  padding: 8px 6px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  gap: 5px;
+}
+
+.mode-toggle #mode-btn-light.active,
+.mode-toggle #mode-btn-light[aria-pressed="true"] {
+  background: #f7f3e8;
+  border-color: #c9a840;
+  color: #4a3200;
+  box-shadow: 0 0 8px rgba(220, 180, 40, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.mode-toggle #mode-btn-dark.active,
+.mode-toggle #mode-btn-dark[aria-pressed="true"] {
+  background: #10102a;
+  border-color: #5a5aaa;
+  color: #b8b8f0;
+  box-shadow: 0 0 8px rgba(100, 80, 255, 0.4), inset 0 -1px 0 rgba(100, 80, 255, 0.2);
+}
+
 /* ============================================================
    SECTION 16 — INPUT STYLES
    ============================================================ */
@@ -1264,8 +1295,8 @@ html {
 .telemetry-bar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 3px 12px;
+  gap: 12px;
+  padding: 4px 12px;
 }
 
 .telemetry-item {
@@ -1273,6 +1304,26 @@ html {
   align-items: center;
   gap: 5px;
   font-size: 10px;
+}
+
+/* Thin divider between adjacent telemetry items */
+.telemetry-item + .telemetry-item::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 14px;
+  background: var(--color-border-muted);
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Date·Time separator pip */
+.telemetry-sep {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0.4;
+  margin: 0 1px;
+  user-select: none;
 }
 
 /* Theme buttons container */
