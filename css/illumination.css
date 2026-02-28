@@ -255,8 +255,8 @@ h4.glow-text-primary {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
-  padding: 8px 14px;
+  gap: 10px;
+  padding: 4px 12px;
   background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
   border: 1px solid #444;
   border-radius: var(--layout-radius, 6px);
@@ -298,8 +298,8 @@ h4.glow-text-primary {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  min-width: 36px;
+  gap: 3px;
+  min-width: 34px;
 }
 
 /* Channel name plate */
@@ -311,6 +311,7 @@ h4.glow-text-primary {
   color: #aaa;
   white-space: nowrap;
   user-select: none;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 -1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* Numeric readout under the dial */
@@ -488,7 +489,7 @@ h4.glow-text-primary {
 .channel-switches {
   display: flex;
   flex-direction: row;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
 }
 

@@ -26,91 +26,164 @@
 
   <!-- 1. HEADER BAR -->
   <header class="region region-header glow-bars-primary" id="region-header" role="banner" aria-label="Application Header">
-    <div class="bezel-outer" style="display:flex; align-items:center; justify-content:space-between; height:100%;">
-      <!-- LEFT: App title -->
-      <div>
+    <div class="bezel-outer" style="display:flex; align-items:center; height:100%; flex:1;">
+
+      <!-- LEFT: App title (flex:1 so it balances against right side) -->
+      <div style="flex:1; min-width:0;">
         <h1 class="glow-text-primary" style="font-size:22px; font-weight:900; letter-spacing:0.08em; margin:0;">
-          POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7;">v0.03.01</span>
+          POLLY PREDICTION PARTNERS <span style="font-size:14px; font-weight:400; opacity:0.7; text-transform:none;">v0.03.01</span>
         </h1>
         <div class="glow-text-secondary" style="font-size:11px; opacity:0.6; letter-spacing:0.15em; margin-top:2px;">
-          MODEL PPP-ALPHA-001 · TRADING INTELLIGENCE SYSTEM
+          MODEL CLAUDE SONNET · ANTHROPIC
         </div>
       </div>
 
-      <!-- RIGHT: Illumination Control Panel -->
+      <!-- CENTER: Insignia flair (natural width, auto margins keep it centered) -->
+      <div style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; pointer-events:none; user-select:none;" aria-hidden="true">
+        <svg width="220" height="76" viewBox="0 0 220 76" fill="none">
+          <!-- Outer dashed orbital ring -->
+          <circle cx="110" cy="38" r="34" stroke="currentColor" stroke-width="0.6" stroke-dasharray="2 5" opacity="0.2"/>
+          <!-- Middle solid ring -->
+          <circle cx="110" cy="38" r="24" stroke="currentColor" stroke-width="0.9" opacity="0.28"/>
+          <!-- Inner ring -->
+          <circle cx="110" cy="38" r="13" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <!-- Horizontal crosshair arms outside rings -->
+          <line x1="4"   y1="38" x2="75"  y2="38" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <line x1="145" y1="38" x2="216" y2="38" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <!-- Vertical crosshair stubs outside rings -->
+          <line x1="110" y1="3"  x2="110" y2="13" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <line x1="110" y1="63" x2="110" y2="73" stroke="currentColor" stroke-width="0.75" opacity="0.28"/>
+          <!-- Inner crosshair (inside inner ring) -->
+          <line x1="87"  y1="38" x2="99"  y2="38" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <line x1="121" y1="38" x2="133" y2="38" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <line x1="110" y1="15" x2="110" y2="27" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <line x1="110" y1="49" x2="110" y2="61" stroke="currentColor" stroke-width="0.6" opacity="0.42"/>
+          <!-- 45° diagonal tick marks on middle ring -->
+          <line x1="127" y1="21" x2="124" y2="24" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <line x1="93"  y1="21" x2="96"  y2="24" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <line x1="127" y1="55" x2="124" y2="52" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <line x1="93"  y1="55" x2="96"  y2="52" stroke="currentColor" stroke-width="0.85" opacity="0.32"/>
+          <!-- Cardinal tick marks on middle ring -->
+          <line x1="110" y1="14" x2="110" y2="17" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <line x1="110" y1="59" x2="110" y2="62" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <line x1="86"  y1="38" x2="89"  y2="38" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <line x1="131" y1="38" x2="134" y2="38" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <!-- Arrow tips on horizontal arms -->
+          <polyline points="9,34 4,38 9,42"     stroke="currentColor" stroke-width="0.85" opacity="0.35" fill="none"/>
+          <polyline points="211,34 216,38 211,42" stroke="currentColor" stroke-width="0.85" opacity="0.35" fill="none"/>
+          <!-- Center dot -->
+          <circle cx="110" cy="38" r="2.5" fill="currentColor" opacity="0.5"/>
+          <!-- PPP monogram -->
+          <text x="112" y="41" text-anchor="middle" fill="currentColor"
+                font-size="9" font-weight="900" letter-spacing="0.45em"
+                font-family="ui-monospace,monospace" opacity="0.52">PPP</text>
+        </svg>
+      </div>
+
+      <!-- RIGHT: Illumination Control Panel — flex:1 + justify-content:flex-end keeps it flush right -->
+      <div style="flex:1; display:flex; justify-content:flex-end; align-items:center;">
       <div class="illumination-panel" id="illumination-panel" role="group" aria-label="Illumination Control Panel">
-        <!-- DAY/NVG toggle -->
+
+        <!-- DAY/NVG — physical flip switch (NVG=up, DAY=down) -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">DAY/NVG</div>
-          <div class="flip-switch-group" role="group" aria-label="Day/NVG Mode">
-            <button class="day-nvg-btn active" id="btn-day" onclick="illumination.setDayNVG('day')" aria-pressed="true">DAY</button>
-            <button class="day-nvg-btn" id="btn-nvg" onclick="illumination.setDayNVG('nvg')" aria-pressed="false">NVG</button>
+          <div class="illumination-channel-label">DAY/NVG</div>
+          <div class="flip-switch" id="switch-day-nvg"
+               onclick="illumination.setDayNVG(illumination.state.dayNvg==='day'?'nvg':'day')"
+               role="switch" aria-checked="false" aria-label="Day/NVG Mode Switch" tabindex="0">
+            <div class="flip-switch-label">NVG</div>
+            <div class="flip-switch-body switch-off" id="switch-body-day-nvg">
+              <div class="flip-switch-lever"></div>
+            </div>
+            <div class="flip-switch-label">DAY</div>
           </div>
         </div>
+
+        <div class="illumination-panel-divider"></div>
 
         <!-- MASTER -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">MASTER</div>
-          <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()" role="switch" aria-checked="false" aria-label="Master Illumination Switch">
-            <div class="flip-switch-label">OFF</div>
+          <div class="illumination-channel-label">MASTER</div>
+          <div class="flip-switch" id="switch-master" onclick="illumination.toggleMaster()"
+               role="switch" aria-checked="false" aria-label="Master Illumination Switch" tabindex="0">
             <div class="flip-switch-body switch-off" id="switch-body-master">
               <div class="flip-switch-lever"></div>
             </div>
-            <div class="flip-switch-label">ON</div>
           </div>
-          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;" title="Master Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-master" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Master Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Master Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
+
+        <div class="illumination-panel-divider"></div>
 
         <!-- TEXT channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">TEXT</div>
+          <div class="illumination-channel-label">TEXT</div>
           <div class="channel-switches" role="group" aria-label="Text Illumination Switches">
-            <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')" role="switch" aria-checked="true" aria-label="Text Primary Switch">
+            <div class="flip-switch" id="switch-text-primary" onclick="illumination.toggleChannel('text-primary')"
+                 role="switch" aria-checked="true" aria-label="Text Primary Switch" tabindex="0">
               <div class="flip-switch-label">PRI</div>
               <div class="flip-switch-body switch-on" id="switch-body-text-primary"><div class="flip-switch-lever"></div></div>
             </div>
-            <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')" role="switch" aria-checked="true" aria-label="Text Secondary Switch">
+            <div class="flip-switch" id="switch-text-secondary" onclick="illumination.toggleChannel('text-secondary')"
+                 role="switch" aria-checked="true" aria-label="Text Secondary Switch" tabindex="0">
               <div class="flip-switch-label">SEC</div>
               <div class="flip-switch-body switch-on" id="switch-body-text-secondary"><div class="flip-switch-lever"></div></div>
             </div>
           </div>
-          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;" title="Text Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-text" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Text Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Text Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- BARS channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">BARS</div>
+          <div class="illumination-channel-label">BARS</div>
           <div class="channel-switches" role="group" aria-label="Bars Illumination Switches">
-            <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')" role="switch" aria-checked="true" aria-label="Bars Primary Switch">
+            <div class="flip-switch" id="switch-bars-primary" onclick="illumination.toggleChannel('bars-primary')"
+                 role="switch" aria-checked="true" aria-label="Bars Primary Switch" tabindex="0">
               <div class="flip-switch-label">PRI</div>
               <div class="flip-switch-body switch-on" id="switch-body-bars-primary"><div class="flip-switch-lever"></div></div>
             </div>
-            <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')" role="switch" aria-checked="true" aria-label="Bars Secondary Switch">
+            <div class="flip-switch" id="switch-bars-secondary" onclick="illumination.toggleChannel('bars-secondary')"
+                 role="switch" aria-checked="true" aria-label="Bars Secondary Switch" tabindex="0">
               <div class="flip-switch-label">SEC</div>
               <div class="flip-switch-body switch-on" id="switch-body-bars-secondary"><div class="flip-switch-lever"></div></div>
             </div>
           </div>
-          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;" title="Bars Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-bars" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Bars Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Bars Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
+
+        <div class="illumination-panel-divider"></div>
 
         <!-- FLOOD channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">FLOOD</div>
-          <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')" role="switch" aria-checked="true" aria-label="Flood Switch">
+          <div class="illumination-channel-label">FLOOD</div>
+          <div class="flip-switch" id="switch-flood" onclick="illumination.toggleChannel('flood')"
+               role="switch" aria-checked="true" aria-label="Flood Switch" tabindex="0">
             <div class="flip-switch-body switch-on" id="switch-body-flood"><div class="flip-switch-lever"></div></div>
           </div>
-          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;" title="Flood Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-flood" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Flood Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Flood Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
 
         <!-- DISPLAY channel -->
         <div class="illumination-channel">
-          <div class="illumination-channel-label label-etched">DISP</div>
-          <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')" role="switch" aria-checked="true" aria-label="Display Switch">
+          <div class="illumination-channel-label">DISP</div>
+          <div class="flip-switch" id="switch-display" onclick="illumination.toggleChannel('display')"
+               role="switch" aria-checked="true" aria-label="Display Switch" tabindex="0">
             <div class="flip-switch-body switch-on" id="switch-body-display"><div class="flip-switch-lever"></div></div>
           </div>
-          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;" title="Display Dimmer — drag up/down or use ↑/↓ keys" role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
+          <div class="rotary-dial" id="dial-display" data-value="1.0" style="--dial-angle: 135deg;"
+               title="Display Dimmer — drag up/down or use ↑/↓ keys"
+               role="slider" aria-label="Display Dimmer" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" tabindex="0"></div>
         </div>
-      </div>
+
+      </div><!-- /illumination-panel -->
+      </div><!-- /right wrapper -->
     </div>
   </header>
 
