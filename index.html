@@ -238,7 +238,8 @@
     <div class="card">
       <div class="label-etched" style="margin-bottom:8px;">MODE</div>
       <div style="display:flex; gap:4px;" role="group" aria-label="Display Mode">
-        <button class="toggle-btn active" id="mode-btn-light" onclick="themes.setModeManual('light')" style="flex:1;" aria-pressed="true">☀ LIGHT</button>
+        <button class="toggle-btn active" id="mode-btn-system" onclick="themes.setModeSystem()" style="flex:1;" aria-pressed="true">⊙ AUTO</button>
+        <button class="toggle-btn" id="mode-btn-light" onclick="themes.setModeManual('light')" style="flex:1;" aria-pressed="false">☀ LIGHT</button>
         <button class="toggle-btn" id="mode-btn-dark" onclick="themes.setModeManual('dark')" style="flex:1;" aria-pressed="false">☾ DARK</button>
       </div>
     </div>

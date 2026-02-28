@@ -76,10 +76,39 @@ const themes = (() => {
 
   let currentTheme = 'modern-webpage';
   let currentMode = 'light';
+  let modePreference = 'system'; // 'system' | 'light' | 'dark'
 
   function init() {
+    // Restore saved mode preference
+    const savedPref = localStorage.getItem('ppp-mode-pref');
+    if (savedPref === 'light' || savedPref === 'dark') {
+      modePreference = savedPref;
+      document.documentElement.dataset.userMode = 'manual';
+    } else {
+      modePreference = 'system';
+      delete document.documentElement.dataset.userMode;
+    }
+
     currentTheme = document.documentElement.dataset.theme || 'modern-webpage';
-    currentMode = document.documentElement.dataset.mode || 'light';
+
+    // Resolve actual mode from preference
+    if (modePreference === 'system') {
+      const osPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      currentMode = osPrefersDark ? 'dark' : 'light';
+    } else {
+      currentMode = modePreference;
+    }
+    document.documentElement.dataset.mode = currentMode;
+
+    // Listen for OS-level color-scheme changes and follow them in system mode
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (modePreference === 'system') {
+          setMode(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
+
     renderThemeButtons();
     updateModeButtons();
     updateActiveButton();
@@ -98,35 +127,53 @@ const themes = (() => {
     currentMode = mode;
     document.documentElement.dataset.mode = mode;
     updateModeButtons();
+    refreshThemeButtonStyles();
     // Update illumination max intensity
     if (window.illumination) window.illumination.updateMaxIntensity();
     // Sync DAY/NVG toggle
     if (window.illumination) window.illumination.syncDayNvg(mode);
   }
 
-  // Called from UI buttons — also marks that the user chose manually
+  // Called from UI buttons — marks that the user chose a specific mode
   function setModeManual(mode) {
+    modePreference = mode;
+    localStorage.setItem('ppp-mode-pref', mode);
     document.documentElement.dataset.userMode = 'manual';
     setMode(mode);
   }
 
+  // Called from the AUTO button — returns to following the OS preference
+  function setModeSystem() {
+    modePreference = 'system';
+    localStorage.setItem('ppp-mode-pref', 'system');
+    delete document.documentElement.dataset.userMode;
+    const osPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setMode(osPrefersDark ? 'dark' : 'light');
+  }
+
   function toggleMode() {
-    setMode(currentMode === 'light' ? 'dark' : 'light');
+    const newMode = currentMode === 'light' ? 'dark' : 'light';
+    setModeManual(newMode);
   }
 
   function getMode() { return currentMode; }
   function getTheme() { return currentTheme; }
 
   function updateModeButtons() {
+    const systemBtn = document.getElementById('mode-btn-system');
     const lightBtn = document.getElementById('mode-btn-light');
     const darkBtn = document.getElementById('mode-btn-dark');
+    if (systemBtn) {
+      systemBtn.classList.toggle('active', modePreference === 'system');
+      systemBtn.setAttribute('aria-pressed', modePreference === 'system');
+    }
     if (lightBtn) {
-      lightBtn.classList.toggle('active', currentMode === 'light');
-      lightBtn.setAttribute('aria-pressed', currentMode === 'light');
+      lightBtn.classList.toggle('active', modePreference === 'light');
+      lightBtn.setAttribute('aria-pressed', modePreference === 'light');
     }
     if (darkBtn) {
-      darkBtn.classList.toggle('active', currentMode === 'dark');
-      darkBtn.setAttribute('aria-pressed', currentMode === 'dark');
+      darkBtn.classList.toggle('active', modePreference === 'dark');
+      darkBtn.setAttribute('aria-pressed', modePreference === 'dark');
     }
   }
 
@@ -186,5 +233,5 @@ const themes = (() => {
     updateActiveButton();
   }
 
-  return { init, setTheme, setMode, setModeManual, toggleMode, getMode, getTheme, renderThemeButtons, refreshThemeButtonStyles };
+  return { init, setTheme, setMode, setModeManual, setModeSystem, toggleMode, getMode, getTheme, renderThemeButtons, refreshThemeButtonStyles };
 })();
