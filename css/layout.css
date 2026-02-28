@@ -221,15 +221,22 @@ body {
 /* 7. Bottom bar ─ ticker tape, position summary */
 .region-bottombar {
   grid-area: bottombar;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  padding: 0 var(--layout-bezel-outer, 12px);
+  flex-direction: column;
+  padding: var(--layout-bezel-inner, 6px) var(--layout-bezel-outer, 12px);
 }
 
+/* Horizontal scroll container that holds all bottom bar cards */
+.bottombar-cards-container {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: stretch;
+}
 
 /* ============================================================
    SECTION 5 — REGION HEADER / PANEL LABEL
