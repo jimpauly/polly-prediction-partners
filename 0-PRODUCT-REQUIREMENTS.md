@@ -390,7 +390,7 @@ Fly Studio State
 
 -  **Rulers:** x-axis (top) and y-axis (left); 18px wide.
     -  Tick heights: 6px / 8px / 12px at every 10px.
-    -  Zero-square at (0,0).
+    -  shared Zero-square.
     -  Accurate to the device pixels.
 -  **X-axis end px label:** located in the ruler at the end of the x-axis.
 -  **Y-axis end px label:** located in the ruler at the end of the y-axis.
