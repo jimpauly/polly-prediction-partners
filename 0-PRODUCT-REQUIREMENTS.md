@@ -208,60 +208,6 @@ Last update: 03-02-26
     - A large Robot emoji.
     - **Illumination Panel Card:** right-aligned, vertically centered.
 
-#### Nav Bar:
-
--  No header in nav bar
-
-    - **`Navigation`** text label aligned left, vertically centered
-    - **Studio Selecting:** Card with Powerful Chunky Radio Buttons for `Design`, `Trade`, `Fly`, `Convert`.
-    - **`Telemetry`** card. right-aligned, vertically centered
-
-#### Left Sidebar:
-
-- **`System Design`** Header text aligned top, centered.
-
-    - **`Mode`** - light/dark toggle (side‑by‑side, centered).
-    - **`System Theme`** - Buttons to select system design theme.
-    - **3D toggle** 
-
-#### Right Sidebar:
-
-- **`Inspector Panel`** Header text aligned top, centered.
-
-    - **`To‑do list` app** (card, `width: 100%`)
-    - **Send-an-idea**  text box and button to send message to main user
-
-#### Bottom Bar:
-
-- **`Hangar Bay`** Vertical Header aligned left, vertically centered.
-
-    - **`Agent Access`** Card for elements to control ai trading agents or algorithms
-    - **`+/- $`** professionally labeled
-        - Graph display window
-    - More ideas that will help visualize or interface with the agents
-
-#### Action Bar:
-
-- **`Ignition`** text aligned top centered.
-    - do not align the gutter line that is between the main region and side bar, with the gutter line between the bottom bars.
-
-#### Main Region:
-
--  **`Viewing Port`** text aligned top centered.
--  **Design Studio:** Creative cards and content to show off pretty design of UI/UX
-    -  Keep main stage content centered horizontally and vertically
-    -  Prevent overflow and scrolling; arrange content creatively
-    -  Keep main stage stocked with diverse elements/cards/displays for visual testing.
-    -  Prevent main stage cards from overflowing the region bounds in Design State; Be creative with design.
-    -  Keep main stage content to fill full width and height and centered both horizontally and vertically.
--  **Trading Studio:** `No data` displayed until after succesful API key connection, the main view port auto-navigates to trading studio state.
--  **Fly Studio:** `No data` and an iss live feed displayed until after succesful API key connection.
--  **File Converter Studio:** PNG to PDF, URL to MP4, etc.
-
-### Components:
-
-#### Header Bar:
-
 -  Illumination Control Panel
     - Aligned-right
     - looks like an overhead-control-panel, see photos for inpiration.
@@ -275,6 +221,12 @@ Last update: 03-02-26
 
 #### Nav Bar:
 
+-  No header in nav bar
+
+    - **`Navigation`** text label aligned left, vertically centered
+    - **Studio Selecting:** Card with Powerful Chunky Radio Buttons for `Design`, `Trade`, `Fly`, `Convert`.
+    - **`Telemetry`** card. right-aligned, vertically centered
+
 -  Studio Selectors
     - aligned-left, veritcally-centered.
     - Card with Powerful Chunky Radio Buttons for `Design`, `Trade` and `Fly`.
@@ -287,6 +239,12 @@ Last update: 03-02-26
     - **DATE/TIME:** real-time clock — format `M/D` and 24-hour `HH:MM`. don't include the seconds in the time, it's stressful.
 
 #### Left Sidebar:
+
+- **`System Design`** Header text aligned top, centered.
+
+    - **`Mode`** - light/dark toggle (side‑by‑side, centered).
+    - **`System Theme`** - Buttons to select system design theme.
+    - **3D toggle**
 
 - Light/Dark Mode Toggle button,
     - if in light mode, `dark`mode button that looks like dark mode
@@ -306,6 +264,11 @@ Last update: 03-02-26
 
 #### Right Sidebar:
 
+- **`Inspector Panel`** Header text aligned top, centered.
+
+    - **`To‑do list` app** (card, `width: 100%`)
+    - **Send-an-idea**  text box and button to send message to main user
+
 - Local, Responsive To-do list App
     - **Spiral Notebook** pages look like they are in or connected to a spiral notebook.
     - **Bold text toggle** small square button. Can bolden H1 and also Aa sizes.
@@ -318,8 +281,14 @@ Last update: 03-02-26
     - exports message in an email to chickensaurusrex@outlook.com for main user.
     - Dont display the email address, only a send-an-idea button.
 
-
 #### Bottom Bar:
+
+- **`Hangar Bay`** Vertical Header aligned left, vertically centered.
+
+    - **`Agent Access`** Card for elements to control ai trading agents or algorithms
+    - **`+/- $`** professionally labeled
+        - Graph display window
+    - More ideas that will help visualize or interface with the agents
 
 - Connect API Keys
     - After successful key login all cards and components for trading appear in bottom bar and main region.
@@ -339,6 +308,9 @@ Last update: 03-02-26
 
 #### Action Bar:
 
+- **`Ignition`** text aligned top centered.
+    - do not align the gutter line that is between the main region and side bar, with the gutter line between the bottom bars.
+
 - Ignition
 - Global Control for agents
     - Oceanliner or Submarine Throttle design: Full-Auto, Semi, Full-Stop (default)
@@ -353,6 +325,17 @@ Last update: 03-02-26
 
 #### Main Region:
 
+-  **`Viewing Port`** text aligned top centered.
+-  **Design Studio:** Creative cards and content to show off pretty design of UI/UX
+    -  Keep main stage content centered horizontally and vertically
+    -  Prevent overflow and scrolling; arrange content creatively
+    -  Keep main stage stocked with diverse elements/cards/displays for visual testing.
+    -  Prevent main stage cards from overflowing the region bounds in Design State; Be creative with design.
+    -  Keep main stage content to fill full width and height and centered both horizontally and vertically.
+-  **Trading Studio:** `No data` displayed until after succesful API key connection, the main view port auto-navigates to trading studio state.
+-  **Fly Studio:** `No data` and an iss live feed displayed until after succesful API key connection.
+-  **File Converter Studio:** PNG to PDF, URL to MP4, etc.
+
 -  Design Studio Default State
     -  Creative Design Cards and Elements
     -  **Default State:** Design Studio: Creative cards and content to show off pretty design of UI/UX
@@ -366,13 +349,13 @@ Last update: 03-02-26
     -  **MS paint 1998 Clone** Fully functioning clone of ms paint with functional tools. New file, open, save, save as, etc. We want people to believe it is exactly microsoft paint 1998.
 -  Trading Studio State.
     -  **Trading Studio:** `No data` displayed until after succesful API key connection.
-    - No mock data ever. Leave empty cards with full formatting, no data or similar place holder text until api keys connect 
-    -  Sleek initilization animations glowing animations and/or brief glow intensity spike. 
+    - No mock data ever. Leave empty cards with full formatting, no data or similar place holder text until api keys connect
+    -  Sleek initilization animations glowing animations and/or brief glow intensity spike.
     -  Live vs Demo mode Indicator and Light.
         -  Completely Different data sets depending on Live or Demo modes initiated.
     -  Category Nav menu, Horizontal scrolling
         -  Sub-Category Nav Menu, horizontal scrolling
-            -  Filter options: Volume, frequency, time-to-close.
+        -  Filter options: Volume, frequency, time-to-close.
     -  **Series Cards**: 3 columns, full width of the main region. Scroll down allowed. `show more markets` button at bottom loads 18 additional series.
         -  Cards show information similar to Kalshi's cards in our photos folder
         -  Cards have tiny button element in bottom right to expand that card to expand to fill the main region.
@@ -381,7 +364,7 @@ Last update: 03-02-26
         -  3 columns, full width of the main region
         -  scroll down allowed
         -  `show more markets` button at bottom loads 18 additional series cards.
-Fly Studio State
+-  Fly Studio State
     -  **Fly Studio:** `No data` displayed until after succesful API key connection.
     - the iss live feed displayed until after succesful API key connection.
 
