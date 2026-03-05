@@ -90,7 +90,8 @@ Last update: 03-02-26
     - Deeply develop our smart, reinforced-learning, super-profitable,high-frequency, full-auto trading-agent studio.
     - **2.5th Stage:** Reach shippable quality.
         - Windows and Mac Desktop apps with setup wizards.
-        - Individuals ith minimal technical background should be able to install, and easily interface with, their copy of this app.
+        - Individuals with minimal technical background should be able to easily install and interface with their copy in less than 5 minutes.
+        - Open-source, free-to-use, no-ads, all features available. 
     - Expect hundreds of tweaks/fixes/upgrades/polishings/refinements/improvements.
     - Do not ever ask for stage 3. Continue developing, refining, improving in step 2.5.
     - Close security holes. Close data leak possibilities. Critique security and fix.
@@ -216,8 +217,10 @@ Last update: 03-02-26
     - **`Navigation`** text label — Aligned left, vertically centered
     - **Studio Selector** — Card with chunky radio buttons for `Design`, `Trade`, `Fly`, `Convert`. Aligned left, vertically centered.
         - **Design:** Default studio. Creative modern webpage.
-        - **Trade:** Trading active; main region switches to markets or series cards.
-        - **Fly:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
+        - **Trading:** Trading active; main region switches to markets or series cards.
+        - **Flight SIM:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
+            - **ISS live video feeds**
+        - **Converter:** File converters, image converters, PDF filler, URL to MP3/MP4 converter.
     - **Telemetry** card — Aligned right, vertically centered
         - **PING:** Live `<canvas>` tiny sparkline using `navigator.connection.rtt` (calming, slow-smooth animation, real-time).
         - **SPD:** Static text `"MACH 4.20"` (only allowed mock data ever).
@@ -275,6 +278,7 @@ Last update: 03-02-26
 - **Agent Access**
     - **Individual agent controls**.
     - **Agent Access Card** — For interactive agent interface
+        - 5 agents. 3 agents active on first build. access cards 4 and 5 are grayed out.
         - **Individual Agent Control Dials:** `Auto`, `Semi-Auto`, `Safe`.
         - **Agent Status Display** — Shows agent status in multiple ways.
 
@@ -312,8 +316,10 @@ Last update: 03-02-26
     - **Live Logs:** Terminal printing 7 events at a time (click, resize, focus). Keep compact; include errors/warnings.
     - **Web Elements:** Assorted, non-functional elements for visual testing.
     - **Palette Viewer:** Accurate with each theme selection and light/dark mode.
-        - Random unique splat-shaped color swatches for selected palette (12 major selectors).
+        - Random unique splat-shaped color swatches for selected palette (the 12 major or common selectors).
     - **MS Paint 1998 Clone:** Fully functional with tools (New, Open, Save, Save As, etc.). Should look exactly like Microsoft Paint 1998.
+        - should have the maximize toggle in the top right that makes it fill to take up the entire main region. All other components leave the main region until the maximized is retoggled.
+    - What else should we have in the design studio?
 
 ##### Trading Studio
 
@@ -336,6 +342,11 @@ Last update: 03-02-26
 - **Display:** `No data` until after successful API key connection.
 - **ISS live feed** displayed (once API keys connected; Agents must earn $2k profit to unlock).
 
+##### Converter Studio
+
+- jpg to png converter. plus other common file converts.
+- pdf filler
+- url to mp3/mp4 converter
 
 #### Precision Tools:
 
@@ -539,6 +550,13 @@ Last update: 03-02-26
 - Document variable purposes with brief dev notes in code
 - Plan for scoped variables (component-level)
 - Theme and illumination state persist when switching studios. They reset on new browser session
+-  One `index.html`. Studio selector in Nav Bar switches state — no page reloads, no routing.
+-  The Header, Nav, sidebars, Bottom and Action Bar never change between studios. Only Main Region's content changes.
+-  Design Studio is the default landing state — our UI shows off itself with web design skills first.
+-  Trading Studio activates when API keys are connected. The Main Region becomes a live data interface that resembles navigating Kalshi.
+- Agents run in the backend regardless of which studio is active.
+- Flight Studio is a reward state — the Main Region transforms into a cockpit. The rest of the interface stays functional. Agents keep trading in the background.
+- All studios share the same theme, illumination, and precision tool state. Switching studios never resets any system design controls.
 
 ### UI/UX Polish:
 
@@ -1578,45 +1596,16 @@ Events broadcast:
 
 ---
 
-## *Chapter 3. Studios*
-
-*This will be 3 apps in one.*
-
----
-
-### Design Studio
+## *Chapter 3. Design Studio*
 
 - Default State showing off our pretty main region and all our cool control interfaces.
+- This isn't too complicated so it doesn't need it's own chapter.
+- see ##### Design Studio for details
 
----
-
-### Trading Studio
+## *Chapter 4. Trading Studio*
 
 - The entire reason why we are doing this: To make money.
 - Three Agents at first. Seperate environments to avoid cross-contamination of performance.
-    -  Each agent has 3 states: Auto, Semi-Auto, Full-Stop.
-
----
-
-### Flight Studio
-
--  *`No Flight Plan` displayed until the agents make 2,000 dollars so we can develop this and play. Live view of the ISS video feeds if possible.*
-
----
-
-### Ideas
-
--  One `index.html`. One running backend. Three studios. Studio selector in Nav Bar switches the Main Region's state — no page reloads, no routing.
--  The Header, Nav Bar, sidebars, Bottom Bar, and Action Bar never change between studios. Only the Main Region morphs.
--  Design Studio is the default landing state — the UI shows off itself before any keys are connected or agents are running.
--  Trading Studio activates when API keys are connected. The Main Region becomes a live data interface. Agents run in the backend regardless of which studio is active.
--  Flight Studio is a reward state — the Main Region transforms into a cockpit. The rest of the interface stays functional. Agents keep trading in the background.
--  All three studios share the same theme, illumination, and precision tool state. Switching studios never resets any controls.
--  The backend is always running. Studios are views into the same live system, not separate apps.
-
-*End Chapter 3*
-
-## *Chapter 4. Trading Agents*
 
 ### Agent Interfaces
 
@@ -1639,29 +1628,134 @@ Events broadcast:
 
 - High high Frequency, multiple yes/no buy/sell per minute.
 - The only hard stop condition could be an account balance under $5
+- only series that close in less than 3 days
+- might have to scan up to 40k series
     
 ### Agent Prime
 
 - Default, Normal
 - Literally just follows the other traders. Basically betting on the majority bets.
 - Should be able to access and analyze and bet on every market.
-
-#### Majority Signal Logic
-
--  prime could watch total buy and sell volume direction within each minute
+- Majority Signal Logic
+    -  prime could watch total buy and sell volume direction within each minute
     -  prime could place bets aligned with whichever side the majority is trading in that window
     -  This idea is that the group consensus of a market tends toward the most accurate answer
+
+### Agent Praxis
+
+- this one only goes for the markets that are sports.
+- its going to get really good at at sports
 
 ### Agent Peritia
 
 - We will put heart into this one and try to get this one to focus on the 15 minute recurring BTC price up/down yes/no series.
 - This is the main main main main #1 goal of this project.
 - Eventually will be really good at all the crypto.
+- uses candlestick patterns to inform decision making
 
-### Agent P007
+- Candlestick Pattern Dictionary
+Explore the comprehensive Candlestick Pattern Dictionary from StockCharts' ChartSchool. Master the art of candlestick patterns and make confident trading decisions.
 
-- this one only goes for the markets that are sports.
-- its going to get really good at at sports
+The StockCharts Candlestick Pattern Dictionary provides brief descriptions of many common candlestick patterns.
+
+Abandoned Baby
+A rare reversal pattern characterized by a gap followed by a Doji, which is then followed by another gap in the opposite direction. The shadows on the Doji must completely gap below or above the shadows of the first and third day.
+
+Dark Cloud Cover
+A bearish reversal pattern that continues the uptrend with a long white body. The next day opens at a new high, then closes below the midpoint of the body of the first day.
+
+Doji
+Doji form when the open and close of a security are virtually equal. The length of the upper and lower shadows can vary, and the resulting candlestick looks like either a cross, inverted cross, or a plus sign. Doji convey a sense of indecision or tug-of-war between buyers and sellers. Prices move above and below the opening level during the session but close at or near the opening level.
+
+Downside Tasuki Gap
+A continuation pattern with a long, black body followed by another black body that has gapped below the first one. The third day is white and opens within the body of the second day, then closes in the gap between the first two days, but does not close the gap.
+
+Dragonfly Doji
+A Doji where the open and close price are at the high of the day. Like other Doji days, this one normally appears at market turning points.
+
+Engulfing Pattern
+A reversal pattern that can be bearish or bullish, depending upon whether it appears at the end of an uptrend (bearish engulfing pattern) or a downtrend (bullish engulfing pattern). The first day is characterized by a small body, followed by a day whose body completely engulfs the previous day's body and closes in the opposite direction of the trend. This pattern is similar to the outside reversal chart pattern, but does not require the entire range (high and low) to be engulfed, just the open and close.
+
+Evening Doji Star
+A three-day bearish reversal pattern similar to the Evening Star. The uptrend continues with a large white body. The next day opens higher, trades in a small range, then closes at its open (Doji). The next day closes below the midpoint of the body of the first day.
+
+Evening Star
+A bearish reversal pattern that continues an uptrend with a long white body day followed by a gapped up small body day, then a down close with the close below the midpoint of the first day.
+
+
+Falling Three Methods
+A bearish continuation pattern. A long black body is followed by three small body days, each fully contained within the range of the high and low of the first day. The fifth day closes at a new low.
+
+Gravestone Doji
+A doji line develops when the Doji is at, or very near, the low of the day.
+
+Hammer
+Hammer candlesticks form when a security moves significantly lower after the open but rallies to close well above the intraday low. The resulting candlestick looks like a square lollipop with a long stick. If this candlestick forms during a decline, it is called a Hammer.
+
+Hanging Man
+Hanging Man candlesticks form when a security moves significantly lower after the open but rallies to close well above the intraday low. The resulting candlestick looks like a square lollipop with a long stick. If this candlestick forms during an advance, it is called a Hanging Man.
+
+Harami
+A two-day pattern that has a small body day completely contained within the range of the previous body, and is the opposite color.
+
+Harami Cross
+A two-day pattern that's similar to the Harami. The difference is that the last day is a Doji.
+
+Inverted Hammer
+A one-day bullish reversal pattern. In a downtrend, the open is lower, then it trades higher, but closes near its open, therefore looking like an inverted lollipop.
+
+
+Long Body / Long Day
+A large price move from open to close, i.e., the length of the candle body is long.
+
+Long-Legged Doji
+This candlestick has long upper and lower shadows with the Doji in the middle of the day's trading range, clearly reflecting the indecision of traders.
+
+Long Shadows
+Candlesticks with a long upper shadow and short lower shadow indicate that buyers dominated during the first part of the session, bidding prices higher. Conversely, candlesticks with long lower shadows and short upper shadows indicate that sellers dominated during the first part of the session, driving prices lower.
+
+Marubozu
+A candlestick with no shadow extending from the body at the open, close, or both. The name means close-cropped or close-cut in Japanese, though other interpretations refer to it as Bald or Shaven Head.
+
+Morning Doji Star
+A three-day bullish reversal pattern that's similar to the Morning Star. The first day is in a downtrend with a long black body. The next day opens lower with a Doji with a small trading range. The last day closes above the midpoint of the first day.
+
+Morning Star
+A three-day bullish reversal pattern consisting of three candlesticks—a long-bodied black candle extending the current downtrend, a short middle candle that gapped down on the open, and a long-bodied white candle that gapped up on the open and closed above the midpoint of the body of the first day.
+
+Piercing Line
+A bullish two-day reversal pattern. The first day, in a downtrend, is a long black day. The next day opens at a new low, then closes above the midpoint of the body of the first day.
+
+Rising Three Methods
+A bullish continuation pattern in which a long white body is followed by three small body days, each fully contained within the range of the high and low of the first day. The fifth day closes at a new high.
+
+Shooting Star
+A single-day pattern that can appear in an uptrend. It opens higher, trades much higher, and then closes near its open. It looks just like the Inverted Hammer, except it's bearish.
+
+Short Body / Short Day
+A short day represents a small price move from open to close, where the length of the candle body is short.
+
+Short body/short day candlestick pattern from StockCharts.com
+Spinning Top
+Candlestick lines that have small bodies with upper and lower shadows that exceed the length of the body. Spinning tops signal indecision.
+
+Stars
+A candlestick that gaps away from the previous candlestick is said to be in a star position. Depending on the previous candlestick, the star position candlestick gaps up or down and appears isolated from the previous price action.
+
+Stick Sandwich
+A bullish reversal pattern with two black bodies surrounding a white body. The closing prices of the two black bodies must be equal. A support price is apparent, and the probability for prices to reverse is high.
+
+Three Black Crows
+A bearish reversal pattern consists of three consecutive long black bodies where each day closes at or near its low and opens within the body of the previous day.
+
+Three White Soldiers
+A bullish reversal pattern consisting of three consecutive long white bodies. Each should open within the previous body, and the close should be near the high of the day.
+
+Upside Gap Two Crows
+A three-day bearish pattern that only happens in an uptrend. The first day is a long white body followed by a gap open with the small black body. The gap remains above the first day after the close. The third day is also a black candlestick with a body larger than the second day and engulfs it. The last day's close is still above the first long white day.
+
+Upside Tasuki Gap
+A continuation pattern with a long white body followed by another white body that has gapped above the first one. The third day is black and opens within the body of the second day, then closes in the gap between the first two days but does not close the gap.
 
 
 ### Ideas
@@ -1688,28 +1782,26 @@ Events broadcast:
 
 *End Chapter 4*
 
-## *Chapter 5. Flight Sim*
+---
+
+## *Chapter 5. Flight Studio*
+
+### Superhero and Aircraft Flight Puget Sound Virtual Simulator.
 
 -  *`No Flight Plan` displayed until the agents make 2,000 dollars so we can develop this and play. Live view of the ISS video feeds if possible.*
 -   ISS live feed (NASA HDEV or equivalent public stream) renders as a main viewport inside the cockpit, treated as the "window."
+-  Flight Sim can run while the rest of the interface — controls, agents, illumination — stays fully operational while flying.
+-  The Flight Sim is deliberately gated — must get the trading system working, flight sim is not a development priority.
 
-### Ideas
+---
 
--  Flight Sim lives entirely inside the Main Region. The rest of the interface — controls, agents, illumination — stays fully operational while flying.
--  The $2,000 threshold is tracked in real-time. When hit, the Flight Studio nav option unlocks automatically without a page reload.
--  The cockpit view should draw from the inspiration photos — USSR MiG interior, NATO fighter panels, analog gauges — not a generic simulator aesthetic.
--  Cockpit gauges map to real backend data: altitude = account balance, airspeed = order frequency, fuel = remaining buying power.
--  The Flight Sim is deliberately gated — it is a reward for the trading system working, not a development priority.
--  All cockpit theming should align with the `Cockpit NATO` and `Cockpit USSR` themes already defined in Chapter 1.
+## *Chapter 6. Converter Studio*
 
-*End Chapter 5*
+File converters, image converters, PDF filler, URL to MP3/MP4 converter.
 
-## *Chapter 6. File Converter*
+Do not worry about developing until stage 2.5 is completed.
 
-### File Converter App
-
-- I am always needing webp to png or jpg to pdf so can we just do that here.
-- Also I always need to fillout PDFs can we do that here too
+---
 
 ## *Chapter 7. Open Chapter*
 
@@ -1717,10 +1809,6 @@ Events broadcast:
     - If adding a complex idea, create multiple checkboxes and use nesting.
 
 ### Questions and Answers
-
--  What does the Action Bar actually do? It's defined in the layout with a fixed size and the label `Ignition` — but its function and contents are completely undefined. What gets ignited?
-
-A: Nothing right now. It's just a placeholder for future components such as the ignition control panel for our flight simulator. Keep the Action Bar fully functional, yet empty, for now.
 
 -  How does the backend run persistently? Is it a local process the user starts manually, a system service, or something that launches when the webpage opens? What happens if it crashes?
 
@@ -1730,13 +1818,9 @@ A: I have no idea yet. Until version 0.02.01 (Once we get profitable), We will n
 
 A: We trade in contracts. YES or NO. The only stop condition is if we are under 5 dollars. Simple. I trust the agents to make good decisions and see how their descisions are affecting our balance p/l while learning and getting positively reinforced and rewarded for being profitable.
 
--  How does Peritia actually make a decision? The strategy is described as "put heart into it" — but what is the first concrete signal it will look at? Spread size? Orderbook imbalance? Recent trade momentum?
-
-A: Idk can you search the internet to see if people have gotten headway on these prediction market trading agents. Peritia will trade multiple times per minute buying and selling yes's and no's on the 15 min frequency repeating series, or recurring series, for crypto.
-
 -  Where does this run? Is this a personal machine that stays on 24/7, a server, or a cloud instance? The backend needs to be always-on for agents to trade continuously.
 
-A: Yeah my laptop will be on 24/7 until we pass 2,000 dollars
+A: Yeah the device has to be on until we get to a development point where we can get versions to run on cloud servers that stay on even when the device is off.
 
 -  What happens to theme and illumination state between sessions? Is it persisted in localStorage, the database, or reset every time the page loads?
 
@@ -1744,23 +1828,21 @@ A: Theme and illumination state reset everytime the page a new state is initiali
 A: Theme and illumination state dont change when changing studios.
 A: The backend never resets like that tho cause we need all our trading data to look back on.
 
--  Beyond Prime and Peritia, what would a third agent look like? Is the architecture designed to add agents easily, or would adding a third require significant refactoring?
+-  Beyond the three agents, what would more agents look like? Is the architecture designed to add agents easily, or would adding a third require significant refactoring?
 
-A: Keep it open for a third agent, code named `007xe`
+A: 5 agents access cards aligned horizontally. the spots for 4 and 5 are 2 grayed out slots. these 2 grayed cards are less wide than the original 3 agent slots, all same height. Only focus on the 3 agents until they get good enough to clone and use the slots 4 and 5 for a/b testing and our initial a/b/c testing.
 
-### More Open Questions
+- The Bottom Bar needs to fit API key inputs, agent controls,and a Live/Demo indicator does it need a scrollable or expandable design?
 
--  The Bottom Bar needs to fit API key inputs, agent controls, a P/L graph, and a Live/Demo indicator does it need a scrollable or expandable design?
-
-A: No scroll; no expand. Pack everything creatively. This is a cockpit but it's only 1080p wide and 944 px tall so we gotta be creative. Cockpits are extremely packed with instruments, dials, screens, switches, indicators, lights, sticks, buttons, levers, knobs, and countles more components.
+A: No scroll; no expand. It will fit i promise. Pack everything creatively. This is a cockpit but it's only 1080p wide and 944 px tall so we gotta be creative. Cockpits are extremely packed with instruments, dials, screens, switches, indicators, lights, sticks, buttons, levers, knobs, rotary dials and countles more components.
 
 -  Semi-Auto mode is defined as a permission state for agents — but what does the approval flow actually look like? Does a trade intent pop up somewhere and wait for a click, and what happens if the user doesn't respond in time?
 
-A: In semi-auto, I'm watching, so an agent finds yes or no contracts they want to buy, the series cards for those contracts, appears at the top, with approve or deny buttons also we need details of why they want to execute trade
+A: In semi-auto, the user will be watching on the front end, so an agent finds yes or no contracts they want to buy, then the series cards for those contracts appears at the top, with approve or deny buttons. also we need details of why they want to execute trade like a reason or a log for why they think this. they already should be logging, so here it can pull from that log and display it softly.
 
 -  The theme buttons in the Left Sidebar need to visually represent their own theme regardless of what's currently active — how does a Volcano button look while the Mosaic 1993 Light theme is selected?
 
-A: If mosiac theme is active, and light mode is selected too, volcano button represents volcano light. If mosaic theme is active and dark mode is toggled, volcano button would represent volcano dark mode.
+A: If mosiac theme is active, and light mode is selected, the volcano button represents volcano light mode. If mosaic theme is active and dark mode is toggled, volcano button would represent volcano dark mode.
 
 -  Kalshi markets settle and expire constantly — what does the Trading Studio look like when a market the user was watching closes mid-session? Does the card disappear, grey out, or move?
 
@@ -1770,26 +1852,28 @@ A: The cards are to ensure data is accurate in the backend, and to tell our agen
 
 A: Only 18 are rendered, including the cards agents need confirmation on cause those would be brou8ght to the top.
 
--  The Right Sidebar to-do list app — is it purely local and decorative, or should it persist notes between 
+-  The Right Sidebar to-do list app — is it decorative, or should it persist notes between 
 sessions and potentially connect to trading context like tagging a market or an agent decision?
 
-A: it is funcational but local and light so i can type notes and send a screenshot of the webppage as it is getting developed so you can read the notes while looking at the page.
+A: it is fully funcational. make it so good that it would get you an A+ if you developed a to-do list app for a college test. local, saves txt files.
 
 -  The project is for personal use, but the backend Control API is a local HTTP server — is there any plan or risk of accidentally exposing it, and should there be a startup check that confirms it is only bound to `127.0.0.1`?
 
-A: If this get's profitable we need to ship it to any of my friends that want their own pc app so eventually probably use docker
+A: If this get's profitable we need to ship it to society that want their own pc app. so probably use docker. This will be open-scource and free. 
 
----
+Mode Selection vs Indicator Redundancy
 
-### And More Open Questions
+"Live/Demo mode selection" and "Live/Demo Trading Mode Indicator Lights" - Are these the same component or different?
 
--  The illumination system has a DAY/NVG toggle in the header — but NVG (night vision green) implies a specific color shift across the entire UI. Does NVG mode override the active theme's color palette entirely, or layer on top of it?
+A: seperate because the live demo mode selection and text boxes for api input will dissapear after successfull connection so we will need an indicator
 
-A: they override each other and they flip to indicate they are pressed or selected to whatever mode got activated
+-  The illumination system has a DAY/NVG toggle in the header — but NVG implies a specific color shift across the entire UI. Does NVG mode override the active theme's color palette entirely, or layer on top of it?
+
+A: NVG is just a cool way to switch to dark mode - no additional effects.
 
 -  State Reconciliation runs every 60 minutes and on reconnect — but what does the UI show during a reconciliation cycle? Does trading pause, does a spinner appear, or does it happen silently in the background?
 
-A: maybe a glowing indicator light showing its active and working properly.
+A: maybe a pulsing glowing blue-green indicator light showing its active and working properly, or a yellow or red color if not working properly
 
 -  Prime "follows the majority bets" — but on Kalshi, the orderbook only shows bids. What specific data point defines majority? Best yes bid size? Total open interest? Recent fill direction?
 
@@ -1801,19 +1885,15 @@ A: Photos with examples for how kalshi's UI organizes and navigates the series c
 
 -  The precision tools — rulers, grid, — are designed for the Design Studio. Do they stay visible or automatically hide when switching to Trading Studio or Flight Studio?
 
-A: they stay visible in the inspector panel sure. Left side bar and right side bar should phase out and be replaced with a full width main region in trading studio.
+A: They stay visible
 
 -  Private API keys are typed into text inputs in the Bottom Bar. Is there a plan for how these are handled in memory — masked after entry, never logged, cleared on disconnect — or is key security left undefined?
 
-A: cleared on disconnect, can we make a env. file that the UI can pull and auto fill either the two live keys or the two demo keys?
-
----
-
-### Even More Open Questions
+A: I'm not sure, what would the majority of people want if this was released to everyone
 
 -  Prime is described as "betting on the majority bets" — but on Kalshi, the best bid/ask spread is the market. What specific orderbook signal defines the majority, and how stale is too stale to act on?
 
-A: they trade what the majority is trading in that minute.
+A: I dont know, use best judgment and try to follow majority volume. Bet/bid on the house.
 
 -  The backend reconciles state against Kalshi every 60 minutes and on reconnect — but what if reconciliation reveals a fill that the agent didn't intend, or a position that shouldn't exist? Is there an alert, an auto-cancel, or just a log entry?
 
@@ -1821,17 +1901,14 @@ A: I'm not sure what this means, maybe this needs to be thought about.
 
 -  The project is personal use only — but is there any plan to run multiple browser tabs or windows simultaneously? Would two open tabs cause duplicate agent commands or state conflicts through the Backend Control API?
 
-A: If it is opened it stops all running instances and starts a new one. two browser tabs could be possible but it would still have only one back end tho. so i guess I want it for example, if im in two browsers for a file like whatever I do would affect the data in both tabs.
+A: If someone clicks our link for a desktop app, nobosdy's apps are connected, They get a beautiful shell that lets them easily interface actions for bots that connect to their personal kalshi accounts.
 
 -  Chapter 7 is defined as "New Ideas, Questions, Complaints, Hopes" — what is the actual workflow for moving something from Chapter 7 into a real chapter with checkboxes and specs? Who decides, and when?
 
-A: We are doing tht right now. Little by little i will integrate these updated ideas and questions into the prd.
-
-### Next Questions:
-
-- 
-
+A: We are doing tht right now. Little by little i will integrate these updated ideas and questions into the prd for future devs to review for clarification.
 
 ---
 
 *End Chapter 7*
+
+*End PRD*
