@@ -13,7 +13,7 @@
   /* ---- Master control -------------------------------------------------- */
   --fx-master-switch: 0;                /* 0 = OFF (default), 1 = ON        */
   --fx-master-dim: 1.00;               /* dimmer: 0.25 – 1.00              */
-  --fx-mode-base: 0.6;                 /* DAY mode base intensity           */
+  --fx-mode-base: 0.6;                 /* DAY (light) mode base intensity   */
 
   /* Combined master multiplier (switch × dim × mode-base) */
   --fx-master-scale: calc(
@@ -532,7 +532,11 @@
     0 1px 3px rgba(0, 0, 0, 0.3);
   border: 2px solid #444;
   transition: transform var(--_glow-transition);
-  /* Rotation driven by --dial-rotation custom property (set via JS) */
+  /*
+     JS must set two custom properties on this element's inline style:
+       --dial-rotation   rotation angle for the knob  (e.g. "180deg")
+       --dial-fraction   normalised value 0.25 – 1.00 (drives the bezel arc)
+  */
   transform: rotate(var(--dial-rotation, 0deg));
 }
 
@@ -543,6 +547,7 @@
   inset: -5px;
   border-radius: 50%;
   border: 3px solid #333;
+  /* Arc maps dimmer range 0.25–1.00 → 0–270 deg of the bezel ring */
   background:
     conic-gradient(
       from 210deg,
