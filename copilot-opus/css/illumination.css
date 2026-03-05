@@ -1,0 +1,642 @@
+/* ==========================================================================
+   Paulie's Prediction Partners — Illumination / Glow System
+   ==========================================================================
+   Simulates cockpit lighting physics with 7 addressable channels.
+   DAY (light) mode: 60 % base intensity.  NVG (dark) mode: 100 %.
+   Dimmers scale 0.25 – 1.00.  Master switch defaults OFF.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. ROOT DEFAULTS — Master OFF, all channels ON at MAX
+   -------------------------------------------------------------------------- */
+:root {
+  /* ---- Master control -------------------------------------------------- */
+  --fx-master-switch: 0;                /* 0 = OFF (default), 1 = ON        */
+  --fx-master-dim: 1.00;               /* dimmer: 0.25 – 1.00              */
+  --fx-mode-base: 0.6;                 /* DAY mode base intensity           */
+
+  /* Combined master multiplier (switch × dim × mode-base) */
+  --fx-master-scale: calc(
+    var(--fx-master-switch) * var(--fx-master-dim) * var(--fx-mode-base)
+  );
+
+  /* ---- Channel dimmers (all default ON at MAX) ------------------------- */
+  --fx-ch-text-primary: 1.00;
+  --fx-ch-text-secondary: 1.00;
+  --fx-ch-bars-primary: 1.00;
+  --fx-ch-bars-secondary: 1.00;
+  --fx-ch-flood: 1.00;
+  --fx-ch-display: 1.00;
+
+  /* ---- Computed channel intensities ------------------------------------ */
+  --fx-glow-text-primary:   calc(var(--fx-master-scale) * var(--fx-ch-text-primary));
+  --fx-glow-text-secondary: calc(var(--fx-master-scale) * var(--fx-ch-text-secondary));
+  --fx-glow-bars-primary:   calc(var(--fx-master-scale) * var(--fx-ch-bars-primary));
+  --fx-glow-bars-secondary: calc(var(--fx-master-scale) * var(--fx-ch-bars-secondary));
+  --fx-glow-flood:          calc(var(--fx-master-scale) * var(--fx-ch-flood));
+  --fx-glow-display:        calc(var(--fx-master-scale) * var(--fx-ch-display));
+
+  /* ---- Internal glow helpers ------------------------------------------- */
+  --_glow-transition: 0.35s ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. NVG (DARK) MODE — full 100 % base intensity
+   -------------------------------------------------------------------------- */
+[data-mode="dark"] {
+  --fx-mode-base: 1.0;
+}
+
+/* ==========================================================================
+   3. UTILITY CLASSES — one per illumination channel
+   ==========================================================================
+   Apply these to any element. The glow strength automatically follows the
+   master switch, mode base, and the channel's dimmer value.
+   ========================================================================== */
+
+/* ---- 3a. TEXT GLOW — primary ------------------------------------------- */
+.glow-text-primary {
+  text-shadow:
+    0 0 calc(var(--fx-glow-text-primary) * 6px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-text-primary) * 16px) var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-text-primary) * 30px) var(--color-accent-primary);
+  transition: text-shadow var(--_glow-transition);
+}
+
+/* ---- 3b. TEXT GLOW — secondary ----------------------------------------- */
+.glow-text-secondary {
+  text-shadow:
+    0 0 calc(var(--fx-glow-text-secondary) * 5px)  var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-text-secondary) * 14px) var(--color-accent-secondary);
+  transition: text-shadow var(--_glow-transition);
+}
+
+/* ---- 3c. BARS GLOW — primary (region borders) -------------------------- */
+.glow-bars-primary {
+  box-shadow:
+    0 0 calc(var(--fx-glow-bars-primary) * 4px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-bars-primary) * 12px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-bars-primary) * 6px) var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  transition:
+    box-shadow var(--_glow-transition),
+    border-color var(--_glow-transition);
+}
+
+/* ---- 3d. BARS GLOW — secondary (card borders) -------------------------- */
+.glow-bars-secondary {
+  box-shadow:
+    0 0 calc(var(--fx-glow-bars-secondary) * 3px)  var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-bars-secondary) * 10px) var(--color-accent-secondary),
+    inset 0 0 calc(var(--fx-glow-bars-secondary) * 4px) var(--color-accent-secondary);
+  border-color: var(--color-accent-secondary);
+  transition:
+    box-shadow var(--_glow-transition),
+    border-color var(--_glow-transition);
+}
+
+/* ---- 3e. FLOOD — ambient fill within regions --------------------------- */
+.glow-flood {
+  background-image:
+    radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--color-accent-primary) calc(var(--fx-glow-flood) * 18%), transparent),
+      transparent 70%
+    );
+  transition: background-image var(--_glow-transition);
+}
+
+/* ---- 3f. DISPLAY — self-illuminated components ------------------------- */
+.glow-display {
+  box-shadow:
+    0 0 calc(var(--fx-glow-display) * 8px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-display) * 12px) color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+  transition:
+    box-shadow var(--_glow-transition),
+    filter var(--_glow-transition);
+}
+
+/* ==========================================================================
+   4. ILLUMINATION CONTROL PANEL
+   ==========================================================================
+   Container for the master switch + channel dimmers.
+   Styled to evoke a real cockpit overhead panel.
+   ========================================================================== */
+.illumination-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 16px;
+  padding: 20px 24px;
+  background:
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--color-bg-surface) 92%, #000) 0%,
+      var(--color-bg-surface) 50%,
+      color-mix(in srgb, var(--color-bg-surface) 88%, #000) 100%
+    );
+  border: 2px solid var(--color-border-default);
+  border-radius: var(--border-radius-md);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
+    0 4px 12px var(--color-shadow);
+  font-family: var(--font-family-mono);
+  user-select: none;
+}
+
+.illumination-panel__label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  text-align: center;
+}
+
+.illumination-panel__channel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Engraved divider lines between sections */
+.illumination-panel__divider {
+  grid-column: 1 / -1;
+  height: 2px;
+  background:
+    linear-gradient(
+      to right,
+      transparent,
+      var(--color-border-muted) 20%,
+      var(--color-border-muted) 80%,
+      transparent
+    );
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+/* ==========================================================================
+   5. AIRPLANE-STYLE TOGGLE SWITCH
+   ==========================================================================
+   Realistic cockpit toggle with 3-D metallic lever.
+   Checkbox <input> is hidden; visual state via :checked.
+
+   Usage:
+     <label class="airplane-switch">
+       <input type="checkbox">
+       <span class="airplane-switch__body">
+         <span class="airplane-switch__lever"></span>
+       </span>
+     </label>
+   ========================================================================== */
+.airplane-switch {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide native checkbox (keep accessible) */
+.airplane-switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ---- Housing / base plate --------------------------------------------- */
+.airplane-switch__body {
+  position: relative;
+  width: 48px;
+  height: 72px;
+  border-radius: 6px;
+  background:
+    linear-gradient(
+      180deg,
+      #4a4a4a 0%,
+      #2c2c2c 40%,
+      #1a1a1a 100%
+    );
+  box-shadow:
+    inset 0  2px 3px rgba(255, 255, 255, 0.12),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+  border: 1px solid #111;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease;
+}
+
+/* Indicator light recess at top of housing */
+.airplane-switch__body::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.8);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ---- Lever / toggle bat ----------------------------------------------- */
+.airplane-switch__lever {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%) rotateX(0deg);
+  transform-origin: center bottom;
+  width: 18px;
+  height: 44px;
+  border-radius: 4px 4px 3px 3px;
+  background:
+    linear-gradient(
+      90deg,
+      #888 0%,
+      #ccc 30%,
+      #e8e8e8 50%,
+      #ccc 70%,
+      #888 100%
+    );
+  box-shadow:
+    inset 0  1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    1px 0 2px rgba(0, 0, 0, 0.25),
+    -1px 0 2px rgba(0, 0, 0, 0.25),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), height 0.2s ease;
+  cursor: grab;
+}
+
+/* Grip ridges on lever */
+.airplane-switch__lever::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 3px;
+  right: 3px;
+  height: 18px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 3px
+  );
+  border-radius: 2px;
+}
+
+/* Beveled top cap */
+.airplane-switch__lever::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 2px;
+  right: 2px;
+  height: 6px;
+  border-radius: 3px 3px 0 0;
+  background:
+    linear-gradient(180deg, #f0f0f0, #ccc);
+}
+
+/* ---- ON state (checked) ----------------------------------------------- */
+.airplane-switch input:checked ~ .airplane-switch__body {
+  box-shadow:
+    inset 0  2px 3px rgba(255, 255, 255, 0.12),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 12px color-mix(in srgb, var(--color-state-success) 30%, transparent);
+}
+
+/* Indicator light ON — green for master */
+.airplane-switch input:checked ~ .airplane-switch__body::before {
+  background: var(--color-state-success);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 6px var(--color-state-success),
+    0 0 14px var(--color-state-success);
+}
+
+/* Lever flips UP when ON */
+.airplane-switch input:checked ~ .airplane-switch__body .airplane-switch__lever {
+  transform: translateX(-50%) rotateX(35deg);
+  height: 38px;
+}
+
+/* ---- Channel-color indicator variants --------------------------------- */
+.airplane-switch--master input:checked ~ .airplane-switch__body::before {
+  background: var(--color-state-success);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 6px var(--color-state-success),
+    0 0 14px var(--color-state-success);
+}
+
+.airplane-switch--primary input:checked ~ .airplane-switch__body::before {
+  background: var(--color-accent-primary);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 6px var(--color-accent-primary),
+    0 0 14px var(--color-accent-primary);
+}
+
+.airplane-switch--secondary input:checked ~ .airplane-switch__body::before {
+  background: var(--color-accent-secondary);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 6px var(--color-accent-secondary),
+    0 0 14px var(--color-accent-secondary);
+}
+
+.airplane-switch--warning input:checked ~ .airplane-switch__body::before {
+  background: var(--color-state-warning);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 6px var(--color-state-warning),
+    0 0 14px var(--color-state-warning);
+}
+
+.airplane-switch--info input:checked ~ .airplane-switch__body::before {
+  background: var(--color-state-info);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 6px var(--color-state-info),
+    0 0 14px var(--color-state-info);
+}
+
+/* ---- Focus ring for accessibility ------------------------------------- */
+.airplane-switch input:focus-visible ~ .airplane-switch__body {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 3px;
+}
+
+/* ---- Touch target guarantee (48 × 48 min) ----------------------------- */
+.airplane-switch::after {
+  content: "";
+  position: absolute;
+  inset: -4px -4px -4px -4px;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+/* ==========================================================================
+   6. SWITCH GUARD COVER
+   ==========================================================================
+   Safety cover that flips up to expose the switch beneath.
+
+   Usage:
+     <div class="switch-guard">
+       <div class="switch-guard__cover"></div>
+       <label class="airplane-switch"> … </label>
+     </div>
+
+   Add .switch-guard--open to flip the cover up.
+   ========================================================================== */
+.switch-guard {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 300px;
+}
+
+.switch-guard__cover {
+  position: absolute;
+  top: -2px;
+  left: -4px;
+  right: -4px;
+  height: 56px;
+  z-index: 2;
+  border-radius: 6px 6px 4px 4px;
+  background:
+    linear-gradient(
+      180deg,
+      #c0392b 0%,
+      #a93226 50%,
+      #922b21 100%
+    );
+  box-shadow:
+    inset 0  2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid #7b241c;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Hinge detail at top */
+.switch-guard__cover::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 10%;
+  right: 10%;
+  height: 5px;
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, #555, #888, #555);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Diagonal safety stripes */
+.switch-guard__cover::after {
+  content: "";
+  position: absolute;
+  inset: 6px 4px;
+  border-radius: 3px;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0px,
+    transparent 4px,
+    rgba(0, 0, 0, 0.15) 4px,
+    rgba(0, 0, 0, 0.15) 8px
+  );
+}
+
+/* Cover OPEN — flipped up */
+.switch-guard--open .switch-guard__cover {
+  transform: rotateX(-110deg);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   7. DIMMER DIAL
+   ==========================================================================
+   Rotary knob control for each channel's intensity.
+   Uses a range input styled as a circular dial.
+
+   Usage:
+     <label class="dimmer-dial">
+       <input type="range" min="0.25" max="1" step="0.01" value="1">
+       <span class="dimmer-dial__knob">
+         <span class="dimmer-dial__indicator"></span>
+       </span>
+       <span class="dimmer-dial__value">100 %</span>
+     </label>
+   ========================================================================== */
+.dimmer-dial {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* Hide native range — sits on top for interaction, invisible */
+.dimmer-dial input[type="range"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* ---- Knob body -------------------------------------------------------- */
+.dimmer-dial__knob {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 35%,
+      #e0e0e0 0%,
+      #b0b0b0 40%,
+      #707070 80%,
+      #555 100%
+    );
+  box-shadow:
+    inset 0  2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    0 3px 10px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  border: 2px solid #444;
+  transition: transform var(--_glow-transition);
+  /* Rotation driven by --dial-rotation custom property (set via JS) */
+  transform: rotate(var(--dial-rotation, 0deg));
+}
+
+/* Outer ring / bezel */
+.dimmer-dial__knob::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 3px solid #333;
+  background:
+    conic-gradient(
+      from 210deg,
+      var(--color-accent-primary) 0deg,
+      var(--color-accent-primary) calc((var(--dial-fraction, 1) - 0.25) / 0.75 * 270deg),
+      #333 calc((var(--dial-fraction, 1) - 0.25) / 0.75 * 270deg),
+      #333 270deg,
+      transparent 270deg
+    );
+  mask:
+    radial-gradient(circle, transparent 58%, #000 60%, #000 100%);
+  -webkit-mask:
+    radial-gradient(circle, transparent 58%, #000 60%, #000 100%);
+  z-index: -1;
+}
+
+/* Pointer / indicator line on knob face */
+.dimmer-dial__indicator {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 3px;
+  height: 16px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow:
+    0 0 4px rgba(0, 0, 0, 0.5),
+    0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+/* Knurled grip texture */
+.dimmer-dial__knob::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(0, 0, 0, 0.06) 0deg 5deg,
+      transparent 5deg 10deg
+    );
+}
+
+/* ---- Value readout ---------------------------------------------------- */
+.dimmer-dial__value {
+  display: block;
+  min-width: 48px;
+  padding: 2px 6px;
+  font-family: var(--font-family-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: var(--color-fg-muted);
+  background: color-mix(in srgb, var(--color-bg-surface) 80%, #000);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--border-radius-sm);
+}
+
+/* Focus ring */
+.dimmer-dial input[type="range"]:focus-visible ~ .dimmer-dial__knob {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 6px;
+}
+
+/* ==========================================================================
+   8. COMBINED GLOW TRANSITIONS — blanket rule for smooth changes
+   ========================================================================== */
+.glow-text-primary,
+.glow-text-secondary,
+.glow-bars-primary,
+.glow-bars-secondary,
+.glow-flood,
+.glow-display {
+  transition-timing-function: ease;
+  will-change: text-shadow, box-shadow, filter, background-image;
+}
+
+/* ==========================================================================
+   9. REDUCED MOTION — respect prefers-reduced-motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .glow-text-primary,
+  .glow-text-secondary,
+  .glow-bars-primary,
+  .glow-bars-secondary,
+  .glow-flood,
+  .glow-display,
+  .airplane-switch__lever,
+  .airplane-switch__body::before,
+  .switch-guard__cover,
+  .dimmer-dial__knob {
+    transition-duration: 0.01ms !important;
+  }
+}
