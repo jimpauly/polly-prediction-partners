@@ -2,20 +2,30 @@
 
 > **Audit date:** March 5, 2026
 > **Assessed by:** Copilot Coding Agent
-> **Codebase:** 17,000+ lines across 55 files
+> **Codebase:** 18,000+ lines across 55 files
 
 ---
 
 ## 🎯 TL;DR — Where Are We?
 
-### **Stage 2.65 out of 3.0** — Roughly 65% through Stage 2 → 3
+### **Stage 2.72 out of 3.0** — Roughly 72% through Stage 2 → 3
 
 | Stage | Status | Confidence |
 |-------|--------|------------|
 | **Stage 1** (Design Studio) | ✅ 100% Complete | Verified — all 14 phases done |
-| **Stage 2** (Trading Agent Studio) | 🟡 ~75% Complete | Backend strong, frontend wiring gaps |
-| **Stage 2.5** (Shippable Quality) | 🟡 ~45% Complete | Desktop/docs exist, polish needed |
+| **Stage 2** (Trading Agent Studio) | 🟡 ~82% Complete | Backend strong, frontend now wired |
+| **Stage 2.5** (Shippable Quality) | 🟡 ~50% Complete | Desktop/docs exist, testing needed |
 | **Stage 3** (Profitability + New Apps) | ❌ 0% Started | Blocked until Stage 2.5 is 110% |
+
+**What changed since the initial audit:**
+- ✅ Trading Studio HTML built (was "Coming Soon" placeholder)
+- ✅ Buy/Sell buttons now wire to backend execution pipeline
+- ✅ Account balance, portfolio value, daily P/L displayed
+- ✅ Toast notification system for order feedback
+- ✅ Approval endpoint URLs fixed to match backend
+- ✅ WebSocket events handle fills, balance updates
+- ✅ Manual order API endpoint added to backend
+- ✅ Interval cleanup on disconnect (memory leak fix)
 
 **Translation:** The engine is built and the cockpit looks incredible, but the wires from the cockpit switches to the engine aren't all connected yet. We're past the halfway mark toward shippable.
 
@@ -96,15 +106,16 @@ All 14 phases verified complete:
 | Semi-auto approval overlay | ✅ Done | Approve/deny buttons wired |
 | WebSocket real-time updates | ✅ Done | Reconnection + event handling |
 | P/L graph (live canvas) | ✅ Done | Polls /api/trading/status every 5s |
-| **Buy/Sell button execution** | ❌ Missing | Buttons render but don't execute trades |
+| **Buy/Sell button execution** | ✅ Done | Wired to `/api/trading/manual-order` with risk checks |
+| **Account balance display** | ✅ Done | Fetched from `/api/state/balance`, polled every 10s |
+| **Daily P/L display** | ✅ Done | Fetched from `/api/trading/status` |
+| **Error feedback (toasts)** | ✅ Done | Toast notification system for all order outcomes |
 | **Position tracking display** | ❌ Missing | No open positions view |
-| **Account balance display** | ❌ Missing | Not shown anywhere in UI |
-| **Trade history / fills** | ❌ Missing | No fills display |
+| **Trade history / fills** | ❌ Missing | No fills display (toast on fill event only) |
 | **Agent reasoning display** | ❌ Missing | No detailed reasoning in cards |
-| **Error feedback (toasts/dialogs)** | ❌ Missing | Silent failures only |
 | **Series card header matching PRD** | ❌ Missing | Layout doesn't exactly match PRD mockups |
 | **Potential returns display** | ❌ Missing | Not calculated or shown |
-| **Market icons** | ❌ Missing | No category icons |
+| **Market icons** | ❌ Missing | No category icons on cards |
 | **Advanced filters** | ❌ Missing | No frequency filter, limited sorting |
 | **Live/Demo mode indicator glow** | ❌ Missing | No visual environment distinction |
 
@@ -191,12 +202,12 @@ Position Sizer            ✅       ✅     ✅      —       🟡        🟡
 Metrics (Prometheus)      ✅       ✅     ✅      —       ✅        🟡
 Control API               ✅       ✅     ✅      —       ✅        🟡
 ────────────────────── ──────── ────── ────── ─────── ──────── ──────────
-Market Card Grid          ✅       ✅     🟡     —       🟡        ❌
-Buy/Sell Execution        ✅       🟡     ❌     —       ❌        ❌
+Market Card Grid          ✅       ✅     ✅     —       🟡        🟡
+Buy/Sell Execution        ✅       ✅     ✅     —       🟡        🟡
+Balance Display           ✅       ✅     ✅     —       ✅        🟡
+Error Handling (Toasts)   ✅       ✅     ✅     —       ✅        🟡
 Position Display          ✅       ❌     ❌     —       ❌        ❌
-Balance Display           ✅       ❌     ❌     —       ❌        ❌
 Trade History             ✅       ❌     ❌     —       ❌        ❌
-Error Handling UX         ✅       ❌     ❌     —       ❌        ❌
 Agent Dashboard           ✅       ❌     ❌     —       ❌        ❌
 ────────────────────── ──────── ────── ────── ─────── ──────── ──────────
 Electron App              ✅       ✅     ✅      —       🟡        ❌
@@ -237,13 +248,13 @@ Legend: ✅ Done  🟡 Partial  ❌ Not Done  — N/A
 ## 🗺️ Roadmap to Stage 3
 
 ### Priority 1 — Critical Path (Stage 2 completion)
-These block all trading functionality:
+These block full trading functionality:
 
-1. **Wire Buy/Sell buttons to execution** — Connect frontend Yes/No buttons to backend `/api/trading/` flow
-2. **Display account balance** — Fetch and show from `/api/state/balance`
+1. ~~**Wire Buy/Sell buttons to execution**~~ ✅ Done — Connected to `/api/trading/manual-order`
+2. ~~**Display account balance**~~ ✅ Done — Fetched from `/api/state/balance`, polled every 10s
 3. **Show open positions** — Wire `/api/state/positions` to a positions panel
 4. **Show trade history** — Wire `/api/state/fills` to a fills/history view
-5. **Add error feedback** — Toast notifications or status bar messages for failures
+5. ~~**Add error feedback**~~ ✅ Done — Toast notification system with success/error/info types
 6. **Display agent reasoning** — Show decision logic from agent intents in approval overlay
 
 ### Priority 2 — Shippable Quality (Stage 2.5)
