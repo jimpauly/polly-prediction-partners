@@ -97,12 +97,12 @@
 - [x] WebSocket event streaming
 
 ### 3.8 Remaining Backend Work
-- [ ] Database persistence (PostgreSQL/asyncpg)
-- [ ] Rate limit budget enforcement (token bucket)
-- [ ] Prometheus metrics integration
-- [ ] Graceful shutdown with signal handlers
-- [ ] Startup reconciliation trigger
-- [ ] Dynamic position sizing (beyond fixed 1.00 count)
+- [x] Database persistence (PostgreSQL/asyncpg)
+- [x] Rate limit budget enforcement (token bucket)
+- [x] Prometheus metrics integration
+- [x] Graceful shutdown with signal handlers
+- [x] Startup reconciliation trigger
+- [x] Dynamic position sizing (beyond fixed 1.00 count)
 
 ---
 

@@ -8,6 +8,7 @@ lifecycle (connect → trade → disconnect), and exposes a FastAPI server on
 from __future__ import annotations
 
 import asyncio
+import signal
 from typing import Any
 
 import structlog
@@ -19,9 +20,18 @@ from backend.agents.praxis import AgentPraxis
 from backend.agents.prime import AgentPrime
 from backend.api.control_api import create_api as _create_control_api
 from backend.config import Settings
+from backend.services.database import Database
 from backend.services.execution_service import ExecutionService
 from backend.services.kalshi_rest_client import KalshiRestClient
 from backend.services.kalshi_websocket_client import KalshiWebSocketClient
+from backend.services.metrics import (
+    ACTIVE_AGENTS,
+    ACTIVE_CONNECTIONS,
+    RECONCILIATION_DRIFT,
+    mount_metrics,
+)
+from backend.services.position_sizer import PositionSizer
+from backend.services.rate_limiter import RateLimiter
 from backend.services.reconciliation_service import ReconciliationService
 from backend.services.risk_gateway import RiskGateway
 from backend.services.state_cache import StateCache
@@ -76,6 +86,12 @@ class Application:
         self._running = False
         self._agent_tasks: list[asyncio.Task] = []
         self._reconciliation_task: asyncio.Task | None = None
+
+        # New Phase 3.8 services
+        self.rate_limiter = RateLimiter(self.config)
+        self.position_sizer = PositionSizer(self.config)
+        self.database = Database()
+        self._shutdown_event: asyncio.Event | None = None
 
     # ------------------------------------------------------------------
     # WebSocket message routing
@@ -280,6 +296,7 @@ class Application:
             )
 
         log.info("agent_loops_started", count=len(self._agent_tasks))
+        ACTIVE_AGENTS.set(len(self._agent_tasks))
 
     async def stop_agents(self) -> None:
         """Stop all agent evaluation loops."""
@@ -406,6 +423,9 @@ class Application:
         self._broadcaster = broadcaster
         self.api_app = app
 
+        # Mount Prometheus metrics endpoint when enabled
+        mount_metrics(app, telemetry_enabled=self.config.telemetry_enabled)
+
         # Lifecycle middleware — hooks into connect/disconnect responses
         application = self  # capture for closure
 
@@ -449,6 +469,13 @@ class Application:
     async def _bootstrap_services(self) -> None:
         """Create clients, run initial reconciliation, subscribe channels,
         and start agent loops.  Credentials are already in ``self.config``."""
+        # Database
+        try:
+            await self.database.connect(self.config.db_url)
+            await self.database.init_schema()
+        except Exception:
+            log.exception("database_bootstrap_failed")
+
         # REST client
         self.rest_client = KalshiRestClient(self.config)
 
@@ -486,15 +513,22 @@ class Application:
         )
         try:
             await self.ws_client.connect()
+            ACTIVE_CONNECTIONS.inc()
             log.info("websocket_connected")
         except Exception:
             log.exception("websocket_connect_failed")
 
-        # Initial reconciliation
+        # Startup reconciliation (required by PRD)
         try:
             await self.reconciliation_service.reconcile(reason="startup")
+            log.info("startup_reconciliation_complete")
+            await self.database.insert_audit_log(
+                self.config.environment,
+                "startup_reconciliation",
+                {"status": "complete"},
+            )
         except Exception:
-            log.exception("initial_reconciliation_failed")
+            log.exception("startup_reconciliation_failed")
 
         # Subscribe channels & start agents
         await self._subscribe_channels()
@@ -524,6 +558,7 @@ class Application:
         if self.ws_client is not None:
             try:
                 await self.ws_client.disconnect()
+                ACTIVE_CONNECTIONS.dec()
             except Exception:
                 log.exception("websocket_disconnect_error")
             self.ws_client = None
@@ -540,6 +575,13 @@ class Application:
         self.execution_service = None
         self.reconciliation_service = None
         self.agents.clear()
+        ACTIVE_AGENTS.set(0)
+
+        # Close database pool
+        try:
+            await self.database.close()
+        except Exception:
+            log.exception("database_close_error")
 
         log.info("services_torn_down")
 
@@ -611,7 +653,7 @@ class Application:
     # ------------------------------------------------------------------
 
     async def run(self) -> None:
-        """Start the API server (async entry point)."""
+        """Start the API server with graceful shutdown on SIGINT/SIGTERM."""
         api = self.create_api()
         config = uvicorn.Config(
             api,
@@ -620,7 +662,39 @@ class Application:
             log_level=self.config.log_level.lower(),
         )
         server = uvicorn.Server(config)
-        await server.serve()
+
+        # Graceful shutdown via signal handlers
+        self._shutdown_event = asyncio.Event()
+        loop = asyncio.get_running_loop()
+
+        def _signal_handler(sig: int) -> None:
+            sig_name = signal.Signals(sig).name
+            log.info("shutdown_signal_received", signal=sig_name)
+            self._shutdown_event.set()  # type: ignore[union-attr]
+            server.should_exit = True
+
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            try:
+                loop.add_signal_handler(sig, _signal_handler, sig)
+            except NotImplementedError:
+                # Windows does not support add_signal_handler
+                pass
+
+        try:
+            await server.serve()
+        finally:
+            log.info("graceful_shutdown_starting")
+            await self._graceful_shutdown()
+
+    async def _graceful_shutdown(self) -> None:
+        """Cleanly tear down all services on shutdown."""
+        try:
+            self.risk_gateway.disable_trading()
+            await self._teardown_services()
+            await self.state_cache.clear()
+            log.info("graceful_shutdown_complete")
+        except Exception:
+            log.exception("graceful_shutdown_error")
 
 
 # ---------------------------------------------------------------------------
