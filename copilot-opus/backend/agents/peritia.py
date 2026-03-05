@@ -494,15 +494,15 @@ class AgentPeritia:
         # Middle candle must be a doji
         if _body(second) > rng_second * _DOJI_BODY_RATIO:
             return None
-        # Bullish abandoned baby: bearish first, gap down to doji, gap up to bullish third
+        # Bullish abandoned baby: bearish first, doji shadows gap below first, third gaps above doji
         if _is_bearish(first) and _is_bullish(third):
-            if second["high"] < min(first["open"], first["close"]):
-                if second["high"] < min(third["open"], third["close"]):
+            if second["high"] < first["low"]:
+                if third["low"] > second["high"]:
                     return ("abandoned_baby", "bullish")
-        # Bearish abandoned baby: bullish first, gap up to doji, gap down to bearish third
+        # Bearish abandoned baby: bullish first, doji shadows gap above first, third gaps below doji
         if _is_bullish(first) and _is_bearish(third):
-            if second["low"] > max(first["open"], first["close"]):
-                if second["low"] > max(third["open"], third["close"]):
+            if second["low"] > first["high"]:
+                if third["high"] < second["low"]:
                     return ("abandoned_baby", "bearish")
         return None
 
