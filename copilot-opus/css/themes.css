@@ -1,0 +1,1356 @@
+/* ==========================================================================
+   Paulie's Prediction Partners — Theme System
+   ==========================================================================
+   24 themes × 2 modes (light / dark) = 48 palettes
+   Selection: data-theme="<name>" data-mode="light|dark" on <html> or <body>
+   Default (:root) is "webpage" light.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. DEFAULT — applied to :root (webpage light)
+   -------------------------------------------------------------------------- */
+:root {
+  --color-bg-canvas: #ffffff;
+  --color-bg-surface: #f8f9fa;
+  --color-bg-surface-raised: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.45);
+  --color-fg-default: #1a1a2e;
+  --color-fg-muted: #4a4a68;
+  --color-fg-subtle: #9191a8;
+  --color-border-default: #d1d5db;
+  --color-border-muted: #e5e7eb;
+  --color-accent-primary: #3b82f6;
+  --color-accent-secondary: #8b5cf6;
+  --color-link-default: #2563eb;
+  --color-state-success: #16a34a;
+  --color-state-warning: #d97706;
+  --color-state-error: #dc2626;
+  --color-state-info: #0ea5e9;
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --font-family-base: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-family-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   1. WEBPAGE — Clean modern web
+   ========================================================================== */
+[data-theme="webpage"][data-mode="light"] {
+  --color-bg-canvas: #ffffff;
+  --color-bg-surface: #f8f9fa;
+  --color-bg-surface-raised: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.45);
+  --color-fg-default: #1a1a2e;
+  --color-fg-muted: #4a4a68;
+  --color-fg-subtle: #9191a8;
+  --color-border-default: #d1d5db;
+  --color-border-muted: #e5e7eb;
+  --color-accent-primary: #3b82f6;
+  --color-accent-secondary: #8b5cf6;
+  --color-link-default: #2563eb;
+  --color-state-success: #16a34a;
+  --color-state-warning: #d97706;
+  --color-state-error: #dc2626;
+  --color-state-info: #0ea5e9;
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --font-family-base: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-family-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --transition-speed: 0.2s;
+}
+
+[data-theme="webpage"][data-mode="dark"] {
+  --color-bg-canvas: #0f172a;
+  --color-bg-surface: #1e293b;
+  --color-bg-surface-raised: #273548;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+  --color-fg-default: #f1f5f9;
+  --color-fg-muted: #94a3b8;
+  --color-fg-subtle: #64748b;
+  --color-border-default: #334155;
+  --color-border-muted: #1e293b;
+  --color-accent-primary: #60a5fa;
+  --color-accent-secondary: #a78bfa;
+  --color-link-default: #93bbfd;
+  --color-state-success: #4ade80;
+  --color-state-warning: #fbbf24;
+  --color-state-error: #f87171;
+  --color-state-info: #38bdf8;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --font-family-base: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-family-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   2. MOSAIC-1993 — Early web browser, chunky borders, Courier font
+   ========================================================================== */
+[data-theme="mosaic-1993"][data-mode="light"] {
+  --color-bg-canvas: #c0c0c0;
+  --color-bg-surface: #d4d0c8;
+  --color-bg-surface-raised: #e4e0d8;
+  --color-bg-overlay: rgba(0, 0, 0, 0.4);
+  --color-fg-default: #000000;
+  --color-fg-muted: #333333;
+  --color-fg-subtle: #808080;
+  --color-border-default: #808080;
+  --color-border-muted: #a0a0a0;
+  --color-accent-primary: #000080;
+  --color-accent-secondary: #008080;
+  --color-link-default: #0000ee;
+  --color-state-success: #008000;
+  --color-state-warning: #808000;
+  --color-state-error: #ff0000;
+  --color-state-info: #000080;
+  --color-shadow: rgba(0, 0, 0, 0.25);
+  --font-family-base: "Courier New", Courier, monospace;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 0px;
+  --border-radius-lg: 0px;
+  --transition-speed: 0s;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] {
+  --color-bg-canvas: #2a2a2a;
+  --color-bg-surface: #3a3a3a;
+  --color-bg-surface-raised: #4a4a4a;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+  --color-fg-default: #c0c0c0;
+  --color-fg-muted: #a0a0a0;
+  --color-fg-subtle: #707070;
+  --color-border-default: #606060;
+  --color-border-muted: #505050;
+  --color-accent-primary: #6666cc;
+  --color-accent-secondary: #66cccc;
+  --color-link-default: #8888ff;
+  --color-state-success: #44bb44;
+  --color-state-warning: #bbbb44;
+  --color-state-error: #ff4444;
+  --color-state-info: #6666cc;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --font-family-base: "Courier New", Courier, monospace;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 0px;
+  --border-radius-lg: 0px;
+  --transition-speed: 0s;
+}
+
+/* ==========================================================================
+   3. GEN7-COCKPIT — Military avionics, green/amber on dark
+   ========================================================================== */
+[data-theme="gen7-cockpit"][data-mode="light"] {
+  --color-bg-canvas: #d4d9c3;
+  --color-bg-surface: #c8ceaf;
+  --color-bg-surface-raised: #dce2c8;
+  --color-bg-overlay: rgba(30, 40, 20, 0.5);
+  --color-fg-default: #1e2a10;
+  --color-fg-muted: #3b4a28;
+  --color-fg-subtle: #6b7a58;
+  --color-border-default: #8a9474;
+  --color-border-muted: #b0b89a;
+  --color-accent-primary: #4a7c2e;
+  --color-accent-secondary: #c8a000;
+  --color-link-default: #2e6b1a;
+  --color-state-success: #3a8c1e;
+  --color-state-warning: #c8a000;
+  --color-state-error: #b03020;
+  --color-state-info: #4a7c2e;
+  --color-shadow: rgba(30, 40, 20, 0.15);
+  --font-family-base: "Share Tech Mono", "Lucida Console", monospace;
+  --font-family-mono: "Share Tech Mono", "Lucida Console", monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 6px;
+  --transition-speed: 0.15s;
+}
+
+[data-theme="gen7-cockpit"][data-mode="dark"] {
+  --color-bg-canvas: #0a0f08;
+  --color-bg-surface: #111a0e;
+  --color-bg-surface-raised: #1a2514;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #33ff33;
+  --color-fg-muted: #22aa22;
+  --color-fg-subtle: #117711;
+  --color-border-default: #1a4a1a;
+  --color-border-muted: #0e2e0e;
+  --color-accent-primary: #33ff33;
+  --color-accent-secondary: #ffaa00;
+  --color-link-default: #44ff66;
+  --color-state-success: #33ff33;
+  --color-state-warning: #ffaa00;
+  --color-state-error: #ff3333;
+  --color-state-info: #33ccff;
+  --color-shadow: rgba(51, 255, 51, 0.08);
+  --font-family-base: "Share Tech Mono", "Lucida Console", monospace;
+  --font-family-mono: "Share Tech Mono", "Lucida Console", monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 6px;
+  --transition-speed: 0.15s;
+}
+
+/* ==========================================================================
+   4. USSR-COCKPIT — Soviet instrument panel, red/amber
+   ========================================================================== */
+[data-theme="ussr-cockpit"][data-mode="light"] {
+  --color-bg-canvas: #d6cbb8;
+  --color-bg-surface: #c8bba6;
+  --color-bg-surface-raised: #e0d5c2;
+  --color-bg-overlay: rgba(60, 20, 10, 0.5);
+  --color-fg-default: #2a1008;
+  --color-fg-muted: #5a3020;
+  --color-fg-subtle: #8a6a50;
+  --color-border-default: #8a7a68;
+  --color-border-muted: #b0a28e;
+  --color-accent-primary: #cc2200;
+  --color-accent-secondary: #d4a800;
+  --color-link-default: #a01a00;
+  --color-state-success: #5a8a1e;
+  --color-state-warning: #d4a800;
+  --color-state-error: #cc2200;
+  --color-state-info: #4a6a8a;
+  --color-shadow: rgba(60, 20, 10, 0.18);
+  --font-family-base: "Courier New", "Lucida Console", monospace;
+  --font-family-mono: "Courier New", "Lucida Console", monospace;
+  --border-radius-sm: 1px;
+  --border-radius-md: 3px;
+  --border-radius-lg: 5px;
+  --transition-speed: 0.15s;
+}
+
+[data-theme="ussr-cockpit"][data-mode="dark"] {
+  --color-bg-canvas: #0e0806;
+  --color-bg-surface: #1a100a;
+  --color-bg-surface-raised: #241810;
+  --color-bg-overlay: rgba(0, 0, 0, 0.75);
+  --color-fg-default: #ff6633;
+  --color-fg-muted: #cc4422;
+  --color-fg-subtle: #883318;
+  --color-border-default: #4a2210;
+  --color-border-muted: #301508;
+  --color-accent-primary: #ff2200;
+  --color-accent-secondary: #ffaa00;
+  --color-link-default: #ff8844;
+  --color-state-success: #44cc22;
+  --color-state-warning: #ffaa00;
+  --color-state-error: #ff2200;
+  --color-state-info: #44aaff;
+  --color-shadow: rgba(255, 34, 0, 0.1);
+  --font-family-base: "Courier New", "Lucida Console", monospace;
+  --font-family-mono: "Courier New", "Lucida Console", monospace;
+  --border-radius-sm: 1px;
+  --border-radius-md: 3px;
+  --border-radius-lg: 5px;
+  --transition-speed: 0.15s;
+}
+
+/* ==========================================================================
+   5. NEON-VICE-1985 — Miami Vice, hot pink / cyan neon
+   ========================================================================== */
+[data-theme="neon-vice-1985"][data-mode="light"] {
+  --color-bg-canvas: #fff0f5;
+  --color-bg-surface: #ffe4f0;
+  --color-bg-surface-raised: #fff5fa;
+  --color-bg-overlay: rgba(80, 0, 60, 0.4);
+  --color-fg-default: #2a0a2a;
+  --color-fg-muted: #6a2a5a;
+  --color-fg-subtle: #9a6a8a;
+  --color-border-default: #e8a0cc;
+  --color-border-muted: #f0c8e0;
+  --color-accent-primary: #ff1493;
+  --color-accent-secondary: #00ced1;
+  --color-link-default: #d6006e;
+  --color-state-success: #00c896;
+  --color-state-warning: #ffaa00;
+  --color-state-error: #ff2060;
+  --color-state-info: #00bcd4;
+  --color-shadow: rgba(255, 20, 147, 0.12);
+  --font-family-base: "Orbitron", "Segoe UI", Tahoma, sans-serif;
+  --font-family-mono: "Fira Code", "Courier New", monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 12px;
+  --transition-speed: 0.25s;
+}
+
+[data-theme="neon-vice-1985"][data-mode="dark"] {
+  --color-bg-canvas: #0d0015;
+  --color-bg-surface: #19002a;
+  --color-bg-surface-raised: #250040;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #ffe0f0;
+  --color-fg-muted: #cc90b8;
+  --color-fg-subtle: #886088;
+  --color-border-default: #5a1050;
+  --color-border-muted: #3a0830;
+  --color-accent-primary: #ff1493;
+  --color-accent-secondary: #00ffe5;
+  --color-link-default: #ff69b4;
+  --color-state-success: #00ffaa;
+  --color-state-warning: #ffcc00;
+  --color-state-error: #ff2060;
+  --color-state-info: #00e5ff;
+  --color-shadow: rgba(255, 20, 147, 0.2);
+  --font-family-base: "Orbitron", "Segoe UI", Tahoma, sans-serif;
+  --font-family-mono: "Fira Code", "Courier New", monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 12px;
+  --transition-speed: 0.25s;
+}
+
+/* ==========================================================================
+   6. NEON-CITY-2085 — Cyberpunk, purple/cyan
+   ========================================================================== */
+[data-theme="neon-city-2085"][data-mode="light"] {
+  --color-bg-canvas: #f0eaff;
+  --color-bg-surface: #e4dcf8;
+  --color-bg-surface-raised: #f5f0ff;
+  --color-bg-overlay: rgba(30, 0, 60, 0.4);
+  --color-fg-default: #1a0a30;
+  --color-fg-muted: #4a2a6a;
+  --color-fg-subtle: #8060a0;
+  --color-border-default: #c0a8e0;
+  --color-border-muted: #dcd0f0;
+  --color-accent-primary: #7c3aed;
+  --color-accent-secondary: #06b6d4;
+  --color-link-default: #6d28d9;
+  --color-state-success: #10b981;
+  --color-state-warning: #f59e0b;
+  --color-state-error: #ef4444;
+  --color-state-info: #06b6d4;
+  --color-shadow: rgba(124, 58, 237, 0.1);
+  --font-family-base: "Rajdhani", "Exo 2", "Segoe UI", sans-serif;
+  --font-family-mono: "JetBrains Mono", "Fira Code", monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.18s;
+}
+
+[data-theme="neon-city-2085"][data-mode="dark"] {
+  --color-bg-canvas: #080010;
+  --color-bg-surface: #10082a;
+  --color-bg-surface-raised: #1a1040;
+  --color-bg-overlay: rgba(0, 0, 0, 0.75);
+  --color-fg-default: #e0d8ff;
+  --color-fg-muted: #a090cc;
+  --color-fg-subtle: #605080;
+  --color-border-default: #3a1a6a;
+  --color-border-muted: #20104a;
+  --color-accent-primary: #a855f7;
+  --color-accent-secondary: #22d3ee;
+  --color-link-default: #c084fc;
+  --color-state-success: #34d399;
+  --color-state-warning: #fbbf24;
+  --color-state-error: #f87171;
+  --color-state-info: #22d3ee;
+  --color-shadow: rgba(168, 85, 247, 0.15);
+  --font-family-base: "Rajdhani", "Exo 2", "Segoe UI", sans-serif;
+  --font-family-mono: "JetBrains Mono", "Fira Code", monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.18s;
+}
+
+/* ==========================================================================
+   7. CONIFOREST — Pine forest greens and earth tones
+   ========================================================================== */
+[data-theme="coniforest"][data-mode="light"] {
+  --color-bg-canvas: #f2f0e8;
+  --color-bg-surface: #e8e4d8;
+  --color-bg-surface-raised: #f7f5ee;
+  --color-bg-overlay: rgba(20, 40, 20, 0.45);
+  --color-fg-default: #1a2e14;
+  --color-fg-muted: #3a5030;
+  --color-fg-subtle: #6a8060;
+  --color-border-default: #a8b898;
+  --color-border-muted: #c8d4be;
+  --color-accent-primary: #2d6a4f;
+  --color-accent-secondary: #8b6914;
+  --color-link-default: #1b5e40;
+  --color-state-success: #2d8a4e;
+  --color-state-warning: #a68a20;
+  --color-state-error: #b8372a;
+  --color-state-info: #3a7a8a;
+  --color-shadow: rgba(20, 40, 20, 0.1);
+  --font-family-base: "Merriweather", Georgia, "Times New Roman", serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="coniforest"][data-mode="dark"] {
+  --color-bg-canvas: #0e1a0c;
+  --color-bg-surface: #162412;
+  --color-bg-surface-raised: #1e3018;
+  --color-bg-overlay: rgba(0, 0, 0, 0.65);
+  --color-fg-default: #d4e8cc;
+  --color-fg-muted: #98b88a;
+  --color-fg-subtle: #607858;
+  --color-border-default: #2a4a22;
+  --color-border-muted: #1a3414;
+  --color-accent-primary: #52b788;
+  --color-accent-secondary: #c8a84a;
+  --color-link-default: #74d4a0;
+  --color-state-success: #52b788;
+  --color-state-warning: #c8a84a;
+  --color-state-error: #e86050;
+  --color-state-info: #5aacba;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+  --font-family-base: "Merriweather", Georgia, "Times New Roman", serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   8. RAINFOREST — Lush tropical greens
+   ========================================================================== */
+[data-theme="rainforest"][data-mode="light"] {
+  --color-bg-canvas: #eef6ee;
+  --color-bg-surface: #dff0df;
+  --color-bg-surface-raised: #f4faf4;
+  --color-bg-overlay: rgba(10, 50, 20, 0.45);
+  --color-fg-default: #0c2810;
+  --color-fg-muted: #2a5530;
+  --color-fg-subtle: #5a8a5e;
+  --color-border-default: #90c094;
+  --color-border-muted: #b8daba;
+  --color-accent-primary: #059669;
+  --color-accent-secondary: #d4aa30;
+  --color-link-default: #047857;
+  --color-state-success: #059669;
+  --color-state-warning: #ca8a04;
+  --color-state-error: #dc2626;
+  --color-state-info: #0891b2;
+  --color-shadow: rgba(10, 60, 30, 0.1);
+  --font-family-base: "Nunito", "Trebuchet MS", Helvetica, sans-serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 6px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="rainforest"][data-mode="dark"] {
+  --color-bg-canvas: #061208;
+  --color-bg-surface: #0c1e10;
+  --color-bg-surface-raised: #142a18;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #c8f0cc;
+  --color-fg-muted: #80c088;
+  --color-fg-subtle: #4a8a50;
+  --color-border-default: #1e5a24;
+  --color-border-muted: #124018;
+  --color-accent-primary: #34d399;
+  --color-accent-secondary: #f0c840;
+  --color-link-default: #6ee7b7;
+  --color-state-success: #34d399;
+  --color-state-warning: #fbbf24;
+  --color-state-error: #f87171;
+  --color-state-info: #22d3ee;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --font-family-base: "Nunito", "Trebuchet MS", Helvetica, sans-serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 6px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+  --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   9. ART-DECO — Gold / black / cream, geometric
+   ========================================================================== */
+[data-theme="art-deco"][data-mode="light"] {
+  --color-bg-canvas: #faf5e8;
+  --color-bg-surface: #f0e8d0;
+  --color-bg-surface-raised: #fdf9f0;
+  --color-bg-overlay: rgba(30, 20, 0, 0.5);
+  --color-fg-default: #1a1408;
+  --color-fg-muted: #4a3e20;
+  --color-fg-subtle: #8a7a50;
+  --color-border-default: #c8a840;
+  --color-border-muted: #e0d098;
+  --color-accent-primary: #b8960a;
+  --color-accent-secondary: #1a1a1a;
+  --color-link-default: #9a7a00;
+  --color-state-success: #4a8a20;
+  --color-state-warning: #c8960a;
+  --color-state-error: #a02020;
+  --color-state-info: #4a6a8a;
+  --color-shadow: rgba(40, 30, 0, 0.12);
+  --font-family-base: "Poiret One", "Didot", "Bodoni MT", Georgia, serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="art-deco"][data-mode="dark"] {
+  --color-bg-canvas: #0a0a08;
+  --color-bg-surface: #141210;
+  --color-bg-surface-raised: #1e1c18;
+  --color-bg-overlay: rgba(0, 0, 0, 0.75);
+  --color-fg-default: #f0e8c8;
+  --color-fg-muted: #c8b880;
+  --color-fg-subtle: #8a7a50;
+  --color-border-default: #b8960a;
+  --color-border-muted: #5a4a10;
+  --color-accent-primary: #d4aa00;
+  --color-accent-secondary: #f0e8c8;
+  --color-link-default: #e8c840;
+  --color-state-success: #6aaa40;
+  --color-state-warning: #d4aa00;
+  --color-state-error: #cc4040;
+  --color-state-info: #6a9abb;
+  --color-shadow: rgba(212, 170, 0, 0.1);
+  --font-family-base: "Poiret One", "Didot", "Bodoni MT", Georgia, serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   10. HOLOGRAPHIC — Iridescent rainbow shifts
+   ========================================================================== */
+[data-theme="holographic"][data-mode="light"] {
+  --color-bg-canvas: #f8f8ff;
+  --color-bg-surface: #f0f0ff;
+  --color-bg-surface-raised: #fcfcff;
+  --color-bg-overlay: rgba(100, 60, 140, 0.35);
+  --color-fg-default: #2a1a3a;
+  --color-fg-muted: #5a4a6a;
+  --color-fg-subtle: #8a7a9a;
+  --color-border-default: #c8b8e8;
+  --color-border-muted: #e0d8f0;
+  --color-accent-primary: #8b5cf6;
+  --color-accent-secondary: #06b6d4;
+  --color-link-default: #7c3aed;
+  --color-state-success: #10b981;
+  --color-state-warning: #f59e0b;
+  --color-state-error: #ef4444;
+  --color-state-info: #3b82f6;
+  --color-shadow: rgba(139, 92, 246, 0.1);
+  --font-family-base: "Quicksand", "Poppins", "Segoe UI", sans-serif;
+  --font-family-mono: "Fira Code", monospace;
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  --transition-speed: 0.4s;
+}
+
+[data-theme="holographic"][data-mode="dark"] {
+  --color-bg-canvas: #08060e;
+  --color-bg-surface: #120e1e;
+  --color-bg-surface-raised: #1c1630;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #e8e0ff;
+  --color-fg-muted: #b0a0d0;
+  --color-fg-subtle: #706090;
+  --color-border-default: #3a2a5a;
+  --color-border-muted: #241840;
+  --color-accent-primary: #a78bfa;
+  --color-accent-secondary: #22d3ee;
+  --color-link-default: #c4b5fd;
+  --color-state-success: #34d399;
+  --color-state-warning: #fbbf24;
+  --color-state-error: #f87171;
+  --color-state-info: #60a5fa;
+  --color-shadow: rgba(167, 139, 250, 0.12);
+  --font-family-base: "Quicksand", "Poppins", "Segoe UI", sans-serif;
+  --font-family-mono: "Fira Code", monospace;
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  --transition-speed: 0.4s;
+}
+
+/* ==========================================================================
+   11. VAPOR — Vaporwave pastel pink / purple / teal
+   ========================================================================== */
+[data-theme="vapor"][data-mode="light"] {
+  --color-bg-canvas: #fff0f8;
+  --color-bg-surface: #ffe8f4;
+  --color-bg-surface-raised: #fff5fb;
+  --color-bg-overlay: rgba(80, 20, 80, 0.35);
+  --color-fg-default: #3a1040;
+  --color-fg-muted: #6a3a70;
+  --color-fg-subtle: #a070a8;
+  --color-border-default: #daa0e0;
+  --color-border-muted: #ecc8f0;
+  --color-accent-primary: #e040a0;
+  --color-accent-secondary: #40d0d0;
+  --color-link-default: #c830a0;
+  --color-state-success: #40c890;
+  --color-state-warning: #e8a840;
+  --color-state-error: #e04060;
+  --color-state-info: #40b0e0;
+  --color-shadow: rgba(224, 64, 160, 0.1);
+  --font-family-base: "VT323", "Segoe UI", Impact, sans-serif;
+  --font-family-mono: "VT323", "Courier New", monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.35s;
+}
+
+[data-theme="vapor"][data-mode="dark"] {
+  --color-bg-canvas: #1a0820;
+  --color-bg-surface: #28103a;
+  --color-bg-surface-raised: #381850;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #ffc8e8;
+  --color-fg-muted: #d090c0;
+  --color-fg-subtle: #905878;
+  --color-border-default: #5a2060;
+  --color-border-muted: #401048;
+  --color-accent-primary: #ff50c0;
+  --color-accent-secondary: #50f0e8;
+  --color-link-default: #ff80d0;
+  --color-state-success: #50e8a0;
+  --color-state-warning: #f0c050;
+  --color-state-error: #ff4070;
+  --color-state-info: #50c0f0;
+  --color-shadow: rgba(255, 80, 192, 0.15);
+  --font-family-base: "VT323", "Segoe UI", Impact, sans-serif;
+  --font-family-mono: "VT323", "Courier New", monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.35s;
+}
+
+/* ==========================================================================
+   12. PAPER — Warm cream stationery
+   ========================================================================== */
+[data-theme="paper"][data-mode="light"] {
+  --color-bg-canvas: #fdf8f0;
+  --color-bg-surface: #f5ede0;
+  --color-bg-surface-raised: #fff9f2;
+  --color-bg-overlay: rgba(60, 40, 20, 0.4);
+  --color-fg-default: #2a2018;
+  --color-fg-muted: #5a4a38;
+  --color-fg-subtle: #9a8a78;
+  --color-border-default: #c8b8a0;
+  --color-border-muted: #e0d4c4;
+  --color-accent-primary: #8a4a2a;
+  --color-accent-secondary: #4a6a8a;
+  --color-link-default: #6a3a1a;
+  --color-state-success: #4a7a30;
+  --color-state-warning: #b08a20;
+  --color-state-error: #b03020;
+  --color-state-info: #3a6a9a;
+  --color-shadow: rgba(60, 40, 20, 0.08);
+  --font-family-base: "Lora", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.2s;
+}
+
+[data-theme="paper"][data-mode="dark"] {
+  --color-bg-canvas: #1a1610;
+  --color-bg-surface: #24201a;
+  --color-bg-surface-raised: #302a22;
+  --color-bg-overlay: rgba(0, 0, 0, 0.65);
+  --color-fg-default: #e8dcc8;
+  --color-fg-muted: #b8a88a;
+  --color-fg-subtle: #7a6a58;
+  --color-border-default: #4a4030;
+  --color-border-muted: #342c20;
+  --color-accent-primary: #c87a4a;
+  --color-accent-secondary: #6a9ac0;
+  --color-link-default: #e0a070;
+  --color-state-success: #6aaa50;
+  --color-state-warning: #d0aa40;
+  --color-state-error: #d05040;
+  --color-state-info: #5a8aba;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --font-family-base: "Lora", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   13. LEDGER-1920 — Sepia accounting ledger
+   ========================================================================== */
+[data-theme="ledger-1920"][data-mode="light"] {
+  --color-bg-canvas: #f5ead4;
+  --color-bg-surface: #ecdcbe;
+  --color-bg-surface-raised: #f9f0dc;
+  --color-bg-overlay: rgba(60, 40, 10, 0.45);
+  --color-fg-default: #2a1e0c;
+  --color-fg-muted: #5a4828;
+  --color-fg-subtle: #8a7a58;
+  --color-border-default: #a09070;
+  --color-border-muted: #c8b898;
+  --color-accent-primary: #6a4a1e;
+  --color-accent-secondary: #1a5a3a;
+  --color-link-default: #5a3a10;
+  --color-state-success: #2a6a30;
+  --color-state-warning: #8a6a10;
+  --color-state-error: #8a2020;
+  --color-state-info: #2a5070;
+  --color-shadow: rgba(60, 40, 10, 0.12);
+  --font-family-base: "IM Fell English", "Baskerville", "Palatino", serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.2s;
+}
+
+[data-theme="ledger-1920"][data-mode="dark"] {
+  --color-bg-canvas: #181208;
+  --color-bg-surface: #221a0e;
+  --color-bg-surface-raised: #2e2414;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #e0d0a8;
+  --color-fg-muted: #b0a078;
+  --color-fg-subtle: #706040;
+  --color-border-default: #4a3e24;
+  --color-border-muted: #342a16;
+  --color-accent-primary: #c89840;
+  --color-accent-secondary: #40a870;
+  --color-link-default: #dab060;
+  --color-state-success: #50a850;
+  --color-state-warning: #c89840;
+  --color-state-error: #c04040;
+  --color-state-info: #5080a8;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+  --font-family-base: "IM Fell English", "Baskerville", "Palatino", serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   14. BLUEPRINT — Blue / white technical drawing
+   ========================================================================== */
+[data-theme="blueprint"][data-mode="light"] {
+  --color-bg-canvas: #e8f0f8;
+  --color-bg-surface: #dce8f4;
+  --color-bg-surface-raised: #f0f5fc;
+  --color-bg-overlay: rgba(10, 30, 60, 0.4);
+  --color-fg-default: #0a1a30;
+  --color-fg-muted: #2a4060;
+  --color-fg-subtle: #5a7898;
+  --color-border-default: #88a8c8;
+  --color-border-muted: #b0c8e0;
+  --color-accent-primary: #1a5aa8;
+  --color-accent-secondary: #e8e8e8;
+  --color-link-default: #1050a0;
+  --color-state-success: #2a8a50;
+  --color-state-warning: #c8960a;
+  --color-state-error: #c03030;
+  --color-state-info: #1a5aa8;
+  --color-shadow: rgba(10, 30, 80, 0.1);
+  --font-family-base: "Tekton Pro", "Lucida Sans", "Trebuchet MS", sans-serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.15s;
+}
+
+[data-theme="blueprint"][data-mode="dark"] {
+  --color-bg-canvas: #0a1830;
+  --color-bg-surface: #0e2244;
+  --color-bg-surface-raised: #142e58;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #d0e4ff;
+  --color-fg-muted: #90b0d8;
+  --color-fg-subtle: #5070a0;
+  --color-border-default: #284880;
+  --color-border-muted: #1a3460;
+  --color-accent-primary: #5a9aea;
+  --color-accent-secondary: #f0f0f0;
+  --color-link-default: #80b8ff;
+  --color-state-success: #50c070;
+  --color-state-warning: #e0b040;
+  --color-state-error: #e05050;
+  --color-state-info: #5a9aea;
+  --color-shadow: rgba(90, 154, 234, 0.08);
+  --font-family-base: "Tekton Pro", "Lucida Sans", "Trebuchet MS", sans-serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.15s;
+}
+
+/* ==========================================================================
+   15. CHALKBOARD — Green board with chalk white
+   ========================================================================== */
+[data-theme="chalkboard"][data-mode="light"] {
+  --color-bg-canvas: #e0e8d8;
+  --color-bg-surface: #d0dac4;
+  --color-bg-surface-raised: #e8f0e0;
+  --color-bg-overlay: rgba(20, 40, 20, 0.45);
+  --color-fg-default: #1a2a14;
+  --color-fg-muted: #3a5030;
+  --color-fg-subtle: #6a8058;
+  --color-border-default: #90a880;
+  --color-border-muted: #b8c8a8;
+  --color-accent-primary: #3a6a2a;
+  --color-accent-secondary: #d4d0c0;
+  --color-link-default: #2a5a1a;
+  --color-state-success: #3a8a2a;
+  --color-state-warning: #a89a30;
+  --color-state-error: #a03020;
+  --color-state-info: #3a6a8a;
+  --color-shadow: rgba(20, 40, 20, 0.1);
+  --font-family-base: "Patrick Hand", "Comic Sans MS", cursive, sans-serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.2s;
+}
+
+[data-theme="chalkboard"][data-mode="dark"] {
+  --color-bg-canvas: #1a3020;
+  --color-bg-surface: #224028;
+  --color-bg-surface-raised: #2a5030;
+  --color-bg-overlay: rgba(0, 0, 0, 0.65);
+  --color-fg-default: #f0ece0;
+  --color-fg-muted: #c8c4b0;
+  --color-fg-subtle: #8a8878;
+  --color-border-default: #3a5a30;
+  --color-border-muted: #2a4024;
+  --color-accent-primary: #d0ccb8;
+  --color-accent-secondary: #e8c040;
+  --color-link-default: #e0dccc;
+  --color-state-success: #70c050;
+  --color-state-warning: #e0c040;
+  --color-state-error: #e05040;
+  --color-state-info: #60a0c0;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --font-family-base: "Patrick Hand", "Comic Sans MS", cursive, sans-serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   16. PHOSPHOR — Green phosphor CRT terminal
+   ========================================================================== */
+[data-theme="phosphor"][data-mode="light"] {
+  --color-bg-canvas: #e0f0e0;
+  --color-bg-surface: #d0e8d0;
+  --color-bg-surface-raised: #e8f8e8;
+  --color-bg-overlay: rgba(0, 40, 0, 0.4);
+  --color-fg-default: #0a2a0a;
+  --color-fg-muted: #1a5a1a;
+  --color-fg-subtle: #4a8a4a;
+  --color-border-default: #70b870;
+  --color-border-muted: #a0d0a0;
+  --color-accent-primary: #1a8a1a;
+  --color-accent-secondary: #4a4a4a;
+  --color-link-default: #0a6a0a;
+  --color-state-success: #1a8a1a;
+  --color-state-warning: #8a8a1a;
+  --color-state-error: #8a1a1a;
+  --color-state-info: #1a6a8a;
+  --color-shadow: rgba(0, 40, 0, 0.1);
+  --font-family-base: "VT323", "Lucida Console", "Courier New", monospace;
+  --font-family-mono: "VT323", "Lucida Console", "Courier New", monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.1s;
+}
+
+[data-theme="phosphor"][data-mode="dark"] {
+  --color-bg-canvas: #000a00;
+  --color-bg-surface: #001400;
+  --color-bg-surface-raised: #002000;
+  --color-bg-overlay: rgba(0, 0, 0, 0.8);
+  --color-fg-default: #33ff33;
+  --color-fg-muted: #20c020;
+  --color-fg-subtle: #0e800e;
+  --color-border-default: #0e4a0e;
+  --color-border-muted: #083008;
+  --color-accent-primary: #33ff33;
+  --color-accent-secondary: #88ff88;
+  --color-link-default: #55ff55;
+  --color-state-success: #33ff33;
+  --color-state-warning: #aaff33;
+  --color-state-error: #ff3333;
+  --color-state-info: #33ffaa;
+  --color-shadow: rgba(51, 255, 51, 0.06);
+  --font-family-base: "VT323", "Lucida Console", "Courier New", monospace;
+  --font-family-mono: "VT323", "Lucida Console", "Courier New", monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.1s;
+}
+
+/* ==========================================================================
+   17. VOLCANO — Deep red / orange lava
+   ========================================================================== */
+[data-theme="volcano"][data-mode="light"] {
+  --color-bg-canvas: #faf0ea;
+  --color-bg-surface: #f0e0d4;
+  --color-bg-surface-raised: #fcf4ee;
+  --color-bg-overlay: rgba(60, 10, 0, 0.45);
+  --color-fg-default: #2a0e06;
+  --color-fg-muted: #5a2818;
+  --color-fg-subtle: #8a5848;
+  --color-border-default: #c09078;
+  --color-border-muted: #d8b8a8;
+  --color-accent-primary: #d4380a;
+  --color-accent-secondary: #e8a020;
+  --color-link-default: #b42a00;
+  --color-state-success: #4a8a2a;
+  --color-state-warning: #e8a020;
+  --color-state-error: #d4380a;
+  --color-state-info: #4a7a9a;
+  --color-shadow: rgba(80, 20, 0, 0.1);
+  --font-family-base: "Oswald", "Impact", "Arial Narrow", sans-serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 10px;
+  --transition-speed: 0.2s;
+}
+
+[data-theme="volcano"][data-mode="dark"] {
+  --color-bg-canvas: #140604;
+  --color-bg-surface: #1e0e08;
+  --color-bg-surface-raised: #2a140c;
+  --color-bg-overlay: rgba(0, 0, 0, 0.75);
+  --color-fg-default: #ffd0b8;
+  --color-fg-muted: #c88a68;
+  --color-fg-subtle: #885838;
+  --color-border-default: #5a2010;
+  --color-border-muted: #3a1408;
+  --color-accent-primary: #ff5020;
+  --color-accent-secondary: #ffa830;
+  --color-link-default: #ff8050;
+  --color-state-success: #60c040;
+  --color-state-warning: #ffa830;
+  --color-state-error: #ff4020;
+  --color-state-info: #60a8d0;
+  --color-shadow: rgba(255, 80, 32, 0.1);
+  --font-family-base: "Oswald", "Impact", "Arial Narrow", sans-serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 10px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   18. OCEANIC — Deep blues and aqua
+   ========================================================================== */
+[data-theme="oceanic"][data-mode="light"] {
+  --color-bg-canvas: #eaf4f8;
+  --color-bg-surface: #dceef4;
+  --color-bg-surface-raised: #f0f8fc;
+  --color-bg-overlay: rgba(0, 20, 50, 0.4);
+  --color-fg-default: #082030;
+  --color-fg-muted: #1a4060;
+  --color-fg-subtle: #4a7090;
+  --color-border-default: #88b8d0;
+  --color-border-muted: #b0d0e0;
+  --color-accent-primary: #0077b6;
+  --color-accent-secondary: #00b4d8;
+  --color-link-default: #005a8a;
+  --color-state-success: #2a9a5a;
+  --color-state-warning: #c89020;
+  --color-state-error: #c83030;
+  --color-state-info: #0096c7;
+  --color-shadow: rgba(0, 30, 60, 0.08);
+  --font-family-base: "Raleway", "Gill Sans", "Century Gothic", sans-serif;
+  --font-family-mono: "Fira Code", "Courier New", monospace;
+  --border-radius-sm: 6px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 18px;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="oceanic"][data-mode="dark"] {
+  --color-bg-canvas: #020e1a;
+  --color-bg-surface: #081a2a;
+  --color-bg-surface-raised: #0e263c;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #c8e4f0;
+  --color-fg-muted: #80b0cc;
+  --color-fg-subtle: #407090;
+  --color-border-default: #1a4060;
+  --color-border-muted: #102a48;
+  --color-accent-primary: #48cae4;
+  --color-accent-secondary: #90e0ef;
+  --color-link-default: #76d8ee;
+  --color-state-success: #50d080;
+  --color-state-warning: #f0c040;
+  --color-state-error: #f06060;
+  --color-state-info: #48cae4;
+  --color-shadow: rgba(72, 202, 228, 0.08);
+  --font-family-base: "Raleway", "Gill Sans", "Century Gothic", sans-serif;
+  --font-family-mono: "Fira Code", "Courier New", monospace;
+  --border-radius-sm: 6px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 18px;
+  --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   19. STEAMPUNK — Copper / brass / leather brown
+   ========================================================================== */
+[data-theme="steampunk"][data-mode="light"] {
+  --color-bg-canvas: #f0e4d0;
+  --color-bg-surface: #e4d4b8;
+  --color-bg-surface-raised: #f5ead8;
+  --color-bg-overlay: rgba(50, 30, 10, 0.5);
+  --color-fg-default: #2a1a0a;
+  --color-fg-muted: #5a3a1a;
+  --color-fg-subtle: #8a6a48;
+  --color-border-default: #b48840;
+  --color-border-muted: #d0ac78;
+  --color-accent-primary: #b87333;
+  --color-accent-secondary: #8b7400;
+  --color-link-default: #9a5a20;
+  --color-state-success: #5a8a30;
+  --color-state-warning: #b08a10;
+  --color-state-error: #a03020;
+  --color-state-info: #4a6a7a;
+  --color-shadow: rgba(60, 30, 10, 0.15);
+  --font-family-base: "Cinzel", "Copperplate", "Palatino", serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.25s;
+}
+
+[data-theme="steampunk"][data-mode="dark"] {
+  --color-bg-canvas: #140e06;
+  --color-bg-surface: #1e160c;
+  --color-bg-surface-raised: #2a2012;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #e0c898;
+  --color-fg-muted: #b89860;
+  --color-fg-subtle: #7a6438;
+  --color-border-default: #5a4020;
+  --color-border-muted: #3a2a12;
+  --color-accent-primary: #d4883a;
+  --color-accent-secondary: #c8a030;
+  --color-link-default: #e8a850;
+  --color-state-success: #70aa40;
+  --color-state-warning: #d0a830;
+  --color-state-error: #cc4030;
+  --color-state-info: #6090a8;
+  --color-shadow: rgba(212, 136, 58, 0.08);
+  --font-family-base: "Cinzel", "Copperplate", "Palatino", serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px;
+  --transition-speed: 0.25s;
+}
+
+/* ==========================================================================
+   20. DIESELPUNK — Industrial gray / riveted metal
+   ========================================================================== */
+[data-theme="dieselpunk"][data-mode="light"] {
+  --color-bg-canvas: #e0deda;
+  --color-bg-surface: #d0cec8;
+  --color-bg-surface-raised: #e8e6e2;
+  --color-bg-overlay: rgba(30, 30, 30, 0.5);
+  --color-fg-default: #1a1a1a;
+  --color-fg-muted: #3a3a38;
+  --color-fg-subtle: #6a6a68;
+  --color-border-default: #8a8a88;
+  --color-border-muted: #b0b0ac;
+  --color-accent-primary: #704a18;
+  --color-accent-secondary: #8a2a1a;
+  --color-link-default: #5a3a10;
+  --color-state-success: #4a7a30;
+  --color-state-warning: #a08020;
+  --color-state-error: #9a2a1a;
+  --color-state-info: #3a5a7a;
+  --color-shadow: rgba(0, 0, 0, 0.15);
+  --font-family-base: "Archivo Black", "Impact", "Franklin Gothic Medium", sans-serif;
+  --font-family-mono: "Share Tech Mono", "Courier New", monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.15s;
+}
+
+[data-theme="dieselpunk"][data-mode="dark"] {
+  --color-bg-canvas: #121212;
+  --color-bg-surface: #1c1c1a;
+  --color-bg-surface-raised: #262624;
+  --color-bg-overlay: rgba(0, 0, 0, 0.75);
+  --color-fg-default: #c8c8c4;
+  --color-fg-muted: #8a8a88;
+  --color-fg-subtle: #5a5a58;
+  --color-border-default: #3a3a38;
+  --color-border-muted: #2a2a28;
+  --color-accent-primary: #c87830;
+  --color-accent-secondary: #cc4430;
+  --color-link-default: #e09040;
+  --color-state-success: #60a840;
+  --color-state-warning: #d0a830;
+  --color-state-error: #d04030;
+  --color-state-info: #5080a8;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --font-family-base: "Archivo Black", "Impact", "Franklin Gothic Medium", sans-serif;
+  --font-family-mono: "Share Tech Mono", "Courier New", monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.15s;
+}
+
+/* ==========================================================================
+   21. SOLARPUNK — Bright green / gold sustainable future
+   ========================================================================== */
+[data-theme="solarpunk"][data-mode="light"] {
+  --color-bg-canvas: #f4fbe8;
+  --color-bg-surface: #e8f4d4;
+  --color-bg-surface-raised: #f8fdf0;
+  --color-bg-overlay: rgba(20, 50, 10, 0.4);
+  --color-fg-default: #142a08;
+  --color-fg-muted: #2a5018;
+  --color-fg-subtle: #5a8040;
+  --color-border-default: #90c068;
+  --color-border-muted: #b8d8a0;
+  --color-accent-primary: #3a9a20;
+  --color-accent-secondary: #d4a010;
+  --color-link-default: #2a7a10;
+  --color-state-success: #3a9a20;
+  --color-state-warning: #c89810;
+  --color-state-error: #c03020;
+  --color-state-info: #1a8aa0;
+  --color-shadow: rgba(20, 60, 10, 0.08);
+  --font-family-base: "Nunito Sans", "Trebuchet MS", "Verdana", sans-serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 8px;
+  --border-radius-md: 14px;
+  --border-radius-lg: 24px;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="solarpunk"][data-mode="dark"] {
+  --color-bg-canvas: #0a1406;
+  --color-bg-surface: #12200e;
+  --color-bg-surface-raised: #1a2e14;
+  --color-bg-overlay: rgba(0, 0, 0, 0.65);
+  --color-fg-default: #d0eeb8;
+  --color-fg-muted: #90c070;
+  --color-fg-subtle: #508838;
+  --color-border-default: #2a5a18;
+  --color-border-muted: #1c3e10;
+  --color-accent-primary: #60d840;
+  --color-accent-secondary: #f0c830;
+  --color-link-default: #80e860;
+  --color-state-success: #60d840;
+  --color-state-warning: #e8c030;
+  --color-state-error: #e05040;
+  --color-state-info: #40c8e0;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+  --font-family-base: "Nunito Sans", "Trebuchet MS", "Verdana", sans-serif;
+  --font-family-mono: "Source Code Pro", Menlo, monospace;
+  --border-radius-sm: 8px;
+  --border-radius-md: 14px;
+  --border-radius-lg: 24px;
+  --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   22. STONEPUNK — Earth / stone gray / brown, primitive tech
+   ========================================================================== */
+[data-theme="stonepunk"][data-mode="light"] {
+  --color-bg-canvas: #e8e0d4;
+  --color-bg-surface: #dcd4c4;
+  --color-bg-surface-raised: #f0e8dc;
+  --color-bg-overlay: rgba(40, 30, 20, 0.45);
+  --color-fg-default: #2a2018;
+  --color-fg-muted: #504030;
+  --color-fg-subtle: #807060;
+  --color-border-default: #a09080;
+  --color-border-muted: #c0b4a4;
+  --color-accent-primary: #7a5a30;
+  --color-accent-secondary: #5a7a5a;
+  --color-link-default: #604420;
+  --color-state-success: #4a7a38;
+  --color-state-warning: #a08020;
+  --color-state-error: #9a3020;
+  --color-state-info: #4a6a7a;
+  --color-shadow: rgba(40, 30, 20, 0.12);
+  --font-family-base: "Cardo", "Garamond", "Georgia", serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.2s;
+}
+
+[data-theme="stonepunk"][data-mode="dark"] {
+  --color-bg-canvas: #161210;
+  --color-bg-surface: #201a16;
+  --color-bg-surface-raised: #2c241e;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #d0c4b4;
+  --color-fg-muted: #9a8e7e;
+  --color-fg-subtle: #6a5e50;
+  --color-border-default: #3e342a;
+  --color-border-muted: #2a241e;
+  --color-accent-primary: #c09050;
+  --color-accent-secondary: #80a880;
+  --color-link-default: #d8a868;
+  --color-state-success: #6aaa50;
+  --color-state-warning: #c8a840;
+  --color-state-error: #cc4830;
+  --color-state-info: #60909a;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+  --font-family-base: "Cardo", "Garamond", "Georgia", serif;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --border-radius-sm: 0px;
+  --border-radius-md: 2px;
+  --border-radius-lg: 4px;
+  --transition-speed: 0.2s;
+}
+
+/* ==========================================================================
+   23. DREAMCORE — Surreal pastel liminal spaces
+   ========================================================================== */
+[data-theme="dreamcore"][data-mode="light"] {
+  --color-bg-canvas: #faf0ff;
+  --color-bg-surface: #f0e4ff;
+  --color-bg-surface-raised: #fdf5ff;
+  --color-bg-overlay: rgba(60, 30, 80, 0.3);
+  --color-fg-default: #30204a;
+  --color-fg-muted: #604880;
+  --color-fg-subtle: #9080a8;
+  --color-border-default: #c8b8e0;
+  --color-border-muted: #e0d8f0;
+  --color-accent-primary: #b060d0;
+  --color-accent-secondary: #60c0b0;
+  --color-link-default: #9848b8;
+  --color-state-success: #50b888;
+  --color-state-warning: #d0a840;
+  --color-state-error: #d05070;
+  --color-state-info: #5090d0;
+  --color-shadow: rgba(176, 96, 208, 0.08);
+  --font-family-base: "Comfortaa", "Century Gothic", "Futura", sans-serif;
+  --font-family-mono: "Fira Code", monospace;
+  --border-radius-sm: 10px;
+  --border-radius-md: 18px;
+  --border-radius-lg: 28px;
+  --transition-speed: 0.5s;
+}
+
+[data-theme="dreamcore"][data-mode="dark"] {
+  --color-bg-canvas: #120818;
+  --color-bg-surface: #1c1028;
+  --color-bg-surface-raised: #28183a;
+  --color-bg-overlay: rgba(0, 0, 0, 0.65);
+  --color-fg-default: #e8d8f8;
+  --color-fg-muted: #b098d0;
+  --color-fg-subtle: #706090;
+  --color-border-default: #3a2050;
+  --color-border-muted: #281438;
+  --color-accent-primary: #d080f0;
+  --color-accent-secondary: #70e8d0;
+  --color-link-default: #e0a0ff;
+  --color-state-success: #60e0a0;
+  --color-state-warning: #e8c050;
+  --color-state-error: #f06080;
+  --color-state-info: #70b0f0;
+  --color-shadow: rgba(208, 128, 240, 0.1);
+  --font-family-base: "Comfortaa", "Century Gothic", "Futura", sans-serif;
+  --font-family-mono: "Fira Code", monospace;
+  --border-radius-sm: 10px;
+  --border-radius-md: 18px;
+  --border-radius-lg: 28px;
+  --transition-speed: 0.5s;
+}
+
+/* ==========================================================================
+   24. FRUTIGER-AERO — Glossy blue / white / glass (2006-era)
+   ========================================================================== */
+[data-theme="frutiger-aero"][data-mode="light"] {
+  --color-bg-canvas: #eaf4fc;
+  --color-bg-surface: #dceefa;
+  --color-bg-surface-raised: #f2f8fe;
+  --color-bg-overlay: rgba(10, 40, 80, 0.35);
+  --color-fg-default: #0a1e3a;
+  --color-fg-muted: #2a4a6a;
+  --color-fg-subtle: #5a7a9a;
+  --color-border-default: #90c0e0;
+  --color-border-muted: #b8d8f0;
+  --color-accent-primary: #0078d4;
+  --color-accent-secondary: #00b294;
+  --color-link-default: #005ea8;
+  --color-state-success: #00a86b;
+  --color-state-warning: #d49800;
+  --color-state-error: #d42020;
+  --color-state-info: #0090d0;
+  --color-shadow: rgba(0, 60, 120, 0.1);
+  --font-family-base: "Frutiger", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "Consolas", "Lucida Console", monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 14px;
+  --transition-speed: 0.25s;
+}
+
+[data-theme="frutiger-aero"][data-mode="dark"] {
+  --color-bg-canvas: #06101e;
+  --color-bg-surface: #0e1e30;
+  --color-bg-surface-raised: #162a44;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #d0e8fc;
+  --color-fg-muted: #88b8e0;
+  --color-fg-subtle: #4880a8;
+  --color-border-default: #1a4a78;
+  --color-border-muted: #103460;
+  --color-accent-primary: #40a8f0;
+  --color-accent-secondary: #30d8b4;
+  --color-link-default: #70c0ff;
+  --color-state-success: #40d090;
+  --color-state-warning: #f0c040;
+  --color-state-error: #f05050;
+  --color-state-info: #40b8f0;
+  --color-shadow: rgba(64, 168, 240, 0.08);
+  --font-family-base: "Frutiger", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "Consolas", "Lucida Console", monospace;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 14px;
+  --transition-speed: 0.25s;
+}
