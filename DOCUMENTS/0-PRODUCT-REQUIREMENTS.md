@@ -206,9 +206,6 @@ Last update: 03-02-26
 - HTML5
 - Native desktop app: **Electron** for cross-platform distribution (Windows, macOS, Linux)
 
-**NOT used:**
-- HTMX (removed; pure JavaScript state management instead)
-
 ### Desktop App Architecture:
 
 #### Installation & Distribution
