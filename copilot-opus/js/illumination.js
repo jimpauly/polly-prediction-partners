@@ -1,13 +1,46 @@
-/**
- * IlluminationController — Paulie's Prediction Partners
- * Manages 7 channels: master, textPrimary, textSecondary,
- *                     barsPrimary, barsSecondary, flood, display
- * Storage key: 'ppp-illumination'
- */
+/* ==========================================================================
+   Paulie's Prediction Partners — Illumination Controller
+   ==========================================================================
+   Drives the 7-channel cockpit lighting system defined in illumination.css.
+   Channels: Master, Text Primary, Text Secondary, Bars Primary,
+             Bars Secondary, Flood, Display.
+
+   Master defaults OFF; every other channel defaults ON at MAX (1.00).
+   DAY mode (data-mode="light") → 60 % base.  NVG (dark) → 100 %.
+   Dimmers scale 0.25 – 1.00.  State persists via localStorage.
+
+   Uses the CSS computed-variables physics model from illumination.css:
+     --fx-master-switch, --fx-master-dim, --fx-mode-base  (master layer)
+     --fx-ch-<channel>                                     (per-channel)
+     --fx-glow-<channel> = master-scale × channel-dim      (computed by CSS)
+
+   Exposes window.IlluminationController with public API.
+   ========================================================================== */
+
 (function () {
   'use strict';
 
+  /* ------------------------------------------------------------------------
+     Constants
+     ------------------------------------------------------------------------ */
+
   const STORAGE_KEY = 'ppp-illumination';
+
+  const CHANNELS = [
+    { id: 'text-primary',   key: 'textPrimary',   dimGroup: 'text'  },
+    { id: 'text-secondary', key: 'textSecondary', dimGroup: 'text'  },
+    { id: 'bars-primary',   key: 'barsPrimary',   dimGroup: 'bars'  },
+    { id: 'bars-secondary', key: 'barsSecondary', dimGroup: 'bars'  },
+    { id: 'flood',          key: 'flood',          dimGroup: 'flood' },
+    { id: 'display',        key: 'display',        dimGroup: 'display' },
+  ];
+
+  const DIMMER_MIN = 0.25;
+  const DIMMER_MAX = 1.0;
+
+  /* ------------------------------------------------------------------------
+     State
+     ------------------------------------------------------------------------ */
 
   const DEFAULT_STATE = {
     mode: 'day',          // 'day' | 'nvg'
@@ -24,49 +57,82 @@
 
   let state = loadState();
 
+  /* ------------------------------------------------------------------------
+     Storage helpers
+     ------------------------------------------------------------------------ */
+
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) return Object.assign({}, DEFAULT_STATE, JSON.parse(raw));
-    } catch (_) {}
+    } catch (_) { /* storage unavailable — silently degrade */ }
     return Object.assign({}, DEFAULT_STATE);
   }
 
   function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) { /* silent */ }
   }
 
-  /**
-   * Apply CSS custom properties to :root based on current state.
-   * When master is OFF → all fx scales = 0 regardless of channels.
-   */
+  /* ------------------------------------------------------------------------
+     Helpers
+     ------------------------------------------------------------------------ */
+
+  function clampDim(value) {
+    const v = parseFloat(value);
+    if (isNaN(v)) return DIMMER_MAX;
+    return Math.min(DIMMER_MAX, Math.max(DIMMER_MIN, v));
+  }
+
+  /* ------------------------------------------------------------------------
+     CSS application — sets custom properties on :root
+     Uses the CSS computed-variables model: JS only sets the inputs,
+     CSS calc() handles the multiplication chain automatically.
+     ------------------------------------------------------------------------ */
+
   function applyCSS() {
-    const root = document.documentElement;
-    const masterOn = state.master.on;
-    const masterDim = masterOn ? (state.master.dim ?? 1.0) : 0;
-    const modeBase = state.mode === 'nvg' ? 1.0 : 0.6;
+    const root = document.documentElement.style;
 
-    root.style.setProperty('--fx-master-scale', masterDim.toFixed(3));
-    root.style.setProperty('--fx-mode-base', modeBase.toFixed(2));
+    // Master layer
+    root.setProperty('--fx-master-switch', state.master.on ? '1' : '0');
+    root.setProperty('--fx-master-dim', (state.master.dim ?? 1.0).toFixed(3));
 
-    const calc = (ch, extraDim = 1.0) =>
-      masterOn && ch.on ? ((ch.dim ?? 1.0) * extraDim * masterDim).toFixed(3) : '0';
-
-    root.style.setProperty('--fx-glow-text-primary',
-      calc(state.textPrimary, state.textDim));
-    root.style.setProperty('--fx-glow-text-secondary',
-      calc(state.textSecondary, state.textDim));
-    root.style.setProperty('--fx-glow-bars-primary',
-      masterOn && state.barsPrimary.on
-        ? (state.barsDim * masterDim).toFixed(3) : '0');
-    root.style.setProperty('--fx-glow-bars-secondary',
-      masterOn && state.barsSecondary.on
-        ? (state.barsDim * masterDim).toFixed(3) : '0');
-    root.style.setProperty('--fx-glow-flood',  calc(state.flood));
-    root.style.setProperty('--fx-glow-display', calc(state.display));
+    // Per-channel values: channel on/off × shared group dimmer × individual dimmer
+    CHANNELS.forEach(ch => {
+      const c = state[ch.key];
+      const groupDim = state[ch.dimGroup + 'Dim'] ?? 1.0;
+      const channelDim = c.dim ?? 1.0;
+      const value = c.on ? (channelDim * groupDim) : 0;
+      root.setProperty('--fx-ch-' + ch.id, value.toFixed(3));
+    });
   }
 
-  /** Sync all panel widgets to match current state */
+  /* ------------------------------------------------------------------------
+     Event dispatch — fires custom 'illuminationchange' event
+     ------------------------------------------------------------------------ */
+
+  function dispatchChange() {
+    try {
+      document.dispatchEvent(new CustomEvent('illuminationchange', {
+        detail: IlluminationController.getState()
+      }));
+    } catch (_) { /* CustomEvent not supported */ }
+  }
+
+  /* ------------------------------------------------------------------------
+     Update cycle — apply CSS → persist → sync UI → notify
+     ------------------------------------------------------------------------ */
+
+  function update() {
+    applyCSS();
+    saveState();
+    syncPanelUI();
+    dispatchChange();
+  }
+
+  /* ------------------------------------------------------------------------
+     Panel UI sync — keeps DOM controls in lock-step with internal state
+     ------------------------------------------------------------------------ */
+
   function syncPanelUI() {
     // DAY/NVG
     document.querySelectorAll('.day-nvg-option').forEach(el => {
@@ -106,7 +172,10 @@
     if (valEl) valEl.textContent = Math.round(value * 100) + '%';
   }
 
-  /** Wire a flip switch click handler */
+  /* ------------------------------------------------------------------------
+     Event wiring — connects DOM controls to state
+     ------------------------------------------------------------------------ */
+
   function wireSwitch(el) {
     el.addEventListener('click', () => {
       const ch = el.dataset.channel;
@@ -124,7 +193,7 @@
       case 'flood':         state.flood.on         = !state.flood.on;         break;
       case 'display':       state.display.on       = !state.display.on;       break;
     }
-    saveState(); applyCSS(); syncPanelUI();
+    update();
   }
 
   /** Wire a rotary dimmer for drag interaction */
@@ -154,7 +223,7 @@
         case 'flood':   state.flood.dim   = v; break;
         case 'display': state.display.dim = v; break;
       }
-      saveState(); applyCSS(); syncDimmer(name, v);
+      update();
     };
 
     wrap.addEventListener('mousedown', (e) => {
@@ -191,14 +260,17 @@
         state.mode = val;
         // Also update the html data-mode attribute for theme system
         document.documentElement.dataset.mode = val === 'nvg' ? 'dark' : 'light';
-        saveState(); applyCSS(); syncPanelUI();
+        update();
         // Notify ThemeManager if available
         if (window.ThemeManager) window.ThemeManager.setMode(val === 'nvg' ? 'dark' : 'light');
       });
     });
   }
 
-  /** Initialize: wire all controls and apply initial state */
+  /* ------------------------------------------------------------------------
+     Initialization
+     ------------------------------------------------------------------------ */
+
   function init() {
     // Wire switches
     document.querySelectorAll('.flip-switch[data-channel]').forEach(wireSwitch);
@@ -209,15 +281,59 @@
     // Wire DAY/NVG
     wireDayNvg();
 
-    // Apply
+    // Apply initial state
     applyCSS();
     syncPanelUI();
+
+    // Listen for mode changes from ThemeManager
+    document.addEventListener('modechange', () => {
+      // CSS adjusts --fx-mode-base via [data-mode] selector automatically.
+      // Re-dispatch so consumers can react to the changed effective values.
+      dispatchChange();
+    });
   }
 
-  window.IlluminationController = {
+  /* ------------------------------------------------------------------------
+     Public API
+     ------------------------------------------------------------------------ */
+
+  const IlluminationController = {
     init,
-    getState: () => Object.assign({}, state),
+
+    /**
+     * Return the full illumination state including computed effective values.
+     * effectiveValue = masterOn × channelOn × channelDim × groupDim × baseFactor.
+     */
+    getState() {
+      const modeBase = state.mode === 'nvg' ? 1.0 : 0.6;
+      const masterMul = (state.master.on ? state.master.dim : 0) * modeBase;
+      const channels = {};
+      CHANNELS.forEach(ch => {
+        const c = state[ch.key];
+        const groupDim = state[ch.dimGroup + 'Dim'] ?? 1.0;
+        const channelDim = c.dim ?? 1.0;
+        channels[ch.id] = {
+          on:        c.on,
+          dim:       channelDim,
+          groupDim:  groupDim,
+          effective: masterMul * (c.on ? channelDim * groupDim : 0)
+        };
+      });
+      return {
+        masterOn:    state.master.on,
+        masterDim:   state.master.dim,
+        mode:        state.mode,
+        baseFactor:  modeBase,
+        masterScale: masterMul,
+        channels:    channels
+      };
+    },
+
     toggleChannel,
+
+    /**
+     * Set a channel's dimmer value (0 – 1.0).
+     */
     setDim(name, value) {
       const v = Math.max(0, Math.min(1, value));
       switch (name) {
@@ -227,11 +343,25 @@
         case 'flood':   state.flood.dim   = v; break;
         case 'display': state.display.dim = v; break;
       }
-      saveState(); applyCSS(); syncDimmer(name, v);
+      update();
     },
+
+    /**
+     * Set the master switch on/off.
+     */
+    setMaster(on) {
+      state.master.on = !!on;
+      update();
+    },
+
+    /**
+     * Set the DAY/NVG mode.
+     */
     setMode(mode) {
       state.mode = mode;
-      saveState(); applyCSS(); syncPanelUI();
+      update();
     },
   };
+
+  window.IlluminationController = IlluminationController;
 })();

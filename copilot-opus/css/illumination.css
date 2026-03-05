@@ -1,88 +1,148 @@
-/* ============================================================
-   ILLUMINATION SYSTEM — Paulie's Prediction Partners
-   7 channels: master, textPrimary, textSecondary,
-               barsPrimary, barsSecondary, flood, display
-   ============================================================ */
+/* ==========================================================================
+   Paulie's Prediction Partners — Illumination / Glow System
+   ==========================================================================
+   Simulates cockpit lighting physics with 7 addressable channels.
+   DAY (light) mode: 60 % base intensity.  NVG (dark) mode: 100 %.
+   Dimmers scale 0.25 – 1.00.  Master switch defaults OFF.
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   1. ROOT DEFAULTS — Master OFF, all channels ON at MAX
+   -------------------------------------------------------------------------- */
 :root {
-  --fx-master-scale:          0;      /* 0=off, 0.25–1.0 when on */
-  --fx-glow-text-primary:     0;
-  --fx-glow-text-secondary:   0;
-  --fx-glow-bars-primary:     0;
-  --fx-glow-bars-secondary:   0;
-  --fx-glow-flood:            0;
-  --fx-glow-display:          0;
-  --fx-mode-base:             0.6;    /* 0.6 DAY, 1.0 NVG */
-}
+  /* ---- Master control -------------------------------------------------- */
+  --fx-master-switch: 0;                /* 0 = OFF (default), 1 = ON        */
+  --fx-master-dim: 1.00;               /* dimmer: 0.25 – 1.00              */
+  --fx-mode-base: 0.6;                 /* DAY (light) mode base intensity   */
 
-/* ── TEXT PRIMARY glow ─────────────────────────────── */
-.fx-text-primary {
-  text-shadow:
-    0 0 calc(10px * var(--fx-glow-text-primary) * var(--fx-master-scale))
-    var(--color-glow-primary),
-    0 0 calc(20px * var(--fx-glow-text-primary) * var(--fx-master-scale))
-    var(--color-glow-secondary);
-  transition: text-shadow 0.4s ease;
-}
-
-/* ── TEXT SECONDARY glow ───────────────────────────── */
-.fx-text-secondary {
-  text-shadow:
-    0 0 calc(8px * var(--fx-glow-text-secondary) * var(--fx-master-scale))
-    var(--color-glow-secondary);
-  transition: text-shadow 0.4s ease;
-}
-
-/* ── BARS PRIMARY glow (region borders) ────────────── */
-.fx-bars-primary {
-  box-shadow:
-    0 0 calc(12px * var(--fx-glow-bars-primary) * var(--fx-master-scale))
-    calc(2px * var(--fx-glow-bars-primary) * var(--fx-master-scale))
-    var(--color-glow-primary),
-    inset 0 0 calc(6px * var(--fx-glow-bars-primary) * var(--fx-master-scale))
-    var(--color-glow-secondary);
-  transition: box-shadow 0.4s ease;
-}
-
-/* ── BARS SECONDARY glow (card borders) ────────────── */
-.fx-bars-secondary {
-  box-shadow:
-    0 0 calc(8px * var(--fx-glow-bars-secondary) * var(--fx-master-scale))
-    var(--color-glow-secondary);
-  transition: box-shadow 0.4s ease;
-}
-
-/* ── FLOOD overlay ─────────────────────────────────── */
-.fx-flood-region {
-  position: relative;
-}
-.fx-flood-region::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at 50% 0%,
-    rgba(var(--color-glow-primary-rgb, 88,166,255),
-         calc(0.06 * var(--fx-glow-flood) * var(--fx-master-scale))) 0%,
-    transparent 70%
+  /* Combined master multiplier (switch × dim × mode-base) */
+  --fx-master-scale: calc(
+    var(--fx-master-switch) * var(--fx-master-dim) * var(--fx-mode-base)
   );
-  z-index: 0;
-  transition: background 0.4s ease;
-}
-.fx-flood-region > * { position: relative; z-index: 1; }
 
-/* ── DISPLAY self-illumination ─────────────────────── */
-.fx-display-card {
-  background-color: color-mix(
-    in srgb,
-    var(--color-bg-card) calc(100% - calc(8% * var(--fx-glow-display) * var(--fx-master-scale))),
-    var(--color-accent-primary) calc(8% * var(--fx-glow-display) * var(--fx-master-scale))
-  );
-  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  /* ---- Channel dimmers (all default ON at MAX) ------------------------- */
+  --fx-ch-text-primary: 1.00;
+  --fx-ch-text-secondary: 1.00;
+  --fx-ch-bars-primary: 1.00;
+  --fx-ch-bars-secondary: 1.00;
+  --fx-ch-flood: 1.00;
+  --fx-ch-display: 1.00;
+
+  /* ---- Computed channel intensities ------------------------------------ */
+  --fx-glow-text-primary:   calc(var(--fx-master-scale) * var(--fx-ch-text-primary));
+  --fx-glow-text-secondary: calc(var(--fx-master-scale) * var(--fx-ch-text-secondary));
+  --fx-glow-bars-primary:   calc(var(--fx-master-scale) * var(--fx-ch-bars-primary));
+  --fx-glow-bars-secondary: calc(var(--fx-master-scale) * var(--fx-ch-bars-secondary));
+  --fx-glow-flood:          calc(var(--fx-master-scale) * var(--fx-ch-flood));
+  --fx-glow-display:        calc(var(--fx-master-scale) * var(--fx-ch-display));
+
+  /* ---- Internal glow helpers ------------------------------------------- */
+  --_glow-transition: 0.35s ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. NVG (DARK) MODE — full 100 % base intensity
+   -------------------------------------------------------------------------- */
+[data-mode="dark"] {
+  --fx-mode-base: 1.0;
+}
+
+/* ==========================================================================
+   3. UTILITY CLASSES — one per illumination channel
+   ==========================================================================
+   Apply these to any element. The glow strength automatically follows the
+   master switch, mode base, and the channel's dimmer value.
+   ========================================================================== */
+
+/* ---- 3a. TEXT GLOW — primary ------------------------------------------- */
+.glow-text-primary {
+  text-shadow:
+    0 0 calc(var(--fx-glow-text-primary) * 6px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-text-primary) * 16px) var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-text-primary) * 30px) var(--color-accent-primary);
+  transition: text-shadow var(--_glow-transition);
+}
+
+/* ---- 3b. TEXT GLOW — secondary ----------------------------------------- */
+.glow-text-secondary {
+  text-shadow:
+    0 0 calc(var(--fx-glow-text-secondary) * 5px)  var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-text-secondary) * 14px) var(--color-accent-secondary);
+  transition: text-shadow var(--_glow-transition);
+}
+
+/* ---- 3c. BARS GLOW — primary (region borders) -------------------------- */
+.glow-bars-primary {
   box-shadow:
-    0 0 calc(14px * var(--fx-glow-display) * var(--fx-master-scale))
-    var(--color-glow-primary);
+    0 0 calc(var(--fx-glow-bars-primary) * 4px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-bars-primary) * 12px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-bars-primary) * 6px) var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  transition:
+    box-shadow var(--_glow-transition),
+    border-color var(--_glow-transition);
+}
+
+/* ---- 3d. BARS GLOW — secondary (card borders) -------------------------- */
+.glow-bars-secondary {
+  box-shadow:
+    0 0 calc(var(--fx-glow-bars-secondary) * 3px)  var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-bars-secondary) * 10px) var(--color-accent-secondary),
+    inset 0 0 calc(var(--fx-glow-bars-secondary) * 4px) var(--color-accent-secondary);
+  border-color: var(--color-accent-secondary);
+  transition:
+    box-shadow var(--_glow-transition),
+    border-color var(--_glow-transition);
+}
+
+/* ---- 3e. FLOOD — ambient fill within regions --------------------------- */
+.glow-flood {
+  background-image:
+    radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--color-accent-primary) calc(var(--fx-glow-flood) * 18%), transparent),
+      transparent 70%
+    );
+  transition: background-image var(--_glow-transition);
+}
+
+/* ---- 3f. DISPLAY — self-illuminated components ------------------------- */
+.glow-display {
+  box-shadow:
+    0 0 calc(var(--fx-glow-display) * 8px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-display) * 12px) color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+  transition:
+    box-shadow var(--_glow-transition),
+    filter var(--_glow-transition);
+}
+
+/* ==========================================================================
+   3g. COMBINED GLOW TRANSITIONS — smooth changes & reduced motion
+   ========================================================================== */
+.glow-text-primary,
+.glow-text-secondary,
+.glow-bars-primary,
+.glow-bars-secondary,
+.glow-flood,
+.glow-display {
+  transition-timing-function: ease;
+  will-change: text-shadow, box-shadow, filter, background-image;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-text-primary,
+  .glow-text-secondary,
+  .glow-bars-primary,
+  .glow-bars-secondary,
+  .glow-flood,
+  .glow-display,
+  .switch-lever,
+  .switch-led,
+  .dimmer-dial {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
