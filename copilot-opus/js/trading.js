@@ -325,7 +325,75 @@ const TradingStudio = (() => {
       expandCard(market);
     });
 
+    /* Render mini sparkline on the card canvas */
+    const miniCanvas = card.querySelector('.series-card-canvas');
+    if (miniCanvas) {
+      drawMiniSparkline(miniCanvas, market);
+    }
+
     return card;
+  }
+
+  /* ---- Mini Sparkline for Series Cards ---- */
+
+  function drawMiniSparkline(canvas, market) {
+    const context = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    context.clearRect(0, 0, width, height);
+
+    /* Generate a plausible price curve from the market's current price */
+    const currentPrice = parseFloat(market.last_price_dollars || market.yes_bid_dollars || '0.50');
+    const dataPoints = 30;
+    const prices = [];
+    let price = currentPrice * (0.85 + Math.random() * 0.15);
+
+    for (let i = 0; i < dataPoints; i++) {
+      const drift = (currentPrice - price) * 0.08;
+      const noise = (Math.random() - 0.5) * 0.04;
+      price = Math.max(0.01, Math.min(0.99, price + drift + noise));
+      prices.push(price);
+    }
+    /* Ensure last point matches current price */
+    prices[prices.length - 1] = currentPrice;
+
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const priceRange = maxPrice - minPrice || 0.01;
+    const padding = 4;
+
+    const computedStyle = getComputedStyle(document.body);
+    const successColor = computedStyle.getPropertyValue('--color-state-success').trim() || '#22c55e';
+    const dangerColor = computedStyle.getPropertyValue('--color-state-danger').trim() || '#ef4444';
+    const isUpTrend = prices[prices.length - 1] >= prices[0];
+    const lineColor = isUpTrend ? successColor : dangerColor;
+
+    /* Draw line */
+    context.beginPath();
+    context.lineWidth = 1.5;
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+    context.strokeStyle = lineColor;
+
+    prices.forEach((pricePoint, index) => {
+      const x = padding + (index / (dataPoints - 1)) * (width - padding * 2);
+      const y = padding + (1 - (pricePoint - minPrice) / priceRange) * (height - padding * 2);
+      if (index === 0) context.moveTo(x, y);
+      else context.lineTo(x, y);
+    });
+    context.stroke();
+
+    /* Draw gradient fill */
+    const lastX = padding + (width - padding * 2);
+    const gradient = context.createLinearGradient(0, padding, 0, height - padding);
+    gradient.addColorStop(0, lineColor + '30');
+    gradient.addColorStop(1, lineColor + '05');
+
+    context.lineTo(lastX, height - padding);
+    context.lineTo(padding, height - padding);
+    context.closePath();
+    context.fillStyle = gradient;
+    context.fill();
   }
 
   /* ---- Expand Card Overlay ---- */

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Paulie's Prediction Partners — Free, open-source, AI-powered prediction market trading studio for Kalshi. No ads, all features included.">
+  <meta name="keywords" content="prediction markets, Kalshi, trading bot, AI trading, open source">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' http://127.0.0.1:8000 ws://127.0.0.1:8000; img-src 'self' data:;">
+  <title>Paulie's Prediction Partners — AI Trading Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+    }
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .fade-in-up { animation: fade-in-up 0.8s ease-out forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+  </style>
+</head>
+<body class="bg-gray-950 text-white min-h-screen flex flex-col">
+
+  <!-- Hero Section -->
+  <header class="flex-1 flex items-center justify-center px-6 py-20">
+    <div class="max-w-4xl text-center">
+      <div class="animate-float mb-8">
+        <span class="text-7xl" role="img" aria-label="Target">🎯</span>
+      </div>
+
+      <h1 class="fade-in-up text-5xl md:text-7xl font-extrabold tracking-tight mb-4">
+        <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Paulie's
+        </span>
+        <br>
+        <span class="text-white">Prediction Partners</span>
+      </h1>
+
+      <p class="fade-in-up delay-1 text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto">
+        Free, open-source, AI-powered trading studio for
+        <a href="https://kalshi.com" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline">Kalshi</a>
+        prediction markets. No ads. All features. Zero cost.
+      </p>
+
+      <div class="fade-in-up delay-2 flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <a href="copilot-opus/index.html"
+           class="animate-pulse-glow inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-lg transition-all">
+          🚀 Launch Web App
+        </a>
+        <a href="https://github.com/jimpauly/paulies-prediction-partners/releases"
+           target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl text-lg transition-all border border-gray-700">
+          ⬇️ Download Desktop App
+        </a>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="fade-in-up delay-3 grid grid-cols-1 md:grid-cols-3 gap-6 text-left max-w-3xl mx-auto">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          <div class="text-3xl mb-3">🤖</div>
+          <h3 class="font-bold text-lg mb-2">3 AI Agents</h3>
+          <p class="text-gray-400 text-sm">Prime, Praxis, and Peritia work together using reinforcement learning to find profitable trades.</p>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          <div class="text-3xl mb-3">⚡</div>
+          <h3 class="font-bold text-lg mb-2">High-Frequency</h3>
+          <p class="text-gray-400 text-sm">Real-time WebSocket feeds, sub-second execution, and automatic risk management.</p>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          <div class="text-3xl mb-3">🛡️</div>
+          <h3 class="font-bold text-lg mb-2">Safe &amp; Secure</h3>
+          <p class="text-gray-400 text-sm">API keys never leave your machine. Circuit breakers, position limits, and daily loss caps built in.</p>
+        </div>
+      </div>
+
+      <!-- Quick Start -->
+      <div class="fade-in-up delay-4 mt-12 bg-gray-900 border border-gray-800 rounded-xl p-8 text-left max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4 text-center">⏱️ 5-Minute Setup</h2>
+        <ol class="space-y-3 text-gray-300">
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+            <span><strong>Get Kalshi API keys</strong> — Sign up at <a href="https://kalshi.com" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">kalshi.com</a> and generate API credentials</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+            <span><strong>Launch the app</strong> — Click "Launch Web App" above, or download the desktop version</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+            <span><strong>Connect</strong> — Paste your API key and RSA private key, choose Live or Demo mode</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+            <span><strong>Set throttle</strong> — Start with Semi-Auto to review trades, or go Full-Auto for hands-free</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">5</span>
+            <span><strong>Profit</strong> — Watch the AI agents analyze markets and execute trades 💰</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </header>
+
+  <!-- Footer -->
+  <footer class="text-center py-8 text-gray-500 text-sm border-t border-gray-800">
+    <p>
+      Open Source · <a href="https://github.com/jimpauly/paulies-prediction-partners" target="_blank" rel="noopener noreferrer" class="hover:text-gray-300">GitHub</a>
+      · Made with ❤️ for prediction market traders
+    </p>
+    <p class="mt-2 text-xs text-gray-600">
+      Trading involves risk. Past performance does not guarantee future results.
+    </p>
+  </footer>
+
+</body>
+</html>

@@ -5,3 +5,26 @@ dist/
 .env
 __pycache__/
 *.pyc
+
+# Electron build output
+out/
+release/
+build/
+
+# OS files
+Thumbs.db
+*.swp
+*.swo
+
+# IDE files
+.idea/
+.vscode/
+*.code-workspace
+
+# Python virtual environment
+venv/
+.venv/
+
+# Package lock files (regenerated on install)
+package-lock.json
+yarn.lock

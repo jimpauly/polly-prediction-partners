@@ -192,12 +192,16 @@ def create_api(
         redoc_url=None,
     )
 
+    # CORS: The backend binds to 127.0.0.1 only, preventing external access.
+    # We allow broad origins so the frontend works from file://, Electron,
+    # GitHub Pages, and local dev servers.  Methods are restricted to the
+    # minimum needed (GET for reads, POST for writes).
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_credentials=False,
+        allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type"],
     )
 
     broadcaster = _EventBroadcaster()
