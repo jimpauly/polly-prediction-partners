@@ -206,6 +206,19 @@ class AgentPeritia:
             self._detect_piercing_line,
             self._detect_dark_cloud_cover,
             self._detect_harami,
+            self._detect_abandoned_baby,
+            self._detect_dragonfly_doji,
+            self._detect_gravestone_doji,
+            self._detect_long_legged_doji,
+            self._detect_harami_cross,
+            self._detect_evening_doji_star,
+            self._detect_morning_doji_star,
+            self._detect_spinning_top,
+            self._detect_rising_three_methods,
+            self._detect_falling_three_methods,
+            self._detect_stick_sandwich,
+            self._detect_upside_tasuki_gap,
+            self._detect_downside_tasuki_gap,
         ]
 
         patterns: list[tuple[str, str]] = []
@@ -469,6 +482,302 @@ class AgentPeritia:
             if _is_bullish(prev) and _is_bearish(cur):
                 return ("bearish_harami", "bearish")
         return None
+
+    def _detect_abandoned_baby(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Rare reversal — gap-doji-gap three-candle pattern."""
+        if len(candles) < 3:
+            return None
+        first, second, third = candles[-3], candles[-2], candles[-1]
+        rng_second = _range(second)
+        if rng_second == 0:
+            return None
+        # Middle candle must be a doji
+        if _body(second) > rng_second * _DOJI_BODY_RATIO:
+            return None
+        # Bullish abandoned baby: bearish first, gap down to doji, gap up to bullish third
+        if _is_bearish(first) and _is_bullish(third):
+            if second["high"] < min(first["open"], first["close"]):
+                if second["high"] < min(third["open"], third["close"]):
+                    return ("abandoned_baby", "bullish")
+        # Bearish abandoned baby: bullish first, gap up to doji, gap down to bearish third
+        if _is_bullish(first) and _is_bearish(third):
+            if second["low"] > max(first["open"], first["close"]):
+                if second["low"] > max(third["open"], third["close"]):
+                    return ("abandoned_baby", "bearish")
+        return None
+
+    def _detect_dragonfly_doji(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bullish reversal — open/close at the high, long lower shadow."""
+        c = candles[-1]
+        rng = _range(c)
+        if rng == 0:
+            return None
+        if _body(c) > rng * _DOJI_BODY_RATIO:
+            return None
+        upper = _upper_shadow(c)
+        lower = _lower_shadow(c)
+        # Open/close should be near the high; lower shadow dominates
+        if upper > rng * Decimal("0.1"):
+            return None
+        if lower < rng * Decimal("0.6"):
+            return None
+        return ("dragonfly_doji", "bullish")
+
+    def _detect_gravestone_doji(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bearish reversal — open/close at the low, long upper shadow."""
+        c = candles[-1]
+        rng = _range(c)
+        if rng == 0:
+            return None
+        if _body(c) > rng * _DOJI_BODY_RATIO:
+            return None
+        upper = _upper_shadow(c)
+        lower = _lower_shadow(c)
+        # Open/close should be near the low; upper shadow dominates
+        if lower > rng * Decimal("0.1"):
+            return None
+        if upper < rng * Decimal("0.6"):
+            return None
+        return ("gravestone_doji", "bearish")
+
+    def _detect_long_legged_doji(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Indecision — doji with long upper and lower shadows."""
+        c = candles[-1]
+        rng = _range(c)
+        if rng == 0:
+            return None
+        if _body(c) > rng * _DOJI_BODY_RATIO:
+            return None
+        upper = _upper_shadow(c)
+        lower = _lower_shadow(c)
+        # Both shadows must be significant
+        if upper < rng * Decimal("0.3"):
+            return None
+        if lower < rng * Decimal("0.3"):
+            return None
+        # Determine context from the preceding candle
+        if len(candles) >= 2:
+            if _is_bearish(candles[-2]):
+                return ("long_legged_doji", "bullish")
+            if _is_bullish(candles[-2]):
+                return ("long_legged_doji", "bearish")
+        return None
+
+    def _detect_harami_cross(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Reversal — like harami but the inside candle is a doji."""
+        if len(candles) < 2:
+            return None
+        prev, cur = candles[-2], candles[-1]
+        if _body(prev) == 0:
+            return None
+        rng_cur = _range(cur)
+        if rng_cur == 0:
+            return None
+        # Current candle must be a doji
+        if _body(cur) > rng_cur * _DOJI_BODY_RATIO:
+            return None
+        prev_top = max(prev["open"], prev["close"])
+        prev_bot = min(prev["open"], prev["close"])
+        cur_top = max(cur["open"], cur["close"])
+        cur_bot = min(cur["open"], cur["close"])
+        # Doji body must be contained within previous body
+        if cur_top > prev_top or cur_bot < prev_bot:
+            return None
+        if _is_bearish(prev):
+            return ("harami_cross", "bullish")
+        if _is_bullish(prev):
+            return ("harami_cross", "bearish")
+        return None
+
+    def _detect_evening_doji_star(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bearish reversal — like evening star but the middle candle is a doji."""
+        if len(candles) < 3:
+            return None
+        first, second, third = candles[-3], candles[-2], candles[-1]
+        first_rng = _range(first)
+        if first_rng == 0:
+            return None
+        if not _is_bullish(first) or _body(first) < first_rng * Decimal("0.4"):
+            return None
+        # Second candle must be a doji
+        rng_second = _range(second)
+        if rng_second == 0:
+            return None
+        if _body(second) > rng_second * _DOJI_BODY_RATIO:
+            return None
+        if not _is_bearish(third):
+            return None
+        if third["close"] > _midpoint(first):
+            return None
+        return ("evening_doji_star", "bearish")
+
+    def _detect_morning_doji_star(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bullish reversal — like morning star but the middle candle is a doji."""
+        if len(candles) < 3:
+            return None
+        first, second, third = candles[-3], candles[-2], candles[-1]
+        first_rng = _range(first)
+        if first_rng == 0:
+            return None
+        if not _is_bearish(first) or _body(first) < first_rng * Decimal("0.4"):
+            return None
+        # Second candle must be a doji
+        rng_second = _range(second)
+        if rng_second == 0:
+            return None
+        if _body(second) > rng_second * _DOJI_BODY_RATIO:
+            return None
+        if not _is_bullish(third):
+            return None
+        if third["close"] < _midpoint(first):
+            return None
+        return ("morning_doji_star", "bullish")
+
+    def _detect_spinning_top(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Indecision — small body with upper and lower shadows exceeding body length."""
+        c = candles[-1]
+        rng = _range(c)
+        if rng == 0:
+            return None
+        body = _body(c)
+        if body == 0:
+            return None
+        # Body must be small relative to range but not doji-small
+        if body > rng * Decimal("0.3"):
+            return None
+        if body <= rng * _DOJI_BODY_RATIO:
+            return None
+        upper = _upper_shadow(c)
+        lower = _lower_shadow(c)
+        # Both shadows must exceed the body
+        if upper < body or lower < body:
+            return None
+        # Determine context from the preceding candle
+        if len(candles) >= 2:
+            if _is_bearish(candles[-2]):
+                return ("spinning_top", "bullish")
+            if _is_bullish(candles[-2]):
+                return ("spinning_top", "bearish")
+        return None
+
+    def _detect_rising_three_methods(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bullish continuation — long white, 3 small inside candles, long white at new high."""
+        if len(candles) < 5:
+            return None
+        first = candles[-5]
+        middle = candles[-4:-1]
+        last = candles[-1]
+        first_rng = _range(first)
+        if first_rng == 0:
+            return None
+        # First candle: long bullish
+        if not _is_bullish(first) or _body(first) < first_rng * Decimal("0.5"):
+            return None
+        # Middle three: small bodies contained within the first candle's range
+        for m in middle:
+            if _body(m) >= _body(first) * Decimal("0.5"):
+                return None
+            if m["high"] > first["high"] or m["low"] < first["low"]:
+                return None
+        # Last candle: long bullish closing above first candle's close
+        last_rng = _range(last)
+        if last_rng == 0:
+            return None
+        if not _is_bullish(last) or _body(last) < last_rng * Decimal("0.5"):
+            return None
+        if last["close"] <= first["close"]:
+            return None
+        return ("rising_three_methods", "bullish")
+
+    def _detect_falling_three_methods(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bearish continuation — long black, 3 small inside candles, long black at new low."""
+        if len(candles) < 5:
+            return None
+        first = candles[-5]
+        middle = candles[-4:-1]
+        last = candles[-1]
+        first_rng = _range(first)
+        if first_rng == 0:
+            return None
+        # First candle: long bearish
+        if not _is_bearish(first) or _body(first) < first_rng * Decimal("0.5"):
+            return None
+        # Middle three: small bodies contained within the first candle's range
+        for m in middle:
+            if _body(m) >= _body(first) * Decimal("0.5"):
+                return None
+            if m["high"] > first["high"] or m["low"] < first["low"]:
+                return None
+        # Last candle: long bearish closing below first candle's close
+        last_rng = _range(last)
+        if last_rng == 0:
+            return None
+        if not _is_bearish(last) or _body(last) < last_rng * Decimal("0.5"):
+            return None
+        if last["close"] >= first["close"]:
+            return None
+        return ("falling_three_methods", "bearish")
+
+    def _detect_stick_sandwich(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bullish reversal — two black bodies surrounding white body, equal closes."""
+        if len(candles) < 3:
+            return None
+        first, second, third = candles[-3], candles[-2], candles[-1]
+        if not _is_bearish(first) or not _is_bullish(second) or not _is_bearish(third):
+            return None
+        # First and third candles should have approximately equal closes
+        avg_range = (_range(first) + _range(third)) / 2
+        if avg_range == 0:
+            return None
+        if abs(first["close"] - third["close"]) > avg_range * Decimal("0.05"):
+            return None
+        return ("stick_sandwich", "bullish")
+
+    def _detect_upside_tasuki_gap(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bullish continuation — gap up between first two bullish candles,
+        third bearish candle opens inside second body but does not close the gap."""
+        if len(candles) < 3:
+            return None
+        first, second, third = candles[-3], candles[-2], candles[-1]
+        if not _is_bullish(first) or not _is_bullish(second):
+            return None
+        if not _is_bearish(third):
+            return None
+        # Gap up: second candle opens above first candle's close
+        if second["open"] <= first["close"]:
+            return None
+        # Third candle opens within the second candle's body
+        body_lo = min(second["open"], second["close"])
+        body_hi = max(second["open"], second["close"])
+        if third["open"] < body_lo or third["open"] > body_hi:
+            return None
+        # Third candle does not close below the gap (first close)
+        if third["close"] < first["close"]:
+            return None
+        return ("upside_tasuki_gap", "bullish")
+
+    def _detect_downside_tasuki_gap(self, candles: list[dict]) -> tuple[str, str] | None:
+        """Bearish continuation — gap down between first two bearish candles,
+        third bullish candle opens inside second body but does not close the gap."""
+        if len(candles) < 3:
+            return None
+        first, second, third = candles[-3], candles[-2], candles[-1]
+        if not _is_bearish(first) or not _is_bearish(second):
+            return None
+        if not _is_bullish(third):
+            return None
+        # Gap down: second candle opens below first candle's close
+        if second["open"] >= first["close"]:
+            return None
+        # Third candle opens within the second candle's body
+        body_lo = min(second["open"], second["close"])
+        body_hi = max(second["open"], second["close"])
+        if third["open"] < body_lo or third["open"] > body_hi:
+            return None
+        # Third candle does not close above the gap (first close)
+        if third["close"] > first["close"]:
+            return None
+        return ("downside_tasuki_gap", "bearish")
 
     # ------------------------------------------------------------------
     # Evaluation pipeline
