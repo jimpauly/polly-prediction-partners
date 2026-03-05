@@ -157,6 +157,7 @@ Last update: 03-02-26
     - **2.5th Stage:** Reach shippable quality.
         - Windows and Mac Desktop apps with setup wizards.
         - Individuals with minimal technical background should be able to easily install and interface with their copy in less than 5 minutes.
+        - Include a published page through github for users who dont want to download an app.
         - Open-source, free-to-use, no-ads, all features available. 
     - Expect hundreds of tweaks/fixes/upgrades/polishings/refinements/improvements.
     - Do not ever ask for stage 3. Continue developing, refining, improving in step 2.5.
@@ -164,6 +165,7 @@ Last update: 03-02-26
 - **Stage 3:**
     - Ask if main user has successfully gained efficient profits. If not, stay in Stage 2.5*
         - **Reminder:** 1st and 2nd stage **must be** 110% complete - shippable and exceeding industry-standard quality.
+        - Must have capability for agents to continue trading for 24 hours even if devices are off. or webpage is closed.
     - Develop SuperHero + Aircraft Flight-Sim.
     - Develop File Converter app. 
 
