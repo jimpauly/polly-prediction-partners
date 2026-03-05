@@ -94,6 +94,13 @@
         // Clear keys from memory
         if (apiKeyInput) apiKeyInput.value = '';
         if (rsaKeyInput) rsaKeyInput.value = '';
+
+        // Notify Trading Studio of connection
+        TradingStudio.onConnected(selectedMode);
+
+        // Auto-navigate to Trading Studio
+        const tradeButton = document.querySelector('.studio-button[data-studio="trade"]');
+        if (tradeButton) tradeButton.click();
       });
     }
   }
@@ -235,6 +242,7 @@
     MsPaint.initialize();
     TodoApp.initialize();
     Rulers.initialize();
+    TradingStudio.initialize();
 
     initializeStudioSwitching();
     initializeApiKeyConnection();

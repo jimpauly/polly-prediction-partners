@@ -330,7 +330,101 @@
 
         <!-- Trading Studio -->
         <div class="studio-content" id="studio-trade">
-          <div class="no-data">No data — Connect API keys to begin trading</div>
+          <!-- Pre-connection state -->
+          <div class="trading-pre-connect" id="trading-pre-connect">
+            <div class="no-data-container">
+              <div class="no-data-icon">📡</div>
+              <div class="no-data">No data</div>
+              <p class="no-data-subtitle">Connect API keys to begin trading</p>
+            </div>
+          </div>
+
+          <!-- Post-connection trading interface -->
+          <div class="trading-interface" id="trading-interface" style="display:none;">
+            <!-- Category Navigation -->
+            <div class="trading-category-nav" id="trading-category-nav">
+              <button class="category-tab active" data-category="all">All</button>
+              <button class="category-tab" data-category="crypto">Crypto</button>
+              <button class="category-tab" data-category="sports">Sports</button>
+              <button class="category-tab" data-category="politics">Politics</button>
+              <button class="category-tab" data-category="economics">Economics</button>
+              <button class="category-tab" data-category="weather">Weather</button>
+              <button class="category-tab" data-category="entertainment">Entertainment</button>
+              <button class="category-tab" data-category="tech">Tech</button>
+              <button class="category-tab" data-category="science">Science</button>
+            </div>
+
+            <!-- Sub-Category Navigation -->
+            <div class="trading-subcategory-nav" id="trading-subcategory-nav">
+              <button class="subcategory-tab active" data-subcategory="all">All</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="trading-filters">
+              <div class="filter-group">
+                <label class="filter-label">Volume</label>
+                <select class="filter-select" id="filter-volume">
+                  <option value="all">All</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label">Frequency</label>
+                <select class="filter-select" id="filter-frequency">
+                  <option value="all">All</option>
+                  <option value="15min">15 min</option>
+                  <option value="hourly">Hourly</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label">Time to Close</label>
+                <select class="filter-select" id="filter-time-to-close">
+                  <option value="all">All</option>
+                  <option value="1h">&lt; 1 hour</option>
+                  <option value="24h">&lt; 24 hours</option>
+                  <option value="7d">&lt; 7 days</option>
+                  <option value="30d">&lt; 30 days</option>
+                </select>
+              </div>
+              <button class="refresh-button" id="market-refresh-button" title="Refresh markets">🔄 Refresh</button>
+            </div>
+
+            <!-- Series Cards Grid -->
+            <div class="series-cards-grid" id="series-cards-grid">
+              <!-- Cards populated by JS -->
+            </div>
+
+            <!-- Show More Button -->
+            <div class="show-more-container" id="show-more-container" style="display:none;">
+              <button class="show-more-button" id="show-more-markets">Show More Markets</button>
+            </div>
+
+            <!-- Expanded Card Overlay -->
+            <div class="expanded-card-overlay" id="expanded-card-overlay" style="display:none;">
+              <div class="expanded-card" id="expanded-card-content">
+                <!-- Populated when a card is expanded -->
+              </div>
+            </div>
+
+            <!-- Semi-Auto Approval Overlay -->
+            <div class="approval-overlay" id="approval-overlay" style="display:none;">
+              <div class="approval-card" id="approval-card">
+                <div class="approval-header">Agent Approval Request</div>
+                <div class="approval-agent" id="approval-agent-name"></div>
+                <div class="approval-ticker" id="approval-ticker"></div>
+                <div class="approval-reasoning" id="approval-reasoning"></div>
+                <div class="approval-details" id="approval-details"></div>
+                <div class="approval-actions">
+                  <button class="approve-button" id="approve-button">✓ APPROVE</button>
+                  <button class="deny-button" id="deny-button">✗ DENY</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Fly Studio -->
@@ -539,6 +633,7 @@
   <script src="js/paint.js"></script>
   <script src="js/todo.js"></script>
   <script src="js/rulers.js"></script>
+  <script src="js/trading.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
