@@ -109,6 +109,9 @@
 
       applyAttribute("data-theme", currentTheme);
       applyAttribute("data-mode", currentMode);
+
+      dispatch("themechange", { theme: currentTheme });
+      dispatch("modechange", { mode: currentMode });
     },
 
     /**
@@ -204,6 +207,28 @@
         wrapper.appendChild(buildModeToggle());
       }
 
+      /* ---------- Disposal ---------- */
+      var cleanupFns = [];
+
+      if (type === "dropdown") {
+        cleanupFns.push(wireDropdownSync(wrapper.querySelector(".theme-selector__dropdown")));
+      } else {
+        cleanupFns.push(wireGridSync(wrapper.querySelector(".theme-selector__grid")));
+      }
+
+      if (showModeToggle) {
+        cleanupFns.push(wireModeSync(wrapper.querySelector(".theme-selector__mode-toggle")));
+      }
+
+      /**
+       * Remove document-level listeners created by this selector instance.
+       * Call when removing the selector from the DOM to prevent leaks.
+       */
+      wrapper.destroy = function () {
+        cleanupFns.forEach(function (fn) { fn(); });
+        cleanupFns.length = 0;
+      };
+
       if (opts.container) {
         opts.container.appendChild(wrapper);
       }
@@ -233,12 +258,14 @@
       ThemeManager.setTheme(select.value);
     });
 
-    // Keep dropdown in sync when theme changes externally
-    document.addEventListener("themechange", function (e) {
-      select.value = e.detail.theme;
-    });
-
     return select;
+  }
+
+  /** Wire external-sync listener; returns a cleanup function. */
+  function wireDropdownSync(select) {
+    var handler = function (e) { select.value = e.detail.theme; };
+    document.addEventListener("themechange", handler);
+    return function () { document.removeEventListener("themechange", handler); };
   }
 
   function buildGrid() {
@@ -269,17 +296,21 @@
       grid.appendChild(btn);
     });
 
-    // Keep grid in sync when theme changes externally
-    document.addEventListener("themechange", function (e) {
+    return grid;
+  }
+
+  /** Wire external-sync listener; returns a cleanup function. */
+  function wireGridSync(grid) {
+    var handler = function (e) {
       var buttons = grid.querySelectorAll(".theme-selector__swatch");
       for (var i = 0; i < buttons.length; i++) {
         var isActive = buttons[i].dataset.theme === e.detail.theme;
         buttons[i].classList.toggle("theme-selector__swatch--active", isActive);
         buttons[i].setAttribute("aria-checked", isActive ? "true" : "false");
       }
-    });
-
-    return grid;
+    };
+    document.addEventListener("themechange", handler);
+    return function () { document.removeEventListener("themechange", handler); };
   }
 
   function buildModeToggle() {
@@ -293,11 +324,14 @@
       ThemeManager.toggleMode();
     });
 
-    document.addEventListener("modechange", function () {
-      setModeLabel(btn);
-    });
-
     return btn;
+  }
+
+  /** Wire external-sync listener; returns a cleanup function. */
+  function wireModeSync(btn) {
+    var handler = function () { setModeLabel(btn); };
+    document.addEventListener("modechange", handler);
+    return function () { document.removeEventListener("modechange", handler); };
   }
 
   function setModeLabel(btn) {
