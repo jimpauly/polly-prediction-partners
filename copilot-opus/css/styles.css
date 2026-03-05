@@ -55,10 +55,16 @@ body {
     "header    header     header"
     "sidebar-l navbar     sidebar-r"
     "sidebar-l main       sidebar-r"
-    "bottombar bottombar  actionbar";
+    "bottom    bottom     bottom";
   gap: 0;
   background: var(--color-bg-canvas);
   position: relative;
+}
+/* Bottom row container: splits into Bottom Bar (~4/6 width) + Action Bar (~1/3 width) */
+.region-bottom-row {
+  grid-area: bottom;
+  display: flex;
+  gap: 0;
 }
 
 /* ---- Region Wrappers (bezel logic) ---- */
@@ -512,7 +518,7 @@ body {
 
 /* ---- Region: Bottom Bar ---- */
 .region-bottombar {
-  grid-area: bottombar;
+  flex: 2;
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -658,7 +664,7 @@ body {
 
 /* ---- Region: Action Bar ---- */
 .region-actionbar {
-  grid-area: actionbar;
+  flex: 1;
 }
 .throttle-container {
   display: flex;
@@ -1212,3 +1218,46 @@ body {
   cursor: not-allowed !important;
   pointer-events: none;
 }
+
+/* ---- Cursor Changes ---- */
+button, [role="switch"], [role="radio"], [role="slider"], .toggle-switch, .flip-toggle, .rotary-dial { cursor: pointer; }
+input[type="text"], textarea { cursor: text; }
+[disabled], .disabled { cursor: not-allowed !important; }
+
+/* ---- Tooltips ---- */
+[title] { position: relative; }
+[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-fg-strong);
+  color: var(--color-bg-canvas);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ---- Respect prefers-color-scheme ---- */
+@media (prefers-color-scheme: dark) {
+  body:not([data-mode="light"]) {
+    --illumination-base: 1.0;
+  }
+}
+
+/* ---- Microinteractions ---- */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.card:hover {
+  border-color: var(--color-border-focus);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
