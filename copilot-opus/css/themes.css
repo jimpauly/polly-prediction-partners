@@ -638,6 +638,822 @@
 }
 
 /* ============================================================
+   THEME: vapor
+   Light — Pastel arcade sunrise. Mint, peach, sky blue haze,
+          soft retro gradients.
+   Dark  — Late-night vaporwave. Deep navy, hot pink, cyan glow,
+          retro grid ambience.
+   ============================================================ */
+[data-theme="vapor"][data-mode="light"] {
+  --color-bg-canvas: #f0fdf9;
+  --color-bg-surface: #fdf2f8;
+  --color-bg-brand: #67e8f9;
+  --color-fg-default: #4a3f6b;
+  --color-fg-strong: #2e1a47;
+  --color-border-default: #c4b5e0;
+  --color-border-muted: #e9dff7;
+  --color-border-focus: #f472b6;
+  --color-link-default: #06b6d4;
+  --color-link-visited: #c084fc;
+  --color-code-bg: #fce7f3;
+  --color-code-fg: #e879a8;
+  --color-state-success: #34d399;
+  --color-state-warning: #fdba74;
+  --color-state-error: #fb7185;
+  --color-state-info: #67e8f9;
+  --color-selection-bg: #a5f3fc;
+  --color-debug-marker: #f9a8d4;
+  --color-agent-1: #fb7185;
+  --color-agent-2: #a78bfa;
+  --color-agent-3: #34d399;
+  --color-agent-4: #fdba74;
+  --color-agent-5: #67e8f9;
+}
+
+[data-theme="vapor"][data-mode="dark"] {
+  --color-bg-canvas: #0c0a2a;
+  --color-bg-surface: #151040;
+  --color-bg-brand: #ec4899;
+  --color-fg-default: #c4b5fd;
+  --color-fg-strong: #f0abfc;
+  --color-border-default: #3b1f6e;
+  --color-border-muted: #1e1254;
+  --color-border-focus: #ec4899;
+  --color-link-default: #22d3ee;
+  --color-link-visited: #f0abfc;
+  --color-code-bg: #1a0e3e;
+  --color-code-fg: #f472b6;
+  --color-state-success: #2dd4bf;
+  --color-state-warning: #fcd34d;
+  --color-state-error: #fb7185;
+  --color-state-info: #22d3ee;
+  --color-selection-bg: #4c1d95;
+  --color-debug-marker: #f9a8d4;
+  --color-agent-1: #f472b6;
+  --color-agent-2: #818cf8;
+  --color-agent-3: #22d3ee;
+  --color-agent-4: #fcd34d;
+  --color-agent-5: #2dd4bf;
+}
+
+/* ============================================================
+   THEME: paper
+   Light — The Office. Copier paper, toner black, ballpoint blue.
+   Dark  — Carbon. Deep indigo, faint blue transfer text.
+   ============================================================ */
+[data-theme="paper"][data-mode="light"] {
+  --color-bg-canvas: #f9f9f7;
+  --color-bg-surface: #ffffff;
+  --color-bg-brand: #1d4ed8;
+  --color-fg-default: #1c1c1c;
+  --color-fg-strong: #000000;
+  --color-border-default: #c4c4c4;
+  --color-border-muted: #e5e5e5;
+  --color-border-focus: #2563eb;
+  --color-link-default: #1e40af;
+  --color-link-visited: #6d28d9;
+  --color-code-bg: #f0f0ec;
+  --color-code-fg: #b91c1c;
+  --color-state-success: #15803d;
+  --color-state-warning: #a16207;
+  --color-state-error: #dc2626;
+  --color-state-info: #1d4ed8;
+  --color-selection-bg: #bfdbfe;
+  --color-debug-marker: #f472b6;
+  --color-agent-1: #dc2626;
+  --color-agent-2: #1d4ed8;
+  --color-agent-3: #15803d;
+  --color-agent-4: #a16207;
+  --color-agent-5: #6d28d9;
+}
+
+[data-theme="paper"][data-mode="dark"] {
+  --color-bg-canvas: #0e0e1c;
+  --color-bg-surface: #161630;
+  --color-bg-brand: #6366f1;
+  --color-fg-default: #7888b8;
+  --color-fg-strong: #a5b4d4;
+  --color-border-default: #252550;
+  --color-border-muted: #1a1a38;
+  --color-border-focus: #6366f1;
+  --color-link-default: #818cf8;
+  --color-link-visited: #a78bfa;
+  --color-code-bg: #121228;
+  --color-code-fg: #818cf8;
+  --color-state-success: #4ade80;
+  --color-state-warning: #facc15;
+  --color-state-error: #f87171;
+  --color-state-info: #818cf8;
+  --color-selection-bg: #1e1b4b;
+  --color-debug-marker: #c084fc;
+  --color-agent-1: #f87171;
+  --color-agent-2: #818cf8;
+  --color-agent-3: #4ade80;
+  --color-agent-4: #facc15;
+  --color-agent-5: #a78bfa;
+}
+
+/* ============================================================
+   THEME: ledger-1920
+   Light — Wall St. Ledger. Manila folder, Banker Green, Typewriter.
+   Dark  — Jazz Moderne / Gatsby. Matte Black Cardstock, Gold Foil.
+   ============================================================ */
+[data-theme="ledger-1920"][data-mode="light"] {
+  --color-bg-canvas: #f5e6c8;
+  --color-bg-surface: #faf0dc;
+  --color-bg-brand: #2d6a4f;
+  --color-fg-default: #3d3229;
+  --color-fg-strong: #1a120b;
+  --color-border-default: #c9a96e;
+  --color-border-muted: #e4d5b0;
+  --color-border-focus: #2d6a4f;
+  --color-link-default: #1b4332;
+  --color-link-visited: #7b4b2a;
+  --color-code-bg: #eddfc3;
+  --color-code-fg: #7b4b2a;
+  --color-state-success: #2d6a4f;
+  --color-state-warning: #b8860b;
+  --color-state-error: #9b2226;
+  --color-state-info: #3a7d5e;
+  --color-selection-bg: #c1d9b0;
+  --color-debug-marker: #d4a574;
+  --color-agent-1: #9b2226;
+  --color-agent-2: #2d6a4f;
+  --color-agent-3: #b8860b;
+  --color-agent-4: #7b4b2a;
+  --color-agent-5: #3a7d5e;
+}
+
+[data-theme="ledger-1920"][data-mode="dark"] {
+  --color-bg-canvas: #0d0d0d;
+  --color-bg-surface: #1a1a1a;
+  --color-bg-brand: #d4a43e;
+  --color-fg-default: #c9a96e;
+  --color-fg-strong: #e8d48b;
+  --color-border-default: #3d3520;
+  --color-border-muted: #2a2415;
+  --color-border-focus: #d4a43e;
+  --color-link-default: #e8d48b;
+  --color-link-visited: #c9a96e;
+  --color-code-bg: #141410;
+  --color-code-fg: #d4a43e;
+  --color-state-success: #bfa14a;
+  --color-state-warning: #e8d48b;
+  --color-state-error: #cd6155;
+  --color-state-info: #d4a43e;
+  --color-selection-bg: #2e2810;
+  --color-debug-marker: #c9a96e;
+  --color-agent-1: #cd6155;
+  --color-agent-2: #d4a43e;
+  --color-agent-3: #e8d48b;
+  --color-agent-4: #c9a96e;
+  --color-agent-5: #bfa14a;
+}
+
+/* ============================================================
+   THEME: blueprint
+   Light — Physical drafting table. Blue ink on white linen,
+          pencil graphite, red markup.
+   Dark  — AutoCAD / Terminal Aesthetic. High contrast lines on
+          deep blue-black ground.
+   ============================================================ */
+[data-theme="blueprint"][data-mode="light"] {
+  --color-bg-canvas: #e8edf4;
+  --color-bg-surface: #f5f7fb;
+  --color-bg-brand: #1e3a6e;
+  --color-fg-default: #1e3a6e;
+  --color-fg-strong: #0c1e3d;
+  --color-border-default: #8ea4c8;
+  --color-border-muted: #c6d3e8;
+  --color-border-focus: #2a5aaa;
+  --color-link-default: #2a5aaa;
+  --color-link-visited: #6b3fa0;
+  --color-code-bg: #dce4f0;
+  --color-code-fg: #c03030;
+  --color-state-success: #2e7d32;
+  --color-state-warning: #e07020;
+  --color-state-error: #c03030;
+  --color-state-info: #1e3a6e;
+  --color-selection-bg: #a8c4e8;
+  --color-debug-marker: #e86060;
+  --color-agent-1: #c03030;
+  --color-agent-2: #1e3a6e;
+  --color-agent-3: #2e7d32;
+  --color-agent-4: #e07020;
+  --color-agent-5: #6b3fa0;
+}
+
+[data-theme="blueprint"][data-mode="dark"] {
+  --color-bg-canvas: #040a18;
+  --color-bg-surface: #0a1428;
+  --color-bg-brand: #5599ff;
+  --color-fg-default: #5599ff;
+  --color-fg-strong: #88bbff;
+  --color-border-default: #1a3060;
+  --color-border-muted: #0e1e40;
+  --color-border-focus: #5599ff;
+  --color-link-default: #88bbff;
+  --color-link-visited: #b088ff;
+  --color-code-bg: #06101f;
+  --color-code-fg: #5599ff;
+  --color-state-success: #33ff88;
+  --color-state-warning: #ffcc33;
+  --color-state-error: #ff4444;
+  --color-state-info: #5599ff;
+  --color-selection-bg: #0e2850;
+  --color-debug-marker: #ff6688;
+  --color-agent-1: #ff4444;
+  --color-agent-2: #5599ff;
+  --color-agent-3: #33ff88;
+  --color-agent-4: #ffcc33;
+  --color-agent-5: #b088ff;
+}
+
+/* ============================================================
+   THEME: chalkboard
+   Light — Greenboard. Chalk colors, aluminum tray,
+          dusty pastel marks on green-gray.
+   Dark  — Classic Blackboard. Slate Black, dusty white chalk,
+          colored chalk accents.
+   ============================================================ */
+[data-theme="chalkboard"][data-mode="light"] {
+  --color-bg-canvas: #3a5a40;
+  --color-bg-surface: #446a4a;
+  --color-bg-brand: #f2e8c9;
+  --color-fg-default: #f0e8d0;
+  --color-fg-strong: #fffdf5;
+  --color-border-default: #5a7a5e;
+  --color-border-muted: #4a6a4e;
+  --color-border-focus: #f2e8c9;
+  --color-link-default: #a8d8ea;
+  --color-link-visited: #d5a6e6;
+  --color-code-bg: #2e4a34;
+  --color-code-fg: #ffc97e;
+  --color-state-success: #a6d89e;
+  --color-state-warning: #ffc97e;
+  --color-state-error: #e88888;
+  --color-state-info: #a8d8ea;
+  --color-selection-bg: #4a7050;
+  --color-debug-marker: #f4a4c0;
+  --color-agent-1: #e88888;
+  --color-agent-2: #a8d8ea;
+  --color-agent-3: #a6d89e;
+  --color-agent-4: #ffc97e;
+  --color-agent-5: #d5a6e6;
+}
+
+[data-theme="chalkboard"][data-mode="dark"] {
+  --color-bg-canvas: #1a1a1e;
+  --color-bg-surface: #242428;
+  --color-bg-brand: #d4cfc0;
+  --color-fg-default: #c8c0a8;
+  --color-fg-strong: #e8e2d0;
+  --color-border-default: #3a3a40;
+  --color-border-muted: #2a2a2e;
+  --color-border-focus: #d4cfc0;
+  --color-link-default: #88c0e8;
+  --color-link-visited: #c898e0;
+  --color-code-bg: #141416;
+  --color-code-fg: #f0c878;
+  --color-state-success: #88c878;
+  --color-state-warning: #f0c878;
+  --color-state-error: #e07070;
+  --color-state-info: #88c0e8;
+  --color-selection-bg: #2e2e34;
+  --color-debug-marker: #e898b0;
+  --color-agent-1: #e07070;
+  --color-agent-2: #88c0e8;
+  --color-agent-3: #88c878;
+  --color-agent-4: #f0c878;
+  --color-agent-5: #c898e0;
+}
+
+/* ============================================================
+   THEME: phosphor
+   Light — Amber CRT. P3 Amber phosphor monitor, warm scan-lines,
+          burnt orange on deep brown-black.
+   Dark  — Green Phosphor. Classic P1 green terminal, retro blur,
+          scan-line glow on black.
+   ============================================================ */
+[data-theme="phosphor"][data-mode="light"] {
+  --color-bg-canvas: #1a1005;
+  --color-bg-surface: #221808;
+  --color-bg-brand: #ff9f1c;
+  --color-fg-default: #ffb347;
+  --color-fg-strong: #ffd580;
+  --color-border-default: #3d2a0a;
+  --color-border-muted: #2a1c06;
+  --color-border-focus: #ff9f1c;
+  --color-link-default: #ffc56e;
+  --color-link-visited: #e8963a;
+  --color-code-bg: #150d03;
+  --color-code-fg: #ff9f1c;
+  --color-state-success: #ffb347;
+  --color-state-warning: #ffd580;
+  --color-state-error: #ff6b2b;
+  --color-state-info: #ffc56e;
+  --color-selection-bg: #3d2a0a;
+  --color-debug-marker: #ff6b2b;
+  --color-agent-1: #ff6b2b;
+  --color-agent-2: #ff9f1c;
+  --color-agent-3: #ffb347;
+  --color-agent-4: #ffd580;
+  --color-agent-5: #e8963a;
+}
+
+[data-theme="phosphor"][data-mode="dark"] {
+  --color-bg-canvas: #020a02;
+  --color-bg-surface: #041204;
+  --color-bg-brand: #33ff33;
+  --color-fg-default: #33cc33;
+  --color-fg-strong: #66ff66;
+  --color-border-default: #0a2a0a;
+  --color-border-muted: #061806;
+  --color-border-focus: #33ff33;
+  --color-link-default: #44ee44;
+  --color-link-visited: #22aa66;
+  --color-code-bg: #010801;
+  --color-code-fg: #33ff33;
+  --color-state-success: #33ff33;
+  --color-state-warning: #ccff33;
+  --color-state-error: #ff3333;
+  --color-state-info: #44ee44;
+  --color-selection-bg: #0a2a0a;
+  --color-debug-marker: #ff3333;
+  --color-agent-1: #ff3333;
+  --color-agent-2: #33ff33;
+  --color-agent-3: #33ccff;
+  --color-agent-4: #ccff33;
+  --color-agent-5: #22aa66;
+}
+
+/* ============================================================
+   THEME: volcano
+   Light — Active Caldera. Ash gray, Pumice, Sulfur, and Magma
+          accents against scorched earth.
+   Dark  — Magma Chamber. Basalt black, flowing lava, heat shimmer
+          in deep volcanic darkness.
+   ============================================================ */
+[data-theme="volcano"][data-mode="light"] {
+  --color-bg-canvas: #e8e0d4;
+  --color-bg-surface: #f0e8da;
+  --color-bg-brand: #c04020;
+  --color-fg-default: #3a2e28;
+  --color-fg-strong: #1a100a;
+  --color-border-default: #b8a88c;
+  --color-border-muted: #d8ccb4;
+  --color-border-focus: #c04020;
+  --color-link-default: #b03018;
+  --color-link-visited: #7a3a5a;
+  --color-code-bg: #ddd4c4;
+  --color-code-fg: #c04020;
+  --color-state-success: #6a8a30;
+  --color-state-warning: #c8a010;
+  --color-state-error: #c04020;
+  --color-state-info: #886030;
+  --color-selection-bg: #d4c4a0;
+  --color-debug-marker: #e06040;
+  --color-agent-1: #c04020;
+  --color-agent-2: #c8a010;
+  --color-agent-3: #6a8a30;
+  --color-agent-4: #886030;
+  --color-agent-5: #7a3a5a;
+}
+
+[data-theme="volcano"][data-mode="dark"] {
+  --color-bg-canvas: #0e0806;
+  --color-bg-surface: #1a100a;
+  --color-bg-brand: #e04020;
+  --color-fg-default: #c8a088;
+  --color-fg-strong: #f0c8a8;
+  --color-border-default: #3a1c0e;
+  --color-border-muted: #241008;
+  --color-border-focus: #e04020;
+  --color-link-default: #ff6830;
+  --color-link-visited: #c86888;
+  --color-code-bg: #120a06;
+  --color-code-fg: #ff6830;
+  --color-state-success: #88aa40;
+  --color-state-warning: #e8c020;
+  --color-state-error: #e04020;
+  --color-state-info: #ff8840;
+  --color-selection-bg: #2e1408;
+  --color-debug-marker: #ff4020;
+  --color-agent-1: #ff4020;
+  --color-agent-2: #e8c020;
+  --color-agent-3: #88aa40;
+  --color-agent-4: #ff8840;
+  --color-agent-5: #c86888;
+}
+
+/* ============================================================
+   THEME: oceanic
+   Light — Maritime / Yacht Club. Navy Blue, White, Brass accents,
+          coral and sea foam.
+   Dark  — The Abyss. Crushing depth. Black-Blue, Coral,
+          Bioluminescence in the deep.
+   ============================================================ */
+[data-theme="oceanic"][data-mode="light"] {
+  --color-bg-canvas: #f0f6fa;
+  --color-bg-surface: #ffffff;
+  --color-bg-brand: #1a3a5c;
+  --color-fg-default: #1a3a5c;
+  --color-fg-strong: #0a1e38;
+  --color-border-default: #8aaccc;
+  --color-border-muted: #c8daea;
+  --color-border-focus: #b8860b;
+  --color-link-default: #1a5276;
+  --color-link-visited: #6c3483;
+  --color-code-bg: #e4eff6;
+  --color-code-fg: #e74c3c;
+  --color-state-success: #1e8449;
+  --color-state-warning: #b8860b;
+  --color-state-error: #e74c3c;
+  --color-state-info: #2471a3;
+  --color-selection-bg: #aed6f1;
+  --color-debug-marker: #f1948a;
+  --color-agent-1: #e74c3c;
+  --color-agent-2: #1a3a5c;
+  --color-agent-3: #1e8449;
+  --color-agent-4: #b8860b;
+  --color-agent-5: #6c3483;
+}
+
+[data-theme="oceanic"][data-mode="dark"] {
+  --color-bg-canvas: #020810;
+  --color-bg-surface: #061020;
+  --color-bg-brand: #00b4d8;
+  --color-fg-default: #6e9cbc;
+  --color-fg-strong: #a8d0e8;
+  --color-border-default: #0c2040;
+  --color-border-muted: #081830;
+  --color-border-focus: #00b4d8;
+  --color-link-default: #48cae4;
+  --color-link-visited: #c77dba;
+  --color-code-bg: #040c18;
+  --color-code-fg: #48cae4;
+  --color-state-success: #30e8a0;
+  --color-state-warning: #f0a030;
+  --color-state-error: #ff6b6b;
+  --color-state-info: #48cae4;
+  --color-selection-bg: #0a2040;
+  --color-debug-marker: #ff6b6b;
+  --color-agent-1: #ff6b6b;
+  --color-agent-2: #48cae4;
+  --color-agent-3: #30e8a0;
+  --color-agent-4: #f0a030;
+  --color-agent-5: #c77dba;
+}
+
+/* ============================================================
+   THEME: steampunk
+   Light — Victorian Sci-Fi. Parchment, Brass, Mahogany, Steam.
+   Dark  — London Fog. Gaslight, Soot, Dark Leather, Copper.
+   ============================================================ */
+[data-theme="steampunk"][data-mode="light"] {
+  --color-bg-canvas: #f2e8d5;
+  --color-bg-surface: #faf3e6;
+  --color-bg-brand: #8b5a2b;
+  --color-fg-default: #4a3520;
+  --color-fg-strong: #2a1a0a;
+  --color-border-default: #c4a46a;
+  --color-border-muted: #ddd0b4;
+  --color-border-focus: #b87333;
+  --color-link-default: #8b5a2b;
+  --color-link-visited: #7b2d3b;
+  --color-code-bg: #e8dcc6;
+  --color-code-fg: #8b5a2b;
+  --color-state-success: #567d46;
+  --color-state-warning: #b87333;
+  --color-state-error: #a0302a;
+  --color-state-info: #5b7d8a;
+  --color-selection-bg: #d8c898;
+  --color-debug-marker: #c06040;
+  --color-agent-1: #a0302a;
+  --color-agent-2: #8b5a2b;
+  --color-agent-3: #567d46;
+  --color-agent-4: #b87333;
+  --color-agent-5: #5b7d8a;
+}
+
+[data-theme="steampunk"][data-mode="dark"] {
+  --color-bg-canvas: #121010;
+  --color-bg-surface: #1e1a18;
+  --color-bg-brand: #b87333;
+  --color-fg-default: #a89078;
+  --color-fg-strong: #d0b898;
+  --color-border-default: #3a302a;
+  --color-border-muted: #28201c;
+  --color-border-focus: #b87333;
+  --color-link-default: #d4944a;
+  --color-link-visited: #c06878;
+  --color-code-bg: #161210;
+  --color-code-fg: #b87333;
+  --color-state-success: #6a9a56;
+  --color-state-warning: #d4944a;
+  --color-state-error: #c04838;
+  --color-state-info: #7a9aaa;
+  --color-selection-bg: #2e2420;
+  --color-debug-marker: #c06040;
+  --color-agent-1: #c04838;
+  --color-agent-2: #b87333;
+  --color-agent-3: #6a9a56;
+  --color-agent-4: #d4944a;
+  --color-agent-5: #7a9aaa;
+}
+
+/* ============================================================
+   THEME: dieselpunk
+   Light — WWI Trench. Khaki, Grease, Riveted Steel, Olive drab.
+   Dark  — Noir City. Oily Steel, Smog, Grime, Weak Yellow Light.
+   ============================================================ */
+[data-theme="dieselpunk"][data-mode="light"] {
+  --color-bg-canvas: #d8d0b8;
+  --color-bg-surface: #e4dcc8;
+  --color-bg-brand: #5a5a3a;
+  --color-fg-default: #3a3828;
+  --color-fg-strong: #1a1a10;
+  --color-border-default: #a09878;
+  --color-border-muted: #c4bca0;
+  --color-border-focus: #6a6a40;
+  --color-link-default: #5a5a3a;
+  --color-link-visited: #6a4040;
+  --color-code-bg: #ccc4a8;
+  --color-code-fg: #8a4020;
+  --color-state-success: #5a7a3a;
+  --color-state-warning: #a08020;
+  --color-state-error: #8a3030;
+  --color-state-info: #5a6a7a;
+  --color-selection-bg: #b8b098;
+  --color-debug-marker: #a86040;
+  --color-agent-1: #8a3030;
+  --color-agent-2: #5a5a3a;
+  --color-agent-3: #5a7a3a;
+  --color-agent-4: #a08020;
+  --color-agent-5: #5a6a7a;
+}
+
+[data-theme="dieselpunk"][data-mode="dark"] {
+  --color-bg-canvas: #0e0e0c;
+  --color-bg-surface: #1a1a16;
+  --color-bg-brand: #888870;
+  --color-fg-default: #8a887a;
+  --color-fg-strong: #b0ae9a;
+  --color-border-default: #2e2e28;
+  --color-border-muted: #1e1e1a;
+  --color-border-focus: #a0a060;
+  --color-link-default: #a0a060;
+  --color-link-visited: #a07060;
+  --color-code-bg: #121210;
+  --color-code-fg: #a0a060;
+  --color-state-success: #6a8a40;
+  --color-state-warning: #c0a030;
+  --color-state-error: #a04040;
+  --color-state-info: #708090;
+  --color-selection-bg: #242420;
+  --color-debug-marker: #c08050;
+  --color-agent-1: #a04040;
+  --color-agent-2: #a0a060;
+  --color-agent-3: #6a8a40;
+  --color-agent-4: #c0a030;
+  --color-agent-5: #708090;
+}
+
+/* ============================================================
+   THEME: solarpunk
+   Light — Eco-Utopia. Cream ceramic, lush green, solar gold,
+          living architecture.
+   Dark  — Night Garden. Bioluminescence, deep teal, soft amber,
+          firefly glow.
+   ============================================================ */
+[data-theme="solarpunk"][data-mode="light"] {
+  --color-bg-canvas: #f8f5ec;
+  --color-bg-surface: #ffffff;
+  --color-bg-brand: #3a8a40;
+  --color-fg-default: #2a3a20;
+  --color-fg-strong: #141e10;
+  --color-border-default: #a0c888;
+  --color-border-muted: #d0e4c0;
+  --color-border-focus: #d4a020;
+  --color-link-default: #2a7a30;
+  --color-link-visited: #6a5a8a;
+  --color-code-bg: #eef4e4;
+  --color-code-fg: #a06a10;
+  --color-state-success: #3a8a40;
+  --color-state-warning: #d4a020;
+  --color-state-error: #c04838;
+  --color-state-info: #2a7a7a;
+  --color-selection-bg: #c4e0aa;
+  --color-debug-marker: #e08840;
+  --color-agent-1: #c04838;
+  --color-agent-2: #3a8a40;
+  --color-agent-3: #d4a020;
+  --color-agent-4: #2a7a7a;
+  --color-agent-5: #6a5a8a;
+}
+
+[data-theme="solarpunk"][data-mode="dark"] {
+  --color-bg-canvas: #060e10;
+  --color-bg-surface: #0c1a1e;
+  --color-bg-brand: #30c8a0;
+  --color-fg-default: #70a898;
+  --color-fg-strong: #a0d8c4;
+  --color-border-default: #143830;
+  --color-border-muted: #0c2820;
+  --color-border-focus: #d0a030;
+  --color-link-default: #40c8a0;
+  --color-link-visited: #a888c0;
+  --color-code-bg: #081418;
+  --color-code-fg: #d0a030;
+  --color-state-success: #30c8a0;
+  --color-state-warning: #d0a030;
+  --color-state-error: #e06050;
+  --color-state-info: #40a8c8;
+  --color-selection-bg: #102828;
+  --color-debug-marker: #e08040;
+  --color-agent-1: #e06050;
+  --color-agent-2: #30c8a0;
+  --color-agent-3: #d0a030;
+  --color-agent-4: #40a8c8;
+  --color-agent-5: #a888c0;
+}
+
+/* ============================================================
+   THEME: stonepunk
+   Light — Bedrock Quarry. Sandstone, Slate, Leather, Clay.
+   Dark  — Cave Fire. Soot black, Torch Orange, Ash White.
+   ============================================================ */
+[data-theme="stonepunk"][data-mode="light"] {
+  --color-bg-canvas: #ddd0bb;
+  --color-bg-surface: #e8ddc8;
+  --color-bg-brand: #8a6844;
+  --color-fg-default: #3e3228;
+  --color-fg-strong: #1e180e;
+  --color-border-default: #b09870;
+  --color-border-muted: #ccc0a4;
+  --color-border-focus: #8a6844;
+  --color-link-default: #6a5030;
+  --color-link-visited: #6e4050;
+  --color-code-bg: #d0c4a8;
+  --color-code-fg: #8a4828;
+  --color-state-success: #6a7a4a;
+  --color-state-warning: #b08828;
+  --color-state-error: #983030;
+  --color-state-info: #607080;
+  --color-selection-bg: #c0b490;
+  --color-debug-marker: #b06040;
+  --color-agent-1: #983030;
+  --color-agent-2: #8a6844;
+  --color-agent-3: #6a7a4a;
+  --color-agent-4: #b08828;
+  --color-agent-5: #607080;
+}
+
+[data-theme="stonepunk"][data-mode="dark"] {
+  --color-bg-canvas: #0e0a06;
+  --color-bg-surface: #1a1408;
+  --color-bg-brand: #e07020;
+  --color-fg-default: #a89880;
+  --color-fg-strong: #d8ccb0;
+  --color-border-default: #302414;
+  --color-border-muted: #201808;
+  --color-border-focus: #e07020;
+  --color-link-default: #f08830;
+  --color-link-visited: #c07060;
+  --color-code-bg: #120e06;
+  --color-code-fg: #e07020;
+  --color-state-success: #88a050;
+  --color-state-warning: #e0a020;
+  --color-state-error: #d04030;
+  --color-state-info: #c09060;
+  --color-selection-bg: #281c0a;
+  --color-debug-marker: #e05020;
+  --color-agent-1: #d04030;
+  --color-agent-2: #e07020;
+  --color-agent-3: #88a050;
+  --color-agent-4: #e0a020;
+  --color-agent-5: #c07060;
+}
+
+/* ============================================================
+   THEME: dreamcore
+   Light — Daydream. Pastel clouds, blinding light, nostalgia,
+          Cotton Candy haze, liminal warmth.
+   Dark  — Nightmare. The Void, static noise, watching eyes,
+          unsettling color bleed.
+   ============================================================ */
+[data-theme="dreamcore"][data-mode="light"] {
+  --color-bg-canvas: #fef8ff;
+  --color-bg-surface: #fff0f8;
+  --color-bg-brand: #e8a0d0;
+  --color-fg-default: #6a4a7a;
+  --color-fg-strong: #3a1a4a;
+  --color-border-default: #e0c0e8;
+  --color-border-muted: #f0e0f4;
+  --color-border-focus: #d888c8;
+  --color-link-default: #b870c0;
+  --color-link-visited: #8868b8;
+  --color-code-bg: #f8e8f4;
+  --color-code-fg: #d070a0;
+  --color-state-success: #80c890;
+  --color-state-warning: #f0c878;
+  --color-state-error: #e08090;
+  --color-state-info: #88b0e0;
+  --color-selection-bg: #f0d0f0;
+  --color-debug-marker: #f098c0;
+  --color-agent-1: #e08090;
+  --color-agent-2: #88b0e0;
+  --color-agent-3: #80c890;
+  --color-agent-4: #f0c878;
+  --color-agent-5: #b870c0;
+}
+
+[data-theme="dreamcore"][data-mode="dark"] {
+  --color-bg-canvas: #06020a;
+  --color-bg-surface: #0e0614;
+  --color-bg-brand: #6a1a6a;
+  --color-fg-default: #888098;
+  --color-fg-strong: #b8a8c8;
+  --color-border-default: #201028;
+  --color-border-muted: #14081c;
+  --color-border-focus: #8a2a8a;
+  --color-link-default: #a040a0;
+  --color-link-visited: #6a30a0;
+  --color-code-bg: #0a0410;
+  --color-code-fg: #a040a0;
+  --color-state-success: #40a060;
+  --color-state-warning: #c09040;
+  --color-state-error: #c03050;
+  --color-state-info: #5070b0;
+  --color-selection-bg: #1a0c22;
+  --color-debug-marker: #c03070;
+  --color-agent-1: #c03050;
+  --color-agent-2: #5070b0;
+  --color-agent-3: #40a060;
+  --color-agent-4: #c09040;
+  --color-agent-5: #a040a0;
+}
+
+/* ============================================================
+   THEME: frutiger-aero
+   Light — Windows Vista / Web 2.0. Bubbly, Glossy, Sky Blue,
+          Grass Green, Glass reflections.
+   Dark  — Midnight Aurora. Glassy Black, Glowing Cyan, Deep Blue,
+          translucent surfaces.
+   ============================================================ */
+[data-theme="frutiger-aero"][data-mode="light"] {
+  --color-bg-canvas: #e8f4fc;
+  --color-bg-surface: #f4faff;
+  --color-bg-brand: #0078d4;
+  --color-fg-default: #1a3a50;
+  --color-fg-strong: #0a1e30;
+  --color-border-default: #88c0e0;
+  --color-border-muted: #c4e0f4;
+  --color-border-focus: #0078d4;
+  --color-link-default: #0066bb;
+  --color-link-visited: #6a3a9a;
+  --color-code-bg: #dceef8;
+  --color-code-fg: #d03020;
+  --color-state-success: #48a848;
+  --color-state-warning: #e8a820;
+  --color-state-error: #d03020;
+  --color-state-info: #0078d4;
+  --color-selection-bg: #a0d0f0;
+  --color-debug-marker: #e06088;
+  --color-agent-1: #d03020;
+  --color-agent-2: #0078d4;
+  --color-agent-3: #48a848;
+  --color-agent-4: #e8a820;
+  --color-agent-5: #6a3a9a;
+}
+
+[data-theme="frutiger-aero"][data-mode="dark"] {
+  --color-bg-canvas: #040810;
+  --color-bg-surface: #0a1420;
+  --color-bg-brand: #00b8e8;
+  --color-fg-default: #6898b8;
+  --color-fg-strong: #a0cce8;
+  --color-border-default: #0c2440;
+  --color-border-muted: #081830;
+  --color-border-focus: #00b8e8;
+  --color-link-default: #20c8f0;
+  --color-link-visited: #a080d0;
+  --color-code-bg: #060e18;
+  --color-code-fg: #20c8f0;
+  --color-state-success: #30d870;
+  --color-state-warning: #e0b030;
+  --color-state-error: #e04848;
+  --color-state-info: #20c8f0;
+  --color-selection-bg: #0c2040;
+  --color-debug-marker: #e04888;
+  --color-agent-1: #e04848;
+  --color-agent-2: #20c8f0;
+  --color-agent-3: #30d870;
+  --color-agent-4: #e0b030;
+  --color-agent-5: #a080d0;
+}
+
+/* ============================================================
    Theme button preview classes
    Each button shows its own theme colors regardless of active theme
    ============================================================ */
