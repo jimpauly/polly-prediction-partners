@@ -3,4 +3,5 @@ dist/
 .DS_Store
 *.log
 .env
-copilot-opus/backend/services/__pycache__/
+__pycache__/
+*.pyc
