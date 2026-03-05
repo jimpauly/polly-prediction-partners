@@ -1,0 +1,32 @@
+name: "Daily UI/UX polish"
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # run once a day (midnight UTC)
+  workflow_dispatch:     # allow manual trigger as well
+
+jobs:
+  check-and-polish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Read current project stage
+        id: stage
+        run: |
+          if grep -q '^stage:\s*2' DOCUMENTS/0-PRODUCT-REQUIREMENTS.md; then
+            echo "stage=2" >> $GITHUB_OUTPUT
+          else
+            echo "stage=not2" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Skip if not stage 2
+        if: ${{ steps.stage.outputs.stage != '2' }}
+        run: echo "Project is not at stage 2 yet; skipping UI/UX work."
+
+      - name: Enhance & polish UI/UX
+        if: ${{ steps.stage.outputs.stage == '2' }}
+        run: |
+          echo "Running UI/UX enhancement scripts..."
+          # insert actual UI/UX update commands here
