@@ -1,0 +1,31 @@
+# Paulie's Prediction Partners — Backend Dependencies
+# Python 3.12+
+
+# Web framework & server
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+
+# HTTP client
+httpx==0.28.1
+
+# WebSocket client
+websockets==14.1
+
+# Database
+asyncpg==0.30.0
+
+# Configuration
+python-dotenv==1.0.1
+
+# Cryptography (RSA-PSS signing for Kalshi auth)
+cryptography==44.0.0
+
+# Data validation
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# Structured logging
+structlog==24.4.0
+
+# Metrics
+prometheus-client==0.21.1

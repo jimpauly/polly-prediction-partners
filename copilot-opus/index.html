@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+  <title>Paulie's Prediction Partners</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-theme="modern-webpage" data-mode="light" data-bezel="2d" data-rulers="false" data-grid="false" data-illumination-master="off">
+
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-region" class="sr-only" tabindex="1">Skip to main content</a>
+
+  <!-- Precision Tools: Rulers & Grid -->
+  <div class="ruler-origin" aria-hidden="true"></div>
+  <canvas class="ruler-x" id="ruler-x-canvas" height="18" aria-hidden="true"></canvas>
+  <canvas class="ruler-y" id="ruler-y-canvas" width="18" aria-hidden="true"></canvas>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <div class="viewport-container">
+
+    <!-- ============================================================
+         REGION 1: HEADER BAR
+         ============================================================ -->
+    <header class="region region-header" role="banner">
+      <div class="region-inner" style="flex-direction:row;align-items:center;justify-content:space-between;width:100%;">
+        <!-- Title Section -->
+        <div class="header-title">
+          <h1 class="etched-text" style="font-size:28px;">Paulie's</h1>
+          <span class="robot-emoji" role="img" aria-label="robot">🤖</span>
+        </div>
+
+        <!-- Illumination Control Panel -->
+        <div class="illumination-panel" role="group" aria-label="Illumination Control Panel">
+          <!-- DAY/NVG Toggle -->
+          <div class="illumination-group">
+            <span class="group-label">DAY/NVG</span>
+            <div class="flip-toggle" id="toggle-day-nvg" role="switch" aria-checked="false" aria-label="Day NVG toggle" tabindex="0"></div>
+          </div>
+
+          <!-- Light/Dark Toggle -->
+          <div class="illumination-group">
+            <span class="group-label">LT/DK</span>
+            <div class="toggle-switch" id="toggle-light-dark" role="switch" aria-checked="false" aria-label="Light Dark mode toggle" tabindex="0"></div>
+          </div>
+
+          <!-- Master -->
+          <div class="illumination-group">
+            <span class="group-label">MASTER</span>
+            <div class="flip-toggle" id="toggle-master" role="switch" aria-checked="false" aria-label="Master illumination switch" tabindex="0"></div>
+            <div class="rotary-dial" id="dial-master" role="slider" aria-label="Master dimmer" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0"></div>
+          </div>
+
+          <!-- Text Primary -->
+          <div class="illumination-group">
+            <span class="group-label">TEXT</span>
+            <div class="dual-toggle-row">
+              <div>
+                <span class="sub-label">PRI</span>
+                <div class="toggle-switch active" id="toggle-text-primary" role="switch" aria-checked="true" aria-label="Text primary toggle" tabindex="0" style="width:28px;height:14px;"></div>
+              </div>
+              <div>
+                <span class="sub-label">SEC</span>
+                <div class="toggle-switch active" id="toggle-text-secondary" role="switch" aria-checked="true" aria-label="Text secondary toggle" tabindex="0" style="width:28px;height:14px;"></div>
+              </div>
+            </div>
+            <div class="rotary-dial" id="dial-text" role="slider" aria-label="Text dimmer" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0"></div>
+          </div>
+
+          <!-- Bars -->
+          <div class="illumination-group">
+            <span class="group-label">BARS</span>
+            <div class="dual-toggle-row">
+              <div>
+                <span class="sub-label">PRI</span>
+                <div class="toggle-switch active" id="toggle-bars-primary" role="switch" aria-checked="true" aria-label="Bars primary toggle" tabindex="0" style="width:28px;height:14px;"></div>
+              </div>
+              <div>
+                <span class="sub-label">SEC</span>
+                <div class="toggle-switch active" id="toggle-bars-secondary" role="switch" aria-checked="true" aria-label="Bars secondary toggle" tabindex="0" style="width:28px;height:14px;"></div>
+              </div>
+            </div>
+            <div class="rotary-dial" id="dial-bars" role="slider" aria-label="Bars dimmer" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0"></div>
+          </div>
+
+          <!-- Flood -->
+          <div class="illumination-group">
+            <span class="group-label">FLOOD</span>
+            <div class="toggle-switch active" id="toggle-flood" role="switch" aria-checked="true" aria-label="Flood toggle" tabindex="0"></div>
+            <div class="rotary-dial" id="dial-flood" role="slider" aria-label="Flood dimmer" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0"></div>
+          </div>
+
+          <!-- Display -->
+          <div class="illumination-group">
+            <span class="group-label">DISPLAY</span>
+            <div class="toggle-switch active" id="toggle-display" role="switch" aria-checked="true" aria-label="Display toggle" tabindex="0"></div>
+            <div class="rotary-dial" id="dial-display" role="slider" aria-label="Display dimmer" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         REGION 3: LEFT SIDEBAR
+         ============================================================ -->
+    <aside class="region region-sidebar-left" role="complementary" aria-label="System Design">
+      <div class="region-inner">
+        <h2 class="sidebar-header etched-text">System Design</h2>
+
+        <!-- Light/Dark Mode Toggle -->
+        <div class="card">
+          <div class="card-inner">
+            <span class="label-text">Mode</span>
+            <div class="mode-toggle-container" style="margin-top:4px;">
+              <button class="mode-button light-btn active" id="mode-light" aria-pressed="true">☀️ Light</button>
+              <button class="mode-button dark-btn" id="mode-dark" aria-pressed="false">🌙 Dark</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D/2D Toggle -->
+        <div class="card">
+          <div class="card-inner">
+            <span class="label-text">Elevation</span>
+            <div class="bezel-toggle" style="margin-top:4px;">
+              <button class="bezel-button" id="bezel-2d" aria-pressed="true">2D</button>
+              <button class="bezel-button active" id="bezel-3d" aria-pressed="false">3D</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Selector -->
+        <div class="card">
+          <div class="card-inner">
+            <span class="label-text">System Theme</span>
+            <div class="theme-grid" id="theme-grid" style="margin-top:4px;">
+              <!-- Theme buttons injected by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Visibility Toggles -->
+        <div class="card">
+          <div class="card-inner">
+            <span class="label-text">Precision Tools</span>
+            <div class="visibility-toggles">
+              <label class="visibility-toggle">
+                <input type="checkbox" id="toggle-rulers" aria-label="Toggle rulers">
+                <span>Rulers</span>
+              </label>
+              <label class="visibility-toggle">
+                <input type="checkbox" id="toggle-grid" aria-label="Toggle grid overlay">
+                <span>Grid (60×60)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================================================
+         REGION 2: NAV BAR
+         ============================================================ -->
+    <nav class="region region-navbar" role="navigation" aria-label="Studio Navigation">
+      <div class="region-inner" style="flex-direction:row;align-items:center;justify-content:space-between;width:100%;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="nav-label">Navigation</span>
+          <div class="studio-selector" role="radiogroup" aria-label="Studio selector">
+            <button class="studio-button active" data-studio="design" role="radio" aria-checked="true">Design</button>
+            <button class="studio-button" data-studio="trade" role="radio" aria-checked="false">Trade</button>
+            <button class="studio-button" data-studio="fly" role="radio" aria-checked="false">Fly</button>
+            <button class="studio-button" data-studio="convert" role="radio" aria-checked="false">Convert</button>
+          </div>
+        </div>
+
+        <!-- Telemetry Card -->
+        <div class="telemetry-card" role="status" aria-label="System telemetry">
+          <div class="telemetry-item">
+            <span class="telemetry-label">PING</span>
+            <canvas class="ping-canvas" id="ping-sparkline" aria-label="Ping sparkline"></canvas>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">SPD</span>
+            <span id="speed-display">MACH 4.20</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">DATE/TIME</span>
+            <span id="datetime-display"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ============================================================
+         REGION 4: MAIN REGION
+         ============================================================ -->
+    <main class="region region-main" id="main-region" role="main" aria-label="Main viewing area">
+      <div class="region-inner">
+        <h2 class="sidebar-header etched-text">Viewing Port</h2>
+
+        <!-- Design Studio -->
+        <div class="studio-content active" id="studio-design">
+          <div class="main-grid">
+            <!-- Hero Card -->
+            <div class="hero-card card">
+              <h2 class="etched-text" style="color:white;">Paulie's Prediction Partners</h2>
+              <p>Command Bridge — Design Studio Active</p>
+            </div>
+
+            <!-- System Gauges -->
+            <div class="card">
+              <div class="card-inner">
+                <span class="label-text">System Gauges</span>
+                <div class="gauge-container" id="gauge-container" style="margin-top:4px;">
+                  <div class="gauge" id="gauge-battery">
+                    <canvas width="70" height="70"></canvas>
+                    <div class="gauge-value">--</div>
+                    <div class="gauge-label">BATT</div>
+                  </div>
+                  <div class="gauge" id="gauge-network">
+                    <canvas width="70" height="70"></canvas>
+                    <div class="gauge-value">--</div>
+                    <div class="gauge-label">NET</div>
+                  </div>
+                  <div class="gauge" id="gauge-memory">
+                    <canvas width="70" height="70"></canvas>
+                    <div class="gauge-value">--</div>
+                    <div class="gauge-label">MEM</div>
+                  </div>
+                  <div class="gauge" id="gauge-cpu">
+                    <canvas width="70" height="70"></canvas>
+                    <div class="gauge-value">--</div>
+                    <div class="gauge-label">CPU</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Logs Terminal -->
+            <div class="card">
+              <div class="card-inner">
+                <span class="label-text">Live Logs</span>
+                <div class="terminal" id="live-logs" role="log" aria-live="polite" aria-label="Live event log" style="margin-top:4px;">
+                  <div class="log-entry log-info">[BOOT] System initialized</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Web Elements Showcase -->
+            <div class="card">
+              <div class="card-inner">
+                <span class="label-text">Web Elements</span>
+                <div class="showcase-grid" style="margin-top:4px;">
+                  <button class="showcase-button primary">Primary</button>
+                  <button class="showcase-button success">Success</button>
+                  <button class="showcase-button danger">Danger</button>
+                  <button class="showcase-button warning">Warning</button>
+                  <button class="showcase-button">Default</button>
+                  <input type="range" class="showcase-slider" value="60" aria-label="Demo slider">
+                  <div class="showcase-progress"><div class="showcase-progress-fill" style="width:72%;"></div></div>
+                  <span class="showcase-badge badge-info">Info</span>
+                  <span class="showcase-badge badge-success">Live</span>
+                  <span class="showcase-badge badge-warning">Pending</span>
+                  <input type="text" placeholder="Text input..." style="font-size:11px;padding:3px 6px;border:1px solid var(--color-border-default);border-radius:3px;background:var(--color-bg-canvas);color:var(--color-fg-default);width:90px;" aria-label="Demo text input">
+                  <select style="font-size:11px;padding:2px 4px;border:1px solid var(--color-border-default);border-radius:3px;background:var(--color-bg-canvas);color:var(--color-fg-default);" aria-label="Demo select">
+                    <option>Option A</option>
+                    <option>Option B</option>
+                    <option>Option C</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Palette Viewer -->
+            <div class="card">
+              <div class="card-inner">
+                <span class="label-text">Palette Viewer</span>
+                <div class="palette-grid" id="palette-viewer" style="margin-top:4px;">
+                  <!-- Swatches injected by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- MS Paint 1998 Clone -->
+            <div class="card" id="mspaint-wrapper" style="grid-column: 1 / -1;">
+              <div class="mspaint-container" id="mspaint">
+                <div class="mspaint-titlebar">
+                  <span>untitled - Paint</span>
+                  <div class="mspaint-titlebar-buttons">
+                    <button aria-label="Minimize Paint">_</button>
+                    <button id="mspaint-maximize" aria-label="Maximize Paint">□</button>
+                    <button id="mspaint-close" aria-label="Close Paint">×</button>
+                  </div>
+                </div>
+                <div class="mspaint-menubar">
+                  <button id="paint-file-new" aria-label="New file">File</button>
+                  <button aria-label="Edit menu">Edit</button>
+                  <button aria-label="View menu">View</button>
+                </div>
+                <div class="mspaint-body">
+                  <div class="mspaint-tools" role="toolbar" aria-label="Drawing tools">
+                    <button class="mspaint-tool active" data-tool="pencil" title="Pencil" aria-label="Pencil tool">✏</button>
+                    <button class="mspaint-tool" data-tool="brush" title="Brush" aria-label="Brush tool">🖌</button>
+                    <button class="mspaint-tool" data-tool="eraser" title="Eraser" aria-label="Eraser tool">🧹</button>
+                    <button class="mspaint-tool" data-tool="fill" title="Fill" aria-label="Fill bucket tool">🪣</button>
+                    <button class="mspaint-tool" data-tool="text" title="Text" aria-label="Text tool">A</button>
+                    <button class="mspaint-tool" data-tool="line" title="Line" aria-label="Line tool">╱</button>
+                    <button class="mspaint-tool" data-tool="rect" title="Rectangle" aria-label="Rectangle tool">▭</button>
+                    <button class="mspaint-tool" data-tool="circle" title="Circle" aria-label="Circle tool">○</button>
+                  </div>
+                  <div class="mspaint-canvas-area">
+                    <canvas id="paint-canvas" class="mspaint-canvas" width="440" height="160"></canvas>
+                  </div>
+                </div>
+                <div class="mspaint-colors">
+                  <div class="mspaint-color-current">
+                    <div class="mspaint-color-fg" id="paint-fg-preview" style="background:#000;"></div>
+                    <div class="mspaint-color-bg-preview" id="paint-bg-preview" style="background:#fff;"></div>
+                  </div>
+                  <div class="mspaint-palette" id="paint-palette" role="listbox" aria-label="Color palette">
+                    <!-- Colors injected by JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trading Studio -->
+        <div class="studio-content" id="studio-trade">
+          <!-- Pre-connection state -->
+          <div class="trading-pre-connect" id="trading-pre-connect">
+            <div class="no-data-container">
+              <div class="no-data-icon">📡</div>
+              <div class="no-data">No data</div>
+              <p class="no-data-subtitle">Connect API keys to begin trading</p>
+            </div>
+          </div>
+
+          <!-- Post-connection trading interface -->
+          <div class="trading-interface" id="trading-interface" style="display:none;">
+            <!-- Category Navigation -->
+            <div class="trading-category-nav" id="trading-category-nav">
+              <button class="category-tab active" data-category="all">All</button>
+              <button class="category-tab" data-category="crypto">Crypto</button>
+              <button class="category-tab" data-category="sports">Sports</button>
+              <button class="category-tab" data-category="politics">Politics</button>
+              <button class="category-tab" data-category="economics">Economics</button>
+              <button class="category-tab" data-category="weather">Weather</button>
+              <button class="category-tab" data-category="entertainment">Entertainment</button>
+              <button class="category-tab" data-category="tech">Tech</button>
+              <button class="category-tab" data-category="science">Science</button>
+            </div>
+
+            <!-- Sub-Category Navigation -->
+            <div class="trading-subcategory-nav" id="trading-subcategory-nav">
+              <button class="subcategory-tab active" data-subcategory="all">All</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="trading-filters">
+              <div class="filter-group">
+                <label class="filter-label">Volume</label>
+                <select class="filter-select" id="filter-volume">
+                  <option value="all">All</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label">Frequency</label>
+                <select class="filter-select" id="filter-frequency">
+                  <option value="all">All</option>
+                  <option value="15min">15 min</option>
+                  <option value="hourly">Hourly</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label">Time to Close</label>
+                <select class="filter-select" id="filter-time-to-close">
+                  <option value="all">All</option>
+                  <option value="1h">&lt; 1 hour</option>
+                  <option value="24h">&lt; 24 hours</option>
+                  <option value="7d">&lt; 7 days</option>
+                  <option value="30d">&lt; 30 days</option>
+                </select>
+              </div>
+              <button class="refresh-button" id="market-refresh-button" title="Refresh markets">🔄 Refresh</button>
+            </div>
+
+            <!-- Series Cards Grid -->
+            <div class="series-cards-grid" id="series-cards-grid">
+              <!-- Cards populated by JS -->
+            </div>
+
+            <!-- Show More Button -->
+            <div class="show-more-container" id="show-more-container" style="display:none;">
+              <button class="show-more-button" id="show-more-markets">Show More Markets</button>
+            </div>
+
+            <!-- Expanded Card Overlay -->
+            <div class="expanded-card-overlay" id="expanded-card-overlay" style="display:none;">
+              <div class="expanded-card" id="expanded-card-content">
+                <!-- Populated when a card is expanded -->
+              </div>
+            </div>
+
+            <!-- Semi-Auto Approval Overlay -->
+            <div class="approval-overlay" id="approval-overlay" style="display:none;">
+              <div class="approval-card" id="approval-card">
+                <div class="approval-header">Agent Approval Request</div>
+                <div class="approval-agent" id="approval-agent-name"></div>
+                <div class="approval-ticker" id="approval-ticker"></div>
+                <div class="approval-reasoning" id="approval-reasoning"></div>
+                <div class="approval-details" id="approval-details"></div>
+                <div class="approval-actions">
+                  <button class="approve-button" id="approve-button">✓ APPROVE</button>
+                  <button class="deny-button" id="deny-button">✗ DENY</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fly Studio -->
+        <div class="studio-content" id="studio-fly">
+          <div class="no-data">No data — Flight Studio locked</div>
+        </div>
+
+        <!-- Converter Studio -->
+        <div class="studio-content" id="studio-convert">
+          <div class="no-data">Converter Studio — Coming Soon</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================================================
+         REGION 5: RIGHT SIDEBAR (Inspector Panel)
+         ============================================================ -->
+    <aside class="region region-sidebar-right" role="complementary" aria-label="Inspector Panel">
+      <div class="region-inner">
+        <h2 class="sidebar-header etched-text">Inspector Panel</h2>
+
+        <!-- To-Do List App -->
+        <div class="card">
+          <div class="card-inner">
+            <span class="label-text">To-Do List</span>
+            <div class="todo-notebook" style="margin-top:4px;">
+              <div class="todo-spiral" aria-hidden="true"></div>
+              <div class="todo-toolbar" role="toolbar" aria-label="Text formatting">
+                <button id="todo-bold" title="Bold" aria-label="Toggle bold"><b>B</b></button>
+                <button id="todo-heading" title="Toggle H1/Aa" aria-label="Toggle heading size" class="active">H1</button>
+                <button id="todo-bullets" title="Toggle bullets" aria-label="Toggle bullet list">•</button>
+                <button id="todo-save" title="Save as .txt" aria-label="Save as text file">💾</button>
+              </div>
+              <div class="todo-content" id="todo-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="To-do list editor"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Send-an-Idea Card -->
+        <div class="card send-idea-card">
+          <div class="card-inner">
+            <span class="label-text">Send an Idea</span>
+            <div style="margin-top:6px;">
+              <button class="send-idea-button" id="send-idea-button" aria-label="Send an idea via email">💡 Send an Idea</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================================================
+         BOTTOM ROW: BOTTOM BAR (~4/6 width) + ACTION BAR (~1/3 width)
+         ============================================================ -->
+    <div class="region-bottom-row">
+
+    <!-- ============================================================
+         REGION 7: BOTTOM BAR
+         ============================================================ -->
+    <section class="region region-bottombar" role="region" aria-label="Hangar Bay">
+      <div class="region-inner">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <h2 class="etched-text" style="font-size:13px;">Hangar Bay</h2>
+          <div class="mode-indicator" id="connection-indicator">
+            <div class="indicator-light" id="connection-light"></div>
+            <span id="connection-status">Disconnected</span>
+          </div>
+        </div>
+        <div class="bottom-bar-content">
+          <!-- API Key Connection Card -->
+          <div class="card api-key-card" id="api-key-card">
+            <div class="card-inner">
+              <span class="label-text">Connect</span>
+              <div class="api-mode-selector" style="margin-top:3px;">
+                <label class="api-mode-radio">
+                  <input type="radio" name="api-mode" value="live" aria-label="Live mode"> Live
+                </label>
+                <label class="api-mode-radio">
+                  <input type="radio" name="api-mode" value="demo" aria-label="Demo mode"> Demo
+                </label>
+              </div>
+              <input type="text" class="api-input" id="api-key-input" placeholder="API Key" disabled aria-label="API key input">
+              <textarea class="api-input rsa-key" id="rsa-key-input" placeholder="RSA Private Key" disabled aria-label="RSA key input"></textarea>
+              <button class="connect-button" id="connect-button" disabled aria-label="Connect to Kalshi stream">Connect Kalshi Stream</button>
+            </div>
+          </div>
+
+          <!-- Agent Access Cards -->
+          <div class="card agent-card" data-agent="prime">
+            <div class="card-inner">
+              <div class="agent-name" style="color:var(--color-agent-1);">Prime</div>
+              <div class="agent-dial" role="radiogroup" aria-label="Agent Prime control">
+                <button class="agent-dial-option" data-dial="auto">Auto</button>
+                <button class="agent-dial-option" data-dial="semi">Semi</button>
+                <button class="agent-dial-option active" data-dial="safe">Safe</button>
+              </div>
+              <div class="agent-status">STATUS: IDLE</div>
+              <canvas class="agent-graph" aria-label="Agent Prime graph"></canvas>
+              <span class="label-text" style="font-size:7px;">+/- $</span>
+            </div>
+          </div>
+
+          <div class="card agent-card" data-agent="praxis">
+            <div class="card-inner">
+              <div class="agent-name" style="color:var(--color-agent-2);">Praxis</div>
+              <div class="agent-dial" role="radiogroup" aria-label="Agent Praxis control">
+                <button class="agent-dial-option" data-dial="auto">Auto</button>
+                <button class="agent-dial-option" data-dial="semi">Semi</button>
+                <button class="agent-dial-option active" data-dial="safe">Safe</button>
+              </div>
+              <div class="agent-status">STATUS: IDLE</div>
+              <canvas class="agent-graph" aria-label="Agent Praxis graph"></canvas>
+              <span class="label-text" style="font-size:7px;">+/- $</span>
+            </div>
+          </div>
+
+          <div class="card agent-card" data-agent="peritia">
+            <div class="card-inner">
+              <div class="agent-name" style="color:var(--color-agent-3);">Peritia</div>
+              <div class="agent-dial" role="radiogroup" aria-label="Agent Peritia control">
+                <button class="agent-dial-option" data-dial="auto">Auto</button>
+                <button class="agent-dial-option" data-dial="semi">Semi</button>
+                <button class="agent-dial-option active" data-dial="safe">Safe</button>
+              </div>
+              <div class="agent-status">STATUS: IDLE</div>
+              <canvas class="agent-graph" aria-label="Agent Peritia graph"></canvas>
+              <span class="label-text" style="font-size:7px;">+/- $</span>
+            </div>
+          </div>
+
+          <!-- Grayed-out placeholder agent slots -->
+          <div class="card agent-card inactive" data-agent="agent4">
+            <div class="card-inner">
+              <div class="agent-name" style="opacity:0.4;">Agent 4</div>
+              <div class="agent-status" style="opacity:0.3;">LOCKED</div>
+            </div>
+          </div>
+
+          <div class="card agent-card inactive" data-agent="agent5">
+            <div class="card-inner">
+              <div class="agent-name" style="opacity:0.4;">Agent 5</div>
+              <div class="agent-status" style="opacity:0.3;">LOCKED</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         REGION 6: ACTION BAR
+         ============================================================ -->
+    <section class="region region-actionbar" role="region" aria-label="Ignition Controls">
+      <div class="region-inner">
+        <h2 class="etched-text" style="font-size:13px;text-align:center;">Ignition</h2>
+
+        <div style="display:flex;gap:8px;flex:1;min-height:0;">
+          <!-- Throttle -->
+          <div class="throttle-container">
+            <span class="label-text" style="font-size:7px;">THROTTLE</span>
+            <div style="display:flex;gap:4px;">
+              <div class="throttle-labels">
+                <span>F-AUTO</span>
+                <span>S-AUTO</span>
+                <span>STOP</span>
+              </div>
+              <div class="throttle-track" id="throttle-track" role="slider" aria-label="Global agent throttle" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0" tabindex="0">
+                <div class="throttle-handle" id="throttle-handle" style="top:calc(100% - 18px);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- P/L Graph -->
+          <div class="pl-graph-container" style="flex:1;display:flex;flex-direction:column;gap:2px;">
+            <span class="label-text" style="font-size:7px;">+/- $</span>
+            <canvas class="pl-graph-canvas" id="pl-graph" aria-label="Profit loss graph"></canvas>
+            <div style="display:flex;justify-content:space-between;">
+              <div class="axis-buttons" aria-label="X-axis time range">
+                <button class="axis-button active" data-axis="x" data-value="24h">24h</button>
+                <button class="axis-button" data-axis="x" data-value="1w">1w</button>
+                <button class="axis-button" data-axis="x" data-value="1m">1m</button>
+                <button class="axis-button" data-axis="x" data-value="1y">1y</button>
+                <button class="axis-button" data-axis="x" data-value="all">all</button>
+              </div>
+              <div class="axis-buttons" aria-label="Y-axis scale">
+                <button class="axis-button active" data-axis="y" data-value="10">$10</button>
+                <button class="axis-button" data-axis="y" data-value="100">$100</button>
+                <button class="axis-button" data-axis="y" data-value="1k">$1k</button>
+                <button class="axis-button" data-axis="y" data-value="10k">$10k</button>
+                <button class="axis-button" data-axis="y" data-value="all">all</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    </div><!-- end region-bottom-row -->
+
+  </div><!-- end viewport-container -->
+
+  <!-- Application Scripts -->
+  <script src="js/themes.js"></script>
+  <script src="js/illumination.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/gauges.js"></script>
+  <script src="js/logs.js"></script>
+  <script src="js/paint.js"></script>
+  <script src="js/todo.js"></script>
+  <script src="js/rulers.js"></script>
+  <script src="js/trading.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
