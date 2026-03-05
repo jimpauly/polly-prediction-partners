@@ -1,0 +1,554 @@
+/* ============================================================
+   THEMES — Paulie's Prediction Partners
+   10 themes × 2 modes (light + dark) = 20 palettes
+   ============================================================ */
+
+/* ── BASE FALLBACK ──────────────────────────────────────────── */
+:root {
+  --color-bg-canvas:       #0d1117;
+  --color-bg-region:       #161b22;
+  --color-bg-card:         #21262d;
+  --color-bg-elevated:     #2d333b;
+  --color-border-primary:  #30363d;
+  --color-border-secondary:#21262d;
+  --color-text-primary:    #e6edf3;
+  --color-text-secondary:  #8b949e;
+  --color-text-tertiary:   #6e7681;
+  --color-accent-primary:  #58a6ff;
+  --color-accent-secondary:#1f6feb;
+  --color-state-success:   #3fb950;
+  --color-state-warning:   #d29922;
+  --color-state-danger:    #f85149;
+  --color-state-info:      #388bfd;
+  --color-highlight:       #ffd700;
+  --color-shadow-primary:  rgba(0,0,0,0.7);
+  --color-shadow-secondary:rgba(0,0,0,0.4);
+  --color-glow-primary:    #58a6ff;
+  --color-glow-secondary:  #1f6feb;
+  --color-glow-primary-rgb:88,166,255;
+  --font-size-base:        14px;
+  --spacing-base:          8px;
+  --radius-base:           4px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   1. MODERN-WEBPAGE
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="modern-webpage"][data-mode="dark"] {
+  --color-bg-canvas:       #0d1117;
+  --color-bg-region:       #161b22;
+  --color-bg-card:         #21262d;
+  --color-bg-elevated:     #2d333b;
+  --color-border-primary:  #30363d;
+  --color-border-secondary:#21262d;
+  --color-text-primary:    #e6edf3;
+  --color-text-secondary:  #8b949e;
+  --color-text-tertiary:   #6e7681;
+  --color-accent-primary:  #58a6ff;
+  --color-accent-secondary:#1f6feb;
+  --color-state-success:   #3fb950;
+  --color-state-warning:   #d29922;
+  --color-state-danger:    #f85149;
+  --color-state-info:      #388bfd;
+  --color-highlight:       #ffd700;
+  --color-shadow-primary:  rgba(0,0,0,0.7);
+  --color-shadow-secondary:rgba(0,0,0,0.4);
+  --color-glow-primary:    #58a6ff;
+  --color-glow-secondary:  #1f6feb;
+  --color-glow-primary-rgb:88,166,255;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 4px;
+}
+[data-theme="modern-webpage"][data-mode="light"] {
+  --color-bg-canvas:       #f6f8fa;
+  --color-bg-region:       #ffffff;
+  --color-bg-card:         #f0f2f4;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #d0d7de;
+  --color-border-secondary:#eaecef;
+  --color-text-primary:    #1f2328;
+  --color-text-secondary:  #57606a;
+  --color-text-tertiary:   #8c959f;
+  --color-accent-primary:  #0969da;
+  --color-accent-secondary:#0550ae;
+  --color-state-success:   #1a7f37;
+  --color-state-warning:   #9a6700;
+  --color-state-danger:    #cf222e;
+  --color-state-info:      #0969da;
+  --color-highlight:       #b08800;
+  --color-shadow-primary:  rgba(31,35,40,0.15);
+  --color-shadow-secondary:rgba(31,35,40,0.08);
+  --color-glow-primary:    #0969da;
+  --color-glow-secondary:  #0550ae;
+  --color-glow-primary-rgb:9,105,218;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   2. MOSAIC-1993 (Windows 3.1 / Early Web)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="mosaic-1993"][data-mode="dark"] {
+  --color-bg-canvas:       #000080;
+  --color-bg-region:       #000080;
+  --color-bg-card:         #0a0a8a;
+  --color-bg-elevated:     #1a1aaa;
+  --color-border-primary:  #aaaaaa;
+  --color-border-secondary:#555577;
+  --color-text-primary:    #ffffff;
+  --color-text-secondary:  #aaaaff;
+  --color-text-tertiary:   #7777cc;
+  --color-accent-primary:  #ffff00;
+  --color-accent-secondary:#00ffff;
+  --color-state-success:   #00ff00;
+  --color-state-warning:   #ffff00;
+  --color-state-danger:    #ff0000;
+  --color-state-info:      #00ffff;
+  --color-highlight:       #ffff00;
+  --color-shadow-primary:  rgba(0,0,128,0.8);
+  --color-shadow-secondary:rgba(0,0,80,0.5);
+  --color-glow-primary:    #aaaaff;
+  --color-glow-secondary:  #5555ff;
+  --color-glow-primary-rgb:170,170,255;
+  --font-size-base: 13px; --spacing-base: 6px; --radius-base: 0px;
+}
+[data-theme="mosaic-1993"][data-mode="light"] {
+  --color-bg-canvas:       #c0c0c0;
+  --color-bg-region:       #c0c0c0;
+  --color-bg-card:         #d4d0c8;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #808080;
+  --color-border-secondary:#ffffff;
+  --color-text-primary:    #000000;
+  --color-text-secondary:  #444444;
+  --color-text-tertiary:   #666666;
+  --color-accent-primary:  #000080;
+  --color-accent-secondary:#0000aa;
+  --color-state-success:   #008000;
+  --color-state-warning:   #808000;
+  --color-state-danger:    #800000;
+  --color-state-info:      #008080;
+  --color-highlight:       #ff0000;
+  --color-shadow-primary:  rgba(0,0,0,0.5);
+  --color-shadow-secondary:rgba(0,0,0,0.25);
+  --color-glow-primary:    #000080;
+  --color-glow-secondary:  #0000aa;
+  --color-glow-primary-rgb:0,0,128;
+  --font-size-base: 13px; --spacing-base: 6px; --radius-base: 0px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3. GEN7-COCKPIT (Modern Military)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="gen7-cockpit"][data-mode="dark"] {
+  --color-bg-canvas:       #0a0e10;
+  --color-bg-region:       #0d1215;
+  --color-bg-card:         #131a1e;
+  --color-bg-elevated:     #1a2228;
+  --color-border-primary:  #1e4d3a;
+  --color-border-secondary:#122a20;
+  --color-text-primary:    #00ff88;
+  --color-text-secondary:  #00cc66;
+  --color-text-tertiary:   #008844;
+  --color-accent-primary:  #00ffaa;
+  --color-accent-secondary:#00cc77;
+  --color-state-success:   #00ff44;
+  --color-state-warning:   #ffcc00;
+  --color-state-danger:    #ff3300;
+  --color-state-info:      #00aaff;
+  --color-highlight:       #ffff00;
+  --color-shadow-primary:  rgba(0,0,0,0.9);
+  --color-shadow-secondary:rgba(0,10,6,0.6);
+  --color-glow-primary:    #00ff88;
+  --color-glow-secondary:  #00cc55;
+  --color-glow-primary-rgb:0,255,136;
+  --font-size-base: 13px; --spacing-base: 7px; --radius-base: 2px;
+}
+[data-theme="gen7-cockpit"][data-mode="light"] {
+  --color-bg-canvas:       #e8f4f0;
+  --color-bg-region:       #f0faf6;
+  --color-bg-card:         #ddf0e8;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #3a8866;
+  --color-border-secondary:#aaddcc;
+  --color-text-primary:    #004422;
+  --color-text-secondary:  #226644;
+  --color-text-tertiary:   #448866;
+  --color-accent-primary:  #006633;
+  --color-accent-secondary:#008844;
+  --color-state-success:   #006600;
+  --color-state-warning:   #886600;
+  --color-state-danger:    #880000;
+  --color-state-info:      #004488;
+  --color-highlight:       #004422;
+  --color-shadow-primary:  rgba(0,30,20,0.15);
+  --color-shadow-secondary:rgba(0,30,20,0.08);
+  --color-glow-primary:    #006633;
+  --color-glow-secondary:  #004422;
+  --color-glow-primary-rgb:0,102,51;
+  --font-size-base: 13px; --spacing-base: 7px; --radius-base: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4. USSR-COCKPIT (Soviet Aesthetic)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="ussr-cockpit"][data-mode="dark"] {
+  --color-bg-canvas:       #1a0a00;
+  --color-bg-region:       #1e0e02;
+  --color-bg-card:         #2a1405;
+  --color-bg-elevated:     #381a08;
+  --color-border-primary:  #6a3a1a;
+  --color-border-secondary:#3a1a08;
+  --color-text-primary:    #ffcc88;
+  --color-text-secondary:  #cc9955;
+  --color-text-tertiary:   #886633;
+  --color-accent-primary:  #ff6600;
+  --color-accent-secondary:#cc4400;
+  --color-state-success:   #88cc44;
+  --color-state-warning:   #ffaa00;
+  --color-state-danger:    #ff2200;
+  --color-state-info:      #4488cc;
+  --color-highlight:       #ffdd00;
+  --color-shadow-primary:  rgba(20,5,0,0.9);
+  --color-shadow-secondary:rgba(15,5,0,0.6);
+  --color-glow-primary:    #ff6600;
+  --color-glow-secondary:  #cc4400;
+  --color-glow-primary-rgb:255,102,0;
+  --font-size-base: 13px; --spacing-base: 7px; --radius-base: 2px;
+}
+[data-theme="ussr-cockpit"][data-mode="light"] {
+  --color-bg-canvas:       #f5ede0;
+  --color-bg-region:       #faf4ea;
+  --color-bg-card:         #ede0cc;
+  --color-bg-elevated:     #fff8f0;
+  --color-border-primary:  #8a5520;
+  --color-border-secondary:#cca870;
+  --color-text-primary:    #2a1000;
+  --color-text-secondary:  #5a3010;
+  --color-text-tertiary:   #8a6040;
+  --color-accent-primary:  #cc4400;
+  --color-accent-secondary:#aa3300;
+  --color-state-success:   #446600;
+  --color-state-warning:   #886600;
+  --color-state-danger:    #880000;
+  --color-state-info:      #224488;
+  --color-highlight:       #aa4400;
+  --color-shadow-primary:  rgba(30,10,0,0.15);
+  --color-shadow-secondary:rgba(30,10,0,0.08);
+  --color-glow-primary:    #cc4400;
+  --color-glow-secondary:  #aa3300;
+  --color-glow-primary-rgb:204,68,0;
+  --font-size-base: 13px; --spacing-base: 7px; --radius-base: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5. NEONVICE-1985 (Miami Vice / Synthwave)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="neonvice-1985"][data-mode="dark"] {
+  --color-bg-canvas:       #0d0015;
+  --color-bg-region:       #100018;
+  --color-bg-card:         #180020;
+  --color-bg-elevated:     #220030;
+  --color-border-primary:  #ff0088;
+  --color-border-secondary:#660033;
+  --color-text-primary:    #ff99ee;
+  --color-text-secondary:  #cc44aa;
+  --color-text-tertiary:   #882266;
+  --color-accent-primary:  #ff0088;
+  --color-accent-secondary:#00ddff;
+  --color-state-success:   #00ff88;
+  --color-state-warning:   #ffcc00;
+  --color-state-danger:    #ff0044;
+  --color-state-info:      #00ccff;
+  --color-highlight:       #ffff00;
+  --color-shadow-primary:  rgba(13,0,21,0.9);
+  --color-shadow-secondary:rgba(80,0,100,0.4);
+  --color-glow-primary:    #ff0088;
+  --color-glow-secondary:  #00ddff;
+  --color-glow-primary-rgb:255,0,136;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 2px;
+}
+[data-theme="neonvice-1985"][data-mode="light"] {
+  --color-bg-canvas:       #fff0f8;
+  --color-bg-region:       #fff5fc;
+  --color-bg-card:         #ffe8f5;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #cc0066;
+  --color-border-secondary:#ffaad4;
+  --color-text-primary:    #220011;
+  --color-text-secondary:  #880044;
+  --color-text-tertiary:   #aa6688;
+  --color-accent-primary:  #cc0066;
+  --color-accent-secondary:#0088aa;
+  --color-state-success:   #006644;
+  --color-state-warning:   #886600;
+  --color-state-danger:    #cc0033;
+  --color-state-info:      #006688;
+  --color-highlight:       #cc0066;
+  --color-shadow-primary:  rgba(30,0,20,0.15);
+  --color-shadow-secondary:rgba(30,0,20,0.08);
+  --color-glow-primary:    #cc0066;
+  --color-glow-secondary:  #0088aa;
+  --color-glow-primary-rgb:204,0,102;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. NEONCITY-2085 (Cyberpunk)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="neoncity-2085"][data-mode="dark"] {
+  --color-bg-canvas:       #050510;
+  --color-bg-region:       #080818;
+  --color-bg-card:         #0e0e22;
+  --color-bg-elevated:     #141430;
+  --color-border-primary:  #6600ff;
+  --color-border-secondary:#330077;
+  --color-text-primary:    #ccaaff;
+  --color-text-secondary:  #8855cc;
+  --color-text-tertiary:   #553388;
+  --color-accent-primary:  #aa00ff;
+  --color-accent-secondary:#00ffcc;
+  --color-state-success:   #00ffaa;
+  --color-state-warning:   #ffaa00;
+  --color-state-danger:    #ff0066;
+  --color-state-info:      #00ccff;
+  --color-highlight:       #ffff00;
+  --color-shadow-primary:  rgba(5,5,16,0.95);
+  --color-shadow-secondary:rgba(20,0,50,0.5);
+  --color-glow-primary:    #aa00ff;
+  --color-glow-secondary:  #00ffcc;
+  --color-glow-primary-rgb:170,0,255;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 3px;
+}
+[data-theme="neoncity-2085"][data-mode="light"] {
+  --color-bg-canvas:       #f0eaff;
+  --color-bg-region:       #f8f4ff;
+  --color-bg-card:         #ecdeff;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #7700cc;
+  --color-border-secondary:#ccaaff;
+  --color-text-primary:    #110022;
+  --color-text-secondary:  #550099;
+  --color-text-tertiary:   #8855aa;
+  --color-accent-primary:  #7700cc;
+  --color-accent-secondary:#00aa88;
+  --color-state-success:   #006644;
+  --color-state-warning:   #886600;
+  --color-state-danger:    #880033;
+  --color-state-info:      #006688;
+  --color-highlight:       #7700cc;
+  --color-shadow-primary:  rgba(17,0,34,0.15);
+  --color-shadow-secondary:rgba(17,0,34,0.08);
+  --color-glow-primary:    #7700cc;
+  --color-glow-secondary:  #00aa88;
+  --color-glow-primary-rgb:119,0,204;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 3px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. CONIFOREST (Forest Greens)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="coniforest"][data-mode="dark"] {
+  --color-bg-canvas:       #050e08;
+  --color-bg-region:       #0a1510;
+  --color-bg-card:         #0f1e14;
+  --color-bg-elevated:     #162618;
+  --color-border-primary:  #2a5c30;
+  --color-border-secondary:#142a16;
+  --color-text-primary:    #a8d4a0;
+  --color-text-secondary:  #6aaa60;
+  --color-text-tertiary:   #3d7040;
+  --color-accent-primary:  #44dd66;
+  --color-accent-secondary:#228844;
+  --color-state-success:   #00cc44;
+  --color-state-warning:   #aacc00;
+  --color-state-danger:    #cc4400;
+  --color-state-info:      #44aacc;
+  --color-highlight:       #88ff44;
+  --color-shadow-primary:  rgba(2,6,3,0.9);
+  --color-shadow-secondary:rgba(5,15,7,0.5);
+  --color-glow-primary:    #44dd66;
+  --color-glow-secondary:  #228844;
+  --color-glow-primary-rgb:68,221,102;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 4px;
+}
+[data-theme="coniforest"][data-mode="light"] {
+  --color-bg-canvas:       #e8f5ea;
+  --color-bg-region:       #f0faf2;
+  --color-bg-card:         #ddf0e0;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #3a7a40;
+  --color-border-secondary:#aadd99;
+  --color-text-primary:    #082010;
+  --color-text-secondary:  #285530;
+  --color-text-tertiary:   #4a7a50;
+  --color-accent-primary:  #226633;
+  --color-accent-secondary:#448844;
+  --color-state-success:   #116622;
+  --color-state-warning:   #556600;
+  --color-state-danger:    #882200;
+  --color-state-info:      #226688;
+  --color-highlight:       #226633;
+  --color-shadow-primary:  rgba(5,18,8,0.15);
+  --color-shadow-secondary:rgba(5,18,8,0.08);
+  --color-glow-primary:    #226633;
+  --color-glow-secondary:  #448844;
+  --color-glow-primary-rgb:34,102,51;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8. RANEFOREST
+   NOTE: "raneforest" is the canonical theme name per product spec —
+   it is an intentional brand-choice alternate spelling of "rainforest".
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="raneforest"][data-mode="dark"] {
+  --color-bg-canvas:       #050a0e;
+  --color-bg-region:       #080f14;
+  --color-bg-card:         #0e1820;
+  --color-bg-elevated:     #14202c;
+  --color-border-primary:  #1a5a4a;
+  --color-border-secondary:#0a2a22;
+  --color-text-primary:    #88ddcc;
+  --color-text-secondary:  #44aaaa;
+  --color-text-tertiary:   #226666;
+  --color-accent-primary:  #00ddbb;
+  --color-accent-secondary:#008877;
+  --color-state-success:   #00ff88;
+  --color-state-warning:   #aadd00;
+  --color-state-danger:    #ff5500;
+  --color-state-info:      #00aadd;
+  --color-highlight:       #00ffdd;
+  --color-shadow-primary:  rgba(2,5,7,0.92);
+  --color-shadow-secondary:rgba(5,12,18,0.5);
+  --color-glow-primary:    #00ddbb;
+  --color-glow-secondary:  #008877;
+  --color-glow-primary-rgb:0,221,187;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 5px;
+}
+[data-theme="raneforest"][data-mode="light"] {
+  --color-bg-canvas:       #e0f5f2;
+  --color-bg-region:       #edfaf8;
+  --color-bg-card:         #d4eeea;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #1a7a66;
+  --color-border-secondary:#88cccc;
+  --color-text-primary:    #041a16;
+  --color-text-secondary:  #1a5a4a;
+  --color-text-tertiary:   #3a7a66;
+  --color-accent-primary:  #006655;
+  --color-accent-secondary:#008877;
+  --color-state-success:   #005533;
+  --color-state-warning:   #445500;
+  --color-state-danger:    #883300;
+  --color-state-info:      #005577;
+  --color-highlight:       #006655;
+  --color-shadow-primary:  rgba(3,15,12,0.15);
+  --color-shadow-secondary:rgba(3,15,12,0.08);
+  --color-glow-primary:    #006655;
+  --color-glow-secondary:  #008877;
+  --color-glow-primary-rgb:0,102,85;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 5px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   9. ART-DECO (Gold & Black)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="art-deco"][data-mode="dark"] {
+  --color-bg-canvas:       #0a0800;
+  --color-bg-region:       #100e02;
+  --color-bg-card:         #181405;
+  --color-bg-elevated:     #221c08;
+  --color-border-primary:  #8a7020;
+  --color-border-secondary:#3a2c08;
+  --color-text-primary:    #f0d060;
+  --color-text-secondary:  #b89830;
+  --color-text-tertiary:   #705c15;
+  --color-accent-primary:  #e8c040;
+  --color-accent-secondary:#c8a020;
+  --color-state-success:   #88cc44;
+  --color-state-warning:   #ffaa00;
+  --color-state-danger:    #cc2200;
+  --color-state-info:      #4488cc;
+  --color-highlight:       #ffd700;
+  --color-shadow-primary:  rgba(10,8,0,0.95);
+  --color-shadow-secondary:rgba(20,15,2,0.6);
+  --color-glow-primary:    #e8c040;
+  --color-glow-secondary:  #c8a020;
+  --color-glow-primary-rgb:232,192,64;
+  --font-size-base: 14px; --spacing-base: 9px; --radius-base: 1px;
+}
+[data-theme="art-deco"][data-mode="light"] {
+  --color-bg-canvas:       #fdf8e8;
+  --color-bg-region:       #fffdf0;
+  --color-bg-card:         #f5eecc;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #8a6600;
+  --color-border-secondary:#ddcc88;
+  --color-text-primary:    #1a1000;
+  --color-text-secondary:  #5a4400;
+  --color-text-tertiary:   #8a7030;
+  --color-accent-primary:  #885500;
+  --color-accent-secondary:#aa7700;
+  --color-state-success:   #445500;
+  --color-state-warning:   #886600;
+  --color-state-danger:    #880000;
+  --color-state-info:      #224488;
+  --color-highlight:       #885500;
+  --color-shadow-primary:  rgba(20,15,0,0.15);
+  --color-shadow-secondary:rgba(20,15,0,0.08);
+  --color-glow-primary:    #885500;
+  --color-glow-secondary:  #aa7700;
+  --color-glow-primary-rgb:136,85,0;
+  --font-size-base: 14px; --spacing-base: 9px; --radius-base: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   10. HOLOGRAPHIC (Iridescent)
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="holographic"][data-mode="dark"] {
+  --color-bg-canvas:       #08050e;
+  --color-bg-region:       #0d0815;
+  --color-bg-card:         #140d20;
+  --color-bg-elevated:     #1c1430;
+  --color-border-primary:  #4422aa;
+  --color-border-secondary:#221155;
+  --color-text-primary:    #e0ccff;
+  --color-text-secondary:  #aa88ff;
+  --color-text-tertiary:   #6644bb;
+  --color-accent-primary:  #cc88ff;
+  --color-accent-secondary:#44ffee;
+  --color-state-success:   #44ffcc;
+  --color-state-warning:   #ffcc44;
+  --color-state-danger:    #ff4488;
+  --color-state-info:      #44ccff;
+  --color-highlight:       #ffffff;
+  --color-shadow-primary:  rgba(8,5,14,0.95);
+  --color-shadow-secondary:rgba(20,10,40,0.5);
+  --color-glow-primary:    #cc88ff;
+  --color-glow-secondary:  #44ffee;
+  --color-glow-primary-rgb:204,136,255;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 6px;
+}
+[data-theme="holographic"][data-mode="light"] {
+  --color-bg-canvas:       #f0eaff;
+  --color-bg-region:       #f8f4ff;
+  --color-bg-card:         #e8ddff;
+  --color-bg-elevated:     #ffffff;
+  --color-border-primary:  #8844cc;
+  --color-border-secondary:#ccaaff;
+  --color-text-primary:    #0a0318;
+  --color-text-secondary:  #440088;
+  --color-text-tertiary:   #7744aa;
+  --color-accent-primary:  #6600cc;
+  --color-accent-secondary:#00aacc;
+  --color-state-success:   #005544;
+  --color-state-warning:   #664400;
+  --color-state-danger:    #880044;
+  --color-state-info:      #004488;
+  --color-highlight:       #6600cc;
+  --color-shadow-primary:  rgba(10,3,24,0.15);
+  --color-shadow-secondary:rgba(10,3,24,0.08);
+  --color-glow-primary:    #6600cc;
+  --color-glow-secondary:  #00aacc;
+  --color-glow-primary-rgb:102,0,204;
+  --font-size-base: 14px; --spacing-base: 8px; --radius-base: 6px;
+}

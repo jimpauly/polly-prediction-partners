@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern-webpage" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paulie's Prediction Partners 🤖</title>
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- App Stylesheets -->
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/illumination.css">
+<link rel="stylesheet" href="css/main.css">
+
+<style>
+/* Tailwind base reset override for CSS vars */
+.tw-hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     APP SHELL
+     ══════════════════════════════════════════════════════ -->
+<div id="app-shell">
+
+  <!-- ════════════════════════════════════════════════════
+       1. HEADER BAR
+       ════════════════════════════════════════════════════ -->
+  <header id="header-bar" class="fx-bars-primary">
+
+    <!-- Title -->
+    <div style="flex-shrink:0;">
+      <div class="header-title etched fx-text-primary">Paulie's 🤖</div>
+      <div class="header-subtitle">Prediction Partners · Mission Control</div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="flex:1;"></div>
+
+    <!-- ╔══════════════════════════════════════════════════╗
+         ║   ILLUMINATION CONTROL PANEL (COCKPIT STYLE)   ║
+         ╚══════════════════════════════════════════════════╝ -->
+    <div class="illum-panel" id="illum-panel" role="region" aria-label="Illumination Control Panel">
+
+      <span class="illum-panel-title">⬛ ILLUMINATION CONTROL</span>
+
+      <!-- ── DAY / NVG ───────────────────────────────── -->
+      <div class="day-nvg-group" title="Mode: DAY = Light, NVG = Dark">
+        <div class="day-nvg-label">MODE</div>
+        <div class="day-nvg-switches">
+          <div class="day-nvg-option" data-value="day" data-active="true" title="DAY / LIGHT mode">
+            <div class="day-nvg-option-label">DAY</div>
+            <div class="day-nvg-lever"></div>
+            <div class="day-nvg-option-led"></div>
+          </div>
+          <div class="day-nvg-option" data-value="nvg" data-active="false" title="NVG / DARK mode">
+            <div class="day-nvg-option-label">NVG</div>
+            <div class="day-nvg-lever"></div>
+            <div class="day-nvg-option-led"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illum-divider"></div>
+
+      <!-- ── MASTER ──────────────────────────────────── -->
+      <div class="illum-group" title="Master illumination power">
+        <div class="illum-group-label">MASTER</div>
+        <div class="illum-switches-row">
+          <div class="flip-switch master-switch" data-channel="master" data-state="off" title="Master ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
+            </div>
+            <div class="switch-led"></div>
+          </div>
+          <div class="dimmer-dial-wrap" data-name="master" title="Master dimmer — drag up/down or scroll">
+            <div class="dimmer-label">DIM</div>
+            <div class="dimmer-dial"></div>
+            <div class="dimmer-value">100%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illum-divider"></div>
+
+      <!-- ── TEXT PRI + SEC ──────────────────────────── -->
+      <div class="illum-group" title="Text illumination channels">
+        <div class="illum-group-label">TEXT</div>
+        <div class="illum-switches-row">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+            <div class="switch-sublabel">PRI</div>
+            <div class="flip-switch" data-channel="textPrimary" data-state="on" title="Text Primary ON/OFF">
+              <div class="switch-housing">
+                <div class="switch-guard-ring"></div>
+                <div class="switch-lever"></div>
+              </div>
+              <div class="switch-led"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+            <div class="switch-sublabel">SEC</div>
+            <div class="flip-switch" data-channel="textSecondary" data-state="on" title="Text Secondary ON/OFF">
+              <div class="switch-housing">
+                <div class="switch-guard-ring"></div>
+                <div class="switch-lever"></div>
+              </div>
+              <div class="switch-led"></div>
+            </div>
+          </div>
+          <div class="dimmer-dial-wrap" data-name="text" title="Text shared dimmer">
+            <div class="dimmer-label">DIM</div>
+            <div class="dimmer-dial"></div>
+            <div class="dimmer-value">100%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illum-divider"></div>
+
+      <!-- ── BARS PRI + SEC ──────────────────────────── -->
+      <div class="illum-group" title="Border/bar illumination channels">
+        <div class="illum-group-label">BARS</div>
+        <div class="illum-switches-row">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+            <div class="switch-sublabel">PRI</div>
+            <div class="flip-switch" data-channel="barsPrimary" data-state="on" title="Bars Primary ON/OFF">
+              <div class="switch-housing">
+                <div class="switch-guard-ring"></div>
+                <div class="switch-lever"></div>
+              </div>
+              <div class="switch-led"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+            <div class="switch-sublabel">SEC</div>
+            <div class="flip-switch" data-channel="barsSecondary" data-state="on" title="Bars Secondary ON/OFF">
+              <div class="switch-housing">
+                <div class="switch-guard-ring"></div>
+                <div class="switch-lever"></div>
+              </div>
+              <div class="switch-led"></div>
+            </div>
+          </div>
+          <div class="dimmer-dial-wrap" data-name="bars" title="Bars shared dimmer">
+            <div class="dimmer-label">DIM</div>
+            <div class="dimmer-dial"></div>
+            <div class="dimmer-value">100%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illum-divider"></div>
+
+      <!-- ── FLOOD ───────────────────────────────────── -->
+      <div class="illum-group" title="Flood atmospheric lighting">
+        <div class="illum-group-label">FLOOD</div>
+        <div class="illum-switches-row">
+          <div class="flip-switch" data-channel="flood" data-state="on" title="Flood ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
+            </div>
+            <div class="switch-led"></div>
+          </div>
+          <div class="dimmer-dial-wrap" data-name="flood" title="Flood dimmer">
+            <div class="dimmer-label">DIM</div>
+            <div class="dimmer-dial"></div>
+            <div class="dimmer-value">100%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illum-divider"></div>
+
+      <!-- ── DISPLAY ─────────────────────────────────── -->
+      <div class="illum-group" title="Display self-illumination">
+        <div class="illum-group-label">DISP</div>
+        <div class="illum-switches-row">
+          <div class="flip-switch" data-channel="display" data-state="on" title="Display ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
+            </div>
+            <div class="switch-led"></div>
+          </div>
+          <div class="dimmer-dial-wrap" data-name="display" title="Display dimmer">
+            <div class="dimmer-label">DIM</div>
+            <div class="dimmer-dial"></div>
+            <div class="dimmer-value">100%</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /illum-panel -->
+
+  </header><!-- /header-bar -->
+
+
+  <!-- ════════════════════════════════════════════════════
+       2. NAV BAR
+       ════════════════════════════════════════════════════ -->
+  <nav id="nav-bar">
+    <span class="nav-label">Nav</span>
+
+    <!-- Studio selector -->
+    <div class="nav-studio-group">
+      <button class="nav-studio-btn active" data-studio="design">⚙ Design</button>
+      <button class="nav-studio-btn" data-studio="trade">📈 Trade</button>
+      <button class="nav-studio-btn" data-studio="fly">✈ Fly</button>
+      <button class="nav-studio-btn" data-studio="convert">🔄 Convert</button>
+    </div>
+
+    <div style="flex:1;"></div>
+
+    <!-- Telemetry card -->
+    <div class="telemetry-card">
+      <span>PING</span>
+      <canvas id="ping-sparkline" width="60" height="20" title="Network latency sparkline"></canvas>
+      <span>SPD: <span class="telemetry-val">MACH 4.20</span></span>
+      <span id="live-clock">00:00:00</span>
+    </div>
+  </nav>
+
+
+  <!-- ════════════════════════════════════════════════════
+       3. LEFT SIDEBAR — System Design
+       ════════════════════════════════════════════════════ -->
+  <aside id="left-sidebar" class="region fx-flood-region">
+    <div class="region-inner">
+      <div class="sidebar-header etched">System Design</div>
+
+      <!-- Light/Dark toggle -->
+      <div class="sidebar-option-row">
+        <span class="label-maker">Light / Dark</span>
+        <div class="small-toggle on" id="mode-toggle" title="Toggle light/dark mode" role="switch" aria-checked="true"></div>
+      </div>
+
+      <!-- 3D/2D bezel toggle -->
+      <div class="sidebar-option-row">
+        <span class="label-maker">3D Bezel</span>
+        <div class="small-toggle on" id="bezel-toggle" title="Toggle 3D bezel effect" role="switch" aria-checked="true"></div>
+      </div>
+
+      <!-- Rulers toggle -->
+      <div class="sidebar-option-row">
+        <span class="label-maker">Rulers</span>
+        <div class="small-toggle" id="rulers-toggle" title="Show/hide rulers" role="switch" aria-checked="false"></div>
+      </div>
+
+      <!-- Grid toggle -->
+      <div class="sidebar-option-row">
+        <span class="label-maker">Grid</span>
+        <div class="small-toggle" id="grid-toggle" title="Show/hide grid overlay" role="switch" aria-checked="false"></div>
+      </div>
+
+      <!-- Mode pill -->
+      <div class="mode-toggle-row" style="margin-top:12px;">
+        <span class="label-maker">Mode</span>
+        <div class="toggle-pill">
+          <button class="toggle-pill-btn" data-mode="light">☀ Light</button>
+          <button class="toggle-pill-btn active" data-mode="dark">🌙 Dark</button>
+        </div>
+      </div>
+
+      <!-- Theme selector -->
+      <div class="sidebar-header etched" style="margin-top:14px;">Themes</div>
+      <div class="theme-grid">
+
+        <!-- modern-webpage -->
+        <button class="theme-btn active" data-theme="modern-webpage"
+          style="background:#161b22;color:#58a6ff;border-color:#30363d;">
+          Modern<br>Web
+        </button>
+
+        <!-- mosaic-1993 -->
+        <button class="theme-btn" data-theme="mosaic-1993"
+          style="background:#000080;color:#ffff00;border-color:#aaaaaa;">
+          Mosaic<br>1993
+        </button>
+
+        <!-- gen7-cockpit -->
+        <button class="theme-btn" data-theme="gen7-cockpit"
+          style="background:#0d1215;color:#00ff88;border-color:#1e4d3a;">
+          Gen-7<br>Cockpit
+        </button>
+
+        <!-- ussr-cockpit -->
+        <button class="theme-btn" data-theme="ussr-cockpit"
+          style="background:#1e0e02;color:#ffcc88;border-color:#6a3a1a;">
+          USSR<br>Cockpit
+        </button>
+
+        <!-- neonvice-1985 -->
+        <button class="theme-btn" data-theme="neonvice-1985"
+          style="background:#100018;color:#ff0088;border-color:#ff0088;">
+          NeonVice<br>1985
+        </button>
+
+        <!-- neoncity-2085 -->
+        <button class="theme-btn" data-theme="neoncity-2085"
+          style="background:#080818;color:#aa00ff;border-color:#6600ff;">
+          NeonCity<br>2085
+        </button>
+
+        <!-- coniforest -->
+        <button class="theme-btn" data-theme="coniforest"
+          style="background:#0a1510;color:#44dd66;border-color:#2a5c30;">
+          Coni<br>Forest
+        </button>
+
+        <!-- raneforest -->
+        <button class="theme-btn" data-theme="raneforest"
+          style="background:#080f14;color:#00ddbb;border-color:#1a5a4a;">
+          Rane<br>Forest
+        </button>
+
+        <!-- art-deco -->
+        <button class="theme-btn" data-theme="art-deco"
+          style="background:#100e02;color:#f0d060;border-color:#8a7020;">
+          Art<br>Deco
+        </button>
+
+        <!-- holographic -->
+        <button class="theme-btn" data-theme="holographic"
+          style="background:linear-gradient(135deg,#0d0815,#14042a);color:#cc88ff;border-color:#4422aa;">
+          Holo<br>graphic
+        </button>
+
+      </div><!-- /theme-grid -->
+    </div>
+  </aside>
+
+
+  <!-- ════════════════════════════════════════════════════
+       4. MAIN REGION — Design Studio
+       ════════════════════════════════════════════════════ -->
+  <main id="main-region" class="region fx-flood-region">
+    <div class="region-inner">
+
+      <!-- Viewing Port header -->
+      <div class="section-title fx-text-secondary">⬛ Viewing Port — Design Studio</div>
+
+      <!-- System Gauges -->
+      <div class="section-title">System Gauges</div>
+      <div class="gauges-grid">
+        <!-- Battery -->
+        <div class="gauge-card fx-display-card" id="gauge-battery">
+          <div class="gauge-label">BATT</div>
+          <div class="gauge-arc-wrap">
+            <svg width="60" height="36" viewBox="0 0 60 36" class="gauge-svg" aria-hidden="true">
+              <path d="M 5 35 A 28 28 0 0 1 55 35" fill="none" stroke="#333" stroke-width="5"/>
+              <path id="arc-battery" d="M 5 35 A 28 28 0 0 1 55 35" fill="none"
+                    stroke="#3fb950" stroke-width="5" stroke-dasharray="88 88"
+                    stroke-dashoffset="0" stroke-linecap="round"/>
+              <text x="30" y="30" text-anchor="middle" font-size="11"
+                    fill="currentColor" font-family="Courier New">92%</text>
+            </svg>
+          </div>
+          <div class="gauge-val" id="gauge-battery-val">92%</div>
+          <div class="gauge-unit">VOLT</div>
+        </div>
+
+        <!-- Network -->
+        <div class="gauge-card fx-display-card" id="gauge-net">
+          <div class="gauge-label">NET</div>
+          <div class="gauge-arc-wrap">
+            <svg width="60" height="36" viewBox="0 0 60 36" class="gauge-svg" aria-hidden="true">
+              <path d="M 5 35 A 28 28 0 0 1 55 35" fill="none" stroke="#333" stroke-width="5"/>
+              <path id="arc-net" d="M 5 35 A 28 28 0 0 1 55 35" fill="none"
+                    stroke="#58a6ff" stroke-width="5" stroke-dasharray="66 88"
+                    stroke-dashoffset="0" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gauge-val" id="gauge-net-val">75%</div>
+          <div class="gauge-unit">MBPS</div>
+        </div>
+
+        <!-- Memory -->
+        <div class="gauge-card fx-display-card" id="gauge-mem">
+          <div class="gauge-label">MEM</div>
+          <div class="gauge-arc-wrap">
+            <svg width="60" height="36" viewBox="0 0 60 36" class="gauge-svg" aria-hidden="true">
+              <path d="M 5 35 A 28 28 0 0 1 55 35" fill="none" stroke="#333" stroke-width="5"/>
+              <path id="arc-mem" d="M 5 35 A 28 28 0 0 1 55 35" fill="none"
+                    stroke="#d29922" stroke-width="5" stroke-dasharray="55 88"
+                    stroke-dashoffset="0" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gauge-val" id="gauge-mem-val">63%</div>
+          <div class="gauge-unit">RAM</div>
+        </div>
+
+        <!-- CPU -->
+        <div class="gauge-card fx-display-card" id="gauge-cpu">
+          <div class="gauge-label">CPU</div>
+          <div class="gauge-arc-wrap">
+            <svg width="60" height="36" viewBox="0 0 60 36" class="gauge-svg" aria-hidden="true">
+              <path d="M 5 35 A 28 28 0 0 1 55 35" fill="none" stroke="#333" stroke-width="5"/>
+              <path id="arc-cpu" d="M 5 35 A 28 28 0 0 1 55 35" fill="none"
+                    stroke="#f85149" stroke-width="5" stroke-dasharray="35 88"
+                    stroke-dashoffset="0" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gauge-val" id="gauge-cpu-val">40%</div>
+          <div class="gauge-unit">LOAD</div>
+        </div>
+      </div>
+
+      <!-- Live Logs Terminal -->
+      <div class="section-title">Live Logs</div>
+      <div class="logs-terminal" id="logs-terminal" aria-live="polite" aria-label="System log output">
+        <div class="log-line"><span class="log-ts">[00:00:00]</span> <span class="log-info">SYS  » Paulie's Prediction Partners initialized</span></div>
+        <div class="log-line"><span class="log-ts">[00:00:01]</span> <span class="log-info">NET  » Connection established — Demo mode</span></div>
+        <div class="log-line"><span class="log-ts">[00:00:02]</span> <span class="log-info">ILLUM» Illumination panel loaded</span></div>
+        <div class="log-line"><span class="log-ts">[00:00:03]</span> <span class="log-info">THEM » Theme system initialized</span></div>
+        <div class="log-line"><span class="log-ts">[00:00:04]</span> <span class="log-info">AGNT » Agents: Prime, Praxis, Peritia — online</span></div>
+        <div class="log-line"><span class="log-ts">[00:00:05]</span> <span class="log-warn">WARN » Master illumination is OFF</span></div>
+        <div class="log-line"><span class="log-ts">[00:00:06]</span> <span class="log-info">REDY » System ready ✓</span></div>
+      </div>
+
+      <!-- Web Elements Showcase -->
+      <div class="section-title">Elements Showcase</div>
+      <div class="elements-grid">
+        <!-- Buttons -->
+        <div class="element-card">
+          <div class="label-maker" style="margin-bottom:6px;">Buttons</div>
+          <button class="btn-demo">Primary Action</button>
+          <button class="btn-demo secondary">Secondary</button>
+          <button class="btn-demo danger">Danger</button>
+        </div>
+
+        <!-- Badges -->
+        <div class="element-card">
+          <div class="label-maker" style="margin-bottom:6px;">Status Badges</div>
+          <span class="badge badge-success">LIVE</span>
+          <span class="badge badge-warn">WARN</span>
+          <span class="badge badge-danger">ERR</span>
+          <span class="badge badge-info">INFO</span>
+          <div style="margin-top:8px;" class="label-maker">Progress</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:75%"></div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:40%;background:var(--color-state-warning)"></div>
+          </div>
+        </div>
+
+        <!-- Palette Viewer -->
+        <div class="element-card">
+          <div class="label-maker" style="margin-bottom:6px;">Color Palette</div>
+          <div class="palette-row">
+            <div class="palette-swatch" style="background:var(--color-bg-canvas)" title="canvas"></div>
+            <div class="palette-swatch" style="background:var(--color-bg-region)" title="region"></div>
+            <div class="palette-swatch" style="background:var(--color-bg-card)" title="card"></div>
+            <div class="palette-swatch" style="background:var(--color-bg-elevated)" title="elevated"></div>
+            <div class="palette-swatch" style="background:var(--color-border-primary)" title="border-pri"></div>
+            <div class="palette-swatch" style="background:var(--color-accent-primary)" title="accent-pri"></div>
+          </div>
+          <div class="palette-row">
+            <div class="palette-swatch" style="background:var(--color-text-primary)" title="text-pri"></div>
+            <div class="palette-swatch" style="background:var(--color-text-secondary)" title="text-sec"></div>
+            <div class="palette-swatch" style="background:var(--color-state-success)" title="success"></div>
+            <div class="palette-swatch" style="background:var(--color-state-warning)" title="warning"></div>
+            <div class="palette-swatch" style="background:var(--color-state-danger)" title="danger"></div>
+            <div class="palette-swatch" style="background:var(--color-glow-primary)" title="glow"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MS Paint Clone -->
+      <div class="section-title">MS Paint 1998</div>
+      <div id="paint-container">
+        <!-- Menubar -->
+        <div id="paint-menubar">
+          <button class="paint-menu-btn" id="paint-new" title="New canvas (Ctrl+N)">File</button>
+          <button class="paint-menu-btn" id="paint-save" title="Save as PNG">Save PNG</button>
+          <button class="paint-menu-btn" id="paint-undo" title="Undo (Ctrl+Z)">Undo</button>
+          <button class="paint-menu-btn" id="paint-redo" title="Redo (Ctrl+Y)">Redo</button>
+          <button class="paint-menu-btn" id="paint-maximize" title="Toggle fullsize">⛶</button>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:0 8px;">
+            <label style="font-size:9px;color:var(--color-text-tertiary);letter-spacing:.1em;text-transform:uppercase;" for="paint-size">Size</label>
+            <input id="paint-size" type="range" min="1" max="20" value="3" style="width:60px;accent-color:var(--color-accent-primary);">
+          </span>
+        </div>
+        <!-- Toolbar -->
+        <div id="paint-toolbar">
+          <button class="paint-tool-btn active" data-tool="pencil" title="Pencil">✏️</button>
+          <button class="paint-tool-btn" data-tool="brush" title="Brush">🖌️</button>
+          <button class="paint-tool-btn" data-tool="eraser" title="Eraser">🧹</button>
+          <button class="paint-tool-btn" data-tool="fill" title="Fill bucket">🪣</button>
+          <button class="paint-tool-btn" data-tool="text" title="Text tool">T</button>
+          <button class="paint-tool-btn" data-tool="rect" title="Rectangle">▭</button>
+          <button class="paint-tool-btn" data-tool="ellipse" title="Ellipse">◯</button>
+          <button class="paint-tool-btn" data-tool="line" title="Line">╱</button>
+        </div>
+        <!-- Palette -->
+        <div id="paint-palette"></div>
+        <!-- Canvas -->
+        <div id="paint-canvas-wrap">
+          <canvas id="paint-canvas" width="560" height="260"></canvas>
+        </div>
+        <div id="paint-status" aria-live="polite">Tool: PENCIL  |  Pos: 0,0  |  Size: 3px</div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ════════════════════════════════════════════════════
+       5. RIGHT SIDEBAR — Inspector Panel
+       ════════════════════════════════════════════════════ -->
+  <aside id="inspector-panel" class="region">
+    <div class="region-inner">
+      <div class="sidebar-header etched">Inspector Panel</div>
+
+      <!-- To-Do List -->
+      <div class="section-title">📓 Notes &amp; To-Do</div>
+      <div id="todo-container">
+        <div id="todo-toolbar">
+          <button class="todo-tool-btn" id="todo-bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button class="todo-tool-btn" id="todo-h1" title="Heading / Normal">Aa</button>
+          <button class="todo-tool-btn" id="todo-list" title="Bullet list">• List</button>
+          <button class="todo-tool-btn" id="todo-save" title="Save as .txt">💾 Save</button>
+          <button class="todo-tool-btn" id="todo-clear" title="Clear all">✕</button>
+        </div>
+        <div id="todo-editor" contenteditable="true" role="textbox" aria-multiline="true"
+          aria-label="Notes editor" spellcheck="true">
+        </div>
+        <div id="todo-footer">
+          <span>Notes</span>
+          <span id="todo-count">0 lines</span>
+        </div>
+      </div>
+
+      <!-- Send an Idea -->
+      <div class="idea-card">
+        <div class="idea-card-title">💡 Send an Idea</div>
+        <p style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5;">
+          Have a prediction or feature idea? Send it directly to Paulie.
+        </p>
+        <a href="mailto:idea@pauliespredictions.com?subject=PPP%20Idea&body=My%20prediction%20partner%20idea%3A"
+           class="idea-btn" style="text-decoration:none;display:block;text-align:center;">
+          📧 Send Idea
+        </a>
+      </div>
+
+    </div>
+  </aside>
+
+
+  <!-- ════════════════════════════════════════════════════
+       7. BOTTOM BAR — Hangar Bay
+       ════════════════════════════════════════════════════ -->
+  <section id="bottom-bar" class="region">
+    <div class="hangar-inner">
+
+      <!-- Section label -->
+      <div style="display:flex;flex-direction:column;justify-content:center;flex-shrink:0;min-width:70px;">
+        <div class="section-title" style="white-space:nowrap;">⬛ Hangar Bay</div>
+        <!-- Live indicator -->
+        <div class="live-indicator">
+          <div class="pulse-dot" id="connection-dot"></div>
+          <span id="connection-label">DEMO</span>
+        </div>
+      </div>
+
+      <!-- API Key Card -->
+      <div class="api-card">
+        <div class="api-card-title">API Connection</div>
+        <div class="api-mode-toggle">
+          <button class="api-mode-btn active" id="api-demo-btn" data-mode="demo">Demo</button>
+          <button class="api-mode-btn" id="api-live-btn" data-mode="live">Live</button>
+        </div>
+        <input type="password" class="api-input" id="api-key-input"
+               placeholder="Kalshi API Key..." autocomplete="off" aria-label="Kalshi API Key">
+        <input type="text" class="api-input" id="api-secret-input"
+               placeholder="API Secret..." autocomplete="off" aria-label="Kalshi API Secret">
+        <button class="btn-demo" style="margin:0;font-size:9px;padding:4px;" id="api-connect-btn">
+          ⚡ Connect
+        </button>
+      </div>
+
+      <!-- Agent cards — Active -->
+      <div class="agent-card active fx-display-card">
+        <div class="agent-name">Prime</div>
+        <div class="agent-role">Lead Analyst</div>
+        <div class="agent-status online">● Online</div>
+        <div style="font-size:8px;color:var(--color-text-tertiary);margin-top:2px;">
+          Tasks: 3 active
+        </div>
+      </div>
+
+      <div class="agent-card active fx-display-card">
+        <div class="agent-name">Praxis</div>
+        <div class="agent-role">Trade Engine</div>
+        <div class="agent-status online">● Online</div>
+        <div style="font-size:8px;color:var(--color-text-tertiary);margin-top:2px;">
+          Orders: 0 pending
+        </div>
+      </div>
+
+      <div class="agent-card active fx-display-card">
+        <div class="agent-name">Peritia</div>
+        <div class="agent-role">Risk Monitor</div>
+        <div class="agent-status standby">◐ Standby</div>
+        <div style="font-size:8px;color:var(--color-text-tertiary);margin-top:2px;">
+          Alerts: 0
+        </div>
+      </div>
+
+      <!-- Placeholder slots -->
+      <div class="agent-card placeholder">
+        <div class="agent-name">Slot 4</div>
+        <div class="agent-role">Unassigned</div>
+        <div class="agent-status standby">○ Offline</div>
+      </div>
+
+      <div class="agent-card placeholder">
+        <div class="agent-name">Slot 5</div>
+        <div class="agent-role">Unassigned</div>
+        <div class="agent-status standby">○ Offline</div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════
+       6. ACTION BAR — Ignition
+       ════════════════════════════════════════════════════ -->
+  <section id="action-bar" class="region">
+    <div class="region-inner">
+      <div class="section-title etched">🔥 Ignition</div>
+
+      <!-- Throttle -->
+      <div class="label-maker" style="margin-bottom:5px;">Throttle</div>
+      <div class="throttle-group">
+        <button class="throttle-btn" data-throttle="full-auto" title="Full Auto trading">
+          ▶▶ Full Auto
+        </button>
+        <button class="throttle-btn active" data-throttle="semi-auto" title="Semi Auto trading">
+          ▶ Semi Auto
+        </button>
+        <button class="throttle-btn" data-throttle="full-stop" title="Stop all trading">
+          ■ Full Stop
+        </button>
+      </div>
+
+      <!-- P/L Graph -->
+      <div class="label-maker" style="margin-top:8px;margin-bottom:4px;">P/L Graph</div>
+      <canvas id="pl-canvas" height="64" aria-label="Profit and Loss graph"></canvas>
+
+    </div>
+  </section>
+
+</div><!-- /app-shell -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT — load order matters
+     ════════════════════════════════════════════════════════ -->
+<script src="js/themes.js"></script>
+<script src="js/illumination.js"></script>
+<script src="js/paint.js"></script>
+<script src="js/todo.js"></script>
+
+<script>
+/* ── INIT all modules ──────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  ThemeManager.init();
+  IlluminationController.init();
+  PaintApp.init();
+  TodoApp.init();
+
+  initClock();
+  initSparkline();
+  initGauges();
+  initLogs();
+  initNavBar();
+  initSidebarToggles();
+  initThrottleBar();
+  initAPICard();
+  initPLGraph();
+});
+
+/* ── LIVE CLOCK ────────────────────────────────────────── */
+function initClock() {
+  const el = document.getElementById('live-clock');
+  if (!el) return;
+  function tick() {
+    const now = new Date();
+    el.textContent =
+      String(now.getHours()).padStart(2,'0') + ':' +
+      String(now.getMinutes()).padStart(2,'0') + ':' +
+      String(now.getSeconds()).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+/* ── PING SPARKLINE ────────────────────────────────────── */
+function initSparkline() {
+  const canvas = document.getElementById('ping-sparkline');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const data = Array.from({length: 20}, () => 20 + Math.random() * 40);
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const max = Math.max(...data);
+    const min = Math.min(...data);
+    const range = max - min || 1;
+    const w = canvas.width / (data.length - 1);
+
+    ctx.strokeStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-accent-primary').trim() || '#58a6ff';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    data.forEach((v, i) => {
+      const x = i * w;
+      const y = canvas.height - ((v - min) / range) * canvas.height;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  draw();
+  setInterval(() => {
+    data.push(20 + Math.random() * 40);
+    data.shift();
+    draw();
+  }, 800);
+}
+
+/* ── SYSTEM GAUGES ─────────────────────────────────────── */
+function initGauges() {
+  const gauges = [
+    { arc: 'arc-battery', val: 'gauge-battery-val', color: '#3fb950', unit:'%', base: 88, vary: 5 },
+    { arc: 'arc-net',     val: 'gauge-net-val',     color: '#58a6ff', unit:'%', base: 70, vary: 20 },
+    { arc: 'arc-mem',     val: 'gauge-mem-val',     color: '#d29922', unit:'%', base: 60, vary: 15 },
+    { arc: 'arc-cpu',     val: 'gauge-cpu-val',     color: '#f85149', unit:'%', base: 35, vary: 30 },
+  ];
+
+  function updateArc(id, pct) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const len = 88;
+    el.setAttribute('stroke-dasharray', `${(pct/100)*len} ${len}`);
+  }
+
+  gauges.forEach(g => {
+    let current = g.base;
+    updateArc(g.arc, current);
+    setInterval(() => {
+      current = Math.max(5, Math.min(99,
+        current + (Math.random() - 0.5) * g.vary));
+      const v = Math.round(current);
+      updateArc(g.arc, v);
+      const el = document.getElementById(g.val);
+      if (el) el.textContent = v + g.unit;
+    }, 1500 + Math.random() * 1000);
+  });
+}
+
+/* ── LIVE LOG FEED ─────────────────────────────────────── */
+function initLogs() {
+  const term = document.getElementById('logs-terminal');
+  if (!term) return;
+  const msgs = [
+    ['info',  'NET  » Heartbeat OK — 23ms'],
+    ['info',  'MKTD » Market data synced'],
+    ['warn',  'RISK » Exposure threshold at 72%'],
+    ['info',  'AGNT » Prime completed analysis cycle'],
+    ['info',  'AGNT » Praxis scanning opportunities'],
+    ['info',  'THEM » Theme applied: modern-webpage'],
+    ['warn',  'CONN » Reconnect attempt #1'],
+    ['info',  'NET  » Connection restored'],
+    ['err',   'ERR  » API rate limit warning'],
+    ['info',  'SYS  » GC cycle complete'],
+    ['info',  'AGNT » Peritia risk check passed'],
+    ['info',  'MKTD » BTC series updated'],
+  ];
+  let idx = msgs.length % msgs.length;
+  setInterval(() => {
+    const m = msgs[idx % msgs.length];
+    idx++;
+    const now = new Date();
+    const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="log-ts">[${ts}]</span> <span class="log-${m[0]}">${m[1]}</span>`;
+    term.appendChild(line);
+    // Keep last 7
+    while (term.children.length > 7) term.removeChild(term.firstChild);
+    term.scrollTop = term.scrollHeight;
+  }, 2800);
+}
+
+/* ── NAV BAR — studio switching ───────────────────────── */
+function initNavBar() {
+  document.querySelectorAll('.nav-studio-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-studio-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Future: swap main region content
+    });
+  });
+}
+
+/* ── SIDEBAR TOGGLES ───────────────────────────────────── */
+function initSidebarToggles() {
+  const bezelToggle = document.getElementById('bezel-toggle');
+  if (bezelToggle) {
+    bezelToggle.classList.add('on');
+    bezelToggle.addEventListener('click', () => {
+      bezelToggle.classList.toggle('on');
+      document.getElementById('app-shell').classList.toggle('no-bezel', !bezelToggle.classList.contains('on'));
+    });
+  }
+
+  const rulersToggle = document.getElementById('rulers-toggle');
+  if (rulersToggle) {
+    rulersToggle.addEventListener('click', () => {
+      rulersToggle.classList.toggle('on');
+      document.body.classList.toggle('show-rulers', rulersToggle.classList.contains('on'));
+    });
+  }
+
+  const gridToggle = document.getElementById('grid-toggle');
+  if (gridToggle) {
+    gridToggle.addEventListener('click', () => {
+      gridToggle.classList.toggle('on');
+      document.body.classList.toggle('show-grid', gridToggle.classList.contains('on'));
+    });
+  }
+}
+
+/* ── THROTTLE BAR ──────────────────────────────────────── */
+function initThrottleBar() {
+  document.querySelectorAll('.throttle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.throttle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+}
+
+/* ── API CARD ──────────────────────────────────────────── */
+function initAPICard() {
+  const demoBtn = document.getElementById('api-demo-btn');
+  const liveBtn = document.getElementById('api-live-btn');
+  const dot     = document.getElementById('connection-dot');
+  const label   = document.getElementById('connection-label');
+
+  function setMode(mode) {
+    const isLive = mode === 'live';
+    demoBtn.classList.toggle('active', !isLive);
+    liveBtn.classList.toggle('active',  isLive);
+    dot.classList.toggle('live', isLive);
+    label.textContent = isLive ? 'LIVE' : 'DEMO';
+  }
+
+  if (demoBtn) demoBtn.addEventListener('click', () => setMode('demo'));
+  if (liveBtn) liveBtn.addEventListener('click', () => setMode('live'));
+
+  const connectBtn = document.getElementById('api-connect-btn');
+  if (connectBtn) {
+    connectBtn.addEventListener('click', () => {
+      const key = document.getElementById('api-key-input').value.trim();
+      if (!key) { alert('Enter an API key first.'); return; }
+      connectBtn.textContent = '⚡ Connecting...';
+      setTimeout(() => {
+        connectBtn.textContent = '✓ Connected';
+        setMode('live');
+        addLog('info', 'API  » Connection authenticated');
+      }, 1200);
+    });
+  }
+}
+
+/* helper to add log line */
+function addLog(type, msg) {
+  const term = document.getElementById('logs-terminal');
+  if (!term) return;
+  const now = new Date();
+  const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-ts">[${ts}]</span> <span class="log-${type}">${msg}</span>`;
+  term.appendChild(line);
+  while (term.children.length > 7) term.removeChild(term.firstChild);
+  term.scrollTop = term.scrollHeight;
+}
+
+/* ── P/L GRAPH ─────────────────────────────────────────── */
+function initPLGraph() {
+  const canvas = document.getElementById('pl-canvas');
+  if (!canvas) return;
+  canvas.width = canvas.parentElement.clientWidth || 180;
+  const ctx = canvas.getContext('2d');
+  let pl = [0];
+
+  function draw() {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+
+    // Background
+    ctx.fillStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-bg-card').trim() || '#21262d';
+    ctx.fillRect(0,0,w,h);
+
+    // Zero line
+    ctx.strokeStyle = '#444';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(0, h/2);
+    ctx.lineTo(w, h/2);
+    ctx.stroke();
+
+    if (pl.length < 2) return;
+    const max = Math.max(...pl.map(Math.abs)) || 1;
+    const xStep = w / (pl.length - 1);
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    pl.forEach((v, i) => {
+      const x = i * xStep;
+      const y = h/2 - (v/max) * (h/2 - 4);
+      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle = pl[pl.length-1] >= 0 ? '#3fb950' : '#f85149';
+    ctx.stroke();
+
+    // Last value label
+    const last = pl[pl.length-1];
+    ctx.fillStyle = last >= 0 ? '#3fb950' : '#f85149';
+    ctx.font = '9px Courier New';
+    ctx.fillText((last >= 0 ? '+' : '') + last.toFixed(2), 4, 10);
+  }
+
+  draw();
+  setInterval(() => {
+    const last = pl[pl.length - 1];
+    pl.push(+(last + (Math.random() - 0.48) * 8).toFixed(2));
+    if (pl.length > 40) pl.shift();
+    draw();
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
