@@ -90,19 +90,19 @@ Last update: 03-02-26
         - Observability
         - Security
         - Operations
-    - Installation Tracking and Version Management
-        - Anonymous Installation Beacon
-        - Version Check-In
-    - Scaling Monitoring and Workarounds
-        - User Count Thresholds and Actions
-        - Automatic Throttling
-        - Polymarket Integration
     - Telemetry and Privacy Policy
     - Realistic Rollout Plan
         - Phase 1: Live-Default Controlled MVP
         - Phase 2: Controlled Live
         - Phase 3: Scale and Hardening
     - BTC Recurring Series Focus
+    - Installation Tracking and Release Channel Management
+        - Anonymous Installation Beacon
+        - Release Check-In
+    - Scaling Monitoring and Capacity Planning
+        - Capacity Signals and Actions
+        - Degradation Policy
+        - Multi-Exchange Expansion (Future)
 
 - Chapter 3. Design Studio
 
@@ -842,6 +842,11 @@ Optional channel set (feature-gated):
 - `communications`
 - `order_group_updates`
 
+Operational notes:
+- Use `send_initial_snapshot=true` for `ticker` when initial top-of-book seed data is required.
+- Use `skip_ticker_ack=true` for large subscription sets to reduce acknowledgement payload volume.
+- Prefer `update_subscription` (`add_markets` / `delete_markets`) for dynamic market set changes without reconnecting.
+
 #### Orderbook Integrity
 
 - Build from `orderbook_snapshot` then apply `orderbook_delta`.
@@ -857,6 +862,8 @@ Optional channel set (feature-gated):
 - Use `Decimal` for prices, costs, and contract quantities.
 - Never use floating-point arithmetic for trading decisions or persistence.
 - Preserve raw upstream values for auditability and replay.
+- Treat `_fp` and `_dollars` fields as the primary contract.
+- Legacy integer fields are compatibility-only and must never be required by core logic.
 
 Canonical internal units:
 - Money: fixed-point dollars (`Decimal`, 4 dp)
@@ -918,40 +925,26 @@ Behavior:
 
 #### Retry Policy
 
-**Before 10,000 Users: Aggressive Retries (No Circuit Breaker)**
-
-- `429` (rate limit): exponential backoff with jitter, retry up to 10 times (honor Retry-After if present)
-- `5xx` and network timeouts: exponential backoff, retry up to 10 times
-- `4xx` validation/auth errors: no retries (terminal failure)
-- Retries must reuse the original `client_order_id`
-- Do NOT implement circuit-breaker logic before 10k users—let orders retry aggressively
-
-**After 10,000 Users: Conservative Retries with Circuit Breaker (Optional)**
-
-- Implement circuit-breaker protection to prevent cascading failures
-- Reduce retry limits when serving many concurrent users
-- Fail fast on repeated 429s to avoid Kalshi account suspension
+- `429` (rate limit): honor `Retry-After` if present, exponential backoff with jitter, retry up to 5 times.
+- `5xx` and network timeouts: exponential backoff with jitter, retry up to 3 times.
+- `4xx` validation/auth errors: no retries (terminal failure).
+- Retries must reuse the original `client_order_id`.
+- Circuit breaker is always enabled in production:
+  - Open if repeated submit failures exceed threshold in a short rolling window.
+  - While open, block new agent-generated orders and allow only manual operator actions.
+  - Auto-close after cooldown and health-check recovery.
 
 ---
 
 ### Rate Limits and Backpressure
 
-**Before 10,000 Users: No Artificial Throttling**
-
-- Read account limits from `GET /account/limits` (dynamic configuration only)
-- Do not hardcode tier values
-- Maintain separate internal budgets for reads and writes
-- Do NOT implement backpressure logic or rate-limiting before 10k users
-- Run orders at full capacity—let Kalshi's API limits be the natural constraint
-- Preserve all execution paths; no degradation mode until scaling thresholds are hit
-
-**After 10,000 Users: Intelligent Backpressure (Optional)**
-
-- Only after reaching 10k+ active installations should you implement intelligent degradation:
-  - Reduce non-critical polling (e.g., market discovery, slower reconciliation intervals)
-  - Preserve execution-critical paths (order submission, fill confirmation, position updates)
-  - Emit operator warnings and metrics when hitting Kalshi rate limits
-  - Implement automatic fallback to Polymarket if Kalshi is consistently rate-limiting
+- Read account limits from `GET /account/limits` at startup and on a fixed refresh interval.
+- Do not hardcode account tier values.
+- Maintain separate budgets for reads and writes; enforce both centrally in execution.
+- Backpressure is always enabled:
+  - Prioritize execution-critical paths (submit/cancel, fills, positions, reconciliation).
+  - De-prioritize non-critical work (broad discovery sweeps, non-urgent refreshes) under pressure.
+  - Emit warnings when sustained 429s or budget starvation are detected.
 
 ---
 
@@ -1096,17 +1089,17 @@ Event delivery requirements:
 
 ---
 
-### Installation Tracking and Version Management
+### Installation Tracking and Release Channel Management
 
 #### Anonymous Installation Beacon (Telemetry System)
 
-Each bot instance sends a one-time anonymous telemetry ping on first startup to enable user count tracking and scaling analysis.
+Telemetry beacon is optional and disabled by default. It is only sent after explicit user opt-in.
 
 **Beacon Specification:**
 
-- **Trigger:** On first application startup only (before any trading operations)
+- **Trigger:** First startup after explicit telemetry opt-in
 - **Frequency:** One-time per installation
-- **Persistence:** Store `installation_uuid` in browser localStorage or local config file
+- **Persistence:** Store `installation_uuid` and `telemetry_enabled` in local config
 - **Endpoint:** `POST https://telemetry.<your-domain>/ping` (configurable per deployment)
 - **Payload:**
   ```json
@@ -1127,7 +1120,7 @@ Each bot instance sends a one-time anonymous telemetry ping on first startup to 
 - No API keys, account credentials, or trading history
 - No IP address logging (backend discards)
 - Installation UUID is one-time random identifier, not tied to user identity
-- Opt-out: Users can delete stored UUID before first run to disable telemetry
+- Opt-out: Users can disable telemetry at any time by setting `telemetry_enabled=false`
 
 **Transparency:**
 
@@ -1135,10 +1128,10 @@ Document in README and first-run wizard:
 ```markdown
 ### Anonymous Installation Analytics
 
-Paulie's app sends a one-time anonymous installation ping on startup to help us understand adoption.
+Paulie's app can send a one-time anonymous installation ping on startup when telemetry is enabled.
 This ping contains only a unique installation ID, release channel, and timestamp—no personal data.
 
-To disable: Delete the 'installation_uuid' from your config before first run.
+To disable: Set `telemetry_enabled=false` in your local config.
 ```
 
 ---
@@ -1187,33 +1180,27 @@ Lightweight API call on startup to check for new releases and collect user count
 
 ---
 
-### Scaling Monitoring and Workarounds
+### Scaling Monitoring and Capacity Planning
 
-#### User Count Thresholds and Actions
+#### Capacity Signals and Actions
 
-No throttling or performance checks until 10,000 active installations. Expect limited adoption and anticipate competition from similar apps.
+| Signal | Warning Threshold | Action |
+| :----- | :---------------- | :----- |
+| Sustained `429` rate | >5% of order requests over 5 minutes | Reduce non-critical traffic; maintain execution path priority |
+| Submit latency p95 | >2 seconds over 5 minutes | Slow agent order cadence and increase intent filtering strictness |
+| Reconciliation drift | Any unresolved drift after one cycle | Pause new automation until consistency is restored |
+| WS gap/reconnect churn | Repeated sequence gaps or reconnect loops | Gate executions to markets with healthy data only |
 
-| Active Installations | Status | Recommended Action|
-|---|---|---|
-| 1–10,000 | Stable & No Throttling | Monitor adoption; zero artificial limits |
-| **10,000–50,000** | ?? Throttling begins | Implement order throttling; shard market coverage |
-| 50,000–100,000 | ?? Breakdown imminent | Activate Polymarket integration; prepare migration |
-| 100,000+ | ?? System failure | Force migration to Polymarket; consider account sharding |
+#### Degradation Policy
 
-#### Automatic Throttling (Starting at 10,000+ Users)
+- Degrade non-critical services first (broad scans, cosmetic updates, low-value polling).
+- Keep order safety, fills, positions, and reconciliation on the highest priority tier.
+- If system health degrades past threshold, move agents to safe mode (`SemiAuto` or `FullStop`) automatically.
 
-When installation count exceeds 10,000:
-- Reduce order submission rate per user (e.g., 1 order/min instead of 1 order/10sec)
-- Add random jitter to order submission times (0–5 second delays)
-- Concentrate buy orders in different markets per agent type (avoid clustering)
-- Implement per-market order queue depth tracking
+#### Multi-Exchange Expansion (Future)
 
-#### Polymarket Integration (Fallback)
-
-When Kalshi position limits are consistently hit or spreads exceed thresholds (typically at 50k+ users):
-- Automatically seed Polymarket API keys and fallback logic
-- Direct new bot instances toward Polymarket if Kalshi is congested
-- Support live/demo mode selectability across both exchanges
+- Multi-exchange routing is not part of this release.
+- Any future expansion must be feature-flagged, operator-approved, and isolated from Kalshi execution paths.
 
 ---
 
@@ -1232,7 +1219,7 @@ When Kalshi position limits are consistently hit or spreads exceed thresholds (t
 ## *Chapter 4. Trading Studio*
 
 - The entire reason why we are doing this: To make money.
-- Three Agents at first. Seperate environments to avoid cross-contamination of performance.
+- Three agents at first. Separate environments to avoid cross-contamination of performance.
 
 ### Agent Interfaces
 
@@ -1253,10 +1240,10 @@ When Kalshi position limits are consistently hit or spreads exceed thresholds (t
 
 ### Trading Strategy
 
-- High high Frequency, multiple yes/no buy/sell per minute.
-- The only hard stop condition could be an account balance under $5
-- only series that close in less than 3 days
-- might have to scan up to 40k series
+- Event-driven, selective frequency: trade only when signal quality and market quality thresholds are met.
+- Hard stops are enforced by the risk gateway (daily loss cap, exposure caps, and global kill switch).
+- Priority universe: recurring BTC and short-dated markets (typically under 3 days to close).
+- Discovery may scan up to 40k markets, but execution must stay constrained to a curated, liquid subset.
     
 ### Agent Prime
 
@@ -1278,12 +1265,34 @@ When Kalshi position limits are consistently hit or spreads exceed thresholds (t
 - We will put heart into this one and try to get this one to focus on the 15 minute recurring BTC price up/down yes/no series.
 - This is the main main main main #1 goal of this project.
 - Eventually will be really good at all the crypto.
-- uses candlestick patterns to inform decision making
+- Uses candlestick patterns to inform decision making
 
-- Candlestick Pattern Dictionary
-Explore the comprehensive Candlestick Pattern Dictionary from StockCharts' ChartSchool. Master the art of candlestick patterns and make confident trading decisions.
+#### Agent Peritia Decision Logic
 
-The StockCharts Candlestick Pattern Dictionary provides brief descriptions of many common candlestick patterns.
+**Primary Strategy: Candlestick Pattern Recognition + Volume Confirmation**
+
+1. **Data Input:** On every BTC 15-min market update, scan the most recent candlestick
+2. **Pattern Detection:** Identify patterns from the Candlestick Pattern Dictionary (Engulfing, Morning Star, Hammer, Shooting Star, etc.)
+3. **Volume Confirmation:** Cross-reference pattern with volume trend:
+   - Pattern + Volume UP (above 20-bar moving average) → **Strong signal**
+   - Pattern + Volume DOWN or FLAT → **Weak signal (skip)**
+4. **Decision Rules:**
+   - **Bullish pattern + strong volume confirmation:** Place YES order at current best price
+   - **Bearish pattern + strong volume confirmation:** Place NO order at current best price
+   - **Conflicting signals (e.g., Engulfing Up but volume down):** Hold (no trade)
+5. **Trade Sizing:** Fixed notional per trade ($X per order) until profitability is proven; then scale up
+6. **Baseline Fallback:** If no patterns detected, use simple momentum (20-bar SMA crossover) as baseline:
+   - Price > SMA 20 → slight YES bias
+   - Price < SMA 20 → slight NO bias
+7. **Performance Tracking & Adaptation:**
+   - Track win rate per pattern over 50-trade sample
+   - Disable patterns with <45% accuracy
+   - Log every decision, pattern match, and outcome for training data
+   - Incrementally add complexity only after baseline strategy is understood and profitable
+
+**Candlestick Pattern Reference**
+
+The following patterns inform Peritia's decision logic. Master these before expanding strategy.
 
 Abandoned Baby
 A rare reversal pattern characterized by a gap followed by a Doji, which is then followed by another gap in the opposite direction. The shadows on the Doji must completely gap below or above the shadows of the first and third day.
