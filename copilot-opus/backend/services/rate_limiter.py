@@ -30,9 +30,10 @@ log = structlog.get_logger(__name__)
 
 BucketName = Literal["read", "write"]
 
-# Non-priority waiters add ``_JITTER_FACTOR * wait`` of random jitter so that
-# priority waiters (which sleep exactly the deficit interval) consistently wake
-# and re-acquire the lock first.
+# Non-priority waiters add extra jitter (10% of the deficit wait) so that
+# priority waiters — which sleep exactly the deficit interval — consistently
+# re-acquire the lock first.  10% is large enough to reliably yield priority
+# but small enough to avoid unnecessary latency on quiet buckets.
 _JITTER_FACTOR = 0.1
 
 

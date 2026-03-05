@@ -45,7 +45,7 @@ def _json_serialiser(obj: object) -> str:
     if isinstance(obj, datetime):
         return obj.isoformat()
     if isinstance(obj, (set, frozenset)):
-        return list(obj)  # type: ignore[return-value]
+        return json.dumps(list(obj))
     # Decimal, UUID, etc. — safe repr via str
     for type_name in ("Decimal", "UUID"):
         if type(obj).__name__ == type_name:

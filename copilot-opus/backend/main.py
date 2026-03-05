@@ -670,7 +670,8 @@ class Application:
         def _signal_handler(sig: int) -> None:
             sig_name = signal.Signals(sig).name
             log.info("shutdown_signal_received", signal=sig_name)
-            self._shutdown_event.set()  # type: ignore[union-attr]
+            if self._shutdown_event is not None:
+                self._shutdown_event.set()
             server.should_exit = True
 
         for sig in (signal.SIGINT, signal.SIGTERM):
