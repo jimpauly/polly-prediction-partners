@@ -223,7 +223,11 @@
         case 'flood':   state.flood.dim   = v; break;
         case 'display': state.display.dim = v; break;
       }
-      update();
+      // Lightweight path for drag: only apply CSS + sync this dimmer
+      applyCSS();
+      syncDimmer(name, v);
+      saveState();
+      dispatchChange();
     };
 
     wrap.addEventListener('mousedown', (e) => {

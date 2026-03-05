@@ -128,7 +128,6 @@
 .glow-flood,
 .glow-display {
   transition-timing-function: ease;
-  will-change: text-shadow, box-shadow, filter, background-image;
 }
 
 @media (prefers-reduced-motion: reduce) {
