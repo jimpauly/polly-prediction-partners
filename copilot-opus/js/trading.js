@@ -325,7 +325,7 @@ const TradingStudio = (() => {
       expandCard(market);
     });
 
-    /* Render mini sparkline on the card canvas */
+    /* Render mini sparkline on the card canvas (simulated trend) */
     const miniCanvas = card.querySelector('.series-card-canvas');
     if (miniCanvas) {
       drawMiniSparkline(miniCanvas, market);

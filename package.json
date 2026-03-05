@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "start:backend": "python -m uvicorn copilot-opus.backend.main:main --host 127.0.0.1 --port 8000",
+    "start:backend": "cd copilot-opus && python -m uvicorn backend.main:main --host 127.0.0.1 --port 8000",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
     "build:linux": "electron-builder --linux",

@@ -83,7 +83,7 @@ async function startBackendDaemon() {
 
   const backendDirectory = getBackendPath();
   const pythonExecutable = getPythonExecutable();
-  const parentDirectory = path.dirname(backendDirectory);
+  const backendWorkingDirectory = path.dirname(backendDirectory);
 
   console.log(`Starting backend: ${pythonExecutable} -m uvicorn backend.main:main`);
   console.log(`Backend directory: ${backendDirectory}`);
@@ -94,7 +94,7 @@ async function startBackendDaemon() {
     '--host', BACKEND_HOST,
     '--port', String(BACKEND_PORT),
   ], {
-    cwd: parentDirectory,
+    cwd: backendWorkingDirectory,
     stdio: ['ignore', 'pipe', 'pipe'],
     env: {
       ...process.env,

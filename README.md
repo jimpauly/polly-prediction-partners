@@ -24,17 +24,17 @@
 ```bash
 # Clone the repository
 git clone https://github.com/jimpauly/paulies-prediction-partners.git
-cd paulies-prediction-partners
+cd paulies-prediction-partners/copilot-opus
 
 # Install Python backend dependencies
-cd copilot-opus
 pip install -r backend/requirements.txt
 
-# Start the backend
+# Start the backend (from the copilot-opus directory)
 python -m uvicorn backend.main:main --host 127.0.0.1 --port 8000 &
 
 # Open the frontend
-# Either open copilot-opus/index.html in your browser, or:
+# Either open index.html in your browser, or:
+cd ..
 python -m http.server 3000
 # Then visit http://localhost:3000/copilot-opus/index.html
 ```
@@ -75,10 +75,12 @@ the app from the menu to fully stop.
 
 ```bash
 # Using nohup (keeps running after terminal closes)
+cd /path/to/paulies-prediction-partners/copilot-opus
 nohup python -m uvicorn backend.main:main --host 127.0.0.1 --port 8000 &
 
 # Using screen (recommended)
 screen -S paulies
+cd /path/to/paulies-prediction-partners/copilot-opus
 python -m uvicorn backend.main:main --host 127.0.0.1 --port 8000
 # Press Ctrl+A, then D to detach
 # Reconnect later: screen -r paulies

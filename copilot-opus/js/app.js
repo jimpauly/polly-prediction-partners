@@ -336,7 +336,13 @@
 
     drawChart();
 
+    /* Clear any previous interval (safety guard against re-initialization) */
+    const previousIntervalId = canvas.dataset.pollingIntervalId;
+    if (previousIntervalId) {
+      clearInterval(parseInt(previousIntervalId, 10));
+    }
     pollingIntervalId = setInterval(fetchProfitLossData, 5000);
+    canvas.dataset.pollingIntervalId = String(pollingIntervalId);
 
     /* Redraw on theme change */
     const observer = new MutationObserver(drawChart);
