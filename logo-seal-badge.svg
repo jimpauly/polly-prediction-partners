@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" width="520" height="520">
+  <defs>
+
+    <!-- Badge body gradient — 3-D metal feel, light from upper-left -->
+    <radialGradient id="badgeFill" cx="34%" cy="30%" r="72%">
+      <stop offset="0%"   stop-color="#2C2C44"/>
+      <stop offset="48%"  stop-color="#1A1A2C"/>
+      <stop offset="100%" stop-color="#0E0E18"/>
+    </radialGradient>
+
+    <!-- Inner content circle — slightly lighter charcoal -->
+    <radialGradient id="contentFill" cx="42%" cy="38%" r="65%">
+      <stop offset="0%"   stop-color="#1E1E30"/>
+      <stop offset="100%" stop-color="#10101C"/>
+    </radialGradient>
+
+    <!-- Outer rim metal gradient (simulates polished ring) -->
+    <linearGradient id="rimMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#60607C"/>
+      <stop offset="28%"  stop-color="#3C3C54"/>
+      <stop offset="52%"  stop-color="#262636"/>
+      <stop offset="76%"  stop-color="#3A3A52"/>
+      <stop offset="100%" stop-color="#505068"/>
+    </linearGradient>
+
+    <!-- Node glow (radial gradient — zero blur) -->
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#00D4FF" stop-opacity="0.88"/>
+      <stop offset="48%"  stop-color="#00D4FF" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Macaw head — same cyan radial as small logo -->
+    <radialGradient id="macawHead" cx="36%" cy="30%" r="68%">
+      <stop offset="0%"   stop-color="#52EAFF"/>
+      <stop offset="50%"  stop-color="#00C8EE"/>
+      <stop offset="100%" stop-color="#0082A5"/>
+    </radialGradient>
+
+    <!-- Macaw nape — same deep navy as small logo -->
+    <linearGradient id="macawNape" x1="85%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#00389A"/>
+      <stop offset="100%" stop-color="#001258"/>
+    </linearGradient>
+
+    <!-- Macaw body — deep teal with depth -->
+    <radialGradient id="macawBody" cx="62%" cy="30%" r="70%">
+      <stop offset="0%"   stop-color="#00B8D8"/>
+      <stop offset="58%"  stop-color="#00748A"/>
+      <stop offset="100%" stop-color="#003C50"/>
+    </radialGradient>
+
+    <!-- Macaw wing (folded) — deeper navy -->
+    <linearGradient id="macawWing" x1="80%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#00368E"/>
+      <stop offset="100%" stop-color="#001048"/>
+    </linearGradient>
+
+    <!-- Branch — organic wood brown -->
+    <linearGradient id="branchFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#5C3E1A"/>
+      <stop offset="100%" stop-color="#3A2610"/>
+    </linearGradient>
+
+    <!-- ══ TEXT ARC PATHS (defined here for textPath references) ══
+
+         Outer text band:  r≈244  →  Left=(16,260) Right=(504,260)
+         Motto ring:       r≈224  →  Left=(36,260) Right=(484,260)
+    ══════════════════════════════════════════════════════════════ -->
+
+    <!-- Outer top arc  "Paulie's" — clockwise through top -->
+    <path id="arcTop"
+          d="M 16,260 A 244,244 0 0 1 504,260"/>
+
+    <!-- Outer bottom arc  "Prediction Partners" — counterclockwise through bottom -->
+    <path id="arcBottom"
+          d="M 16,260 A 244,244 0 0 0 504,260"/>
+
+    <!-- Motto ring bottom arc -->
+    <path id="arcMotto"
+          d="M 40,260 A 220,220 0 0 0 480,260"/>
+
+    <!-- Motto ring top arc (for symmetric short arc segments) -->
+    <path id="arcMottoTop"
+          d="M 40,260 A 220,220 0 0 1 480,260"/>
+
+  </defs>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       OUTER BADGE STRUCTURE — concentric rings, 3-D metal/glass feel
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Main badge body fill -->
+  <circle cx="260" cy="260" r="252" fill="url(#badgeFill)"/>
+
+  <!-- Thick outer rim (metal ring) -->
+  <circle cx="260" cy="260" r="252" fill="none"
+          stroke="url(#rimMetal)" stroke-width="11"/>
+  <!-- Bright inner edge of rim (glass-like specular line) -->
+  <circle cx="260" cy="260" r="246" fill="none"
+          stroke="#4A4A66" stroke-width="1.2"/>
+  <!-- Shadow at inner edge of rim -->
+  <circle cx="260" cy="260" r="240" fill="none"
+          stroke="#1A1A28" stroke-width="1.2"/>
+
+  <!-- ── Outer text ring separator ── -->
+  <circle cx="260" cy="260" r="237" fill="none"
+          stroke="#2E2E46" stroke-width="0.9"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       OUTER ARC TEXT
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- "Paulie's" — small, shy, etched script at top -->
+  <text font-family="Georgia, 'Times New Roman', serif"
+        font-size="13" font-style="italic" font-weight="400"
+        fill="#00D4FF" opacity="0.85" letter-spacing="4">
+    <textPath href="#arcTop" startOffset="50%" text-anchor="middle">
+      P A U L I E ' S
+    </textPath>
+  </text>
+
+  <!-- "Prediction Partners" — large, bold, dominant at bottom -->
+  <text font-family="'Arial Black', 'Arial', 'Helvetica Neue', sans-serif"
+        font-size="20" font-weight="900"
+        fill="#DDE5F2" letter-spacing="1.2">
+    <textPath href="#arcBottom" startOffset="50%" text-anchor="middle">
+      PREDICTION PARTNERS
+    </textPath>
+  </text>
+
+  <!-- ── Inner text ring separator ── -->
+  <circle cx="260" cy="260" r="224" fill="none"
+          stroke="#28284A" stroke-width="1.2"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MOTTO + DECORATIVE INNER RING  (r = 224 → 237)
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Motto text: "Insight · Logic · Foresight" — bottom arc, subtle -->
+  <text font-family="Georgia, serif"
+        font-size="11" font-style="italic"
+        fill="#7A8EA0" letter-spacing="1.8" opacity="0.82">
+    <textPath href="#arcMotto" startOffset="50%" text-anchor="middle">
+      Insight  ·  Logic  ·  Foresight
+    </textPath>
+  </text>
+
+  <!-- Top portion of motto ring — small dot accents + subtle line pattern -->
+  <text font-family="Georgia, serif"
+        font-size="9" fill="#3A4A5A" opacity="0.55" letter-spacing="6">
+    <textPath href="#arcMottoTop" startOffset="50%" text-anchor="middle">
+      · · · · · · · · · · · · · · · · · · ·
+    </textPath>
+  </text>
+
+  <!-- Decorative ring marks — 24 small dots every 15° at r=231 (middle of motto band) -->
+  <!-- MAJOR marks every 30° (r=2.4) -->
+  <circle cx="491.0" cy="260.0" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 0°   -->
+  <circle cx="460.4" cy="375.5" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 30°  -->
+  <circle cx="375.5" cy="460.4" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 60°  -->
+  <circle cx="260.0" cy="491.0" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 90°  -->
+  <circle cx="144.5" cy="460.4" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 120° -->
+  <circle cx="59.6"  cy="375.5" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 150° -->
+  <circle cx="29.0"  cy="260.0" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 180° -->
+  <circle cx="59.6"  cy="144.5" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 210° -->
+  <circle cx="144.5" cy="59.6"  r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 240° -->
+  <circle cx="260.0" cy="29.0"  r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 270° -->
+  <circle cx="375.5" cy="59.6"  r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 300° -->
+  <circle cx="460.4" cy="144.5" r="2.2" fill="#3C4A5C" opacity="0.7"/><!-- 330° -->
+  <!-- MINOR marks every 15° between (r=1.5) -->
+  <circle cx="483.3" cy="319.8" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 15°  -->
+  <circle cx="423.4" cy="423.4" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 45°  -->
+  <circle cx="319.8" cy="483.3" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 75°  -->
+  <circle cx="200.2" cy="483.3" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 105° -->
+  <circle cx="96.6"  cy="423.4" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 135° -->
+  <circle cx="36.7"  cy="319.8" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 165° -->
+  <circle cx="36.7"  cy="200.2" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 195° -->
+  <circle cx="96.6"  cy="96.6"  r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 225° -->
+  <circle cx="200.2" cy="36.7"  r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 255° -->
+  <circle cx="319.8" cy="36.7"  r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 285° -->
+  <circle cx="423.4" cy="96.6"  r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 315° -->
+  <circle cx="483.3" cy="200.2" r="1.5" fill="#2E3A48" opacity="0.6"/><!-- 345° -->
+
+  <!-- ── Inner content ring separator ── -->
+  <circle cx="260" cy="260" r="215" fill="none"
+          stroke="#262640" stroke-width="1.4"/>
+  <!-- Thin bright specular line at content circle edge -->
+  <circle cx="260" cy="260" r="213" fill="none"
+          stroke="#323252" stroke-width="0.6"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       CONTENT AREA
+  ══════════════════════════════════════════════════════════════════════ -->
+  <circle cx="260" cy="260" r="212" fill="url(#contentFill)"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MACAW — FULL BODY, FACING RIGHT, PERCHED ON BRANCH
+       Same colour palette as logo-icon-text.svg (same bird)
+
+       Head center:  (245, 182)
+       Body center:  (252, 275)
+       Branch at:    y ≈ 355  (x 128 → 392)
+       Tail extends: down to y ≈ 400
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ── Nape (deep blue, same as small logo) ── -->
+  <ellipse cx="230" cy="186" rx="40" ry="49" fill="url(#macawNape)"/>
+
+  <!-- ── Main head oval — cyan ── -->
+  <ellipse cx="245" cy="182" rx="42" ry="50" fill="url(#macawHead)"/>
+
+  <!-- Yellow-green forehead stripe -->
+  <path d="M 232,134 C 243,127 259,127 272,134 C 260,138 244,138 232,138 Z"
+        fill="#C5DA20"/>
+
+  <!-- Crimson nape accent -->
+  <path d="M 205,152 C 200,167 200,180 206,192 C 202,179 202,164 207,153 Z"
+        fill="#BB2E00" opacity="0.50"/>
+
+  <!-- Teal-green throat accent -->
+  <path d="M 218,228 C 231,236 246,237 256,232 C 246,235 232,234 220,227 Z"
+        fill="#2A9070" opacity="0.52"/>
+
+  <!-- ── Upper mandible — same dark horn as small logo ── -->
+  <path d="M 280,169
+           C 294,161 313,158 330,165
+           C 342,169 348,180 345,191
+           C 342,201 333,207 322,207
+           C 313,207 303,202 296,195
+           L 281,185
+           C 278,178 277,172 280,169 Z"
+        fill="#231908"/>
+  <!-- Beak top-ridge highlight -->
+  <path d="M 282,168 C 297,161 315,159 332,165 C 317,159 298,158 283,164 Z"
+        fill="#3D2B16" opacity="0.68"/>
+
+  <!-- ── Lower mandible ── -->
+  <path d="M 281,186
+           L 296,195
+           C 305,202 315,207 322,205
+           C 319,212 310,220 298,222
+           C 285,224 273,218 267,208
+           C 271,203 277,195 281,186 Z"
+        fill="#31200F"/>
+
+  <!-- ── Facial patch ── -->
+  <ellipse cx="306" cy="186" rx="14" ry="11" fill="#F0E8D5"/>
+  <line x1="293" y1="181" x2="318" y2="181" stroke="#5A4A36" stroke-width="0.75"/>
+  <line x1="291" y1="186" x2="317" y2="186" stroke="#5A4A36" stroke-width="0.75"/>
+  <line x1="292" y1="191" x2="317" y2="191" stroke="#5A4A36" stroke-width="0.75"/>
+  <line x1="295" y1="196" x2="314" y2="196" stroke="#5A4A36" stroke-width="0.70"/>
+
+  <!-- ── Eye — same nested circles as small logo ── -->
+  <circle cx="258" cy="166" r="12"  fill="#E0D8BE"/>
+  <circle cx="258" cy="166" r="10"  fill="#CF9C18"/>
+  <circle cx="258" cy="166" r="6.5" fill="#18287C"/>
+  <circle cx="258" cy="166" r="3.8" fill="#080808"/>
+  <circle cx="260" cy="164" r="2.0" fill="#F8F8F8"/>
+
+  <!-- ── Crown feather hints (decorative) ── -->
+  <path d="M 231,135 C 228,122 225,109 223,102"
+        stroke="#00C2E8" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M 245,131 C 244,118 243,106 242,99"
+        stroke="#BED020" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M 259,133 C 259,119 258,108 256,101"
+        stroke="#00AAC8" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+  <circle cx="223" cy="102" r="2.4" fill="#00C2E8" opacity="0.82"/>
+  <circle cx="242" cy="99"  r="2.1" fill="#BED020" opacity="0.82"/>
+  <circle cx="256" cy="101" r="1.9" fill="#00AAC8" opacity="0.82"/>
+
+  <!-- ════ BODY ════ -->
+
+  <!-- Body back / wing (deep navy, behind main body) -->
+  <path d="M 216,228
+           C 204,248 200,268 202,292
+           C 204,314 212,332 224,342
+           C 216,328 210,312 210,290
+           C 210,268 216,248 226,232 Z"
+        fill="url(#macawWing)"/>
+
+  <!-- Wing feather layers (folded primaries) — deep blue striations -->
+  <path d="M 216,238 C 208,258 206,280 210,302"
+        stroke="#00398A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M 220,234 C 213,255 211,278 215,300"
+        stroke="#003E96" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+  <path d="M 224,232 C 218,252 216,275 220,298"
+        stroke="#0044A2" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Main body oval (cyan/teal) -->
+  <ellipse cx="252" cy="275" rx="42" ry="67" fill="url(#macawBody)"/>
+
+  <!-- Breast / chest highlight (warm gold-yellow) -->
+  <path d="M 262,218
+           C 276,232 284,255 283,280
+           C 282,302 273,320 264,332
+           C 275,318 282,298 282,274
+           C 282,248 276,228 265,214 Z"
+        fill="#D4A620" opacity="0.58"/>
+
+  <!-- Shoulder highlight (light cyan) -->
+  <path d="M 240,230 C 252,225 264,226 272,232 C 262,227 250,227 240,232 Z"
+        fill="#52EAFF" opacity="0.40"/>
+
+  <!-- ════ TAIL FEATHERS ════ -->
+
+  <!-- Primary tail (main cyan, longest) -->
+  <path d="M 248,338 C 247,358 248,380 252,400"
+        stroke="#00C8EE" stroke-width="9"
+        stroke-linecap="round" fill="none"/>
+  <!-- Secondary tail feather (deep blue) -->
+  <path d="M 254,336 C 254,356 256,378 262,398"
+        stroke="#003A8E" stroke-width="6"
+        stroke-linecap="round" fill="none"/>
+  <!-- Tertiary tail feather (mid-teal) -->
+  <path d="M 242,338 C 240,358 238,376 236,395"
+        stroke="#006890" stroke-width="4.5"
+        stroke-linecap="round" fill="none"/>
+  <!-- Thin outer tail feather (green-teal) -->
+  <path d="M 238,340 C 234,360 230,378 228,396"
+        stroke="#28886A" stroke-width="3"
+        stroke-linecap="round" fill="none"/>
+
+  <!-- ════ FEET / TALONS gripping branch ════ -->
+  <!-- Front talons (forward-facing) -->
+  <path d="M 238,348 C 232,352 228,356 224,360"
+        stroke="#3A2808" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path d="M 242,348 C 238,354 236,358 234,364"
+        stroke="#3A2808" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path d="M 248,347 C 246,354 246,360 246,366"
+        stroke="#3A2808" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <!-- Back talon (hallux) -->
+  <path d="M 265,348 C 266,354 270,358 272,362"
+        stroke="#3A2808" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M 270,347 C 272,352 276,355 278,358"
+        stroke="#3A2808" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       BRANCH — natural curvy wood + intricate circuit-board overlay
+       Main branch at y ≈ 355, spanning x = 128 to x = 392
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Branch bark shadow (slightly below main branch for depth) -->
+  <path d="M 128,362 C 148,358 172,362 196,359 C 220,356 244,362 264,362
+           C 284,362 310,358 334,362 C 358,365 376,362 394,366"
+        stroke="#2A1A08" stroke-width="11" stroke-linecap="round" fill="none"/>
+
+  <!-- Main branch (organic curvy — natural irregular line) -->
+  <path d="M 128,358 C 148,354 172,358 196,355 C 220,352 244,358 264,358
+           C 284,358 310,354 334,358 C 358,361 376,358 394,362"
+        stroke="url(#branchFill)" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+  <!-- Branch bark highlight (top edge lighter) -->
+  <path d="M 130,356 C 150,352 174,355 198,352 C 222,349 246,355 266,355
+           C 286,355 312,352 336,355 C 360,358 378,355 392,359"
+        stroke="#6A4820" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+  <!-- ── CIRCUIT BOARD TRACES on branch ──
+       Teal #00D4FF coloured traces, thin and precise
+  ── -->
+  <!-- Main horizontal circuit trace running along branch surface -->
+  <path d="M 155,356 L 230,356 L 230,348 L 298,348 L 298,356 L 375,356"
+        stroke="#005568" stroke-width="1.4" fill="none"/>
+  <!-- Secondary trace below branch -->
+  <path d="M 185,360 L 250,360 L 250,368 L 315,368 L 315,360 L 370,360"
+        stroke="#004A5C" stroke-width="1.2" fill="none"/>
+  <!-- PCB via/pad marks on horizontal traces -->
+  <rect x="228" y="346" width="4" height="4" rx="1" fill="#003E52"/>
+  <rect x="296" y="346" width="4" height="4" rx="1" fill="#003E52"/>
+  <rect x="248" y="366" width="4" height="4" rx="1" fill="#003E52"/>
+  <rect x="313" y="366" width="4" height="4" rx="1" fill="#003E52"/>
+
+  <!-- ── ORGANIC sub-branches (natural curvy lines going up from branch) ── -->
+  <!-- Sub-branch to NODE 1 (upper-left) -->
+  <path d="M 142,357 C 138,347 133,338 130,326 C 127,318 128,312 132,308"
+        stroke="#5C3A18" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <!-- Branch bark highlight on sub-branch 1 -->
+  <path d="M 143,355 C 139,345 134,336 131,324"
+        stroke="#6E4A22" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.45"/>
+
+  <!-- Sub-branch to NODE 2 (straight up, slightly right) -->
+  <path d="M 170,356 C 168,343 166,330 168,318"
+        stroke="#5C3A18" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M 171,354 C 170,342 168,329 170,317"
+        stroke="#6E4A22" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.4"/>
+
+  <!-- Sub-branch to NODE 3 (upper-right) -->
+  <path d="M 358,358 C 360,347 362,337 364,326"
+        stroke="#5C3A18" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M 359,356 C 361,345 363,335 365,324"
+        stroke="#6E4A22" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.4"/>
+
+  <!-- Sub-branch to NODE 4 (lower-right, short stub going down) -->
+  <path d="M 382,361 C 385,367 387,371 388,374"
+        stroke="#5C3A18" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+
+  <!-- ── CIRCUIT sub-branches (straight digital traces going down from branch) ── -->
+  <!-- Down to NODE 5 -->
+  <path d="M 226,358 L 226,388"
+        stroke="#005568" stroke-width="1.6" fill="none"/>
+  <!-- Down to NODE 6 (parallel) -->
+  <path d="M 298,358 L 298,392"
+        stroke="#004E62" stroke-width="1.5" fill="none"/>
+  <!-- Right-angle trace to NODE 7 (branches off NODE 6 path) -->
+  <path d="M 298,368 L 322,368 L 322,380"
+        stroke="#004462" stroke-width="1.4" fill="none"/>
+  <!-- PCB tick marks on vertical traces -->
+  <line x1="224" y1="370" x2="228" y2="370" stroke="#006878" stroke-width="1"/>
+  <line x1="296" y1="374" x2="300" y2="374" stroke="#005E70" stroke-width="1"/>
+  <line x1="319" y1="372" x2="323" y2="372" stroke="#005060" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       7 CIRCUIT END-POINT NODES — glowing teal #00D4FF
+       (3 organic-branch endpoints + 4 circuit-trace endpoints)
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Glow halos -->
+  <circle cx="132" cy="308" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 1 organic -->
+  <circle cx="168" cy="318" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 2 organic -->
+  <circle cx="364" cy="326" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 3 organic -->
+  <circle cx="388" cy="374" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 4 organic -->
+  <circle cx="226" cy="388" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 5 circuit -->
+  <circle cx="298" cy="392" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 6 circuit -->
+  <circle cx="322" cy="380" r="13" fill="url(#nodeGlow)"/>  <!-- NODE 7 circuit -->
+
+  <!-- Node dots (solid #00D4FF) -->
+  <circle cx="132" cy="308" r="4.2" fill="#00D4FF"/>
+  <circle cx="168" cy="318" r="4.2" fill="#00D4FF"/>
+  <circle cx="364" cy="326" r="4.2" fill="#00D4FF"/>
+  <circle cx="388" cy="374" r="4.2" fill="#00D4FF"/>
+  <circle cx="226" cy="388" r="4.2" fill="#00D4FF"/>
+  <circle cx="298" cy="392" r="4.2" fill="#00D4FF"/>
+  <circle cx="322" cy="380" r="4.2" fill="#00D4FF"/>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       INNER RING COMPLEX PATTERN (radial geometric ornament)
+       Fills the space between content circle and the ring boundary.
+       Uses lines, small diamonds, and arc segments — no blur.
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Radial spoke lines (every 45°, from r=213 inward ~14px — subtle) -->
+  <!-- 0°   --> <line x1="473" y1="260" x2="459" y2="260" stroke="#303050" stroke-width="0.8"/>
+  <!-- 45°  --> <line x1="471" y1="311" x2="462" y2="303" stroke="#303050" stroke-width="0.8"/>
+  <!-- wait, these coords don't make sense at 45°. Let me recalculate -->
+  <!-- Actually at 45°, from r=213: x=260+213*cos45=260+150.6=410.6, y=260+213*sin45=260+150.6=410.6 -->
+  <!-- and r=200: x=260+200*cos45=260+141.4=401.4, y=401.4 -->
+
+  <!-- Decorative diamond marks at 8 positions (every 45°) on inner ring -->
+  <!-- These are small rotated squares at r=208, marking the ring boundary -->
+
+  <!-- 0°  (right)     --> <polygon points="474,260 470,256 466,260 470,264"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 45° (lower-rt) --> <polygon points="413,413 410,408 405,411 408,416"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 90° (bottom)   --> <polygon points="260,474 256,470 260,466 264,470"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 135° (lower-lt)--> <polygon points="107,413 104,408 109,411 112,416"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 180° (left)    --> <polygon points="46,260 50,256 54,260 50,264"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 225° (upper-lt)--> <polygon points="107,107 112,104 109,109 104,112"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 270° (top)     --> <polygon points="260,46 256,50 260,54 264,50"
+            fill="#3A4A5C" opacity="0.65"/>
+  <!-- 315° (upper-rt)--> <polygon points="413,107 408,104 411,109 416,112"
+            fill="#3A4A5C" opacity="0.65"/>
+
+</svg>

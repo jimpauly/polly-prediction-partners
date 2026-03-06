@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 310" width="280" height="310">
+  <defs>
+
+    <!-- Node glow: radial gradient (no blur — pure gradient glow) -->
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#00D4FF" stop-opacity="0.88"/>
+      <stop offset="45%"  stop-color="#00D4FF" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#00D4FF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Icon panel — dark metal gradient -->
+    <linearGradient id="panel" x1="0%" y1="0%" x2="65%" y2="100%">
+      <stop offset="0%"   stop-color="#252538"/>
+      <stop offset="100%" stop-color="#13131C"/>
+    </linearGradient>
+
+    <!-- Glass sheen overlay (top-left light source) -->
+    <linearGradient id="glassSheen" x1="0%" y1="0%" x2="20%" y2="100%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.07"/>
+      <stop offset="40%"  stop-color="#FFFFFF" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Macaw head — cyan radial (light upper-left) -->
+    <radialGradient id="macawHead" cx="36%" cy="30%" r="68%">
+      <stop offset="0%"   stop-color="#52EAFF"/>
+      <stop offset="50%"  stop-color="#00C8EE"/>
+      <stop offset="100%" stop-color="#0082A5"/>
+    </radialGradient>
+
+    <!-- Macaw nape / back of head (deep navy-blue) -->
+    <linearGradient id="macawNape" x1="85%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#00389A"/>
+      <stop offset="100%" stop-color="#001258"/>
+    </linearGradient>
+
+  </defs>
+
+  <!-- ══════════════ ICON PANEL ══════════════ -->
+  <rect x="22" y="12" width="236" height="190" rx="15" ry="15"
+        fill="url(#panel)" stroke="#30304A" stroke-width="1"/>
+  <!-- Glass sheen (upper half only, rectangular clip via opacity) -->
+  <rect x="23" y="13" width="234" height="96" rx="15" ry="15"
+        fill="url(#glassSheen)"/>
+  <!-- Inner panel edge highlight (thin bright top-left arc) -->
+  <rect x="23" y="13" width="234" height="188" rx="14" ry="14"
+        fill="none" stroke="#3E3E5A" stroke-width="0.6"/>
+
+  <!-- ══════════════ MACAW HEAD — FACING RIGHT ══════════════
+       Head center ≈ (118, 92)  |  beak extends to x ≈ 212
+       All colours: diverse palette, main = #00D4FF
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- Nape / back of head (deep navy, offset left — peeking behind) -->
+  <ellipse cx="104" cy="96" rx="42" ry="52" fill="url(#macawNape)"/>
+
+  <!-- Main head oval — cyan -->
+  <ellipse cx="118" cy="92" rx="44" ry="54" fill="url(#macawHead)"/>
+
+  <!-- Yellow-green forehead stripe (scarlet-macaw-style band) -->
+  <path d="M 106,40 C 117,34 132,34 146,41 C 134,44 119,44 106,45 Z"
+        fill="#C5DA20"/>
+
+  <!-- Crimson accent on upper-nape edge -->
+  <path d="M 79,58 C 75,71 75,83 80,93 C 77,82 78,69 82,59 Z"
+        fill="#BB2E00" opacity="0.52"/>
+
+  <!-- Teal-green chin / throat base accent -->
+  <path d="M 94,134 C 106,141 119,142 129,138 C 119,141 106,140 96,133 Z"
+        fill="#2A9070" opacity="0.55"/>
+
+  <!-- ── Upper mandible (large, hooked — dark horn/charcoal) ── -->
+  <path d="M 155,75
+           C 168,67 185,65 201,71
+           C 212,75 217,85 214,95
+           C 212,104 203,109 193,109
+           C 185,109 176,104 169,98
+           L 156,90
+           C 153,83 152,77 155,75 Z"
+        fill="#231908"/>
+  <!-- Upper beak top-ridge highlight (subtle metallic edge) -->
+  <path d="M 157,74 C 171,67 188,66 203,72 C 189,66 172,64 157,71 Z"
+        fill="#3D2B16" opacity="0.7"/>
+
+  <!-- ── Lower mandible ── -->
+  <path d="M 156,91
+           L 169,98
+           C 178,104 188,109 194,107
+           C 192,113 183,120 171,122
+           C 159,124 148,118 142,109
+           C 146,104 151,98 156,91 Z"
+        fill="#31200F"/>
+
+  <!-- ── Facial patch (bare naked skin — cream with fine feather-lines) ── -->
+  <ellipse cx="163" cy="92" rx="13" ry="10" fill="#F0E8D5"/>
+  <line x1="151" y1="87" x2="173" y2="87" stroke="#5A4A36" stroke-width="0.7"/>
+  <line x1="149" y1="91" x2="172" y2="91" stroke="#5A4A36" stroke-width="0.7"/>
+  <line x1="150" y1="95" x2="172" y2="95" stroke="#5A4A36" stroke-width="0.7"/>
+  <line x1="153" y1="99" x2="170" y2="99" stroke="#5A4A36" stroke-width="0.65"/>
+
+  <!-- ── Eye ── -->
+  <circle cx="128" cy="73" r="11"  fill="#E0D8BE"/>  <!-- pale scleral ring -->
+  <circle cx="128" cy="73" r="9"   fill="#CF9C18"/>  <!-- yellow scleral ring (macaw) -->
+  <circle cx="128" cy="73" r="6"   fill="#18287C"/>  <!-- iris -->
+  <circle cx="128" cy="73" r="3.5" fill="#080808"/>  <!-- pupil -->
+  <circle cx="130" cy="71" r="1.9" fill="#F8F8F8"/>  <!-- specular highlight -->
+
+  <!-- ── Subtle crown feather hints (decorative — NOT circuit nodes) ── -->
+  <path d="M 105,41 C 102,30 100,19 98,12"
+        stroke="#00C2E8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M 118,38 C 117,26 116,15 115,8"
+        stroke="#BED020" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+  <path d="M 131,40 C 130,28 129,18 127,11"
+        stroke="#00AAC8" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+  <!-- Tiny feather-tip accents -->
+  <circle cx="98"  cy="12" r="2.2" fill="#00C2E8" opacity="0.85"/>
+  <circle cx="115" cy="8"  r="1.9" fill="#BED020" opacity="0.85"/>
+  <circle cx="127" cy="11" r="1.7" fill="#00AAC8" opacity="0.85"/>
+
+  <!-- ══════════════ CIRCUIT BRANCH SYSTEM — 7 END-POINT NODES ══════════════
+       All 7 nodes are at branch endpoints (not at crown).
+       Left side = organic curvy paths   |   Right side = straight digital traces
+  ══════════════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Main trunk from chin base -->
+  <path d="M 118,148 L 118,163"
+        stroke="#004E68" stroke-width="2.2" fill="none"/>
+
+  <!-- ── ORGANIC curvy branches (left side) ── -->
+  <!-- Primary left branch -->
+  <path d="M 118,158 C 100,163 82,168 65,175"
+        stroke="#005A78" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+  <!-- Sub-branch → NODE 1 (far-left) -->
+  <path d="M 65,175 C 56,182 47,187 41,192"
+        stroke="#004A64" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <!-- Sub-branch → NODE 2 (left) -->
+  <path d="M 65,175 C 62,181 59,187 56,192"
+        stroke="#004260" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <!-- Mid-left branch → NODE 3 -->
+  <path d="M 118,158 C 108,165 100,173 92,182"
+        stroke="#00506E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- ── STRAIGHT digital circuit traces (right side) ── -->
+  <!-- Horizontal trunk right -->
+  <path d="M 118,160 L 152,160"
+        stroke="#005878" stroke-width="1.8" fill="none"/>
+  <!-- Down to NODE 5 -->
+  <path d="M 152,160 L 152,182"
+        stroke="#005878" stroke-width="1.5" fill="none"/>
+  <!-- Right then down to NODE 6 -->
+  <path d="M 152,160 L 176,160 L 176,178"
+        stroke="#004E6A" stroke-width="1.4" fill="none"/>
+  <!-- Further right then down to NODE 7 -->
+  <path d="M 176,160 L 204,160 L 204,174"
+        stroke="#00435E" stroke-width="1.3" fill="none"/>
+  <!-- PCB-style tick marks on horizontal trace -->
+  <line x1="135" y1="157" x2="135" y2="163" stroke="#006888" stroke-width="1"/>
+  <line x1="164" y1="157" x2="164" y2="163" stroke="#006080" stroke-width="1"/>
+  <line x1="190" y1="157" x2="190" y2="163" stroke="#005878" stroke-width="1"/>
+
+  <!-- Centre straight down → NODE 4 -->
+  <path d="M 118,163 L 118,192"
+        stroke="#006080" stroke-width="1.6" fill="none"/>
+
+  <!-- ── NODE GLOW HALOS (radial gradient, zero blur) ── -->
+  <circle cx="41"  cy="192" r="11" fill="url(#nodeGlow)"/>
+  <circle cx="56"  cy="192" r="11" fill="url(#nodeGlow)"/>
+  <circle cx="92"  cy="182" r="11" fill="url(#nodeGlow)"/>
+  <circle cx="118" cy="192" r="11" fill="url(#nodeGlow)"/>
+  <circle cx="152" cy="182" r="11" fill="url(#nodeGlow)"/>
+  <circle cx="176" cy="178" r="11" fill="url(#nodeGlow)"/>
+  <circle cx="204" cy="174" r="11" fill="url(#nodeGlow)"/>
+
+  <!-- ── NODE DOTS — exactly 7 ── -->
+  <circle cx="41"  cy="192" r="3.5" fill="#00D4FF"/>  <!-- 1 far-left organic -->
+  <circle cx="56"  cy="192" r="3.5" fill="#00D4FF"/>  <!-- 2 left organic -->
+  <circle cx="92"  cy="182" r="3.5" fill="#00D4FF"/>  <!-- 3 mid-left organic -->
+  <circle cx="118" cy="192" r="3.5" fill="#00D4FF"/>  <!-- 4 centre straight -->
+  <circle cx="152" cy="182" r="3.5" fill="#00D4FF"/>  <!-- 5 right circuit -->
+  <circle cx="176" cy="178" r="3.5" fill="#00D4FF"/>  <!-- 6 right circuit -->
+  <circle cx="204" cy="174" r="3.5" fill="#00D4FF"/>  <!-- 7 far-right circuit -->
+
+  <!-- ══════════════ TYPOGRAPHY ══════════════ -->
+
+  <!-- Thin separator rule -->
+  <line x1="96" y1="228" x2="184" y2="228"
+        stroke="#00D4FF" stroke-width="0.5" opacity="0.38"/>
+
+  <!-- "Paulie's" — small, shy, italic -->
+  <text x="140" y="248"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="14" font-style="italic" font-weight="400"
+        fill="#00D4FF" text-anchor="middle" letter-spacing="2.2" opacity="0.90">
+    Paulie's
+  </text>
+
+  <!-- "Prediction Partners" — large, bold, dominant -->
+  <text x="140" y="284"
+        font-family="'Arial Black', 'Arial', 'Helvetica Neue', sans-serif"
+        font-size="22" font-weight="900"
+        fill="#DDE5F2" text-anchor="middle" letter-spacing="0.4">
+    Prediction Partners
+  </text>
+
+  <!-- Bottom anchor rule -->
+  <line x1="30" y1="297" x2="250" y2="297"
+        stroke="#28283E" stroke-width="0.8"/>
+
+</svg>
