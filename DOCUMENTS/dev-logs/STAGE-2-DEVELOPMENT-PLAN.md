@@ -108,20 +108,20 @@
 
 ## Phase 4: Trading Studio UI (Future)
 
-- [ ] Closer match to Kalshi card layout (per reference photos)
-- [ ] Series section headers (e.g., "BTC", "Sports")
-- [ ] Potential returns display ($100 → $135)
-- [ ] Market icon/badges per series
-- [ ] More filter options matching Kalshi (Closing soon, Open markets)
-- [ ] Live/Demo mode indicator glow enhancements
+- [x] Closer match to Kalshi card layout (per reference photos)
+- [x] Series section headers (e.g., "BTC", "Sports")
+- [x] Potential returns display ($100 → $135)
+- [x] Market icon/badges per series
+- [x] More filter options matching Kalshi (Closing soon, Open markets, frequency)
+- [x] Live/Demo mode indicator glow enhancements
 
 ---
 
 ## Phase 5: Shippable Quality (Stage 2.5)
 
-- [ ] Electron desktop app wrapper
-- [ ] Setup wizard (first-run experience)
-- [ ] Windows .exe and macOS .dmg installers
-- [ ] Auto-updater integration
-- [ ] Security audit and hardening
+- [x] Electron desktop app wrapper
+- [x] Setup wizard (first-run experience, 4-step flow)
+- [x] Windows .exe and macOS .dmg installers (config complete)
+- [x] Auto-updater integration (GitHub Releases check at startup)
+- [x] Security audit and hardening (CSP, localhost binding, sandbox mode)
 - [ ] Performance profiling and optimization

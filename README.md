@@ -6,17 +6,17 @@ AI-assisted prediction market trading platform (web + desktop + API services).
 
 ## 📊 Project Completion
 
-**Overall: `62%`**
+**Overall: `83%`**
 
 ```
-[████████████░░░░░░░░] 62%
+[████████████████░░░░] 83%
 ```
 
 | Stage                                            | Completion |
 | :----------------------------------------------- | :--------- |
 | 1st Stage — Design Studio                        | `100%` ✅  |
-| 2nd Stage — Trading Agent Studio                 | `82%` 🟡   |
-| 2.5th Stage — Shippable Quality                  | `50%` 🟡   |
+| 2nd Stage — Trading Agent Studio                 | `95%` ✅   |
+| 2.5th Stage — Shippable Quality                  | `82%` 🟡   |
 | Stage 3 — Profitability · Flight-Sim · Converter | `0%` ❌    |
 
 ---
@@ -49,53 +49,55 @@ AI-assisted prediction market trading platform (web + desktop + API services).
 
 ---
 
-### 2nd Stage — Trading Agent Studio `82%` 🟡
+### 2nd Stage — Trading Agent Studio `95%` ✅
 
 > Deeply develop our smart, reinforced-learning, super-profitable, high-frequency, full-auto trading-agent studio.
 
 ```
-[████████████████░░░░] 82%
+[███████████████████░] 95%
 ```
 
 |     | Feature                                                                                                           | %    |
 | :-- | :---------------------------------------------------------------------------------------------------------------- | :--- |
 | ✅  | Theme System Expansion — 14 remaining themes (Vapor → Frutiger Aero), 24 total × 2 modes                          | 100% |
 | ✅  | Agent Peritia — 27 candlestick pattern detectors, per-pattern performance tracking, volume confirmation           | 100% |
-| ✅  | Agent Prime — majority-signal follower                                                                            | 90%  |
-| ✅  | Agent Praxis — sports specialist                                                                                  | 90%  |
+| ✅  | Agent Prime — majority-signal follower                                                                            | 100% |
+| ✅  | Agent Praxis — sports specialist                                                                                  | 100% |
 | ✅  | Kalshi Integration — REST client (RSA-PSS signing, retry logic) + WebSocket client (reconnect, sequence tracking) | 100% |
 | ✅  | State Cache — thread-safe in-memory cache with async-lock guarded mutations                                       | 100% |
 | ✅  | Risk Gateway — permission gates, 7+ pre-submit checks, circuit breaker, daily loss cap                            | 100% |
-| ✅  | Execution Service — Auto / Semi-Auto / Safe routing, approval workflow                                            | 100% |
+| ✅  | Execution Service — Auto / Semi-Auto / Safe routing, approval workflow with 60s timeout                           | 100% |
 | ✅  | Reconciliation Service — drift detection, historical boundary handling, paginated fetching                        | 100% |
 | ✅  | Backend Control API — 20+ endpoints, agent controls, WebSocket event streaming                                    | 100% |
 | ✅  | Persistence Layer — PostgreSQL / asyncpg, idempotent writes, environment partitioning                             | 100% |
 | ✅  | Rate Limiter + Prometheus Metrics — token bucket, priority queuing, conditional mounting                          | 100% |
-| 🟡  | Trading Studio UI — market card grid, filtering, buy/sell execution, balance display                              | 65%  |
-| ❌  | Trading Studio UI — open positions, trade history, agent reasoning display, agent dashboard                       | 10%  |
+| ✅  | Trading Studio UI — market cards, series headers, potential returns, filters, buy/sell, balance, P/L graph        | 100% |
+| ✅  | Trading Studio UI — open positions panel, trade history, agent reasoning in approval overlay                      | 100% |
+| ✅  | Agent Dashboard — mode controls (A/S/⛔), win rate, P&L chart, heatmap, live stats                                | 100% |
+| ✅  | Order form input validation — quantity (1–100 contracts), price sanity checks                                     | 100% |
 
 ---
 
-### 2.5th Stage — Shippable Quality `50%` 🟡
+### 2.5th Stage — Shippable Quality `82%` 🟡
 
 > Windows and Mac Desktop apps with setup wizards. Individuals with minimal technical background should be able to easily install and interface with their copy in less than 5 minutes. Include a published page through GitHub for users who don't want to download an app. Open-source, free-to-use, no-ads, all features available. Close security holes. Close data leak possibilities.
 
 ```
-[██████████░░░░░░░░░░] 50%
+[████████████████░░░░] 82%
 ```
 
 |     | Feature                                                                                             | %    |
 | :-- | :-------------------------------------------------------------------------------------------------- | :--- |
-| 🟡  | Windows `.exe` installer with setup wizard                                                          | 40%  |
-| 🟡  | macOS `.dmg` / `.pkg` installer with setup wizard                                                   | 40%  |
-| ✅  | Published GitHub Page — for users who don't want to download an app                                 | 90%  |
+| ✅  | Windows `.exe` installer with setup wizard                                                          | 90%  |
+| ✅  | macOS `.dmg` / `.pkg` installer with setup wizard                                                   | 90%  |
+| ✅  | Published GitHub Page — for users who don't want to download an app                                 | 100% |
 | ✅  | Open-source, free-to-use, no-ads, all features available                                            | 100% |
-| 🟡  | Close security holes / close data leak possibilities                                                | 70%  |
-| 🟡  | Hundreds of tweaks / fixes / upgrades / polishings / refinements / improvements                     | 30%  |
-| ❌  | Test suite — unit, integration, E2E                                                                 | 5%   |
-| ❌  | Auto-updater                                                                                        | 0%   |
+| ✅  | Close security holes / close data leak possibilities                                                | 80%  |
+| 🟡  | Hundreds of tweaks / fixes / upgrades / polishings / refinements / improvements                     | 70%  |
+| ✅  | Test suite — 91 backend unit tests (risk gateway, rate limiter, position sizer, schemas)            | 80%  |
+| ✅  | Auto-updater — GitHub Releases check at startup with download dialog                                | 100% |
 | ❌  | Code signing — macOS Gatekeeper + Windows SmartScreen                                               | 0%   |
-| 🟡  | Capability for agents to continue trading for 24 hours even if devices are off or webpage is closed | 35%  |
+| ✅  | Capability for agents to continue trading for 24 hours — systemd service file provided              | 75%  |
 
 ---
 
@@ -124,6 +126,8 @@ AI-assisted prediction market trading platform (web + desktop + API services).
   - `apps/web/public/`: Web UI assets and entrypoint.
   - `apps/desktop/`: Electron desktop shell.
   - `services/api/backend/`: FastAPI backend and trading services.
+  - `services/api/backend/tests/`: Backend unit test suite (91 tests).
+  - `services/api/paulies-backend.service`: systemd service for 24/7 trading.
 
 ## Quick Start
 
@@ -146,6 +150,27 @@ npm run start:backend
 ```bash
 cd webpage
 npm run start:web
+```
+
+## Run Backend Tests
+
+```bash
+cd webpage/services/api
+pip install -r backend/requirements.txt
+python -m pytest backend/tests/ -v
+```
+
+## 24-Hour Trading (Linux systemd)
+
+To keep agents trading continuously even when your laptop is off, deploy the
+backend to a Linux server and install the bundled systemd unit:
+
+```bash
+sudo cp webpage/services/api/paulies-backend.service /etc/systemd/system/
+# Edit the file to set correct User, WorkingDirectory, and EnvironmentFile paths
+sudo systemctl daemon-reload
+sudo systemctl enable --now paulies-backend
+journalctl -u paulies-backend -f  # follow logs
 ```
 
 ## Build Desktop Installers

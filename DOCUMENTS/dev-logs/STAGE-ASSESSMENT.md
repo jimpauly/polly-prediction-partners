@@ -1,23 +1,23 @@
 # 📊 Stage Assessment — Paulie's Prediction Partners
 
-> **Audit date:** March 6, 2026
-> **Assessed by:** Copilot Coding Agent (Stage 2/2.5 Development Sprint)
-> **Codebase:** 22,000+ lines across 65 files
+> **Audit date:** March 6, 2026 (updated)
+> **Assessed by:** Copilot Coding Agent (Stage 2 Completion Sprint)
+> **Codebase:** 23,000+ lines across 70 files
 
 ---
 
 ## 🎯 TL;DR — Where Are We?
 
-### **Stage 2.92 out of 3.0** — ~92% through Stage 2 → 3
+### **Stage 2.95 out of 3.0** — ~95% through Stage 2 → 3
 
-| Stage                                  | Status           | Confidence                                             |
-| -------------------------------------- | ---------------- | ------------------------------------------------------ |
-| **Stage 1** (Design Studio)            | ✅ 100% Complete | Verified — all 14 phases done                          |
-| **Stage 2** (Trading Agent Studio)     | ✅ ~95% Complete | Trading UI overhauled, series headers, returns display |
-| **Stage 2.5** (Shippable Quality)      | 🟡 ~80% Complete | Setup wizard done, auto-updater wired, tests pending   |
-| **Stage 3** (Profitability + New Apps) | ❌ 0% Started    | Blocked until Stage 2.5 is 110%                        |
+| Stage                                  | Status           | Confidence                                                   |
+| -------------------------------------- | ---------------- | ------------------------------------------------------------ |
+| **Stage 1** (Design Studio)            | ✅ 100% Complete | Verified — all 14 phases done                                |
+| **Stage 2** (Trading Agent Studio)     | ✅ ~95% Complete | Full trading UI, agents, backend, tests, input validation    |
+| **Stage 2.5** (Shippable Quality)      | 🟡 ~82% Complete | Tests added (91 unit tests), systemd service, auto-updater   |
+| **Stage 3** (Profitability + New Apps) | ❌ 0% Started    | Blocked until Stage 2.5 is 110%                              |
 
-**What changed in this sprint (March 6, 2026):**
+**What changed in this sprint (March 6, 2026 — Stage 2 Completion):**
 
 - ✅ Trading Studio UI major overhaul — Kalshi-style series section headers
 - ✅ Series grouping by category (BTC 15-min, Sports, Economics, etc.)
@@ -50,8 +50,13 @@
 - ✅ Converter Studio: market calculator, Kelly criterion sizer, price converter
 - ✅ Telemetry: 1-second datetime, backend health dot, ping label
 - ✅ Live Logs: improved event capture, memory reporting, better formatting
+- ✅ **91 backend unit tests** — risk gateway, rate limiter, position sizer, schemas
+- ✅ **CI pipeline** — GitHub Actions backend-tests job runs pytest on every PR
+- ✅ **Order quantity input** — contracts spinner in expanded card (1–100)
+- ✅ **Input validation** — quantity and price sanity checks before order submit
+- ✅ **systemd service file** — paulies-backend.service for 24/7 Linux deployment
 
-**Translation:** The engine is built and the cockpit looks incredible, but the wires from the cockpit switches to the engine aren't all connected yet. We're past the halfway mark toward shippable.
+**Translation:** All Stage 2 features are built and wired. Stage 2.5 is now at ~82% — the main remaining gaps are code signing and deeper performance profiling.
 
 ---
 

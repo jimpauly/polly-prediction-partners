@@ -1898,6 +1898,37 @@ select:focus {
   padding-top: 8px;
 }
 
+.expanded-order-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.expanded-qty-label {
+  font-size: 11px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.expanded-qty-input {
+  width: 64px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border-muted);
+  background: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  font-size: 13px;
+  text-align: center;
+}
+
+.expanded-qty-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
 /* ---- Approval Overlay ---- */
 .approval-overlay {
   position: fixed;
