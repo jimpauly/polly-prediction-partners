@@ -24,7 +24,7 @@ Paulie's Prediction Partners is a free and open-source AI-assisted prediction ma
 - No advertising networks
 - No user accounts on our servers
 - No cookies (the App runs locally, not on a web server you visit)
-- The only external network traffic occurs when *you* choose to connect to Kalshi's API
+- The only external network traffic occurs when _you_ choose to connect to Kalshi's API
 
 ---
 
@@ -34,25 +34,25 @@ Paulie's Prediction Partners is a free and open-source AI-assisted prediction ma
 
 We do not collect, store, process, or transmit:
 
-| Category | Examples | Collected? |
-|----------|----------|------------|
-| Personal identifiers | Name, email, phone number, IP address | ❌ No |
-| Financial data | Bank account, credit card, payment info | ❌ No |
-| Usage analytics | Page views, clicks, session duration, crashes | ❌ No |
-| Device information | Hardware specs, OS version, device IDs | ❌ No |
-| Location data | GPS, city, country | ❌ No |
-| Behavioral data | How you use the App, patterns, preferences | ❌ No |
+| Category             | Examples                                      | Collected? |
+| -------------------- | --------------------------------------------- | ---------- |
+| Personal identifiers | Name, email, phone number, IP address         | ❌ No      |
+| Financial data       | Bank account, credit card, payment info       | ❌ No      |
+| Usage analytics      | Page views, clicks, session duration, crashes | ❌ No      |
+| Device information   | Hardware specs, OS version, device IDs        | ❌ No      |
+| Location data        | GPS, city, country                            | ❌ No      |
+| Behavioral data      | How you use the App, patterns, preferences    | ❌ No      |
 
 ### 3.2 Information That Stays on Your Computer
 
 The following is stored **only on your local machine** and is never transmitted to us:
 
-| Data | Storage Location | Purpose |
-|------|-----------------|---------|
-| App theme and display preferences | Local browser/Electron storage | Remember your settings |
-| Illumination control settings | Local browser/Electron storage | Remember your panel settings |
-| Setup wizard completion state | `userData/wizard-state.json` on your device | Skip re-running first-time setup |
-| To-Do list items | Local browser storage | Your personal task list |
+| Data                              | Storage Location                            | Purpose                          |
+| --------------------------------- | ------------------------------------------- | -------------------------------- |
+| App theme and display preferences | Local browser/Electron storage              | Remember your settings           |
+| Illumination control settings     | Local browser/Electron storage              | Remember your panel settings     |
+| Setup wizard completion state     | `userData/wizard-state.json` on your device | Skip re-running first-time setup |
+| To-Do list items                  | Local browser storage                       | Your personal task list          |
 
 You can delete this data at any time by clearing your app data or uninstalling the application.
 
@@ -117,22 +117,22 @@ Even though we collect no personal data, you have rights that we respect:
 
 ### GDPR Rights (EU/EEA/UK residents)
 
-| Right | What it means | How to exercise |
-|-------|--------------|-----------------|
-| Right of Access | Know what personal data we hold about you | Email us — we hold none |
-| Right to Erasure | Have your data deleted | Email us — there is nothing to delete |
-| Right to Rectification | Correct inaccurate data | Email us — we hold no data |
-| Right to Data Portability | Receive your data in a portable format | Email us — we hold none |
-| Right to Object | Object to processing | Email us — we do no processing |
-| Right to Restrict Processing | Limit how your data is used | Email us — no processing occurs |
+| Right                        | What it means                             | How to exercise                       |
+| ---------------------------- | ----------------------------------------- | ------------------------------------- |
+| Right of Access              | Know what personal data we hold about you | Email us — we hold none               |
+| Right to Erasure             | Have your data deleted                    | Email us — there is nothing to delete |
+| Right to Rectification       | Correct inaccurate data                   | Email us — we hold no data            |
+| Right to Data Portability    | Receive your data in a portable format    | Email us — we hold none               |
+| Right to Object              | Object to processing                      | Email us — we do no processing        |
+| Right to Restrict Processing | Limit how your data is used               | Email us — no processing occurs       |
 
 ### CCPA Rights (California residents)
 
-| Right | Status |
-|-------|--------|
-| Right to Know | We collect no personal information |
-| Right to Delete | Nothing to delete |
-| Right to Opt-Out of Sale | We never sell personal information |
+| Right                       | Status                                     |
+| --------------------------- | ------------------------------------------ |
+| Right to Know               | We collect no personal information         |
+| Right to Delete             | Nothing to delete                          |
+| Right to Opt-Out of Sale    | We never sell personal information         |
 | Right to Non-Discrimination | We provide no tiered service based on data |
 
 **To exercise any of these rights:** Email chickensaurusrex@outlook.com
@@ -212,4 +212,4 @@ We will respond within 48 hours.
 
 ---
 
-*This privacy policy was written to be human-readable. If you have questions about any section, please reach out.*
+_This privacy policy was written to be human-readable. If you have questions about any section, please reach out._
