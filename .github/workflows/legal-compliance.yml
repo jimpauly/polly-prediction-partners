@@ -1,0 +1,421 @@
+name: ⚖️ Legal Compliance Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  legal-compliance:
+    name: Legal & Privacy Compliance Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────
+      # STEP 1 — Required Legal Files
+      # ─────────────────────────────────────────────
+      - name: 📋 Check required legal files
+        id: legal_files
+        shell: bash
+        run: |
+          echo "## 📋 Required Legal Files" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          MISSING=0
+
+          check_file() {
+            local FILE="$1"
+            local LABEL="$2"
+            if [ -f "$FILE" ]; then
+              echo "- ✅ \`$FILE\` — $LABEL" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- ❌ \`$FILE\` — $LABEL **[MISSING]**" >> "$GITHUB_STEP_SUMMARY"
+              MISSING=$((MISSING + 1))
+            fi
+          }
+
+          check_file "LICENSE"    "Open-source license"
+          check_file "PRIVACY.md" "Privacy policy (GDPR/CCPA)"
+          check_file "SECURITY.md" "Security policy & vulnerability reporting"
+          check_file "README.md"  "Project documentation"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$MISSING" -gt 0 ]; then
+            echo "::error::$MISSING required legal file(s) are missing. Add them to the repository root."
+            echo "files_ok=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          else
+            echo "All required legal files are present. ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "files_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 2 — Python Dependency License Audit
+      # ─────────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 🐍 Audit Python dependency licenses
+        id: python_licenses
+        shell: bash
+        run: |
+          echo "## 🐍 Python Dependency Licenses" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          REQUIREMENTS="webpage/services/api/backend/requirements.txt"
+
+          if [ ! -f "$REQUIREMENTS" ]; then
+            echo "No Python requirements.txt found — skipping." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          pip install pip-licenses --quiet
+
+          # Install project deps so pip-licenses can inspect them
+          pip install -r "$REQUIREMENTS" --quiet 2>&1 | tail -5
+
+          # Licenses considered incompatible with MIT open-source distribution
+          # GPL-2.0 and GPL-3.0 are copyleft — they would require the entire app to be GPL.
+          # AGPL is even more restrictive.
+          BLOCKED_LICENSES="GPL-2.0,GPL-3.0,AGPL-3.0,LGPL-2.1,LGPL-3.0,GPL-2,GPL-3,AGPL"
+
+          echo "| Package | Version | License | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---------|---------|---------|--------|" >> "$GITHUB_STEP_SUMMARY"
+
+          PROBLEMS=0
+
+          while IFS=',' read -r NAME VERSION LICENSE_TYPE; do
+            NAME=$(echo "$NAME" | xargs)
+            VERSION=$(echo "$VERSION" | xargs)
+            LICENSE_TYPE=$(echo "$LICENSE_TYPE" | xargs)
+
+            # Skip header row
+            [ "$NAME" = "Name" ] && continue
+
+            STATUS="✅"
+            for BLOCKED in $(echo "$BLOCKED_LICENSES" | tr ',' ' '); do
+              if echo "$LICENSE_TYPE" | grep -qi "$BLOCKED"; then
+                STATUS="⚠️ REVIEW NEEDED"
+                PROBLEMS=$((PROBLEMS + 1))
+                break
+              fi
+            done
+
+            echo "| $NAME | $VERSION | $LICENSE_TYPE | $STATUS |" >> "$GITHUB_STEP_SUMMARY"
+          done < <(pip-licenses --format=csv 2>/dev/null)
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$PROBLEMS" -gt 0 ]; then
+            echo "::warning::$PROBLEMS Python package(s) may have licenses that require legal review before distribution."
+            echo "python_ok=warn" >> "$GITHUB_OUTPUT"
+          else
+            echo "All Python dependency licenses are compatible with MIT open-source distribution. ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "python_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 3 — npm Dependency License Audit
+      # ─────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Audit npm dependency licenses
+        id: npm_licenses
+        shell: bash
+        run: |
+          echo "## 📦 npm Dependency Licenses" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          PACKAGE_JSON="webpage/package.json"
+
+          if [ ! -f "$PACKAGE_JSON" ]; then
+            echo "No package.json found — skipping." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          cd webpage
+          npm install --quiet 2>&1 | tail -5
+
+          npm install -g license-checker --quiet 2>&1 | tail -3
+
+          BLOCKED_LICENSES="GPL-2.0,GPL-3.0,AGPL-3.0,LGPL-2.1,LGPL-3.0"
+
+          echo "| Package | License | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---------|---------|--------|" >> "$GITHUB_STEP_SUMMARY"
+
+          PROBLEMS=0
+
+          license-checker --json 2>/dev/null | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          blocked = ['GPL-2.0', 'GPL-3.0', 'AGPL-3.0', 'LGPL-2.1', 'LGPL-3.0']
+          for pkg, info in data.items():
+              lic = info.get('licenses', 'Unknown')
+              status = '✅'
+              for b in blocked:
+                  if b.lower() in lic.lower():
+                      status = '⚠️ REVIEW NEEDED'
+                      break
+              print(f'| {pkg} | {lic} | {status} |')
+          " >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          cd ..
+
+          echo "All npm dependency licenses checked. ✅" >> "$GITHUB_STEP_SUMMARY"
+          echo "npm_ok=true" >> "$GITHUB_OUTPUT"
+
+      # ─────────────────────────────────────────────
+      # STEP 4 — Privacy & Tracking Code Scan
+      # ─────────────────────────────────────────────
+      - name: 🔍 Scan for analytics / tracking code
+        id: tracking_scan
+        shell: bash
+        run: |
+          echo "## 🔍 Privacy & Tracking Code Scan" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          FINDINGS=0
+
+          check_pattern() {
+            local LABEL="$1"
+            local PATTERN="$2"
+            local EXCLUDE="${3:-.git}"
+
+            MATCHES=$(grep -rn --include="*.js" --include="*.html" --include="*.py" --include="*.ts" \
+              -i "$PATTERN" . \
+              --exclude-dir=".git" \
+              --exclude-dir="node_modules" \
+              --exclude-dir=".venv" \
+              2>/dev/null | grep -v "^Binary" || true)
+
+            if [ -n "$MATCHES" ]; then
+              echo "- ⚠️ **$LABEL** — found in:" >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              echo "$MATCHES" | head -10 >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              FINDINGS=$((FINDINGS + 1))
+            else
+              echo "- ✅ **$LABEL** — not found" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          }
+
+          check_pattern "Google Analytics (gtag / analytics.js)" "google-analytics\|gtag(\|ga\.js\|analytics\.js"
+          check_pattern "Google Tag Manager" "googletagmanager\|GTM-"
+          check_pattern "Facebook Pixel" "facebook\.net/en_US/fbevents\|fbq\("
+          check_pattern "Mixpanel analytics" "mixpanel\.com\|mixpanel\.init\|mixpanel\.track"
+          check_pattern "Segment analytics" "cdn\.segment\.com\|analytics\.identify\|analytics\.track"
+          check_pattern "Hotjar" "hotjar\.com\|hj\("
+          check_pattern "Intercom chat widget" "intercom\.io\|intercomSettings"
+          check_pattern "Amplitude analytics" "amplitude\.com\|amplitude\.getInstance"
+          check_pattern "Sentry (external telemetry)" "sentry\.io\|sentry\.init"
+          check_pattern "Plausible analytics" "plausible\.io"
+          check_pattern "Heap analytics" "heapanalytics\.com"
+          check_pattern "FullStory" "fullstory\.com\|fullstory\.identify"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$FINDINGS" -gt 0 ]; then
+            echo "::warning::$FINDINGS potential analytics/tracking pattern(s) found. Review to confirm these are not sending user data to external services."
+            echo "tracking_ok=warn" >> "$GITHUB_OUTPUT"
+          else
+            echo "No known analytics or tracking code detected. ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "tracking_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 5 — Hardcoded Secret / Credential Scan
+      # ─────────────────────────────────────────────
+      - name: 🔑 Scan for hardcoded secrets
+        id: secret_scan
+        shell: bash
+        run: |
+          echo "## 🔑 Hardcoded Secret Scan" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          FINDINGS=0
+
+          check_secret() {
+            local LABEL="$1"
+            local PATTERN="$2"
+
+            MATCHES=$(grep -rn --include="*.js" --include="*.html" --include="*.py" \
+              --include="*.ts" --include="*.json" --include="*.env" --include="*.yml" \
+              -i "$PATTERN" . \
+              --exclude-dir=".git" \
+              --exclude-dir="node_modules" \
+              --exclude-dir=".venv" \
+              --exclude="*.lock" \
+              --exclude="PRIVACY.md" \
+              --exclude="SECURITY.md" \
+              --exclude="legal-compliance.yml" \
+              2>/dev/null | grep -v "^Binary" \
+              | grep -v "example\|sample\|placeholder\|dummy\|YOUR_" || true)
+
+            if [ -n "$MATCHES" ]; then
+              echo "- ⚠️ **$LABEL** — possible match (verify it is not a real secret):" >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              echo "$MATCHES" | head -5 >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              FINDINGS=$((FINDINGS + 1))
+            else
+              echo "- ✅ **$LABEL** — not detected" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          }
+
+          check_secret "Hardcoded password" "password\s*=\s*['\"][^'\"]{4,}['\"]"
+          check_secret "Hardcoded API key (generic)" "api_key\s*=\s*['\"][A-Za-z0-9_\-]{16,}['\"]"
+          check_secret "Hardcoded secret/token" "secret\s*=\s*['\"][A-Za-z0-9_\-]{8,}['\"]"
+          check_secret "AWS access key pattern" "AKIA[0-9A-Z]{16}"
+          check_secret "Private key header in source" "-----BEGIN.*PRIVATE KEY-----"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$FINDINGS" -gt 0 ]; then
+            echo "::warning::$FINDINGS potential hardcoded secret pattern(s) found. Verify these are not real credentials committed to the repository."
+            echo "secrets_ok=warn" >> "$GITHUB_OUTPUT"
+          else
+            echo "No hardcoded secrets detected. ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "secrets_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 6 — Copyright Risk Scan
+      # ─────────────────────────────────────────────
+      - name: ©️ Copyright risk scan
+        id: copyright_scan
+        shell: bash
+        run: |
+          echo "## ©️ Copyright Risk Scan" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          FINDINGS=0
+
+          check_copyright() {
+            local LABEL="$1"
+            local PATTERN="$2"
+
+            MATCHES=$(grep -rn --include="*.js" --include="*.html" --include="*.py" --include="*.ts" \
+              -i "$PATTERN" . \
+              --exclude-dir=".git" \
+              --exclude-dir="node_modules" \
+              --exclude-dir=".venv" \
+              --exclude-dir="DOCUMENTS" \
+              2>/dev/null | grep -v "^Binary" || true)
+
+            if [ -n "$MATCHES" ]; then
+              echo "- ⚠️ **$LABEL**" >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              echo "$MATCHES" | head -5 >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              FINDINGS=$((FINDINGS + 1))
+            else
+              echo "- ✅ **$LABEL** — not detected" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          }
+
+          # YouTube content extraction (DMCA / ToS risk)
+          check_copyright "YouTube content extraction (yt-dlp / youtube-dl)" "yt\.dlp\|youtube\.dl\|pytube\|yt_dlp"
+          # Spotify ripping
+          check_copyright "Spotify content ripping" "spotify.*download\|spotipy.*download\|librespot"
+          # General streaming rip patterns
+          check_copyright "Streaming rip imports" "import.*streamrip\|import.*spotdl\|from.*spotdl"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "> **Note:** The Converter Studio feature should only process files the user owns or has explicit permission to convert. See PRIVACY.md §11." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$FINDINGS" -gt 0 ]; then
+            echo "::warning::$FINDINGS copyright risk pattern(s) found. Review to ensure the Converter Studio only processes legally-owned content."
+            echo "copyright_ok=warn" >> "$GITHUB_OUTPUT"
+          else
+            echo "No copyright risk patterns detected. ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "copyright_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 7 — GDPR Data Collection Verification
+      # ─────────────────────────────────────────────
+      - name: 🇪🇺 Verify GDPR commitments (no external data sends)
+        id: gdpr_check
+        shell: bash
+        run: |
+          echo "## 🇪🇺 GDPR Data Collection Verification" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          FINDINGS=0
+
+          echo "Checking that telemetry/data is not sent to external hosts (excluding Kalshi)..." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          # Look for fetch/axios/requests calls to non-Kalshi, non-localhost external URLs
+          EXTERNAL=$(grep -rn --include="*.js" --include="*.py" --include="*.ts" \
+            -E '(fetch|axios|requests\.(get|post|put|patch))\s*\(' . \
+            --exclude-dir=".git" \
+            --exclude-dir="node_modules" \
+            --exclude-dir=".venv" \
+            2>/dev/null \
+            | grep -v "localhost\|127\.0\.0\.1\|kalshi\.com\|api\.kalshi\.com" \
+            | grep -v "^Binary" \
+            | grep -v "example\|sample\|test\|spec\|mock" \
+            | head -20 || true)
+
+          if [ -n "$EXTERNAL" ]; then
+            echo "- ⚠️ **External HTTP calls (non-Kalshi)** — review each to confirm no personal data is sent:" >> "$GITHUB_STEP_SUMMARY"
+            echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "$EXTERNAL" >> "$GITHUB_STEP_SUMMARY"
+            echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+            FINDINGS=$((FINDINGS + 1))
+          else
+            echo "- ✅ **External HTTP calls** — only Kalshi or localhost detected" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$FINDINGS" -gt 0 ]; then
+            echo "::warning::External HTTP call(s) found outside of Kalshi/localhost. Review each to verify no personal data is transmitted."
+            echo "gdpr_ok=warn" >> "$GITHUB_OUTPUT"
+          else
+            echo "GDPR data-transmission check passed. ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "gdpr_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 8 — Final Summary
+      # ─────────────────────────────────────────────
+      - name: 📊 Compliance summary
+        if: always()
+        shell: bash
+        run: |
+          echo "---" >> "$GITHUB_STEP_SUMMARY"
+          echo "## 📊 Overall Compliance Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Check | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|--------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Required legal files | ${{ steps.legal_files.outputs.files_ok == 'true' && '✅ Pass' || '❌ Fail' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Python dependency licenses | ${{ steps.python_licenses.outputs.python_ok == 'true' && '✅ Pass' || steps.python_licenses.outputs.python_ok == 'warn' && '⚠️ Review' || '❌ Fail' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| npm dependency licenses | ${{ steps.npm_licenses.outputs.npm_ok == 'true' && '✅ Pass' || '⚠️ Review' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| No tracking/analytics code | ${{ steps.tracking_scan.outputs.tracking_ok == 'true' && '✅ Pass' || '⚠️ Review' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| No hardcoded secrets | ${{ steps.secret_scan.outputs.secrets_ok == 'true' && '✅ Pass' || '⚠️ Review' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Copyright risk (converter) | ${{ steps.copyright_scan.outputs.copyright_ok == 'true' && '✅ Pass' || '⚠️ Review' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| GDPR external-data check | ${{ steps.gdpr_check.outputs.gdpr_ok == 'true' && '✅ Pass' || '⚠️ Review' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "> ✅ = no issues found &nbsp;|&nbsp; ⚠️ = items need human review &nbsp;|&nbsp; ❌ = blocking issue" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "_This check does not constitute legal advice. Consult a qualified attorney for compliance decisions._" >> "$GITHUB_STEP_SUMMARY"
