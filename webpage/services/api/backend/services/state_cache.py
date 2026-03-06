@@ -14,12 +14,16 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Any
 
+import structlog
+
 from backend.models.schemas import AgentState, Fill, Market, Order, RiskEvent
 
 _FILLS_CAP = 1000
 _RISK_EVENTS_CAP = 500
 
 _AGENT_NAMES = ("prime", "praxis", "peritia")
+
+log = structlog.get_logger(__name__)
 
 
 class StateCache:
@@ -69,7 +73,36 @@ class StateCache:
     async def update_market(self, ticker: str, data: Market | dict) -> None:
         async with self._lock:
             if isinstance(data, dict):
-                data = Market(**data)
+                existing = self._markets.get(ticker)
+                if existing is not None:
+                    # Merge partial update into existing market — WebSocket ticker
+                    # events only carry price/volume deltas, not all required fields.
+                    # Skip keys whose value is None or empty string so we don't
+                    # overwrite valid existing data with missing-field placeholders.
+                    merged = {
+                        **existing.model_dump(),
+                        **{k: v for k, v in data.items() if v is not None and v != ""},
+                    }
+                    try:
+                        data = Market.model_validate(merged)
+                    except Exception as exc:
+                        log.debug(
+                            "market_merge_failed",
+                            ticker=ticker,
+                            error=str(exc),
+                        )
+                        return  # keep existing on bad merge
+                else:
+                    try:
+                        data = Market.model_validate(data)
+                    except Exception as exc:
+                        log.debug(
+                            "market_create_failed",
+                            ticker=ticker,
+                            keys=list(data.keys()),
+                            error=str(exc),
+                        )
+                        return  # can't create without required fields
             self._markets[ticker] = data
 
     def get_market(self, ticker: str) -> Market | None:
@@ -138,7 +171,35 @@ class StateCache:
     async def update_order(self, order_id: str, data: Order | dict) -> None:
         async with self._lock:
             if isinstance(data, dict):
-                data = Order(**data)
+                existing = self._orders.get(order_id)
+                if existing is not None:
+                    # Merge partial update (e.g. a status-change from WebSocket).
+                    # Omit None values but preserve empty strings (some fields are
+                    # legitimately empty, e.g. client_order_id on exchange orders).
+                    merged = {
+                        **existing.model_dump(),
+                        **{k: v for k, v in data.items() if v is not None},
+                    }
+                    try:
+                        data = Order.model_validate(merged)
+                    except Exception as exc:
+                        log.debug(
+                            "order_merge_failed",
+                            order_id=order_id,
+                            error=str(exc),
+                        )
+                        return  # keep existing on bad merge
+                else:
+                    try:
+                        data = Order.model_validate(data)
+                    except Exception as exc:
+                        log.debug(
+                            "order_create_failed",
+                            order_id=order_id,
+                            keys=list(data.keys()),
+                            error=str(exc),
+                        )
+                        return  # can't create without required fields
             self._orders[order_id] = data
 
     def get_orders(self) -> dict[str, Order]:
@@ -151,7 +212,17 @@ class StateCache:
     async def add_fill(self, fill_data: Fill | dict) -> None:
         async with self._lock:
             if isinstance(fill_data, dict):
-                fill_data = Fill(**fill_data)
+                try:
+                    fill_data = Fill.model_validate(fill_data)
+                except Exception as exc:
+                    # WebSocket fill shape may differ from REST shape; log and
+                    # skip rather than crashing the whole handler.
+                    log.warning(
+                        "fill_parse_failed",
+                        keys=list(fill_data.keys()),
+                        error=str(exc),
+                    )
+                    return
             self._fills.append(fill_data)
 
     def get_fills(self) -> list[Fill]:

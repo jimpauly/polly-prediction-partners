@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import asyncio
 import signal
+import time as _time
+from decimal import Decimal
 from typing import Any
 
 import structlog
@@ -42,6 +44,15 @@ log = structlog.get_logger(__name__)
 _PRIME_INTERVAL = 10.0
 _PRAXIS_INTERVAL = 30.0
 _PERITIA_INTERVAL = 15.0
+
+# Position-sizing defaults used in the evaluation loop
+_DEFAULT_INTENT_PRICE = Decimal("0.50")   # fallback when intent has no price
+_CONTRACT_COUNT_FMT = "2f"                # FixedPoint precision for count_fp
+
+# Candlestick polling parameters
+_CANDLE_POLL_INTERVAL_SECS = 60.0    # how often to re-fetch OHLCV history
+_CANDLE_PERIOD_INTERVAL_MINS = 15    # 15-minute bars
+_CANDLE_LOOKBACK_BARS = 100          # how many historical bars to request
 
 
 # ---------------------------------------------------------------------------
@@ -86,6 +97,7 @@ class Application:
         self._running = False
         self._agent_tasks: list[asyncio.Task] = []
         self._reconciliation_task: asyncio.Task | None = None
+        self._candlestick_task: asyncio.Task | None = None
 
         # New Phase 3.8 services
         self.rate_limiter = RateLimiter(self.config)
@@ -295,6 +307,13 @@ class Application:
                 name="reconciliation-loop",
             )
 
+        # Start candlestick poll loop for AgentPeritia
+        if self._candlestick_task is None:
+            self._candlestick_task = asyncio.create_task(
+                self._candlestick_poll_loop(),
+                name="candlestick-poll-loop",
+            )
+
         log.info("agent_loops_started", count=len(self._agent_tasks))
         ACTIVE_AGENTS.set(len(self._agent_tasks))
 
@@ -305,6 +324,15 @@ class Application:
         if self._agent_tasks:
             await asyncio.gather(*self._agent_tasks, return_exceptions=True)
         self._agent_tasks.clear()
+
+        if self._candlestick_task is not None:
+            self._candlestick_task.cancel()
+            try:
+                await self._candlestick_task
+            except asyncio.CancelledError:
+                pass
+            self._candlestick_task = None
+
         log.info("agent_loops_stopped")
 
     async def _agent_evaluation_loop(
@@ -334,6 +362,24 @@ class Application:
                     for intent in intents:
                         if self.execution_service is not None:
                             try:
+                                # Apply dynamic position sizing: compute the
+                                # appropriate contract count for this agent at
+                                # the current price before submitting.
+                                try:
+                                    price = Decimal(intent.price_dollars) if intent.price_dollars else _DEFAULT_INTENT_PRICE
+                                    count = self.position_sizer.compute_position_count(
+                                        agent_name, price
+                                    )
+                                    intent = intent.model_copy(
+                                        update={"count_fp": f"{count:.{_CONTRACT_COUNT_FMT}}"}
+                                    )
+                                except Exception:
+                                    log.exception(
+                                        "position_sizing_failed",
+                                        agent=agent_name,
+                                        ticker=intent.ticker,
+                                    )
+
                                 result = await self.execution_service.process_intent(intent)
                                 log.info(
                                     "agent_intent_processed",
@@ -395,8 +441,117 @@ class Application:
             log.info("reconciliation_loop_cancelled")
 
     # ------------------------------------------------------------------
-    # FastAPI application factory
+    # Candlestick polling — feeds AgentPeritia with OHLCV data
     # ------------------------------------------------------------------
+
+    async def _candlestick_poll_loop(self) -> None:
+        """Periodically fetch OHLCV candlesticks from REST and feed them to
+        AgentPeritia.
+
+        Kalshi does not push candlestick data over WebSocket; they are
+        available only via the historical REST endpoint.  This loop polls
+        once per minute so that Peritia always has up-to-date 15-minute bars
+        to evaluate.  Only crypto / BTC tickers (as classified by Peritia
+        itself) are polled.
+        """
+        log.info(
+            "candlestick_poll_loop_started",
+            interval=_CANDLE_POLL_INTERVAL_SECS,
+            period_mins=_CANDLE_PERIOD_INTERVAL_MINS,
+        )
+
+        # Brief warm-up delay so other services are fully initialised.
+        await asyncio.sleep(10.0)
+
+        try:
+            while True:
+                if not self._running:
+                    break
+
+                peritia = self.agents.get("peritia")
+                if (
+                    peritia is not None
+                    and isinstance(peritia, AgentPeritia)
+                    and self.rest_client is not None
+                ):
+                    subscribed = self.state_cache.get_subscribed_markets()
+                    crypto_tickers = [
+                        t for t in subscribed if peritia.is_crypto_market(t)
+                    ]
+
+                    for ticker in crypto_tickers:
+                        try:
+                            market = self.state_cache.get_market(ticker)
+                            if market is None:
+                                continue
+
+                            # Kalshi candlestick endpoint requires both the
+                            # series_ticker and the market_ticker.  The
+                            # series_ticker is the prefix of the event_ticker
+                            # up to (but not including) the first hyphen.
+                            # If no hyphen exists (unusual), use the full
+                            # event_ticker as a best-effort fallback.
+                            event = market.event_ticker
+                            series_ticker = event.split("-")[0] if event else ticker
+
+                            end_ts = int(_time.time())
+                            start_ts = end_ts - (
+                                _CANDLE_LOOKBACK_BARS * _CANDLE_PERIOD_INTERVAL_MINS * 60
+                            )
+
+                            candles = await self.rest_client.get_market_candlesticks(
+                                series_ticker=series_ticker,
+                                market_ticker=ticker,
+                                start_ts=start_ts,
+                                end_ts=end_ts,
+                                period_interval=_CANDLE_PERIOD_INTERVAL_MINS,
+                            )
+
+                            # Feed all returned candles to Peritia (the
+                            # agent caps its own history to 100 bars).
+                            for candle in candles:
+                                await peritia.on_candlestick_update(ticker, candle)
+
+                            if candles:
+                                log.debug(
+                                    "candlesticks_updated",
+                                    ticker=ticker,
+                                    count=len(candles),
+                                )
+                        except Exception:
+                            log.exception("candlestick_fetch_failed", ticker=ticker)
+
+                await asyncio.sleep(_CANDLE_POLL_INTERVAL_SECS)
+
+        except asyncio.CancelledError:
+            log.info("candlestick_poll_loop_cancelled")
+
+    # ------------------------------------------------------------------
+    # Market prefetch helper
+    # ------------------------------------------------------------------
+
+    async def _fetch_all_active_markets(self) -> list:
+        """Fetch all active markets from Kalshi REST and return them as a list.
+
+        Paginates until the cursor is exhausted so the subscribed-market set
+        is complete regardless of how many markets Kalshi currently lists.
+        """
+        if self.rest_client is None:
+            raise RuntimeError("REST client not initialised before market fetch")
+        all_markets = []
+        cursor: str | None = None
+
+        while True:
+            page, cursor = await self.rest_client.get_markets(
+                status="active",
+                limit=200,
+                cursor=cursor or None,
+            )
+            all_markets.extend(page)
+            if not cursor:
+                break
+
+        return all_markets
 
     def create_api(self) -> FastAPI:
         """Create and configure the FastAPI application with lifecycle hooks.
@@ -492,6 +647,17 @@ class Application:
             log.exception("balance_fetch_failed")
 
         self.risk_gateway.set_environment_healthy(True)
+
+        # Fetch active markets from REST and populate the subscribed-market set
+        # so that WebSocket subscriptions and agent evaluation loops have targets.
+        try:
+            all_markets = await self._fetch_all_active_markets()
+            for market in all_markets:
+                await self.state_cache.update_market(market.ticker, market)
+                await self.state_cache.add_subscribed_market(market.ticker)
+            log.info("markets_fetched", count=len(all_markets))
+        except Exception:
+            log.exception("markets_fetch_failed")
 
         # Execution & reconciliation
         self.execution_service = ExecutionService(

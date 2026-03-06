@@ -215,15 +215,21 @@ class RiskGateway:
         # Gate 3: agent mode
         agent_state = self._cache.get_agent_state(intent.agent_name)
         if agent_state is None:
-            return False, "unknown_agent"
-
-        mode = agent_state.mode
-        if mode == "safe":
-            return False, "agent_mode_safe_blocks_execution"
-        if mode == "semi-auto":
-            return False, "agent_mode_semi_auto_needs_approval"
-        if mode != "auto":
-            return False, f"agent_mode_unsupported:{mode}"
+            if intent.agent_name == "user":
+                # Manual UI orders have no agent-state record; allow them
+                # through this gate (trading-enabled / kill-switch checks
+                # already ran above).
+                pass
+            else:
+                return False, "unknown_agent"
+        else:
+            mode = agent_state.mode
+            if mode == "safe":
+                return False, "agent_mode_safe_blocks_execution"
+            if mode == "semi-auto":
+                return False, "agent_mode_semi_auto_needs_approval"
+            if mode != "auto":
+                return False, f"agent_mode_unsupported:{mode}"
 
         # Gate 4: account-level kill switch
         if self._account_kill_switch:
