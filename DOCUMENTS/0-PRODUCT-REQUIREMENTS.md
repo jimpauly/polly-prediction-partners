@@ -1,8 +1,10 @@
 ﻿# **Paulie's Prediction Partners** - Product Requirements Document
 
-https://github.com/jimpauly/paulies
+https://github.com/jimpauly/paulies-prediction-partners
 
-Last update: 03-02-26
+https://jimpauly.github.io/paulies-prediction-partners/
+
+Last update: 03-06-26
 
 ## *Chapter 0. Overview*
 
@@ -493,12 +495,15 @@ Last update: 03-02-26
 - **Category Nav Menu:** Horizontal scrolling
     - **Sub-Category Nav Menu:** Horizontal scrolling.
     - **Filter Options:** Volume, frequency, time-to-close.
+- **Account Summary Bar:** Compact top strip showing live BALANCE, PORTFOLIO value, DAILY P/L. Updates on data refresh.
+    - **Market Refresh Button** — manual refresh trigger in the summary bar; re-fetches series and resets greyed-out expired cards.
 - **Series Cards:** 3 columns, full width of main region. Scroll down allowed.
     - Cards show information similar to Kalshi cards (see photos folder).
     - Tiny expand button in bottom right to expand card to fill main region.
     - After successful API key connection: collect as much data as allowed, as frequently as allowed.
     - Render only first 18 series cards to keep UI fast.
     - `Show More Markets` button at bottom loads additional 18 series cards.
+    - **Markets that close mid-session grey out** in place; do not disappear. Clear on next refresh.
 
 ##### Fly Studio
 
