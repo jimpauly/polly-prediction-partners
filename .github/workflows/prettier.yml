@@ -23,3 +23,26 @@ jobs:
         with:
           prettier_options: --write **/*.{js,md,json,css}
           only_changed: true
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: webpage/services/api/backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r webpage/services/api/backend/requirements.txt
+
+      - name: Run backend unit tests
+        run: |
+          cd webpage/services/api
+          python -m pytest backend/tests/ -v --tb=short

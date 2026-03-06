@@ -813,6 +813,20 @@ const TradingStudio = (() => {
             <div class="detail-row"><span>Last Price</span><span>${escapeHtml(market.last_price_dollars ? "$" + parseFloat(market.last_price_dollars).toFixed(2) : "—")}</span></div>
           </div>
         </div>
+        <div class="expanded-order-row">
+          <label class="expanded-qty-label" for="expanded-order-qty">Contracts</label>
+          <input
+            id="expanded-order-qty"
+            class="expanded-qty-input"
+            type="number"
+            min="1"
+            max="100"
+            step="1"
+            value="1"
+            ${isClosed ? "disabled" : ""}
+            aria-label="Number of contracts to order"
+          />
+        </div>
         <div class="expanded-actions">
           <button class="yes-button large" data-ticker="${escapeAttr(market.ticker)}" data-side="yes" ${isClosed ? "disabled" : ""}>
             Buy YES ${yesAsk}
@@ -1069,6 +1083,16 @@ const TradingStudio = (() => {
       showToast("Market not found", "error");
       return;
     }
+
+    /* Read order quantity from expanded-card input (defaults to 1) */
+    const qtyInput = document.getElementById("expanded-order-qty");
+    const rawQty = qtyInput ? parseFloat(qtyInput.value) : 1;
+    if (!Number.isInteger(rawQty) || rawQty < 1 || rawQty > 100) {
+      showToast("Quantity must be a whole number between 1 and 100", "error");
+      return;
+    }
+    const countFp = rawQty.toFixed(2);
+
     const priceDollars =
       side === "yes"
         ? market.yes_ask_dollars || market.yes_bid_dollars || ""
@@ -1079,7 +1103,14 @@ const TradingStudio = (() => {
       return;
     }
 
-    showToast(`Submitting ${side.toUpperCase()} order for ${ticker}…`, "info");
+    const priceNum = parseFloat(priceDollars);
+    /* Kalshi contracts are priced $0.01–$0.99 (exclusive 0 and 1) */
+    if (isNaN(priceNum) || priceNum <= 0 || priceNum > 0.99) {
+      showToast("Invalid price data from backend", "error");
+      return;
+    }
+
+    showToast(`Submitting ${side.toUpperCase()} ×${rawQty} order for ${ticker}…`, "info");
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/trading/manual-order`, {
@@ -1089,7 +1120,7 @@ const TradingStudio = (() => {
           ticker: ticker,
           side: side,
           action: "buy",
-          count_fp: "1.00",
+          count_fp: countFp,
           price_dollars: priceDollars,
         }),
       });
@@ -1102,7 +1133,7 @@ const TradingStudio = (() => {
         return;
       }
       showToast(
-        `✓ Order submitted: ${side.toUpperCase()} on ${ticker}`,
+        `✓ Order submitted: ${side.toUpperCase()} ×${rawQty} on ${ticker}`,
         "success",
       );
     } catch (networkError) {

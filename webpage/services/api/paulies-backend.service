@@ -1,0 +1,45 @@
+[Unit]
+Description=Paulie's Prediction Partners — Trading Backend
+Documentation=https://github.com/jimpauly/paulies-prediction-partners
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Replace with the system user that owns the repo (never run as root)
+User=paulies
+Group=paulies
+
+# Working directory — adjust to where you cloned the repo
+WorkingDirectory=/opt/paulies-prediction-partners/webpage/services/api
+
+# Python virtual-environment interpreter (recommended)
+# Create one with:  python3.12 -m venv /opt/paulies-venv
+ExecStart=/opt/paulies-venv/bin/python -m uvicorn backend.main:main \
+    --host 127.0.0.1 \
+    --port 8000 \
+    --workers 1 \
+    --log-level info
+
+# Restart policy — keep trading 24/7 even after crashes
+Restart=on-failure
+RestartSec=10
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# Load credentials from an environment file (keep this file 0600, not in git)
+EnvironmentFile=/opt/paulies-prediction-partners/.env
+
+# Safety hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ReadWritePaths=/opt/paulies-prediction-partners
+
+# Stdout/stderr go to journald — view with: journalctl -u paulies-backend -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=paulies-backend
+
+[Install]
+# Start automatically at multi-user (normal) runlevel
+WantedBy=multi-user.target
