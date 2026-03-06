@@ -424,7 +424,7 @@ _End Chapter 0._
 #### Bottom Bar:
 
 - **`Hangar Bay`** header — Aligned left, vertically centered
-  - **`Agent Access`** card — For elements to control AI trading agents or algorithms
+  - **`Agent Access`** card — For elements to control trading agents and their algorithms
     - **Graph display window** labeled **`+/- $`** professionally
     - **More ideas** to visualize or interface with agents
 - **Connect API Keys**

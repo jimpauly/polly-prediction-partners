@@ -1,6 +1,6 @@
 # Paulie's Prediction Partners
 
-AI-assisted prediction market trading platform (web + desktop + API services).
+Prediction market trading platform built on custom algorithms (web + desktop + API services).
 
 ---
 
@@ -51,7 +51,7 @@ AI-assisted prediction market trading platform (web + desktop + API services).
 
 ### 2nd Stage — Trading Agent Studio `95%` ✅
 
-> Deeply develop our smart, reinforced-learning, super-profitable, high-frequency, full-auto trading-agent studio.
+> Deeply develop our algorithm-driven trading agent studio built for Kalshi prediction markets.
 
 ```
 [███████████████████░] 95%
