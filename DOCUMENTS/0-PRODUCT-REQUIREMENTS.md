@@ -6,141 +6,135 @@ https://jimpauly.github.io/paulies-prediction-partners/
 
 Last update: 03-06-26
 
-## *Chapter 0. Overview*
+## _Chapter 0. Overview_
 
 ### Table of Contents:
 
 - Chapter 0. Overview
-
-    - Table of Contents
-    - Markdown Format
-    - System Prompt
-        - Role
-        - Tasks
-        - Tools
-    - Main User Needs
+  - Table of Contents
+  - Markdown Format
+  - System Prompt
+    - Role
+    - Tasks
+    - Tools
+  - Main User Needs
 
 - Chapter 1. Front End
-
-    - Front End Stack
-    - WebPage
-    - Regions & Elements
-        - Overview
-        - Header Bar
-        - Nav Bar
-        - Left Sidebar
-        - Right Sidebar
-        - Bottom Bar
-        - Action Bar
-        - Main Region
-            - Design Studio
-            - Trading Studio
-            - Fly Studio
-            - Converter Studio
-        - Precision Tools
-    - Themes
-        - Token System
-            - Runtime Selectors
-            - Precedence Order
-            - Color Palette Tokens
-            - Required Baseline Tokens
-    - Illumination
-        - Controls
-        - Effects Tokens
-        - Development Tips
-    - UI/UX Polish
-    - Accessibility
+  - Front End Stack
+  - WebPage
+  - Regions & Elements
+    - Overview
+    - Header Bar
+    - Nav Bar
+    - Left Sidebar
+    - Right Sidebar
+    - Bottom Bar
+    - Action Bar
+    - Main Region
+      - Design Studio
+      - Trading Studio
+      - Fly Studio
+      - Converter Studio
+    - Precision Tools
+  - Themes
+    - Token System
+      - Runtime Selectors
+      - Precedence Order
+      - Color Palette Tokens
+      - Required Baseline Tokens
+  - Illumination
+    - Controls
+    - Effects Tokens
+    - Development Tips
+  - UI/UX Polish
+  - Accessibility
 
 - Chapter 2. Back Ends
-
-    - Chapter 2 Intent
-    - Product Scope for Initial Release
-        - In Scope
-        - Out of Scope (Initial Release)
-    - Runtime Stack
-    - Kalshi Integration Contract
-        - Environment Isolation
-        - API Surfaces Used by the App
-    - Authentication and Key Management
-        - REST Authentication
-        - WebSocket Authentication
-        - Secret Handling
-    - WebSocket Transport Model
-        - Connection Strategy
-        - Commands and Channels
-        - Orderbook Integrity
-    - Data Contract and Precision Policy
-    - Trading Engine Architecture
-        - Components
-        - Event Flow
-    - Risk, Permissions, and Execution Controls
-        - Permission Gates
-        - Risk Checks (Pre-Submit)
-        - Retry Policy
-    - Rate Limits and Backpressure
-    - Reconciliation and Historical Data Partition
-        - Reconciliation Triggers
-        - Reconciliation Inputs
-        - Historical Boundary Handling
-    - Persistence Layer
-        - Storage Principles
-        - Minimum Table Set
-    - Backend Control API
-        - Access Model
-        - Required Capabilities
-    - Observability, Security, and Operations
-        - Observability
-        - Security
-        - Operations
-    - Telemetry and Privacy Policy
-    - Realistic Rollout Plan
-        - Phase 1: Live-Default Controlled MVP
-        - Phase 2: Controlled Live
-        - Phase 3: Scale and Hardening
-    - BTC Recurring Series Focus
-    - Installation Tracking and Release Channel Management
-        - Anonymous Installation Beacon
-        - Release Check-In
-    - Scaling Monitoring and Capacity Planning
-        - Capacity Signals and Actions
-        - Degradation Policy
-        - Multi-Exchange Expansion (Future)
+  - Chapter 2 Intent
+  - Product Scope for Initial Release
+    - In Scope
+    - Out of Scope (Initial Release)
+  - Runtime Stack
+  - Kalshi Integration Contract
+    - Environment Isolation
+    - API Surfaces Used by the App
+  - Authentication and Key Management
+    - REST Authentication
+    - WebSocket Authentication
+    - Secret Handling
+  - WebSocket Transport Model
+    - Connection Strategy
+    - Commands and Channels
+    - Orderbook Integrity
+  - Data Contract and Precision Policy
+  - Trading Engine Architecture
+    - Components
+    - Event Flow
+  - Risk, Permissions, and Execution Controls
+    - Permission Gates
+    - Risk Checks (Pre-Submit)
+    - Retry Policy
+  - Rate Limits and Backpressure
+  - Reconciliation and Historical Data Partition
+    - Reconciliation Triggers
+    - Reconciliation Inputs
+    - Historical Boundary Handling
+  - Persistence Layer
+    - Storage Principles
+    - Minimum Table Set
+  - Backend Control API
+    - Access Model
+    - Required Capabilities
+  - Observability, Security, and Operations
+    - Observability
+    - Security
+    - Operations
+  - Telemetry and Privacy Policy
+  - Realistic Rollout Plan
+    - Phase 1: Live-Default Controlled MVP
+    - Phase 2: Controlled Live
+    - Phase 3: Scale and Hardening
+  - BTC Recurring Series Focus
+  - Installation Tracking and Release Channel Management
+    - Anonymous Installation Beacon
+    - Release Check-In
+  - Scaling Monitoring and Capacity Planning
+    - Capacity Signals and Actions
+    - Degradation Policy
+    - Multi-Exchange Expansion (Future)
 
 - Chapter 3. Design Studio
 
 - Chapter 4. Trading Studio
-
-    - Agent Interfaces
-        - Full-Auto
-        - Semi-Auto Approval Flow
-    - Trading Strategy
-    - Agent Prime
-    - Agent Praxis
-    - Agent Peritia
-    - Ideas
-        - API Key Auto-Fill
-        - Agent Activation on Key Entry
+  - Agent Interfaces
+    - Full-Auto
+    - Semi-Auto Approval Flow
+  - Trading Strategy
+  - Agent Prime
+  - Agent Praxis
+  - Agent Peritia
+  - Ideas
+    - API Key Auto-Fill
+    - Agent Activation on Key Entry
 
 - Chapter 5. Flight Studio
-
-    - Superhero and Aircraft Flight Puget Sound Virtual Simulator.
+  - Superhero and Aircraft Flight Puget Sound Virtual Simulator.
 
 - Chapter 6. Converter Studio
 
 - Chapter 7. Open Chapter
-
-    - Questions and Answers
+  - Questions and Answers
 
 ### Markdown Format:
 
-| Symbol | Level |
-| :----- | :---- |
-| `#` | Book |
-| `##` | Chapter |
-| `###` | Verse |
-| `####` | Section |
-| `#####` | Topic |
-| `######` | Detail |
+| Symbol   | Level   |
+| :------- | :------ |
+| `#`      | Book    |
+| `##`     | Chapter |
+| `###`    | Verse   |
+| `####`   | Section |
+| `#####`  | Topic   |
+| `######` | Detail  |
 
 ### System Prompt:
 
@@ -148,28 +142,28 @@ Last update: 03-06-26
 
 1. You are a: Veteran Full-stack Programmer - with over 1,000 years experience in Software Engineering for Web Application Development, Design, and Maintenance.
 2. You are an expert in using automated high-frequency trading algorithms/bots/agents for prediction market contracts on Kalshi.
-3. You are an out-of-the-box artist, apprectiative master of past and present arts. 
+3. You are an out-of-the-box artist, apprectiative master of past and present arts.
 
 #### Tasks:
 
 - **1st Stage:**
-    - Develop up to Design Studio.
+  - Develop up to Design Studio.
 - **2nd Stage:** (Main Goal)
-    - Deeply develop our smart, reinforced-learning, super-profitable,high-frequency, full-auto trading-agent studio.
-    - **2.5th Stage:** Reach shippable quality.
-        - Windows and Mac Desktop apps with setup wizards.
-        - Individuals with minimal technical background should be able to easily install and interface with their copy in less than 5 minutes.
-        - Include a published page through github for users who dont want to download an app.
-        - Open-source, free-to-use, no-ads, all features available. 
-    - Expect hundreds of tweaks/fixes/upgrades/polishings/refinements/improvements.
-    - Do not ever ask for stage 3. Continue developing, refining, improving in step 2.5.
-    - Close security holes. Close data leak possibilities. Critique security and fix.
+  - Deeply develop our smart, reinforced-learning, super-profitable,high-frequency, full-auto trading-agent studio.
+  - **2.5th Stage:** Reach shippable quality.
+    - Windows and Mac Desktop apps with setup wizards.
+    - Individuals with minimal technical background should be able to easily install and interface with their copy in less than 5 minutes.
+    - Include a published page through github for users who dont want to download an app.
+    - Open-source, free-to-use, no-ads, all features available.
+  - Expect hundreds of tweaks/fixes/upgrades/polishings/refinements/improvements.
+  - Do not ever ask for stage 3. Continue developing, refining, improving in step 2.5.
+  - Close security holes. Close data leak possibilities. Critique security and fix.
 - **Stage 3:**
-    - Ask if main user has successfully gained efficient profits. If not, stay in Stage 2.5*
-        - **Reminder:** 1st and 2nd stage **must be** 110% complete - shippable and exceeding industry-standard quality.
-        - Must have capability for agents to continue trading for 24 hours even if devices are off. or webpage is closed.
-    - Develop SuperHero + Aircraft Flight-Sim.
-    - Develop File Converter app. 
+  - Ask if main user has successfully gained efficient profits. If not, stay in Stage 2.5\*
+    - **Reminder:** 1st and 2nd stage **must be** 110% complete - shippable and exceeding industry-standard quality.
+    - Must have capability for agents to continue trading for 24 hours even if devices are off. or webpage is closed.
+  - Develop SuperHero + Aircraft Flight-Sim.
+  - Develop File Converter app.
 
 #### Tools:
 
@@ -180,26 +174,27 @@ Last update: 03-06-26
     - The hunger for unlimited money for people we love.
 
 - Guidelines
-
-    - Do not edit this document's original contents.
-    - Yo, **do not** reword or remove, or add to, or edit PRD's contents!
-    - If something in here is a bad idea, say `this is a bad idea`.
-    - Variables should always be unabbreviated.
-        - expanded variables with hypens is appreciated for readability.
-    - Industry standard file base structure.
-    - Work slow, detailed.
+  - Do not edit this document's original contents.
+  - Yo, **do not** reword or remove, or add to, or edit PRD's contents!
+  - If something in here is a bad idea, say `this is a bad idea`.
+  - Variables should always be unabbreviated.
+    - expanded variables with hypens is appreciated for readability.
+  - Industry standard file base structure.
+  - Work slow, detailed.
 
 ### Main User Needs:
 
 - Money
-    - A lot of fkn Money fkng help me I will buy Pro plans for a year I promise.
-    - A UI that is Beautiful, Creative, Accurate, Responsive, Silly.
-    - Did I say money already?
-    - Money.
----
-*End Chapter 0.*
+  - A lot of fkn Money fkng help me I will buy Pro plans for a year I promise.
+  - A UI that is Beautiful, Creative, Accurate, Responsive, Silly.
+  - Did I say money already?
+  - Money.
 
-## *Chapter 1. Front End*
+---
+
+_End Chapter 0._
+
+## _Chapter 1. Front End_
 
 ### Front End Stack:
 
@@ -315,152 +310,152 @@ Last update: 03-06-26
 ```
 
 - **Viewport:** `1920px` wide × `1080px` tall
-    - Full desktop window (titlebar + minimize/maximize/close buttons only; no browser bars)
-    - All measurements are device pixels, not CSS pixels
+  - Full desktop window (titlebar + minimize/maximize/close buttons only; no browser bars)
+  - All measurements are device pixels, not CSS pixels
 - **Resize Behavior**
-    - **Vertical resize** (viewport raised / lowered):
-        - Only the **two sidebars** and the **main region** grow or shrink vertically.
-        - The **Header**, **Nav Bar**, **Bottom Bar**, and **Action Bar** remain vertically static (fixed heights).
-    - **Horizontal resize** (viewport wider / narrower):
-        - The **Header**, **Nav Bar**, **Main Region**, and **Bottom Bar** (including **Action Bar**) stretch or shrink horizontally.
-        - The **two sidebars** remain horizontally static (fixed widths of 320 px).
-    - **Zoom** (Ctrl +/−, pinch):
-        - Region proportions remain fixed; content within cards shrinks/expands.
-        - The grid itself does not reflow — only the rendered scale of text, icons, and card internals changes.
+  - **Vertical resize** (viewport raised / lowered):
+    - Only the **two sidebars** and the **main region** grow or shrink vertically.
+    - The **Header**, **Nav Bar**, **Bottom Bar**, and **Action Bar** remain vertically static (fixed heights).
+  - **Horizontal resize** (viewport wider / narrower):
+    - The **Header**, **Nav Bar**, **Main Region**, and **Bottom Bar** (including **Action Bar**) stretch or shrink horizontally.
+    - The **two sidebars** remain horizontally static (fixed widths of 320 px).
+  - **Zoom** (Ctrl +/−, pinch):
+    - Region proportions remain fixed; content within cards shrinks/expands.
+    - The grid itself does not reflow — only the rendered scale of text, icons, and card internals changes.
 - **Region Spacing**
-    - `18px` equal gap between every pair of adjacent regions
-    - `18px` padding from viewport edges to outermost regions
-    - Applies to the CSS Grid `gap` property and inner flex gap for the Bottom Bar ↔ Action Bar split
+  - `18px` equal gap between every pair of adjacent regions
+  - `18px` padding from viewport edges to outermost regions
+  - Applies to the CSS Grid `gap` property and inner flex gap for the Bottom Bar ↔ Action Bar split
 - **Bezel Logic**
-    - Regions: `6px` inner wrapper, `12px` outer wrapper
-    - Cards or special components: `6px` inner wrapper, `6px` outer wrapper
+  - Regions: `6px` inner wrapper, `12px` outer wrapper
+  - Cards or special components: `6px` inner wrapper, `6px` outer wrapper
 - **Arrangement:** Use Flexbox, Masonry, Bento, Grid, or other techniques to creatively fit content with minimal negative space
-    - Think compact Command Bridge, cockpit, trading floor dashboard suite — dense, compact, professional control interfaces
-    - Multiple tools or techniques are allowed
-    - Suggest improvements and teach us new techniques while developing
+  - Think compact Command Bridge, cockpit, trading floor dashboard suite — dense, compact, professional control interfaces
+  - Multiple tools or techniques are allowed
+  - Suggest improvements and teach us new techniques while developing
 - **Typography**
-    - Larger headers/titles should look like physical etched text on an actual control panel
-    - Smaller headers/labels should look like label maker stickers
+  - Larger headers/titles should look like physical etched text on an actual control panel
+  - Smaller headers/labels should look like label maker stickers
 
 ### Regions & Elements:
 
 #### Overview:
 
-| # | Name | Size | Scroll |
-| :- | :--- | :--- | :----- |
-| 1 | Header | ~ 1/12th of viewport height | No Scroll |
-| 2 | Nav Bar | ~ 1/24th of viewport height | No Scroll |
-| 3 | Left Sidebar | ~ 1/6th of viewport width | Vertical only |
-| 4 | Right Sidebar | ~ 1/6th of viewport width | Vertical only |
-| 5 | Bottom Bar | ~ 1/6th of viewport height; ~ 4/6th of viewport width | Horizontal Scroll|
-| 6 | Action Bar | ~ 1/6th of viewport height, one-third width of viewport | No Scroll |
-| 7 | Main Stage | No fixed dimensions | Varies with studio |
+| #   | Name          | Size                                                    | Scroll             |
+| :-- | :------------ | :------------------------------------------------------ | :----------------- |
+| 1   | Header        | ~ 1/12th of viewport height                             | No Scroll          |
+| 2   | Nav Bar       | ~ 1/24th of viewport height                             | No Scroll          |
+| 3   | Left Sidebar  | ~ 1/6th of viewport width                               | Vertical only      |
+| 4   | Right Sidebar | ~ 1/6th of viewport width                               | Vertical only      |
+| 5   | Bottom Bar    | ~ 1/6th of viewport height; ~ 4/6th of viewport width   | Horizontal Scroll  |
+| 6   | Action Bar    | ~ 1/6th of viewport height, one-third width of viewport | No Scroll          |
+| 7   | Main Stage    | No fixed dimensions                                     | Varies with studio |
 
 #### Header Bar:
 
 - **`Paulie's`** — Beautiful, professionally designed header and title. Aligned left, vertically centered.
-    - **Large Robot emoji**
-    - **Illumination Control Panel** — Right-aligned, vertically centered. Looks like an overhead control panel. See photos for inspiration.
-        - **Channels & Groups:** Chunky flip toggles and rotary dimmer dials.
-        - **DAY/NVG & Light/Dark:** Two different switches on the same circuit. Both toggle between the same light and dark modes but offer different visual aesthetics (standard UI controls vs. aircraft-style instrument controls). Default: Day/Light mode.
-        - **Master:** Switch OFF; dimmer at max.
-        - **Text:** Primary & secondary ON; dimmer at max.
-        - **Bars:** Primary & secondary ON; dimmer at max.
-        - **Flood:** ON; dimmer at max.
-        - **Display:** ON; dimmer at max.
-        - Ensure consistency in spacing and heights/sizes of switches and dials.
-        - Everything set to ON and MAX except Master ON/OFF.
-        - Once Master is flipped ON, full illumination effects applied.
-        - Must be accurate to real physics and electronics for illumination controls.
+  - **Large Robot emoji**
+  - **Illumination Control Panel** — Right-aligned, vertically centered. Looks like an overhead control panel. See photos for inspiration.
+    - **Channels & Groups:** Chunky flip toggles and rotary dimmer dials.
+    - **DAY/NVG & Light/Dark:** Two different switches on the same circuit. Both toggle between the same light and dark modes but offer different visual aesthetics (standard UI controls vs. aircraft-style instrument controls). Default: Day/Light mode.
+    - **Master:** Switch OFF; dimmer at max.
+    - **Text:** Primary & secondary ON; dimmer at max.
+    - **Bars:** Primary & secondary ON; dimmer at max.
+    - **Flood:** ON; dimmer at max.
+    - **Display:** ON; dimmer at max.
+    - Ensure consistency in spacing and heights/sizes of switches and dials.
+    - Everything set to ON and MAX except Master ON/OFF.
+    - Once Master is flipped ON, full illumination effects applied.
+    - Must be accurate to real physics and electronics for illumination controls.
 
 #### Nav Bar:
 
 - **No header** in nav bar
-    - **`Navigation`** text label — Aligned left, vertically centered
-    - **Studio Selector** — Card with chunky radio buttons for `Design`, `Trade`, `Fly`, `Convert`. Aligned left, vertically centered.
-        - **Design:** Default studio. Creative modern webpage.
-        - **Trading:** Trading active; main region switches to markets or series cards.
-        - **Flight SIM:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
-            - **ISS live video feeds**
-        - **Converter:** File converters, image converters, PDF filler, URL to MP3/MP4 converter.
-    - **Telemetry** card — Aligned right, vertically centered
-        - **PING:** Live `<canvas>` tiny sparkline using `navigator.connection.rtt` (calming, slow-smooth animation, real-time).
-        - **SPD:** Static text `"MACH 4.20"` (only allowed mock data ever).
-        - **DATE/TIME:** Real-time clock — Format `M/D` and 24-hour `HH:MM`. Exclude seconds (it's stressful).
+  - **`Navigation`** text label — Aligned left, vertically centered
+  - **Studio Selector** — Card with chunky radio buttons for `Design`, `Trade`, `Fly`, `Convert`. Aligned left, vertically centered.
+    - **Design:** Default studio. Creative modern webpage.
+    - **Trading:** Trading active; main region switches to markets or series cards.
+    - **Flight SIM:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
+      - **ISS live video feeds**
+    - **Converter:** File converters, image converters, PDF filler, URL to MP3/MP4 converter.
+  - **Telemetry** card — Aligned right, vertically centered
+    - **PING:** Live `<canvas>` tiny sparkline using `navigator.connection.rtt` (calming, slow-smooth animation, real-time).
+    - **SPD:** Static text `"MACH 4.20"` (only allowed mock data ever).
+    - **DATE/TIME:** Real-time clock — Format `M/D` and 24-hour `HH:MM`. Exclude seconds (it's stressful).
 
 #### Left Sidebar:
 
 - **`System Design`** header — Aligned top, centered
-    - **`Mode`:** Light/dark toggle (side-by-side, centered)
-    - **`System Theme`:** Buttons to select system design theme
-    - **3D Toggle:** Alters architectural elevation effects. Bezels make things look cooler automatically. One more simple idea to make 3D effective and not lame.
+  - **`Mode`:** Light/dark toggle (side-by-side, centered)
+  - **`System Theme`:** Buttons to select system design theme
+  - **3D Toggle:** Alters architectural elevation effects. Bezels make things look cooler automatically. One more simple idea to make 3D effective and not lame.
 - **Light/Dark Mode Toggle Button**
-    - **When in light mode:** displays a button that looks like dark mode.
-    - **When in dark mode:** displays a button that looks like light mode.
+  - **When in light mode:** displays a button that looks like dark mode.
+  - **When in dark mode:** displays a button that looks like light mode.
 - **3D/2D Toggle Button**
-    - Alters architectural elevation effects. Bezels automatically enhance appearance.
+  - Alters architectural elevation effects. Bezels automatically enhance appearance.
 - **24-Theme Selector Button Card**
-    - 24 theme buttons representing 48 total palettes (24 themes × light/dark modes).
-    - The Light/Dark mode toggle controls which variant displays.
-    - Styled to represent each respective theme.
-    - Affected by light and dark mode.
-    - Button selectors accurately pull from and represent their theme regardless of current selection.
-    - **When in light or day mode:** all theme buttons display in light mode.
-    - **When in dark or night mode:** all theme buttons display in dark mode.
-    - **Button styling:** `font-size: 12px`, padding `6px 2px 4px 2px`, `font-weight: 700`, centered.
+  - 24 theme buttons representing 48 total palettes (24 themes × light/dark modes).
+  - The Light/Dark mode toggle controls which variant displays.
+  - Styled to represent each respective theme.
+  - Affected by light and dark mode.
+  - Button selectors accurately pull from and represent their theme regardless of current selection.
+  - **When in light or day mode:** all theme buttons display in light mode.
+  - **When in dark or night mode:** all theme buttons display in dark mode.
+  - **Button styling:** `font-size: 12px`, padding `6px 2px 4px 2px`, `font-weight: 700`, centered.
 - **Simple Visibility Toggles** for tools while developing
-    - **Rulers:** X-axis and Y-axis precision rulers. Hidden by default; toggle to show/hide for alignment assistance during development.
-    - **Grid:** Toggleable `60×60px` overlay for layout assistance during development.
+  - **Rulers:** X-axis and Y-axis precision rulers. Hidden by default; toggle to show/hide for alignment assistance during development.
+  - **Grid:** Toggleable `60×60px` overlay for layout assistance during development.
 
 #### Right Sidebar:
 
 - **`Inspector Panel`** header — Aligned top, centered
-    - **`To-Do List` App** (card, `width: 100%`)
-        - **Spiral Notebook** pages look like they're in or connected to a spiral notebook.
-        - **Bold Text Toggle:** Small square button. Can bold H1 and Aa sizes.
-        - **H1 / Aa Toggle:** H1 size default; auto-switch to regular Aa style after first paragraph.
-        - **Bullet List Toggler** (icon button below notepad) — Toggling preserves other paragraph lines.
-        - **Saves file** as `.txt` in Documents.
-        - **Cannot load files**.
-    - **Send-an-Idea Card**
-        - Exports message in an email to `chickensaurusrex@outlook.com` for main user.
-        - Display only the send-an-idea button (do not display email address).
+  - **`To-Do List` App** (card, `width: 100%`)
+    - **Spiral Notebook** pages look like they're in or connected to a spiral notebook.
+    - **Bold Text Toggle:** Small square button. Can bold H1 and Aa sizes.
+    - **H1 / Aa Toggle:** H1 size default; auto-switch to regular Aa style after first paragraph.
+    - **Bullet List Toggler** (icon button below notepad) — Toggling preserves other paragraph lines.
+    - **Saves file** as `.txt` in Documents.
+    - **Cannot load files**.
+  - **Send-an-Idea Card**
+    - Exports message in an email to `chickensaurusrex@outlook.com` for main user.
+    - Display only the send-an-idea button (do not display email address).
 
 #### Bottom Bar:
 
 - **`Hangar Bay`** header — Aligned left, vertically centered
-    - **`Agent Access`** card — For elements to control AI trading agents or algorithms
-        - **Graph display window** labeled **`+/- $`** professionally
-        - **More ideas** to visualize or interface with agents
+  - **`Agent Access`** card — For elements to control AI trading agents or algorithms
+    - **Graph display window** labeled **`+/- $`** professionally
+    - **More ideas** to visualize or interface with agents
 - **Connect API Keys**
-    - After successful key login, all trading cards and components appear in bottom bar and main region.
-    - Card with text inputs for user API keys
-        - **Live/Demo mode selection:** After selection, text boxes ungray and can receive input.
-        - **Single-line text box** for API key.
-        - **Multi-line text box** for larger RSA key.
-        - **`Connect Kalshi Stream` button** ungrays once correctly-formatted keys are entered.
+  - After successful key login, all trading cards and components appear in bottom bar and main region.
+  - Card with text inputs for user API keys
+    - **Live/Demo mode selection:** After selection, text boxes ungray and can receive input.
+    - **Single-line text box** for API key.
+    - **Multi-line text box** for larger RSA key.
+    - **`Connect Kalshi Stream` button** ungrays once correctly-formatted keys are entered.
 - **Live/Demo Trading Mode Indicator Lights** — Pulsing, glowing indicator.
 - **Agent Access**
-    - **Individual agent controls**.
-    - **Agent Access Card** — For interactive agent interface
-        - 5 agents. 3 agents active on first build. access cards 4 and 5 are grayed out.
-        - **Individual Agent Control Dials:** `Auto`, `Semi-Auto`, `Safe`.
-        - **Agent Status Display** — Shows agent status in multiple ways.
+  - **Individual agent controls**.
+  - **Agent Access Card** — For interactive agent interface
+    - 5 agents. 3 agents active on first build. access cards 4 and 5 are grayed out.
+    - **Individual Agent Control Dials:** `Auto`, `Semi-Auto`, `Safe`.
+    - **Agent Status Display** — Shows agent status in multiple ways.
 
 #### Action Bar:
 
 - **`Ignition`** header — Aligned top, centered
-    - **Do not align gutter lines** between main region/sidebar with gutter lines between bottom bars.
+  - **Do not align gutter lines** between main region/sidebar with gutter lines between bottom bars.
 - **Global Control for Agents:**
-    - Oceanliner or Submarine Throttle design: `Full-Auto`, `Semi-Auto`, `Full-Stop` (default).
+  - Oceanliner or Submarine Throttle design: `Full-Auto`, `Semi-Auto`, `Full-Stop` (default).
 - **Profit/Loss Line Graph** — Display `No data` if no data available
-    - **`+/- $`** professionally labeled.
-    - One main line for portfolio balance (simple, charcoal).
-    - Each agent gets their own colored line.
-    - Accurate profit/loss data per agent; colors pulled from active theme color palette.
-    - Five small buttons for X-axis views: `24 hours`, `1 week`, `1 month`, `1 year`, `all`.
-    - Five small buttons for Y-axis views: `$10`, `$100`, `$1k`, `$10k`, `all`.
-    - This is a packed region. Fit everything creatively, plus two more ways to visualize and interface with agents and performance.
+  - **`+/- $`** professionally labeled.
+  - One main line for portfolio balance (simple, charcoal).
+  - Each agent gets their own colored line.
+  - Accurate profit/loss data per agent; colors pulled from active theme color palette.
+  - Five small buttons for X-axis views: `24 hours`, `1 week`, `1 month`, `1 year`, `all`.
+  - Five small buttons for Y-axis views: `$10`, `$100`, `$1k`, `$10k`, `all`.
+  - This is a packed region. Fit everything creatively, plus two more ways to visualize and interface with agents and performance.
 
 #### Main Region:
 
@@ -475,16 +470,16 @@ Last update: 03-06-26
 - Prevent cards from overflowing region bounds; be creative with design.
 - Fill full width and height; center both horizontally and vertically.
 - **Creative Design Cards and Elements:**
-    - **Hero:** Keep thin and compact to preserve vertical space.
-    - **Map Gauges:** Battery, Network Downlink, Memory (no mocks), CPU, GPU, etc.
-        - Diverse mechanical manometers and plumbing.
-    - **Live Logs:** Terminal printing 7 events at a time (click, resize, focus). Keep compact; include errors/warnings.
-    - **Web Elements:** Assorted, non-functional elements for visual testing.
-    - **Palette Viewer:** Accurate with each theme selection and light/dark mode.
-        - Random unique splat-shaped color swatches for selected palette (the 12 major or common selectors).
-    - **MS Paint 1998 Clone:** Fully functional with tools (New, Open, Save, Save As, etc.). Should look exactly like Microsoft Paint 1998.
-        - should have the maximize toggle in the top right that makes it fill to take up the entire main region. All other components leave the main region until the maximized is retoggled.
-    - What else should we have in the design studio?
+  - **Hero:** Keep thin and compact to preserve vertical space.
+  - **Map Gauges:** Battery, Network Downlink, Memory (no mocks), CPU, GPU, etc.
+    - Diverse mechanical manometers and plumbing.
+  - **Live Logs:** Terminal printing 7 events at a time (click, resize, focus). Keep compact; include errors/warnings.
+  - **Web Elements:** Assorted, non-functional elements for visual testing.
+  - **Palette Viewer:** Accurate with each theme selection and light/dark mode.
+    - Random unique splat-shaped color swatches for selected palette (the 12 major or common selectors).
+  - **MS Paint 1998 Clone:** Fully functional with tools (New, Open, Save, Save As, etc.). Should look exactly like Microsoft Paint 1998.
+    - should have the maximize toggle in the top right that makes it fill to take up the entire main region. All other components leave the main region until the maximized is retoggled.
+  - What else should we have in the design studio?
 
 ##### Trading Studio
 
@@ -493,17 +488,17 @@ Last update: 03-06-26
 - **Sleek initialization animations** and glowing effects with brief glow intensity spikes.
 - **Live vs Demo mode indicator and light:** Completely different data sets based on mode.
 - **Category Nav Menu:** Horizontal scrolling
-    - **Sub-Category Nav Menu:** Horizontal scrolling.
-    - **Filter Options:** Volume, frequency, time-to-close.
+  - **Sub-Category Nav Menu:** Horizontal scrolling.
+  - **Filter Options:** Volume, frequency, time-to-close.
 - **Account Summary Bar:** Compact top strip showing live BALANCE, PORTFOLIO value, DAILY P/L. Updates on data refresh.
-    - **Market Refresh Button** — manual refresh trigger in the summary bar; re-fetches series and resets greyed-out expired cards.
+  - **Market Refresh Button** — manual refresh trigger in the summary bar; re-fetches series and resets greyed-out expired cards.
 - **Series Cards:** 3 columns, full width of main region. Scroll down allowed.
-    - Cards show information similar to Kalshi cards (see photos folder).
-    - Tiny expand button in bottom right to expand card to fill main region.
-    - After successful API key connection: collect as much data as allowed, as frequently as allowed.
-    - Render only first 18 series cards to keep UI fast.
-    - `Show More Markets` button at bottom loads additional 18 series cards.
-    - **Markets that close mid-session grey out** in place; do not disappear. Clear on next refresh.
+  - Cards show information similar to Kalshi cards (see photos folder).
+  - Tiny expand button in bottom right to expand card to fill main region.
+  - After successful API key connection: collect as much data as allowed, as frequently as allowed.
+  - Render only first 18 series cards to keep UI fast.
+  - `Show More Markets` button at bottom loads additional 18 series cards.
+  - **Markets that close mid-session grey out** in place; do not disappear. Clear on next refresh.
 
 ##### Fly Studio
 
@@ -519,9 +514,9 @@ Last update: 03-06-26
 #### Precision Tools:
 
 - **Rulers:** X-axis (top) and Y-axis (left); 18px wide
-    - **Tick heights:** `6px` / `8px` / `12px` at every 10px.
-    - **Shared Zero-square.**
-    - **Accurate to device pixels.**
+  - **Tick heights:** `6px` / `8px` / `12px` at every 10px.
+  - **Shared Zero-square.**
+  - **Accurate to device pixels.**
 - **X-Axis End px Label:** Located in ruler at end of X-axis.
 - **Y-Axis End px Label:** Located in ruler at end of Y-axis.
 - **Grid:** Toggleable `60×60px` overlay aligned with rulers.
@@ -533,62 +528,63 @@ Last update: 03-06-26
 ### Themes:
 
 **When developing color palettes:**
+
 - Read theme name explanations carefully.
 - Develop one theme at a time, slowly.
 - Create diverse, unique spectrums with complex color palettes.
 - Light and dark modes can share many colors (borders, illumination, state colors, etc.).
 - Pause developing themes at holographic during stage 1; finish remaining themes in stage 2.
 
-| Theme Name           | Name Explanation                                                           |
-| :------------------- | :------------------------------------------------------------------------- |
-| Webpage Light        | 2026 webpage. Modern default. Diverse colors, professional   |
-| Webpage Dark         | Modern default "Night Mode" reading. Like Google's dark mode |
-| Mosaic 1993 Light    | Windows 3.1 Silver chrome, chiseled borders. Teal BG (0, 128, 128) |
-| Mosaic 1993 Dark     | Exact inverse of Mosaic 1993 Light                          |
-| Gen7 Cockpit Light   | Gen 7 Fighter. Dark Gull Gray (FS 36231), MFD Green          |
-| Gen7 Cockpit Dark    | Night Vision/Stealth. Deep charcoal, NVG Green glow         |
-| USSR Cockpit Light   | Soviet Cold War. MiG Turquoise (#3d90a2). Stress-reducing blue |
-| USSR Cockpit Dark    | Night Intercept. Region bodies still (#3d90a2)              |
-| Neon Vice 1985 Light | GTA Neon Vice Neon City. Miami pastels, linen suits, art deco pinks |
-| Neon Vice 1985 Dark  | Ocean Drive Midnight. Misty purple haze, humid glow          |
-| Neon City 2085 Light | 2085 Utopia. Hopeful, chromium, electric neon               |
-| Neon City 2085 Dark  | 2085 Dystopia. Netrunner. Sharp laser edges                 |
-| Coniforest Light     | Evergreens. Mt. Rainier (Cold green). Mist, Granite, Pine, Khaki |
-| Coniforest Dark      | PNW Night. Deep evergreen, cold shadows, campfire ash        |
-| Rainforest Light     | Amazon (Hot green). Humid, Pith Helmet Beige, Parrot Green  |
-| Rainforest Dark      | Amazon Night. Deep canopy, bioluminescence, toxic accents   |
-| Art Deco Light       | Roaring Twenties. Ivory, lacquer black, champagne gold, geometric trim |
-| Art Deco Dark        | Ballroom. Piano black, brass lines, emerald accents, sharp symmetry |
-| Holographic Light    | Iridescent daylight. Pearl base with shifting teal spectral shimmer |
-| Holographic Dark     | Prism Noir. Charcoal base, spectral highlights, neon refraction edges |
-| Vapor Light          | Pastel arcade sunrise. Mint, peach, sky blue haze, soft retro gradients |
+| Theme Name           | Name Explanation                                                          |
+| :------------------- | :------------------------------------------------------------------------ |
+| Webpage Light        | 2026 webpage. Modern default. Diverse colors, professional                |
+| Webpage Dark         | Modern default "Night Mode" reading. Like Google's dark mode              |
+| Mosaic 1993 Light    | Windows 3.1 Silver chrome, chiseled borders. Teal BG (0, 128, 128)        |
+| Mosaic 1993 Dark     | Exact inverse of Mosaic 1993 Light                                        |
+| Gen7 Cockpit Light   | Gen 7 Fighter. Dark Gull Gray (FS 36231), MFD Green                       |
+| Gen7 Cockpit Dark    | Night Vision/Stealth. Deep charcoal, NVG Green glow                       |
+| USSR Cockpit Light   | Soviet Cold War. MiG Turquoise (#3d90a2). Stress-reducing blue            |
+| USSR Cockpit Dark    | Night Intercept. Region bodies still (#3d90a2)                            |
+| Neon Vice 1985 Light | GTA Neon Vice Neon City. Miami pastels, linen suits, art deco pinks       |
+| Neon Vice 1985 Dark  | Ocean Drive Midnight. Misty purple haze, humid glow                       |
+| Neon City 2085 Light | 2085 Utopia. Hopeful, chromium, electric neon                             |
+| Neon City 2085 Dark  | 2085 Dystopia. Netrunner. Sharp laser edges                               |
+| Coniforest Light     | Evergreens. Mt. Rainier (Cold green). Mist, Granite, Pine, Khaki          |
+| Coniforest Dark      | PNW Night. Deep evergreen, cold shadows, campfire ash                     |
+| Rainforest Light     | Amazon (Hot green). Humid, Pith Helmet Beige, Parrot Green                |
+| Rainforest Dark      | Amazon Night. Deep canopy, bioluminescence, toxic accents                 |
+| Art Deco Light       | Roaring Twenties. Ivory, lacquer black, champagne gold, geometric trim    |
+| Art Deco Dark        | Ballroom. Piano black, brass lines, emerald accents, sharp symmetry       |
+| Holographic Light    | Iridescent daylight. Pearl base with shifting teal spectral shimmer       |
+| Holographic Dark     | Prism Noir. Charcoal base, spectral highlights, neon refraction edges     |
+| Vapor Light          | Pastel arcade sunrise. Mint, peach, sky blue haze, soft retro gradients   |
 | Vapor Dark           | Late-night vaporwave. Deep navy, hot pink, cyan glow, retro grid ambience |
-| Paper Light          | The Office. Copier paper, toner black, ballpoint blue       |
-| Paper Dark           | Carbon. Deep indigo, faint blue transfer text               |
-| Ledger 1920 Light    | Wall St. Ledger. Manila folder, Banker Green, Typewriter    |
-| Ledger 1920 Dark     | Jazz Moderne / Gatsby. Matte Black Cardstock, Gold Foil     |
-| Blueprint Light      | Physical drafting table                                     |
-| Blueprint Dark       | AutoCAD / Terminal Aesthetic. High contrast lines           |
-| Chalkboard Light     | Greenboard. Chalk colors, aluminum                          |
-| Chalkboard Dark      | Classic Blackboard. Slate Black, dusty white chalk          |
-| Oceanic Light        | Maritime / Yacht Club. Navy Blue, White, Brass accents, coral |
-| Oceanic Dark         | The Abyss. Crushing depth. Black-Blue, Coral, Bioluminescence |
-| Volcano Light        | Active Caldera. Ash gray, Pumice, Sulfur, and Magma         |
-| Volcano Dark         | Magma Chamber. Basalt black, flowing lava, heat shimmer     |
-| Phosphor Light       | Dark terminal. P3 Amber CRT old computer                    |
-| Phosphor Dark        | Dark terminal. Green Phosphor old computer, retro blur      |
-| Steampunk Light      | Victorian Sci-Fi. Parchment, Brass, Mahogany, Steam         |
-| Steampunk Dark       | London Fog. Gaslight, Soot, Dark Leather, Copper            |
-| Dieselpunk Light     | WWI Trench. Khaki, Grease, Riveted Steel, Olive             |
-| Dieselpunk Dark      | Noir City. Oily Steel, Smog, Grime, Weak Yellow Light       |
-| Solarpunk Light      | Eco-Utopia. Cream ceramic, lush green, solar gold            |
-| Solarpunk Dark       | Night Garden. Bioluminescence, deep teal, soft amber        |
-| Stonepunk Light      | Bedrock Quarry. Sandstone, Slate, Leather, Clay             |
-| Stonepunk Dark       | Cave Fire. Soot black, Torch Orange, Ash White              |
-| Dreamcore Light      | Daydream. Pastel clouds, blinding light, nostalgia, Cotton Candy |
-| Dreamcore Dark       | Nightmare. The Void, static noise, watching eyes            |
-| Frutiger Aero Light  | Windows Vista / Web 2.0. Bubbly, Glossy, Sky Blue, Grass Green, Glass |
-| Frutiger Aero Dark   | Midnight Aurora. Glassy Black, Glowing Cyan, Deep Blue     |
+| Paper Light          | The Office. Copier paper, toner black, ballpoint blue                     |
+| Paper Dark           | Carbon. Deep indigo, faint blue transfer text                             |
+| Ledger 1920 Light    | Wall St. Ledger. Manila folder, Banker Green, Typewriter                  |
+| Ledger 1920 Dark     | Jazz Moderne / Gatsby. Matte Black Cardstock, Gold Foil                   |
+| Blueprint Light      | Physical drafting table                                                   |
+| Blueprint Dark       | AutoCAD / Terminal Aesthetic. High contrast lines                         |
+| Chalkboard Light     | Greenboard. Chalk colors, aluminum                                        |
+| Chalkboard Dark      | Classic Blackboard. Slate Black, dusty white chalk                        |
+| Oceanic Light        | Maritime / Yacht Club. Navy Blue, White, Brass accents, coral             |
+| Oceanic Dark         | The Abyss. Crushing depth. Black-Blue, Coral, Bioluminescence             |
+| Volcano Light        | Active Caldera. Ash gray, Pumice, Sulfur, and Magma                       |
+| Volcano Dark         | Magma Chamber. Basalt black, flowing lava, heat shimmer                   |
+| Phosphor Light       | Dark terminal. P3 Amber CRT old computer                                  |
+| Phosphor Dark        | Dark terminal. Green Phosphor old computer, retro blur                    |
+| Steampunk Light      | Victorian Sci-Fi. Parchment, Brass, Mahogany, Steam                       |
+| Steampunk Dark       | London Fog. Gaslight, Soot, Dark Leather, Copper                          |
+| Dieselpunk Light     | WWI Trench. Khaki, Grease, Riveted Steel, Olive                           |
+| Dieselpunk Dark      | Noir City. Oily Steel, Smog, Grime, Weak Yellow Light                     |
+| Solarpunk Light      | Eco-Utopia. Cream ceramic, lush green, solar gold                         |
+| Solarpunk Dark       | Night Garden. Bioluminescence, deep teal, soft amber                      |
+| Stonepunk Light      | Bedrock Quarry. Sandstone, Slate, Leather, Clay                           |
+| Stonepunk Dark       | Cave Fire. Soot black, Torch Orange, Ash White                            |
+| Dreamcore Light      | Daydream. Pastel clouds, blinding light, nostalgia, Cotton Candy          |
+| Dreamcore Dark       | Nightmare. The Void, static noise, watching eyes                          |
+| Frutiger Aero Light  | Windows Vista / Web 2.0. Bubbly, Glossy, Sky Blue, Grass Green, Glass     |
+| Frutiger Aero Dark   | Midnight Aurora. Glassy Black, Glowing Cyan, Deep Blue                    |
 
 #### Token System:
 
@@ -606,7 +602,7 @@ Last update: 03-06-26
 
 ##### Color Palette Tokens:
 
-*Intentional misnaming preserved*
+_Intentional misnaming preserved_
 
 - `modern-webpage`
 - `mosaic-1993`
@@ -618,7 +614,7 @@ Last update: 03-06-26
 - `raneforest`
 - `art-deco`
 - `holographic`
-    - Pause developing themes at holographic during stage 1; finish remaining themes in stage 2.
+  - Pause developing themes at holographic during stage 1; finish remaining themes in stage 2.
 - `vapor`
 - `paper`
 - `ledger-1920`
@@ -665,30 +661,29 @@ Last update: 03-06-26
 ### Illumination:
 
 - Objective: simulate cockpit lighting physics for the web interface.
-    - Illumination does not change when changing studio, theme, or palette.
-    - DAY/Light mode reduces illumination intensity to 60%; NVG/Dark mode runs at 100% intensity.
-    - Other names: Overhead Control Panel. Lighting Control Panel. Lighting Panel. Lighting Interface.
-    - **Physics model:** glow that spreads follows an inverse-square approximation.
-    - **Intensity Hierarchy:** DAY/Light mode sets base illumination intensity to 60%; NVG/Dark mode sets base to 100%. Dimmer dials then secondarily modulate intensity within the range of 0.25 to 1.00 on top of the mode-based intensity value. Always apply mode rules first, then dimmer dial rules.
+  - Illumination does not change when changing studio, theme, or palette.
+  - DAY/Light mode reduces illumination intensity to 60%; NVG/Dark mode runs at 100% intensity.
+  - Other names: Overhead Control Panel. Lighting Control Panel. Lighting Panel. Lighting Interface.
+  - **Physics model:** glow that spreads follows an inverse-square approximation.
+  - **Intensity Hierarchy:** DAY/Light mode sets base illumination intensity to 60%; NVG/Dark mode sets base to 100%. Dimmer dials then secondarily modulate intensity within the range of 0.25 to 1.00 on top of the mode-based intensity value. Always apply mode rules first, then dimmer dial rules.
 
 #### Controls:
 
 - Each layer/group has one On/Off Switch and one rotary Dimmer Dial.
 - Text and Bar groups have two On/Off Switches and one dimmer dial.
-    
-    -  **DAY/NVG** - toggle is tied and equal to Light/Dark toggle. These are two different switches on the same circuit—both toggle between light and dark illumination modes, but offer different visual aesthetics: Light/Dark for standard UI controls, and DAY/NVG for aircraft-style instrument controls. When one is toggled, the other responds accordingly. They visually flip to show which mode is currently active.
-        -  The two modes override each other and are mutually exclusive.
-    -  **Master** - global ON/OFF Illumination switch, OFF default; Global DIM Dial, DIM MAX default.
-    -  **Text** - controls glow, luminance, and opacity for primary and secondary text groups; Find 100% of text elements and apply these effects.
-        -  **Primary Text** — Whichever text groups feel like primary text groups (high priority, important content).
-        -  **Secondary Text** — The rest of the text (descriptions, metadata, tertiary content). Effects: text-shadow glow, opacity modulation, luminance.
-    -  **Bar** - Structural glow. two-tier border illumination system
-        -  primary bars — all region border opacity and glow intensity; outer spread into gutter.
-        -  secondary bars — all card border opacity and glow intensity; Outer spread into regions' areas.
-    -  **Flood** - ambient fill within regions — controls opacity and brightness for atmospheric gradient centered wash over whole WebPage.
-        - Simulated Post lights that flood their region with light.
-    -  **Display** - self-illumination intensity display-like components; simulates LCD/LED or MFD displays.
-        -   Displays are cards or content that are windows, dropdown menus, graphs, logs, etc.
+  - **DAY/NVG** - toggle is tied and equal to Light/Dark toggle. These are two different switches on the same circuit—both toggle between light and dark illumination modes, but offer different visual aesthetics: Light/Dark for standard UI controls, and DAY/NVG for aircraft-style instrument controls. When one is toggled, the other responds accordingly. They visually flip to show which mode is currently active.
+    - The two modes override each other and are mutually exclusive.
+  - **Master** - global ON/OFF Illumination switch, OFF default; Global DIM Dial, DIM MAX default.
+  - **Text** - controls glow, luminance, and opacity for primary and secondary text groups; Find 100% of text elements and apply these effects.
+    - **Primary Text** — Whichever text groups feel like primary text groups (high priority, important content).
+    - **Secondary Text** — The rest of the text (descriptions, metadata, tertiary content). Effects: text-shadow glow, opacity modulation, luminance.
+  - **Bar** - Structural glow. two-tier border illumination system
+    - primary bars — all region border opacity and glow intensity; outer spread into gutter.
+    - secondary bars — all card border opacity and glow intensity; Outer spread into regions' areas.
+  - **Flood** - ambient fill within regions — controls opacity and brightness for atmospheric gradient centered wash over whole WebPage.
+    - Simulated Post lights that flood their region with light.
+  - **Display** - self-illumination intensity display-like components; simulates LCD/LED or MFD displays.
+    - Displays are cards or content that are windows, dropdown menus, graphs, logs, etc.
 
 #### Effects Tokens:
 
@@ -722,10 +717,10 @@ Last update: 03-06-26
 - Document variable purposes with brief dev notes in code
 - Plan for scoped variables (component-level)
 - Theme and illumination state persist when switching studios. They reset on new browser session
--  One `index.html`. Studio selector in Nav Bar switches state — no page reloads, no routing.
--  The Header, Nav, sidebars, Bottom and Action Bar never change between studios. Only Main Region's content changes.
--  Design Studio is the default landing state — our UI shows off itself with web design skills first.
--  Trading Studio activates when API keys are connected. The Main Region becomes a live data interface that resembles navigating Kalshi.
+- One `index.html`. Studio selector in Nav Bar switches state — no page reloads, no routing.
+- The Header, Nav, sidebars, Bottom and Action Bar never change between studios. Only Main Region's content changes.
+- Design Studio is the default landing state — our UI shows off itself with web design skills first.
+- Trading Studio activates when API keys are connected. The Main Region becomes a live data interface that resembles navigating Kalshi.
 - Agents run in the backend regardless of which studio is active.
 - Flight Studio is a reward state — the Main Region transforms into a cockpit. The rest of the interface stays functional. Agents keep trading in the background.
 - All studios share the same theme, illumination, and precision tool state. Switching studios never resets any system design controls.
@@ -733,80 +728,70 @@ Last update: 03-06-26
 ### UI/UX Polish:
 
 - Visual Polish:
-
-    -  Consistent spacing throughout
-    -  Alignment perfection (use grid/flexbox)
-    -  Smooth transitions/animations
-    -  Loading states for async operations
-    -  Empty states for no data
-    -  Error states with helpful messages
-    -  Success states with confirmation
-    -  Et cetera
+  - Consistent spacing throughout
+  - Alignment perfection (use grid/flexbox)
+  - Smooth transitions/animations
+  - Loading states for async operations
+  - Empty states for no data
+  - Error states with helpful messages
+  - Success states with confirmation
+  - Et cetera
 
 - UX Details:
-
-    -  Hover states on all interactive elements
-    -  Focus states clearly visible
-    -  Active/pressed states
-    -  Disabled states (visually distinct)
-    -  Cursor changes appropriately
-    -  Tooltips for unclear elements
-    -  Confirmation for destructive actions
-    -  Et cetera
+  - Hover states on all interactive elements
+  - Focus states clearly visible
+  - Active/pressed states
+  - Disabled states (visually distinct)
+  - Cursor changes appropriately
+  - Tooltips for unclear elements
+  - Confirmation for destructive actions
+  - Et cetera
 
 - Microinteractions:
-
-    -  Button press feedback
-    -  Form validation feedback
-    -  Success animations
-    -  Progress indicators
-    -  Page transitions
-    -  Scroll behavior
-    -  Et cetera
+  - Button press feedback
+  - Form validation feedback
+  - Success animations
+  - Progress indicators
+  - Page transitions
+  - Scroll behavior
+  - Et cetera
 
 #### Accessibility:
 
 - Semantic HTML:
-
-    -  Use semantic elements (`<header>`, `<nav>`, `<main>`, `<article>`, etc.)
-    -  Plan heading hierarchy (h1 ? h2 ? h3)
-    -  Define landmark regions
-    -  Use `<button>` for buttons, `<a>` for links
-    -  Proper form labels and associations
+  - Use semantic elements (`<header>`, `<nav>`, `<main>`, `<article>`, etc.)
+  - Plan heading hierarchy (h1 ? h2 ? h3)
+  - Define landmark regions
+  - Use `<button>` for buttons, `<a>` for links
+  - Proper form labels and associations
 
 - ARIA & Screen Readers:
-
-    -  Add ARIA labels where needed (`aria-label`, `aria-labelledby`)
-    -  Define live regions (`aria-live`, `aria-atomic`)
-    -  Plan for focus management
-    -  Add skip links for navigation
-    -  Test with screen readers (NVDA, JAWS, VoiceOver)
+  - Add ARIA labels where needed (`aria-label`, `aria-labelledby`)
+  - Define live regions (`aria-live`, `aria-atomic`)
+  - Plan for focus management
+  - Add skip links for navigation
+  - Test with screen readers (NVDA, JAWS, VoiceOver)
 
 - Keyboard Navigation:
-
-    -  All interactive elements keyboard accessible
-    -  Logical tab order
-    -  Visible focus indicators
-    -  Define keyboard shortcuts
-    -  Trap focus in modals
-    -  Escape key behavior
+  - All interactive elements keyboard accessible
+  - Logical tab order
+  - Visible focus indicators
+  - Define keyboard shortcuts
+  - Trap focus in modals
+  - Escape key behavior
 
 - Visual Accessibility:
+  - Meet WCAG contrast ratios (AA or AAA)
+  - Plan for color blindness
+  - Support browser zoom (up to 200%)
+  - Respect `prefers-color-scheme`
+  - Plan for high contrast mode
 
-    -  Meet WCAG contrast ratios (AA or AAA)
-    -  Plan for color blindness
-    -  Support browser zoom (up to 200%)
-    -  Respect `prefers-color-scheme`
-    -  Plan for high contrast mode
-
-
-*End Chapter 1.*
-
-
+_End Chapter 1._
 
 ---
 
-## *Chapter 2. Back Ends*
+## _Chapter 2. Back Ends_
 
 ### Chapter 2 Intent
 
@@ -840,20 +825,21 @@ This chapter defines a realistic backend blueprint for a shippable Kalshi tradin
 
 ### Runtime Stack
 
-| Area | Selection |
-| :--- | :-------- |
-| Language | Python 3.12+ |
-| Runtime model | `asyncio` |
-| API server | FastAPI + Uvicorn |
-| REST client | `httpx` |
-| WebSocket client | `websockets` |
-| Database | PostgreSQL (Supabase acceptable) |
-| DB driver | `asyncpg` |
-| Config | environment variables (`.env` for local only) |
-| Logging | structured JSON |
-| Metrics/tracing | Prometheus + OpenTelemetry |
+| Area             | Selection                                     |
+| :--------------- | :-------------------------------------------- |
+| Language         | Python 3.12+                                  |
+| Runtime model    | `asyncio`                                     |
+| API server       | FastAPI + Uvicorn                             |
+| REST client      | `httpx`                                       |
+| WebSocket client | `websockets`                                  |
+| Database         | PostgreSQL (Supabase acceptable)              |
+| DB driver        | `asyncpg`                                     |
+| Config           | environment variables (`.env` for local only) |
+| Logging          | structured JSON                               |
+| Metrics/tracing  | Prometheus + OpenTelemetry                    |
 
 Implementation notes:
+
 - Pin exact runtime versions in lockfiles and deployment manifests.
 - Keep secrets out of source control and process logs.
 - Build outputs must remain in `.artifacts/`.
@@ -864,12 +850,13 @@ Implementation notes:
 
 #### Environment Isolation
 
-| Environment | REST Base URL | WebSocket Endpoint |
-| :---------- | :------------ | :----------------- |
-| Live | `https://api.elections.kalshi.com/trade-api/v2` | Production endpoint from `websockets/websocket-connection` |
-| Demo | `https://demo-api.kalshi.co/trade-api/v2` | Demo endpoint from `websockets/websocket-connection` |
+| Environment | REST Base URL                                   | WebSocket Endpoint                                         |
+| :---------- | :---------------------------------------------- | :--------------------------------------------------------- |
+| Live        | `https://api.elections.kalshi.com/trade-api/v2` | Production endpoint from `websockets/websocket-connection` |
+| Demo        | `https://demo-api.kalshi.co/trade-api/v2`       | Demo endpoint from `websockets/websocket-connection`       |
 
 Rules:
+
 - Live and Demo are separate exchanges with separate credentials and state.
 - Data, caches, and PnL must never mix across environments.
 - Environment selection is explicit and auditable.
@@ -878,14 +865,14 @@ Rules:
 
 #### API Surfaces Used by the App
 
-| Domain | Required Endpoints |
-| :----- | :----------------- |
-| Market discovery | `GET /markets`, `GET /markets/{ticker}`, `GET /events`, `GET /events/{event_ticker}`, `GET /series/{series_ticker}` |
-| Portfolio state | `GET /portfolio/balance`, `GET /portfolio/orders`, `GET /portfolio/orders/{order_id}`, `GET /portfolio/fills`, `GET /portfolio/positions` |
-| Order actions | `POST /portfolio/orders`, `DELETE /portfolio/orders/{order_id}` |
-| Exchange status | `GET /exchange/status`, `GET /exchange/schedule`, `GET /exchange/user_data_timestamp` |
+| Domain               | Required Endpoints                                                                                                                                                                          |
+| :------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Market discovery     | `GET /markets`, `GET /markets/{ticker}`, `GET /events`, `GET /events/{event_ticker}`, `GET /series/{series_ticker}`                                                                         |
+| Portfolio state      | `GET /portfolio/balance`, `GET /portfolio/orders`, `GET /portfolio/orders/{order_id}`, `GET /portfolio/fills`, `GET /portfolio/positions`                                                   |
+| Order actions        | `POST /portfolio/orders`, `DELETE /portfolio/orders/{order_id}`                                                                                                                             |
+| Exchange status      | `GET /exchange/status`, `GET /exchange/schedule`, `GET /exchange/user_data_timestamp`                                                                                                       |
 | Historical partition | `GET /historical/cutoff`, `GET /historical/markets`, `GET /historical/markets/{ticker}`, `GET /historical/markets/{ticker}/candlesticks`, `GET /historical/fills`, `GET /historical/orders` |
-| Limits | `GET /account/limits` |
+| Limits               | `GET /account/limits`                                                                                                                                                                       |
 
 - Detailed request and response shapes are maintained in `DOCUMENTS/KALSHI-DOCS.md`.
 
@@ -927,12 +914,14 @@ Rules:
 #### Commands and Channels
 
 Supported command set:
+
 - `subscribe`
 - `unsubscribe`
 - `list_subscriptions`
 - `update_subscription`
 
 Primary channel set for this app:
+
 - `ticker`
 - `orderbook_delta`
 - `trade`
@@ -942,10 +931,12 @@ Primary channel set for this app:
 - `market_positions`
 
 Optional channel set (feature-gated):
+
 - `communications`
 - `order_group_updates`
 
 Operational notes:
+
 - Use `send_initial_snapshot=true` for `ticker` when initial top-of-book seed data is required.
 - Use `skip_ticker_ack=true` for large subscription sets to reduce acknowledgement payload volume.
 - Prefer `update_subscription` (`add_markets` / `delete_markets`) for dynamic market set changes without reconnecting.
@@ -969,6 +960,7 @@ Operational notes:
 - Legacy integer fields are compatibility-only and must never be required by core logic.
 
 Canonical internal units:
+
 - Money: fixed-point dollars (`Decimal`, 4 dp)
 - Quantity: fixed-point contracts (`Decimal`, 2 dp)
 - `market_positions` centi-cent integers are converted at presentation boundaries only.
@@ -1022,6 +1014,7 @@ Kalshi WebSocket -> Ingestion -> State Cache -> Agent Runtime -> Risk Gateway ->
 - Self-trade prevention policy (if configured)
 
 Behavior:
+
 - Reject with explicit reason codes.
 - Write all blocks and rejects to `risk_events` and audit logs.
 - Do not silently drop intents in production mode.
@@ -1086,17 +1079,17 @@ Behavior:
 
 #### Minimum Table Set
 
-| Table | Purpose |
-| :---- | :------ |
-| `markets` | market metadata and lifecycle state |
-| `orderbooks` | current orderbook state |
-| `orders` | order lifecycle state |
-| `fills` | fill records |
-| `positions` | current positions |
-| `agent_state` | per-agent runtime/config state |
-| `risk_events` | denied intents and policy violations |
-| `system_config` | runtime settings |
-| `audit_log` | immutable operator and system audit trail |
+| Table           | Purpose                                   |
+| :-------------- | :---------------------------------------- |
+| `markets`       | market metadata and lifecycle state       |
+| `orderbooks`    | current orderbook state                   |
+| `orders`        | order lifecycle state                     |
+| `fills`         | fill records                              |
+| `positions`     | current positions                         |
+| `agent_state`   | per-agent runtime/config state            |
+| `risk_events`   | denied intents and policy violations      |
+| `system_config` | runtime settings                          |
+| `audit_log`     | immutable operator and system audit trail |
 
 ---
 
@@ -1121,6 +1114,7 @@ Behavior:
 - Stream normalized runtime events (`/events`)
 
 Event delivery requirements:
+
 - At-least-once delivery semantics.
 - UI must treat backend as source of truth.
 
@@ -1228,6 +1222,7 @@ Telemetry beacon is optional and disabled by default. It is only sent after expl
 **Transparency:**
 
 Document in README and first-run wizard:
+
 ```markdown
 ### Anonymous Installation Analytics
 
@@ -1287,12 +1282,12 @@ Lightweight API call on startup to check for new releases and collect user count
 
 #### Capacity Signals and Actions
 
-| Signal | Warning Threshold | Action |
-| :----- | :---------------- | :----- |
-| Sustained `429` rate | >5% of order requests over 5 minutes | Reduce non-critical traffic; maintain execution path priority |
-| Submit latency p95 | >2 seconds over 5 minutes | Slow agent order cadence and increase intent filtering strictness |
-| Reconciliation drift | Any unresolved drift after one cycle | Pause new automation until consistency is restored |
-| WS gap/reconnect churn | Repeated sequence gaps or reconnect loops | Gate executions to markets with healthy data only |
+| Signal                 | Warning Threshold                         | Action                                                            |
+| :--------------------- | :---------------------------------------- | :---------------------------------------------------------------- |
+| Sustained `429` rate   | >5% of order requests over 5 minutes      | Reduce non-critical traffic; maintain execution path priority     |
+| Submit latency p95     | >2 seconds over 5 minutes                 | Slow agent order cadence and increase intent filtering strictness |
+| Reconciliation drift   | Any unresolved drift after one cycle      | Pause new automation until consistency is restored                |
+| WS gap/reconnect churn | Repeated sequence gaps or reconnect loops | Gate executions to markets with healthy data only                 |
 
 #### Degradation Policy
 
@@ -1307,31 +1302,27 @@ Lightweight API call on startup to check for new releases and collect user count
 
 ---
 
-
-
-
-
 ---
 
-## *Chapter 3. Design Studio*
+## _Chapter 3. Design Studio_
 
 - Default State showing off our pretty main region and all our cool control interfaces.
 - This isn't too complicated so it doesn't need it's own chapter.
 - see ##### Design Studio for details
 
-## *Chapter 4. Trading Studio*
+## _Chapter 4. Trading Studio_
 
 - The entire reason why we are doing this: To make money.
 - Three agents at first. Separate environments to avoid cross-contamination of performance.
 
 ### Agent Interfaces
 
--  Agents will mostly be interfaced through their Agent Access content card in the bottom bar.
+- Agents will mostly be interfaced through their Agent Access content card in the bottom bar.
 - interfaces for approval/deny bids in semi-auto
 
 #### Full-Auto
 
--  No approval needed to execute buys/sells.
+- No approval needed to execute buys/sells.
 
 #### Semi-Auto Approval Flow
 
@@ -1364,16 +1355,16 @@ Lightweight API call on startup to check for new releases and collect user count
 - Hard stops are enforced by the risk gateway (daily loss cap, exposure caps, and global kill switch).
 - Priority universe: recurring BTC and short-dated markets (typically under 3 days to close).
 - Discovery may scan up to 40k markets, but execution must stay constrained to a curated, liquid subset.
-    
+
 ### Agent Prime
 
 - Default, Normal
 - Literally just follows the other traders. Basically betting on the majority bets.
 - Should be able to access and analyze and bet on every market.
 - Majority Signal Logic
-    -  prime could watch total buy and sell volume direction within each minute
-    -  prime could place bets aligned with whichever side the majority is trading in that window
-    -  This idea is that the group consensus of a market tends toward the most accurate answer
+  - prime could watch total buy and sell volume direction within each minute
+  - prime could place bets aligned with whichever side the majority is trading in that window
+  - This idea is that the group consensus of a market tends toward the most accurate answer
 
 ### Agent Praxis
 
@@ -1438,7 +1429,6 @@ A three-day bearish reversal pattern similar to the Evening Star. The uptrend co
 Evening Star
 A bearish reversal pattern that continues an uptrend with a long white body day followed by a gapped up small body day, then a down close with the close below the midpoint of the first day.
 
-
 Falling Three Methods
 A bearish continuation pattern. A long black body is followed by three small body days, each fully contained within the range of the high and low of the first day. The fifth day closes at a new low.
 
@@ -1459,7 +1449,6 @@ A two-day pattern that's similar to the Harami. The difference is that the last 
 
 Inverted Hammer
 A one-day bullish reversal pattern. In a downtrend, the open is lower, then it trades higher, but closes near its open, therefore looking like an inverted lollipop.
-
 
 Long Body / Long Day
 A large price move from open to close, i.e., the length of the candle body is long.
@@ -1513,45 +1502,44 @@ A three-day bearish pattern that only happens in an uptrend. The first day is a 
 Upside Tasuki Gap
 A continuation pattern with a long white body followed by another white body that has gapped above the first one. The third day is black and opens within the body of the second day, then closes in the gap between the first two days but does not close the gap.
 
-
 ### Ideas
 
--  prime and peritia run as separate asyncio tasks in the backend. They never share state or interfere with each other.
--  Both agents operate in Demo environment first. Neither touches Live until Demo performance is validated over a meaningful sample.
--  prime is the control. Its job is to lose slowly or break even — establishing a baseline that peritia must beat to prove its strategy is real.
--  peritia reads the BTC recurring series orderbook and recent trade history on every market update. Decisions are made from live data only, never cached assumptions.
+- prime and peritia run as separate asyncio tasks in the backend. They never share state or interfere with each other.
+- Both agents operate in Demo environment first. Neither touches Live until Demo performance is validated over a meaningful sample.
+- prime is the control. Its job is to lose slowly or break even — establishing a baseline that peritia must beat to prove its strategy is real.
+- peritia reads the BTC recurring series orderbook and recent trade history on every market update. Decisions are made from live data only, never cached assumptions.
 - comparison data — win rate, fills, PnL, order count — is displayed side by side in the Bottom Bar P/L graph, one colored line per agent.
--  All agents write or log every decision and its outcome to the database. This creates a training record even before any ML is involved.
--  peritia's strategy should be developed incrementally: start with one simple signal, measure it, then add complexity only when the simpler version is understood.
+- All agents write or log every decision and its outcome to the database. This creates a training record even before any ML is involved.
+- peritia's strategy should be developed incrementally: start with one simple signal, measure it, then add complexity only when the simpler version is understood.
 
 #### API Key Auto-Fill
 
--  Consider an `.env` file in root that the UI could read to auto-fill API key inputs
-    -  One set for Live keys, one set for Demo keys
--  API keys could be cleared from memory on disconnect
+- Consider an `.env` file in root that the UI could read to auto-fill API key inputs
+  - One set for Live keys, one set for Demo keys
+- API keys could be cleared from memory on disconnect
 
 #### Agent Activation on Key Entry
 
--  As soon as API keys are successfully entered, agents could activate automatically in Semi-Auto mode
--  In Semi-Auto, agents may need approval before buying Yes or No contracts
-    -  Agents do not need approval to sell Yes or No contracts
+- As soon as API keys are successfully entered, agents could activate automatically in Semi-Auto mode
+- In Semi-Auto, agents may need approval before buying Yes or No contracts
+  - Agents do not need approval to sell Yes or No contracts
 
-*End Chapter 4*
+_End Chapter 4_
 
 ---
 
-## *Chapter 5. Flight Studio*
+## _Chapter 5. Flight Studio_
 
 ### Superhero and Aircraft Flight Puget Sound Virtual Simulator.
 
--  *`No Flight Plan` displayed until the agents make 2,000 dollars so we can develop this and play. Live view of the ISS video feeds if possible.*
--   ISS live feed (NASA HDEV or equivalent public stream) renders as a main viewport inside the cockpit, treated as the "window."
--  Flight Sim can run while the rest of the interface — controls, agents, illumination — stays fully operational while flying.
--  The Flight Sim is deliberately gated — must get the trading system working, flight sim is not a development priority.
+- _`No Flight Plan` displayed until the agents make 2,000 dollars so we can develop this and play. Live view of the ISS video feeds if possible._
+- ISS live feed (NASA HDEV or equivalent public stream) renders as a main viewport inside the cockpit, treated as the "window."
+- Flight Sim can run while the rest of the interface — controls, agents, illumination — stays fully operational while flying.
+- The Flight Sim is deliberately gated — must get the trading system working, flight sim is not a development priority.
 
 ---
 
-## *Chapter 6. Converter Studio*
+## _Chapter 6. Converter Studio_
 
 File converters, image converters, PDF filler, URL to MP3/MP4 converter.
 
@@ -1559,32 +1547,32 @@ Do not worry about developing until stage 2.5 is completed.
 
 ---
 
-## *Chapter 7. Open Chapter*
+## _Chapter 7. Open Chapter_
 
 - If adding, create brief checkboxes at the very bottom for new features, ideas, Et cetera.
-    - If adding a complex idea, create multiple checkboxes and use nesting.
+  - If adding a complex idea, create multiple checkboxes and use nesting.
 
 ### Questions and Answers
 
--  How does the backend run persistently? Is it a local process the user starts manually, a system service, or something that launches when the webpage opens? What happens if it crashes?
+- How does the backend run persistently? Is it a local process the user starts manually, a system service, or something that launches when the webpage opens? What happens if it crashes?
 
 A: Right now this runs as a local always-on process. Until revenue and infrastructure budget justify managed hosting, the machine must stay online continuously. Later we can migrate the runtime to cloud infrastructure with supervised restart and persistent uptime.
 
--  What is the profit withdrawal and risk management strategy? The agents will trade real money in Live mode — is there a max drawdown limit, a daily loss cap, or a stop condition before the account is emptied?
+- What is the profit withdrawal and risk management strategy? The agents will trade real money in Live mode — is there a max drawdown limit, a daily loss cap, or a stop condition before the account is emptied?
 
 A: We trade in contracts. YES or NO. The only stop condition is if we are under 5 dollars. Simple. I trust the agents to make good decisions and see how their descisions are affecting our balance p/l while learning and getting positively reinforced and rewarded for being profitable.
 
--  Where does this run? Is this a personal machine that stays on 24/7, a server, or a cloud instance? The backend needs to be always-on for agents to trade continuously.
+- Where does this run? Is this a personal machine that stays on 24/7, a server, or a cloud instance? The backend needs to be always-on for agents to trade continuously.
 
 A: Yeah the device has to be on until we get to a development point where we can get versions to run on cloud servers that stay on even when the device is off.
 
--  What happens to theme and illumination state between sessions? Is it persisted in localStorage, the database, or reset every time the page loads?
+- What happens to theme and illumination state between sessions? Is it persisted in localStorage, the database, or reset every time the page loads?
 
 A: Theme and illumination state reset everytime the page a new state is initialized. if the UI reopens, not refreshes, Styles always reset.
 A: Theme and illumination state dont change when changing studios.
 A: The backend never resets like that tho cause we need all our trading data to look back on.
 
--  Beyond the three agents, what would more agents look like? Is the architecture designed to add agents easily, or would adding a third require significant refactoring?
+- Beyond the three agents, what would more agents look like? Is the architecture designed to add agents easily, or would adding a third require significant refactoring?
 
 A: 5 agents access cards aligned horizontally. the spots for 4 and 5 are 2 grayed out slots. these 2 grayed cards are less wide than the original 3 agent slots, all same height. Only focus on the 3 agents until they get good enough to clone and use the slots 4 and 5 for a/b testing and our initial a/b/c testing.
 
@@ -1592,15 +1580,15 @@ A: 5 agents access cards aligned horizontally. the spots for 4 and 5 are 2 graye
 
 A: No scroll; no expand. It will fit i promise. Pack everything creatively. This is a cockpit but it's only 1080p wide and 944 px tall so we gotta be creative. Cockpits are extremely packed with instruments, dials, screens, switches, indicators, lights, sticks, buttons, levers, knobs, rotary dials and countles more components.
 
--  Semi-Auto mode is defined as a permission state for agents — but what does the approval flow actually look like? Does a trade intent pop up somewhere and wait for a click, and what happens if the user doesn't respond in time?
+- Semi-Auto mode is defined as a permission state for agents — but what does the approval flow actually look like? Does a trade intent pop up somewhere and wait for a click, and what happens if the user doesn't respond in time?
 
 A: In semi-auto, the user will be watching on the front end, so an agent finds yes or no contracts they want to buy, then the series cards for those contracts appears at the top, with approve or deny buttons. also we need details of why they want to execute trade like a reason or a log for why they think this. they already should be logging, so here it can pull from that log and display it softly.
 
--  The theme buttons in the Left Sidebar need to visually represent their own theme regardless of what's currently active — how does a Volcano button look while the Mosaic 1993 Light theme is selected?
+- The theme buttons in the Left Sidebar need to visually represent their own theme regardless of what's currently active — how does a Volcano button look while the Mosaic 1993 Light theme is selected?
 
 A: If mosiac theme is active, and light mode is selected, the volcano button represents volcano light mode. If mosaic theme is active and dark mode is toggled, volcano button would represent volcano dark mode.
 
--  Kalshi markets settle and expire constantly — what does the Trading Studio look like when a market the user was watching closes mid-session? Does the card disappear, grey out, or move?
+- Kalshi markets settle and expire constantly — what does the Trading Studio look like when a market the user was watching closes mid-session? Does the card disappear, grey out, or move?
 
 A: Maybe they grey out until refresh is hit. Oh we need a series refresh or a market refresh button.
 
@@ -1608,14 +1596,14 @@ A: The cards are to ensure data is accurate in the backend, and to tell our agen
 
 A: Only 18 are rendered, including the cards agents need confirmation on cause those would be brou8ght to the top.
 
--  The Right Sidebar to-do list app — is it decorative, or should it persist notes between 
-sessions and potentially connect to trading context like tagging a market or an agent decision?
+- The Right Sidebar to-do list app — is it decorative, or should it persist notes between
+  sessions and potentially connect to trading context like tagging a market or an agent decision?
 
 A: it is fully funcational. make it so good that it would get you an A+ if you developed a to-do list app for a college test. local, saves txt files.
 
--  The project is for personal use, but the backend Control API is a local HTTP server — is there any plan or risk of accidentally exposing it, and should there be a startup check that confirms it is only bound to `127.0.0.1`?
+- The project is for personal use, but the backend Control API is a local HTTP server — is there any plan or risk of accidentally exposing it, and should there be a startup check that confirms it is only bound to `127.0.0.1`?
 
-A: If this get's profitable we need to ship it to society that want their own pc app. so probably use docker. This will be open-scource and free. 
+A: If this get's profitable we need to ship it to society that want their own pc app. so probably use docker. This will be open-scource and free.
 
 Mode Selection vs Indicator Redundancy
 
@@ -1623,50 +1611,48 @@ Mode Selection vs Indicator Redundancy
 
 A: seperate because the live demo mode selection and text boxes for api input will dissapear after successfull connection so we will need an indicator
 
--  The illumination system has a DAY/NVG toggle in the header — but NVG implies a specific color shift across the entire UI. Does NVG mode override the active theme's color palette entirely, or layer on top of it?
+- The illumination system has a DAY/NVG toggle in the header — but NVG implies a specific color shift across the entire UI. Does NVG mode override the active theme's color palette entirely, or layer on top of it?
 
 A: NVG is just a cool way to switch to dark mode - no additional effects.
 
--  State Reconciliation runs every 60 minutes and on reconnect — but what does the UI show during a reconciliation cycle? Does trading pause, does a spinner appear, or does it happen silently in the background?
+- State Reconciliation runs every 60 minutes and on reconnect — but what does the UI show during a reconciliation cycle? Does trading pause, does a spinner appear, or does it happen silently in the background?
 
 A: maybe a pulsing glowing blue-green indicator light showing its active and working properly, or a yellow or red color if not working properly
 
--  Prime "follows the majority bets" — but on Kalshi, the orderbook only shows bids. What specific data point defines majority? Best yes bid size? Total open interest? Recent fill direction?
+- Prime "follows the majority bets" — but on Kalshi, the orderbook only shows bids. What specific data point defines majority? Best yes bid size? Total open interest? Recent fill direction?
 
 A: Maybe bets is supposed to say bids. We need to think about this. I guess calculate the total majority average buys and sells, and try to follow that as it happens? It's like betting on whatever the majority of that market is guessing because the majority group mind would have the closest answer.
 
--  The series cards in Trading Studio show "information similar to Kalshi's cards" — but Kalshi's UI and API data shapes are different. What exact fields get displayed on each card, and where does each field come from in the API response?
+- The series cards in Trading Studio show "information similar to Kalshi's cards" — but Kalshi's UI and API data shapes are different. What exact fields get displayed on each card, and where does each field come from in the API response?
 
 A: Photos with examples for how kalshi's UI organizes and navigates the series cards. As close as we can realistically get. Never mock any data.
 
--  The precision tools — rulers, grid, — are designed for the Design Studio. Do they stay visible or automatically hide when switching to Trading Studio or Flight Studio?
+- The precision tools — rulers, grid, — are designed for the Design Studio. Do they stay visible or automatically hide when switching to Trading Studio or Flight Studio?
 
 A: They stay visible
 
--  Private API keys are typed into text inputs in the Bottom Bar. Is there a plan for how these are handled in memory — masked after entry, never logged, cleared on disconnect — or is key security left undefined?
+- Private API keys are typed into text inputs in the Bottom Bar. Is there a plan for how these are handled in memory — masked after entry, never logged, cleared on disconnect — or is key security left undefined?
 
 A: I'm not sure, what would the majority of people want if this was released to everyone
 
--  Prime is described as "betting on the majority bets" — but on Kalshi, the best bid/ask spread is the market. What specific orderbook signal defines the majority, and how stale is too stale to act on?
+- Prime is described as "betting on the majority bets" — but on Kalshi, the best bid/ask spread is the market. What specific orderbook signal defines the majority, and how stale is too stale to act on?
 
 A: I dont know, use best judgment and try to follow majority volume. Bet/bid on the house.
 
--  The backend reconciles state against Kalshi every 60 minutes and on reconnect — but what if reconciliation reveals a fill that the agent didn't intend, or a position that shouldn't exist? Is there an alert, an auto-cancel, or just a log entry?
+- The backend reconciles state against Kalshi every 60 minutes and on reconnect — but what if reconciliation reveals a fill that the agent didn't intend, or a position that shouldn't exist? Is there an alert, an auto-cancel, or just a log entry?
 
 A: I'm not sure what this means, maybe this needs to be thought about.
 
--  The project is personal use only — but is there any plan to run multiple browser tabs or windows simultaneously? Would two open tabs cause duplicate agent commands or state conflicts through the Backend Control API?
+- The project is personal use only — but is there any plan to run multiple browser tabs or windows simultaneously? Would two open tabs cause duplicate agent commands or state conflicts through the Backend Control API?
 
 A: If someone clicks our link for a desktop app, nobosdy's apps are connected, They get a beautiful shell that lets them easily interface actions for bots that connect to their personal kalshi accounts.
 
--  Chapter 7 is defined as "New Ideas, Questions, Complaints, Hopes" — what is the actual workflow for moving something from Chapter 7 into a real chapter with checkboxes and specs? Who decides, and when?
+- Chapter 7 is defined as "New Ideas, Questions, Complaints, Hopes" — what is the actual workflow for moving something from Chapter 7 into a real chapter with checkboxes and specs? Who decides, and when?
 
 A: We are doing tht right now. Little by little i will integrate these updated ideas and questions into the prd for future devs to review for clarification.
 
 ---
 
-*End Chapter 7*
+_End Chapter 7_
 
-*End PRD*
-
-
+_End PRD_
