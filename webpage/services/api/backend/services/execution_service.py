@@ -69,6 +69,14 @@ class ExecutionService:
         """
         agent_state = self.state_cache.get_agent_state(intent.agent_name)
         if agent_state is None:
+            if intent.agent_name == "user":
+                # Manual orders from the UI bypass agent-mode gating and go
+                # straight to the risk gateway (trading-enabled + risk checks
+                # still apply).
+                approved, reason = await self.risk_gateway.check_trade_intent(intent)
+                if not approved:
+                    return self._result("rejected", intent, reason=reason)
+                return await self.submit_order(intent)
             reason = "unknown_agent"
             await self._record_rejection(intent, reason)
             return self._result("rejected", intent, reason=reason)
