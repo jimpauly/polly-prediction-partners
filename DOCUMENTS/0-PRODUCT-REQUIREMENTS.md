@@ -325,6 +325,10 @@ Last update: 03-02-26
     - **Zoom** (Ctrl +/−, pinch):
         - Region proportions remain fixed; content within cards shrinks/expands.
         - The grid itself does not reflow — only the rendered scale of text, icons, and card internals changes.
+- **Region Spacing**
+    - `18px` equal gap between every pair of adjacent regions
+    - `18px` padding from viewport edges to outermost regions
+    - Applies to the CSS Grid `gap` property and inner flex gap for the Bottom Bar ↔ Action Bar split
 - **Bezel Logic**
     - Regions: `6px` inner wrapper, `12px` outer wrapper
     - Cards or special components: `6px` inner wrapper, `6px` outer wrapper

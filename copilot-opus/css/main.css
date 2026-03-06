@@ -82,11 +82,17 @@ body {
        — Sidebars keep their fixed 320px width → horizontally static.
      Zoom
        — Region proportions remain fixed; content within cards scales.
+
+   Spacing
+     — 18px equal gap between all adjacent regions (grid gap).
+     — 18px padding from viewport edges to outermost regions.
+     — 18px gap between Bottom Bar and Action Bar inside the foot flex wrapper.
    ========================================================================== */
 .app-shell {
   display: grid;
   width: 100vw;
   height: 100vh;
+  padding: 18px;
   grid-template-columns: 320px 1fr 320px;
   grid-template-rows: auto 45px 1fr 180px;
   grid-template-areas:
@@ -94,7 +100,7 @@ body {
     "left    nav     right"
     "left    main    right"
     "foot    foot    foot";
-  gap: 0;
+  gap: 18px;
   background: var(--color-bg-canvas);
 }
 
@@ -117,7 +123,7 @@ body {
 .region-foot {
   grid-area: foot;
   display: flex;
-  border-top: 2px solid var(--color-border-default);
+  gap: 18px;
   overflow: hidden;
 }
 
@@ -127,7 +133,6 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: var(--space-2) var(--space-4);
-  border-bottom: 2px solid var(--color-border-default);
   background:
     linear-gradient(
       180deg,
@@ -155,7 +160,6 @@ body {
   align-items: center;
   gap: var(--space-2);
   padding: 0 var(--space-4);
-  border-bottom: 1px solid var(--color-border-muted);
   overflow-x: auto;
   overflow-y: hidden;
   z-index: 9;
@@ -178,8 +182,7 @@ body {
   overflow-x: hidden;
 }
 
-.region-left  { border-right: 1px solid var(--color-border-default); }
-.region-right { border-left:  1px solid var(--color-border-default); }
+/* Sidebar borders handled by .region base — gap provides separation */
 
 /* ---------- Action Bar -------------------------------------------------- */
 .region-action {
@@ -187,7 +190,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  border-left: 1px solid var(--color-border-default);
 }
 
 /* ---------- Bottom Bar -------------------------------------------------- */
