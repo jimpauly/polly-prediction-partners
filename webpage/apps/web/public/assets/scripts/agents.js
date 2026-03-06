@@ -209,13 +209,23 @@ const AgentDashboard = (() => {
       const mode = agentData.mode || 'safe';
       updateModeButtonHighlight(agentName, mode);
 
-      /* Update win rate */
+      /* Update win rate (from win_count / total_trades) */
       const wrElement = document.getElementById(`agent-wr-${agentName}`);
       if (wrElement) {
-        const winRate = agentData.win_rate !== undefined
-          ? `${Math.round(parseFloat(agentData.win_rate) * 100)}%`
-          : '—%';
-        wrElement.textContent = winRate;
+        const winCount = parseInt(agentData.win_count || 0);
+        const totalTrades = parseInt(agentData.total_trades || 0);
+        let winRateStr = '—%';
+        if (totalTrades > 0) {
+          const wr = Math.round((winCount / totalTrades) * 100);
+          winRateStr = `${wr}% (${winCount}/${totalTrades})`;
+          /* Color-code win rate */
+          wrElement.style.color = wr >= 55 ? 'var(--color-state-success)'
+            : wr >= 45 ? 'var(--color-state-warning)'
+            : 'var(--color-state-error)';
+        } else {
+          winRateStr = `0T`;
+        }
+        wrElement.textContent = winRateStr;
       }
 
       /* Update P&L */
@@ -243,10 +253,25 @@ const AgentDashboard = (() => {
           pnlHistory[agentName].shift();
         }
       }
+
+      /* Update agent heatmap bar */
+      const heatBar = document.querySelector(`[data-agent-heat="${agentName}"]`);
+      if (heatBar) {
+        heatBar.style.background = mode === 'auto'
+          ? 'var(--color-state-success)'
+          : mode === 'semi-auto'
+            ? 'var(--color-state-warning)'
+            : 'var(--color-fg-subtle)';
+        heatBar.style.opacity = mode === 'safe' ? '0.3' : '0.8';
+        heatBar.title = `${agentName.toUpperCase()} — ${mode}`;
+      }
     });
 
     /* Redraw multi-line P&L chart */
     drawPnlChart();
+
+    /* Update overall win rate gauge in action bar */
+    updateWinRateGauge(agentsData);
   }
 
   function resetAgentDisplays() {
@@ -344,6 +369,38 @@ const AgentDashboard = (() => {
       context.fillRect(legendX, legendY, 6, 3);
       legendX += 10;
     });
+  }
+
+  /* ---- Update Win Rate Gauge in Action Bar ---- */
+
+  function updateWinRateGauge(agentsData) {
+    const fill = document.getElementById('win-rate-fill');
+    const label = document.getElementById('win-rate-label');
+    if (!fill && !label) return;
+
+    /* Aggregate win/loss across all agents */
+    let totalWins = 0;
+    let totalTrades = 0;
+    Object.keys(AGENT_CONFIG).forEach(agentName => {
+      const agentData = agentsData[agentName];
+      if (!agentData) return;
+      totalWins += parseInt(agentData.win_count || 0);
+      totalTrades += parseInt(agentData.total_trades || 0);
+    });
+
+    if (totalTrades > 0) {
+      const pct = Math.round((totalWins / totalTrades) * 100);
+      if (fill) fill.style.height = pct + '%';
+      if (label) {
+        label.textContent = pct + '%';
+        label.style.color = pct >= 55 ? 'var(--color-state-success)'
+          : pct >= 45 ? 'var(--color-state-warning)'
+          : 'var(--color-state-error)';
+      }
+    } else {
+      if (fill) fill.style.height = '0%';
+      if (label) { label.textContent = '—'; label.style.color = ''; }
+    }
   }
 
   /* ---- Update heatmap ---- */

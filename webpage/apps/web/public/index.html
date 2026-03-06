@@ -316,18 +316,19 @@
         </li>
       </ul>
       <!-- Telemetry Card (right-aligned) -->
-      <div class="flex items-center gap-3 ml-auto" style="font-family:var(--font-family-mono);white-space:nowrap">
+      <div class="flex items-center gap-3 ml-auto" style="font-family:var(--font-family-mono);white-space:nowrap;font-size:11px">
         <div class="flex items-center gap-1" title="Network latency">
           <span style="font-weight:700;color:var(--color-fg-muted)">PING</span>
           <canvas id="ping-sparkline" width="60" height="16" style="display:block"></canvas>
+          <span id="ping-label" style="color:var(--color-fg-muted);min-width:32px">—ms</span>
         </div>
-        <div title="Speed indicator">
-          <span style="font-weight:700;color:var(--color-fg-muted)">SPD</span>
-          <span style="color:var(--color-fg-default)">MACH 4.20</span>
+        <div title="Backend health" style="display:flex;align-items:center;gap:3px">
+          <span style="font-weight:700;color:var(--color-fg-muted)">SVC</span>
+          <div id="backend-health-dot" style="width:6px;height:6px;border-radius:50%;background:var(--color-fg-subtle);transition:all 0.5s" title="Backend offline"></div>
         </div>
         <div title="Date and time">
           <span style="font-weight:700;color:var(--color-fg-muted)">DATE/TIME</span>
-          <span id="datetime-display" style="color:var(--color-fg-default)">--/-- --:--</span>
+          <span id="datetime-display" style="color:var(--color-fg-default)">--/-- --:--:--</span>
         </div>
       </div>
     </nav>
@@ -676,10 +677,53 @@
         aria-labelledby="tab-fly"
         hidden
       >
-        <div class="empty-state">
-          <span class="empty-state__icon">✈️</span>
-          <h2 class="empty-state__title">Fly Studio</h2>
-          <p class="empty-state__description">Coming Soon — Flight simulation and navigation dashboard.</p>
+        <div class="fly-studio">
+          <h2 class="region-title region-title--centered glow-text-primary">Fly Studio — Flight Deck</h2>
+
+          <!-- Locked state: shows until agents earn $2k profit -->
+          <div id="fly-locked-state" class="fly-locked">
+            <div class="fly-locked__cockpit-art" aria-hidden="true">
+              ✈️
+            </div>
+            <h3 class="fly-locked__title">Flight Deck Locked</h3>
+            <p class="fly-locked__description">
+              The Flight Deck unlocks when your agents reach <strong>$2,000 in total profit</strong>.
+              Keep the agents running — this reward cockpit will activate automatically.
+            </p>
+            <div class="fly-locked__progress-container">
+              <div class="fly-locked__progress-label">
+                <span>Progress to unlock</span>
+                <span id="fly-profit-label">$0 / $2,000</span>
+              </div>
+              <div class="fly-locked__progress-bar">
+                <div id="fly-profit-fill" class="fly-locked__progress-fill" style="width:0%"></div>
+              </div>
+            </div>
+            <p class="fly-locked__hint">
+              💡 The Flight Deck features a live ISS orbital feed, real-time flight radar, and a full 3D cockpit simulation.
+            </p>
+          </div>
+
+          <!-- Unlocked state: flight simulation preview (hidden until unlocked) -->
+          <div id="fly-unlocked-state" class="fly-unlocked" style="display:none">
+            <div class="card mb-4">
+              <div class="card-header">
+                <span>🛰️ ISS Live Feed</span>
+                <span class="text-xs text-muted ml-auto">Track International Space Station</span>
+              </div>
+              <div class="card-body" style="text-align:center;padding:40px">
+                <p class="text-muted">ISS live feed will display here when orbital API is connected.</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <span>✈️ Flight Radar</span>
+              </div>
+              <div class="card-body" style="text-align:center;padding:40px">
+                <p class="text-muted">Real-time flight radar will display here.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -691,10 +735,107 @@
         aria-labelledby="tab-converter"
         hidden
       >
-        <div class="empty-state">
-          <span class="empty-state__icon">🔄</span>
-          <h2 class="empty-state__title">Converter Studio</h2>
-          <p class="empty-state__description">Coming Soon — Data format and unit conversion tools.</p>
+        <h2 class="region-title region-title--centered glow-text-primary">Converter Studio</h2>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:4px">
+
+          <!-- Prediction Market Calculator -->
+          <div class="card">
+            <div class="card-header">
+              <span>🎯 Prediction Market Calculator</span>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <p class="text-xs text-muted">Calculate returns for YES/NO contracts on Kalshi prediction markets.</p>
+              <div class="form-group">
+                <label class="form-label" for="calc-investment">Investment ($)</label>
+                <input id="calc-investment" class="input" type="number" min="1" max="10000" value="100" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="calc-price">Contract Price (cents, 1–99)</label>
+                <input id="calc-price" class="input" type="number" min="1" max="99" value="50" step="1">
+              </div>
+              <div class="calc-results" id="calc-results" style="background:var(--color-bg-canvas);border:1px solid var(--color-border-muted);border-radius:6px;padding:12px;font-family:var(--font-family-mono);font-size:12px;display:flex;flex-direction:column;gap:4px">
+                <!-- populated by JS -->
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-sm btn-primary" onclick="runCalc()">Calculate</button>
+                <button class="btn btn-sm btn-ghost" onclick="resetCalc()">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Probability / Kelly Criterion Calculator -->
+          <div class="card">
+            <div class="card-header">
+              <span>📐 Kelly Criterion Sizer</span>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <p class="text-xs text-muted">Optimal bet sizing using the Kelly Criterion formula.</p>
+              <div class="form-group">
+                <label class="form-label" for="kelly-edge">Your Edge (Win probability %)</label>
+                <input id="kelly-edge" class="input" type="number" min="1" max="99" value="55" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="kelly-market-prob">Market Implied Probability (cents)</label>
+                <input id="kelly-market-prob" class="input" type="number" min="1" max="99" value="50" step="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="kelly-bankroll">Bankroll ($)</label>
+                <input id="kelly-bankroll" class="input" type="number" min="1" value="1000" step="10">
+              </div>
+              <div id="kelly-results" style="background:var(--color-bg-canvas);border:1px solid var(--color-border-muted);border-radius:6px;padding:12px;font-family:var(--font-family-mono);font-size:12px;display:flex;flex-direction:column;gap:4px">
+                <!-- populated by JS -->
+              </div>
+              <button class="btn btn-sm btn-primary" onclick="runKelly()">Calculate</button>
+            </div>
+          </div>
+
+          <!-- Cents ↔ Dollars ↔ Probability Converter -->
+          <div class="card">
+            <div class="card-header">
+              <span>🔄 Price Converter</span>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <p class="text-xs text-muted">Convert between contract price formats.</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                <div class="form-group">
+                  <label class="form-label" for="conv-cents">Cents</label>
+                  <input id="conv-cents" class="input" type="number" min="1" max="99" placeholder="50" oninput="syncConvert('cents')">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="conv-dollars">Dollars</label>
+                  <input id="conv-dollars" class="input" type="number" min="0.01" max="0.99" step="0.01" placeholder="0.50" oninput="syncConvert('dollars')">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="conv-percent">Probability %</label>
+                  <input id="conv-percent" class="input" type="number" min="1" max="99" placeholder="50" oninput="syncConvert('percent')">
+                </div>
+              </div>
+              <div id="conv-implied" style="font-size:11px;color:var(--color-fg-muted);font-family:var(--font-family-mono)"></div>
+            </div>
+          </div>
+
+          <!-- Quick Reference Card -->
+          <div class="card">
+            <div class="card-header">
+              <span>📚 Quick Reference</span>
+            </div>
+            <div class="card-body" style="font-size:11px;display:flex;flex-direction:column;gap:6px">
+              <div style="font-weight:700;margin-bottom:4px;color:var(--color-accent-primary)">Kalshi Contract Basics</div>
+              <div class="detail-row"><span>YES wins</span><span>Pays $1.00 per contract</span></div>
+              <div class="detail-row"><span>NO wins</span><span>Pays $1.00 per contract</span></div>
+              <div class="detail-row"><span>Price 60¢</span><span>60% market-implied chance</span></div>
+              <div class="detail-row"><span>YES @ 60¢</span><span>Win $0.40 if correct</span></div>
+              <div class="detail-row"><span>NO @ 40¢</span><span>Win $0.60 if correct</span></div>
+              <hr class="divider" style="margin:4px 0">
+              <div style="font-weight:700;margin-bottom:4px;color:var(--color-accent-primary)">Kelly Criterion</div>
+              <div style="font-family:var(--font-family-mono);background:var(--color-bg-canvas);padding:6px;border-radius:4px;font-size:10px">
+                f* = (p × b − q) / b<br>
+                <span style="opacity:0.6">p=win prob, q=1−p, b=net odds (1/price − 1)</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
     </main>
@@ -1169,6 +1310,143 @@
           throttleTrack.setAttribute('aria-valuetext', pos.label);
         });
       }
+
+      /* ---- Fly Studio Profit Progress ---- */
+      async function updateFlyProgress() {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/trading/status').catch(() => null);
+          if (!response || !response.ok) return;
+          const data = await response.json();
+          const pnl = parseFloat(data.daily_pnl || '0') || 0;
+          const target = 2000;
+          const pct = Math.min(100, Math.max(0, (pnl / target) * 100));
+          const fillEl = document.getElementById('fly-profit-fill');
+          const labelEl = document.getElementById('fly-profit-label');
+          if (fillEl) fillEl.style.width = pct + '%';
+          if (labelEl) labelEl.textContent = `$${pnl.toFixed(2)} / $${target.toLocaleString()}`;
+          if (pnl >= target) {
+            const locked = document.getElementById('fly-locked-state');
+            const unlocked = document.getElementById('fly-unlocked-state');
+            if (locked) locked.style.display = 'none';
+            if (unlocked) unlocked.style.display = '';
+          }
+        } catch (_e) { /* silent */ }
+      }
+      setInterval(updateFlyProgress, 30000);
+
+    });
+  </script>
+
+  <!-- ============================================================
+       Converter Studio Scripts (inline, non-module)
+       ============================================================ -->
+  <script>
+    function runCalc() {
+      const invest = parseFloat(document.getElementById('calc-investment')?.value) || 100;
+      const priceCents = parseFloat(document.getElementById('calc-price')?.value) || 50;
+      const priceDollars = priceCents / 100;
+      const results = document.getElementById('calc-results');
+      if (!results) return;
+
+      const contracts = invest / priceDollars;
+      const winPayout = contracts * 1.0; /* $1.00 per contract */
+      const netProfit = winPayout - invest;
+      const roi = ((winPayout / invest) - 1) * 100;
+      const lossAmount = invest; /* you lose what you paid */
+      const impliedProb = priceCents;
+
+      results.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <span style="opacity:0.6">Contracts</span>
+          <span style="font-weight:800">${contracts.toFixed(2)}</span>
+          <span style="opacity:0.6">If WIN (total)</span>
+          <span style="font-weight:800;color:#22c55e">$${winPayout.toFixed(2)}</span>
+          <span style="opacity:0.6">Net Profit</span>
+          <span style="font-weight:800;color:#22c55e">+$${netProfit.toFixed(2)}</span>
+          <span style="opacity:0.6">ROI</span>
+          <span style="font-weight:800;color:#22c55e">+${roi.toFixed(1)}%</span>
+          <span style="opacity:0.6">If LOSE</span>
+          <span style="font-weight:800;color:#ef4444">-$${lossAmount.toFixed(2)}</span>
+          <span style="opacity:0.6">Implied Prob</span>
+          <span style="font-weight:800">${impliedProb}%</span>
+        </div>
+      `;
+    }
+
+    function resetCalc() {
+      const inv = document.getElementById('calc-investment');
+      const pr = document.getElementById('calc-price');
+      if (inv) inv.value = '100';
+      if (pr) pr.value = '50';
+      const results = document.getElementById('calc-results');
+      if (results) results.innerHTML = '';
+    }
+
+    function runKelly() {
+      const edgePercent = parseFloat(document.getElementById('kelly-edge')?.value) || 55;
+      const marketCents = parseFloat(document.getElementById('kelly-market-prob')?.value) || 50;
+      const bankroll = parseFloat(document.getElementById('kelly-bankroll')?.value) || 1000;
+      const results = document.getElementById('kelly-results');
+      if (!results) return;
+
+      const p = edgePercent / 100;          /* your win probability */
+      const q = 1 - p;                       /* your loss probability */
+      const marketProb = marketCents / 100;
+      const b = (1 / marketProb) - 1;       /* net odds: profit per $1 risked */
+
+      /* Kelly formula: f* = (p × b − q) / b */
+      const kelly = (p * b - q) / b;
+      const halfKelly = kelly / 2;
+      const betAmount = Math.max(0, kelly) * bankroll;
+      const halfBetAmount = Math.max(0, halfKelly) * bankroll;
+      const ev = p * b * bankroll - q * bankroll;
+
+      results.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <span style="opacity:0.6">Kelly %</span>
+          <span style="font-weight:800;color:${kelly > 0 ? '#22c55e' : '#ef4444'}">${(kelly * 100).toFixed(1)}%</span>
+          <span style="opacity:0.6">Full Kelly Bet</span>
+          <span style="font-weight:800">$${betAmount.toFixed(2)}</span>
+          <span style="opacity:0.6">Half Kelly (safer)</span>
+          <span style="font-weight:800">$${halfBetAmount.toFixed(2)}</span>
+          <span style="opacity:0.6">Net Odds (b)</span>
+          <span style="font-weight:800">${b.toFixed(2)}×</span>
+          <span style="opacity:0.6">EV on bankroll</span>
+          <span style="font-weight:800;color:${ev > 0 ? '#22c55e' : '#ef4444'}">${ev > 0 ? '+' : ''}$${ev.toFixed(2)}</span>
+        </div>
+        ${kelly <= 0 ? '<div style="color:#f59e0b;font-size:10px;margin-top:4px">⚠ Negative edge — Kelly says skip this trade</div>' : ''}
+      `;
+    }
+
+    function syncConvert(source) {
+      const centsEl = document.getElementById('conv-cents');
+      const dollarsEl = document.getElementById('conv-dollars');
+      const percentEl = document.getElementById('conv-percent');
+      const impliedEl = document.getElementById('conv-implied');
+      if (!centsEl || !dollarsEl || !percentEl) return;
+
+      let cents;
+      if (source === 'cents') cents = parseFloat(centsEl.value);
+      else if (source === 'dollars') cents = parseFloat(dollarsEl.value) * 100;
+      else cents = parseFloat(percentEl.value);
+
+      if (isNaN(cents)) { if (impliedEl) impliedEl.textContent = ''; return; }
+      cents = Math.max(1, Math.min(99, cents));
+
+      if (source !== 'cents') centsEl.value = cents.toFixed(0);
+      if (source !== 'dollars') dollarsEl.value = (cents / 100).toFixed(2);
+      if (source !== 'percent') percentEl.value = cents.toFixed(0);
+
+      if (impliedEl) {
+        const win = 1 - cents / 100;
+        impliedEl.textContent = `YES profit per $1: $${win.toFixed(2)} | NO implied: ${(100 - cents).toFixed(0)}¢`;
+      }
+    }
+
+    /* Run calculations on load with defaults */
+    document.addEventListener('DOMContentLoaded', () => {
+      runCalc();
+      runKelly();
     });
   </script>
 </body>

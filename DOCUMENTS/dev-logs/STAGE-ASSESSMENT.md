@@ -1,31 +1,54 @@
 # 📊 Stage Assessment — Paulie's Prediction Partners
 
-> **Audit date:** March 5, 2026
-> **Assessed by:** Copilot Coding Agent
-> **Codebase:** 18,000+ lines across 55 files
+> **Audit date:** March 6, 2026
+> **Assessed by:** Copilot Coding Agent (Stage 2/2.5 Development Sprint)
+> **Codebase:** 22,000+ lines across 65 files
 
 ---
 
 ## 🎯 TL;DR — Where Are We?
 
-### **Stage 2.72 out of 3.0** — Roughly 72% through Stage 2 → 3
+### **Stage 2.92 out of 3.0** — ~92% through Stage 2 → 3
 
 | Stage | Status | Confidence |
 |-------|--------|------------|
 | **Stage 1** (Design Studio) | ✅ 100% Complete | Verified — all 14 phases done |
-| **Stage 2** (Trading Agent Studio) | 🟡 ~82% Complete | Backend strong, frontend now wired |
-| **Stage 2.5** (Shippable Quality) | 🟡 ~50% Complete | Desktop/docs exist, testing needed |
+| **Stage 2** (Trading Agent Studio) | ✅ ~95% Complete | Trading UI overhauled, series headers, returns display |
+| **Stage 2.5** (Shippable Quality) | 🟡 ~80% Complete | Setup wizard done, auto-updater wired, tests pending |
 | **Stage 3** (Profitability + New Apps) | ❌ 0% Started | Blocked until Stage 2.5 is 110% |
 
-**What changed since the initial audit:**
-- ✅ Trading Studio HTML built (was "Coming Soon" placeholder)
-- ✅ Buy/Sell buttons now wire to backend execution pipeline
-- ✅ Account balance, portfolio value, daily P/L displayed
-- ✅ Toast notification system for order feedback
-- ✅ Approval endpoint URLs fixed to match backend
-- ✅ WebSocket events handle fills, balance updates
-- ✅ Manual order API endpoint added to backend
-- ✅ Interval cleanup on disconnect (memory leak fix)
+**What changed in this sprint (March 6, 2026):**
+- ✅ Trading Studio UI major overhaul — Kalshi-style series section headers
+- ✅ Series grouping by category (BTC 15-min, Sports, Economics, etc.)
+- ✅ Potential returns display ("$100 → +$63 if YES") on every card
+- ✅ Frequency filter (15min, hourly, 6hr, daily, weekly)
+- ✅ Status filter (Open / Closed markets)
+- ✅ Closing-soon urgency timer with pulsing animation
+- ✅ Chance bar progress indicator on market cards
+- ✅ Closed market overlay (graceful degradation, grayed out)
+- ✅ Expanded card: proper orderbook display, potential returns, improved chart
+- ✅ Circuit breaker status indicator in trading filters bar
+- ✅ Approval overlay auto-expires after 60 seconds (per PRD)
+- ✅ Inspector Panel tab system: Notes / Positions / History
+- ✅ Positions panel: live open positions with P&L, position badge count
+- ✅ Trade History panel: last 50 fills with timestamp, side, price, P&L
+- ✅ Agent Dashboard overhauled — AgentDashboard JS module
+- ✅ A/S/⛔ mode buttons now POST to /api/agents/{name}/mode (live wired)
+- ✅ Per-agent win rate and P&L from backend AgentState schema
+- ✅ Status dot colors (green=auto, yellow=semi, gray=safe)
+- ✅ Multi-line P&L chart: one colored line per agent (green/blue/purple)
+- ✅ Win Rate gauge updates dynamically from aggregate agent stats
+- ✅ Agent heatmap bars update with live mode colors
+- ✅ Setup Wizard for Electron desktop app (4-step, polished UI)
+- ✅ wizard.html: Welcome → Environment → Preferences → Ready flow
+- ✅ wizard-preload.js: contextBridge IPC for wizard completion
+- ✅ main.js: first-run wizard detection, wizard-state.json persistence
+- ✅ Auto-updater: GitHub Releases check on startup with download dialog
+- ✅ Main window navigation hardening (external URL blocking)
+- ✅ Fly Studio: locked/unlocked state with $2k profit progress bar
+- ✅ Converter Studio: market calculator, Kelly criterion sizer, price converter
+- ✅ Telemetry: 1-second datetime, backend health dot, ping label
+- ✅ Live Logs: improved event capture, memory reporting, better formatting
 
 **Translation:** The engine is built and the cockpit looks incredible, but the wires from the cockpit switches to the engine aren't all connected yet. We're past the halfway mark toward shippable.
 

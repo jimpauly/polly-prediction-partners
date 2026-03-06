@@ -2337,3 +2337,127 @@ input:focus, textarea:focus, select:focus {
   align-items: center;
   gap: 4px;
 }
+
+/* ============================================================
+   Fly Studio
+   ============================================================ */
+
+.fly-studio {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.fly-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding: 40px 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.fly-locked__cockpit-art {
+  font-size: 64px;
+  filter: grayscale(0.8);
+  opacity: 0.4;
+  animation: fly-float 4s ease-in-out infinite;
+}
+
+@keyframes fly-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.fly-locked__title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--color-fg-default);
+}
+
+.fly-locked__description {
+  font-size: 13px;
+  color: var(--color-fg-muted);
+  line-height: 1.6;
+  max-width: 380px;
+}
+
+.fly-locked__progress-container {
+  width: 100%;
+  max-width: 320px;
+}
+
+.fly-locked__progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-family: var(--font-family-mono);
+  font-weight: 700;
+  color: var(--color-fg-muted);
+  margin-bottom: 6px;
+}
+
+.fly-locked__progress-bar {
+  height: 6px;
+  background: var(--color-border-muted);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.fly-locked__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-primary, #3b82f6), var(--color-state-success, #22c55e));
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.fly-locked__hint {
+  font-size: 11px;
+  color: var(--color-fg-subtle);
+  font-style: italic;
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+.fly-unlocked {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================================
+   Converter Studio
+   ============================================================ */
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 11px;
+  border-bottom: 1px solid var(--color-border-muted);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row > span:first-child { color: var(--color-fg-muted); }
+.detail-row > span:last-child { font-weight: 700; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-fg-muted);
+}

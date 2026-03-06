@@ -181,6 +181,7 @@ function createMainWindow() {
       sandbox: true,
     },
     show: false,
+    backgroundColor: '#0f172a',   /* Match app dark background */
   });
 
   const indexPath = path.join(__dirname, '..', 'web', 'public', 'index.html');
@@ -188,6 +189,10 @@ function createMainWindow() {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    /* Check for updates after window is visible */
+    if (app.isPackaged) {
+      setTimeout(checkForUpdates, 3000);
+    }
   });
 
   mainWindow.on('closed', () => {
@@ -201,11 +206,84 @@ function createMainWindow() {
     });
   }
 
+  /* Block navigation to external URLs in the main window */
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    const allowedUrls = [
+      `file://${path.join(__dirname, '..', 'web', 'public', 'index.html')}`,
+    ];
+    const isAllowed = allowedUrls.some(allowed => url.startsWith(allowed)) ||
+      url.startsWith('file://');
+    if (!isAllowed) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
+  });
+
   /* Open external links in system browser */
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      shell.openExternal(url);
+    }
     return { action: 'deny' };
   });
+}
+
+/* ------------------------------------------------------------------ */
+/* Auto-Updater                                                        */
+/* ------------------------------------------------------------------ */
+
+const UPDATE_CHECK_URL = 'https://api.github.com/repos/jimpauly/paulies-prediction-partners/releases/latest';
+
+async function checkForUpdates() {
+  try {
+    const https = require('https');
+    const currentVersion = app.getVersion();
+
+    const latestRelease = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.github.com',
+        path: '/repos/jimpauly/paulies-prediction-partners/releases/latest',
+        method: 'GET',
+        headers: {
+          'User-Agent': `${APPLICATION_NAME}/${currentVersion}`,
+          'Accept': 'application/vnd.github+json',
+        },
+        timeout: 5000,
+      };
+      const request = https.request(options, (response) => {
+        let data = '';
+        response.on('data', chunk => data += chunk);
+        response.on('end', () => {
+          try { resolve(JSON.parse(data)); }
+          catch (_e) { reject(new Error('Invalid JSON response')); }
+        });
+      });
+      request.on('error', reject);
+      request.on('timeout', () => { request.destroy(); reject(new Error('Timeout')); });
+      request.end();
+    });
+
+    if (latestRelease && latestRelease.tag_name) {
+      const latestTag = latestRelease.tag_name.replace(/^v/, '');
+      if (latestTag !== currentVersion && mainWindow) {
+        const { response: clicked } = await dialog.showMessageBox(mainWindow, {
+          type: 'info',
+          title: 'Update Available',
+          message: `${APPLICATION_NAME} v${latestTag} is available`,
+          detail: `You are running v${currentVersion}. Download and install the latest version?`,
+          buttons: ['Download Update', 'Later'],
+          defaultId: 0,
+          cancelId: 1,
+        });
+        if (clicked === 0 && latestRelease.html_url) {
+          shell.openExternal(latestRelease.html_url);
+        }
+      }
+    }
+  } catch (error) {
+    /* Update check is optional — fail silently */
+    console.log(`Update check skipped: ${error.message}`);
+  }
 }
 
 /* ------------------------------------------------------------------ */
