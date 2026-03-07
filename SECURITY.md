@@ -1,80 +1,63 @@
-# 🛡️ Security Policy — Paulie's Prediction Partners
+# Security Policy — Paulie's Prediction Partners
 
 ## Supported Versions
 
 | Version | Supported |
 | ------- | --------- |
-| 1.x     | ✅ Yes    |
-
-We actively maintain security updates for the latest release.
+| 1.x     | Yes       |
 
 ---
 
-## 🔐 How We Keep Your Data Safe
+## How the app handles your data
 
 ### API Keys & Credentials
 
-- **Never stored on disk** — Your Kalshi API key and RSA private key are held in memory only while the app is running.
-- **Never logged** — Credentials are excluded from all log output by design.
-- **Never sent to third parties** — All communication is between your machine and Kalshi's official API servers.
+- **Never stored on disk** — Your Kalshi API key and RSA private key stay in memory while the app is running and nowhere else.
+- **Never logged** — Credentials are excluded from all log output.
+- **Never sent anywhere by us** — All communication goes directly between your machine and Kalshi's servers.
 - **Cleared on disconnect** — When you disconnect or close the app, credentials are wiped from memory.
-- **Masked in the UI** — Your API key is displayed as `****` with only the last 4 characters visible.
+- **Masked in the UI** — Your API key shows as `****` with only the last 4 characters visible.
 
-### Network Security
+### Network
 
-- **Local-only backend** — The Python backend listens on `127.0.0.1:8000` (localhost). It cannot be accessed from other computers on your network.
-- **Content Security Policy** — The web UI uses a strict CSP to prevent cross-site scripting attacks.
-- **Kalshi RSA-PSS authentication** — All API calls to Kalshi are signed with your RSA private key using the standard RSA-PSS algorithm.
+- **Local-only backend** — The Python backend listens on `127.0.0.1:8000` (localhost only). Nothing on your network can reach it.
+- **Content Security Policy** — The web UI uses a strict CSP header.
+- **Kalshi RSA-PSS authentication** — API calls to Kalshi are signed with your RSA private key using RSA-PSS.
 
-### Desktop App Security
+### Desktop App
 
-- **Sandbox mode** — The Electron browser window runs with `contextIsolation: true` and `sandbox: true`.
-- **No Node.js in renderer** — The UI cannot access system resources directly.
+- **Sandbox mode** — The Electron window runs with `contextIsolation: true` and `sandbox: true`.
+- **No Node.js in renderer** — The UI cannot touch system resources directly.
 - **Single instance lock** — Only one copy of the app can run at a time.
-- **DevTools disabled** — Developer tools are blocked in production builds.
+- **DevTools disabled** — Blocked in production builds.
 
-### Trading Safety
+### Trading Safeguards
 
-- **Circuit breakers** — Trading automatically stops if daily losses exceed your configured cap.
+- **Circuit breakers** — Trading stops automatically if daily losses hit your configured cap.
 - **Position limits** — Maximum order size and total exposure are enforced.
-- **Rate limiting** — API calls are throttled to stay within Kalshi's rate limits.
-- **Semi-auto mode** — Review and approve every trade before it executes.
+- **Rate limiting** — API calls are throttled to stay within Kalshi's limits.
+- **Semi-auto mode** — You can review and approve every trade before it goes through.
 
 ---
 
-## 🐛 How to Report a Security Problem
+## Found something wrong?
 
-Found something that doesn't look right? Here are two easy ways to let us know:
+Two ways to reach us:
 
-### Option 1: Send Us an Email
+### Email
 
-1. Open your email app (Gmail, Outlook, Yahoo Mail, etc.)
-2. Create a new message to: **chickensaurusrex@outlook.com**
-3. In the subject line, write: **Security Issue — Paulie's Prediction Partners**
-4. Describe what you found — what happened, what you expected, and any steps to reproduce it
-5. Hit Send! 📧
+Send a message to **chickensaurusrex@outlook.com** with the subject line **Security Issue — Paulie's Prediction Partners**. Describe what you found and we'll get back to you within 48 hours.
 
-### Option 2: Use the "Send an Idea" Button in the App
+### "Send an Idea" button in the app
 
-1. Open Paulie's Prediction Partners
-2. Look at the right side of the screen — there's a panel called **Inspector**
-3. Find the button that says **"Send an Idea"** and click it
-4. Your email app will open with our address already filled in
-5. Just type what you found and hit Send! 📧
-
-### What Happens Next
-
-- We'll acknowledge your report within **48 hours**
-- We'll investigate and let you know if it's something we can fix
-- If it's a real security issue, we'll prioritize a fix and credit you (if you'd like!)
-- We'll never share your personal information
+Open the Inspector panel on the right side of the screen, click **"Send an Idea"**, and your email app will open with our address already filled in.
 
 ---
 
-## 🚫 What We Don't Collect
+## What we don't collect
 
 - No analytics or tracking
-- No telemetry sent to external servers
+- No telemetry sent anywhere
 - No advertising
 - No user accounts on our end
 - No data leaves your computer (except to Kalshi's API when you choose to connect)

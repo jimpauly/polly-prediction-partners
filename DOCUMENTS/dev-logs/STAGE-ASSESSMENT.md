@@ -122,7 +122,7 @@ All 14 phases verified complete:
 - Full application orchestrator with graceful shutdown (743 lines)
 - RSA-PSS authentication for Kalshi API (119 lines)
 
-**All 3 AI Agents — Implemented:**
+**All 3 Trading Agents — Implemented:**
 
 - Agent Prime: majority-signal follower (256 lines)
 - Agent Praxis: sports momentum specialist (320 lines)

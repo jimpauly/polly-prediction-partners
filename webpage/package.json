@@ -1,7 +1,7 @@
 {
   "name": "paulies-prediction-partners",
   "version": "1.0.0",
-  "description": "AI-Powered Prediction Market Trading Studio for Kalshi",
+  "description": "Prediction Market Trading Studio for Kalshi",
   "main": "apps/desktop/main.js",
   "author": "Paulie's Prediction Partners",
   "license": "MIT",
