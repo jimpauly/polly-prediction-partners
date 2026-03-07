@@ -11,9 +11,9 @@
    -------------------------------------------------------------------------- */
 :root {
   /* ---- Master control -------------------------------------------------- */
-  --fx-master-switch: 0;                /* 0 = OFF (default), 1 = ON        */
-  --fx-master-dim: 1.00;               /* dimmer: 0.25 – 1.00              */
-  --fx-mode-base: 0.6;                 /* DAY (light) mode base intensity   */
+  --fx-master-switch: 0; /* 0 = OFF (default), 1 = ON        */
+  --fx-master-dim: 1; /* dimmer: 0.25 – 1.00              */
+  --fx-mode-base: 0.6; /* DAY (light) mode base intensity   */
 
   /* Combined master multiplier (switch × dim × mode-base) */
   --fx-master-scale: calc(
@@ -21,20 +21,28 @@
   );
 
   /* ---- Channel dimmers (all default ON at MAX) ------------------------- */
-  --fx-ch-text-primary: 1.00;
-  --fx-ch-text-secondary: 1.00;
-  --fx-ch-bars-primary: 1.00;
-  --fx-ch-bars-secondary: 1.00;
-  --fx-ch-flood: 1.00;
-  --fx-ch-display: 1.00;
+  --fx-ch-text-primary: 1;
+  --fx-ch-text-secondary: 1;
+  --fx-ch-bars-primary: 1;
+  --fx-ch-bars-secondary: 1;
+  --fx-ch-flood: 1;
+  --fx-ch-display: 1;
 
   /* ---- Computed channel intensities ------------------------------------ */
-  --fx-glow-text-primary:   calc(var(--fx-master-scale) * var(--fx-ch-text-primary));
-  --fx-glow-text-secondary: calc(var(--fx-master-scale) * var(--fx-ch-text-secondary));
-  --fx-glow-bars-primary:   calc(var(--fx-master-scale) * var(--fx-ch-bars-primary));
-  --fx-glow-bars-secondary: calc(var(--fx-master-scale) * var(--fx-ch-bars-secondary));
-  --fx-glow-flood:          calc(var(--fx-master-scale) * var(--fx-ch-flood));
-  --fx-glow-display:        calc(var(--fx-master-scale) * var(--fx-ch-display));
+  --fx-glow-text-primary: calc(
+    var(--fx-master-scale) * var(--fx-ch-text-primary)
+  );
+  --fx-glow-text-secondary: calc(
+    var(--fx-master-scale) * var(--fx-ch-text-secondary)
+  );
+  --fx-glow-bars-primary: calc(
+    var(--fx-master-scale) * var(--fx-ch-bars-primary)
+  );
+  --fx-glow-bars-secondary: calc(
+    var(--fx-master-scale) * var(--fx-ch-bars-secondary)
+  );
+  --fx-glow-flood: calc(var(--fx-master-scale) * var(--fx-ch-flood));
+  --fx-glow-display: calc(var(--fx-master-scale) * var(--fx-ch-display));
 
   /* ---- Internal glow helpers ------------------------------------------- */
   --_glow-transition: 0.35s ease;
@@ -44,7 +52,7 @@
    2. NVG (DARK) MODE — full 100 % base intensity
    -------------------------------------------------------------------------- */
 [data-mode="dark"] {
-  --fx-mode-base: 1.0;
+  --fx-mode-base: 1;
 }
 
 /* ==========================================================================
@@ -57,7 +65,7 @@
 /* ---- 3a. TEXT GLOW — primary ------------------------------------------- */
 .glow-text-primary {
   text-shadow:
-    0 0 calc(var(--fx-glow-text-primary) * 6px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-text-primary) * 6px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-text-primary) * 16px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-text-primary) * 30px) var(--color-accent-primary);
   transition: text-shadow var(--_glow-transition);
@@ -66,7 +74,7 @@
 /* ---- 3b. TEXT GLOW — secondary ----------------------------------------- */
 .glow-text-secondary {
   text-shadow:
-    0 0 calc(var(--fx-glow-text-secondary) * 5px)  var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-text-secondary) * 5px) var(--color-accent-secondary),
     0 0 calc(var(--fx-glow-text-secondary) * 14px) var(--color-accent-secondary);
   transition: text-shadow var(--_glow-transition);
 }
@@ -74,9 +82,10 @@
 /* ---- 3c. BARS GLOW — primary (region borders) -------------------------- */
 .glow-bars-primary {
   box-shadow:
-    0 0 calc(var(--fx-glow-bars-primary) * 4px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-bars-primary) * 4px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-bars-primary) * 12px) var(--color-accent-primary),
-    inset 0 0 calc(var(--fx-glow-bars-primary) * 6px) var(--color-accent-primary);
+    inset 0 0 calc(var(--fx-glow-bars-primary) * 6px)
+      var(--color-accent-primary);
   border-color: var(--color-accent-primary);
   transition:
     box-shadow var(--_glow-transition),
@@ -86,9 +95,10 @@
 /* ---- 3d. BARS GLOW — secondary (card borders) -------------------------- */
 .glow-bars-secondary {
   box-shadow:
-    0 0 calc(var(--fx-glow-bars-secondary) * 3px)  var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-bars-secondary) * 3px) var(--color-accent-secondary),
     0 0 calc(var(--fx-glow-bars-secondary) * 10px) var(--color-accent-secondary),
-    inset 0 0 calc(var(--fx-glow-bars-secondary) * 4px) var(--color-accent-secondary);
+    inset 0 0 calc(var(--fx-glow-bars-secondary) * 4px)
+      var(--color-accent-secondary);
   border-color: var(--color-accent-secondary);
   transition:
     box-shadow var(--_glow-transition),
@@ -97,21 +107,25 @@
 
 /* ---- 3e. FLOOD — ambient fill within regions --------------------------- */
 .glow-flood {
-  background-image:
-    radial-gradient(
-      ellipse at 50% 0%,
-      color-mix(in srgb, var(--color-accent-primary) calc(var(--fx-glow-flood) * 18%), transparent),
-      transparent 70%
-    );
+  background-image: radial-gradient(
+    ellipse at 50% 0%,
+    color-mix(
+      in srgb,
+      var(--color-accent-primary) calc(var(--fx-glow-flood) * 18%),
+      transparent
+    ),
+    transparent 70%
+  );
   transition: background-image var(--_glow-transition);
 }
 
 /* ---- 3f. DISPLAY — self-illuminated components ------------------------- */
 .glow-display {
   box-shadow:
-    0 0 calc(var(--fx-glow-display) * 8px)  var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-display) * 8px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
-    inset 0 0 calc(var(--fx-glow-display) * 12px) color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+    inset 0 0 calc(var(--fx-glow-display) * 12px)
+      color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
   transition:
     box-shadow var(--_glow-transition),
@@ -159,25 +173,27 @@
   border-radius: 4px;
   padding: 5px 10px 5px 10px;
   box-shadow:
-    0 2px 8px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(0,0,0,0.5);
+    0 2px 8px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
   position: relative;
   height: 82px;
-  font-family: 'Courier New', 'Consolas', monospace;
+  font-family: "Courier New", "Consolas", monospace;
   user-select: none;
   flex-shrink: 0;
-  transition: box-shadow var(--_glow-transition), border-color var(--_glow-transition);
+  transition:
+    box-shadow var(--_glow-transition),
+    border-color var(--_glow-transition);
 }
 
 /* Panel glows when master switch is ON */
 .illum-panel[data-master="on"] {
   border-top-color: #5a7090;
   box-shadow:
-    0 2px 8px rgba(0,0,0,0.8),
-    0 0 12px rgba(88,166,255,calc(var(--fx-master-scale) * 0.4)),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(0,0,0,0.5);
+    0 2px 8px rgba(0, 0, 0, 0.8),
+    0 0 12px rgba(88, 166, 255, calc(var(--fx-master-scale) * 0.4)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* Panel title strip */
@@ -189,21 +205,29 @@
   letter-spacing: 0.18em;
   color: #8899aa;
   text-transform: uppercase;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   pointer-events: none;
-  transition: color var(--_glow-transition), text-shadow var(--_glow-transition);
+  transition:
+    color var(--_glow-transition),
+    text-shadow var(--_glow-transition);
 }
 
 .illum-panel[data-master="on"] .illum-panel-title {
   color: #aabbcc;
-  text-shadow: 0 0 6px rgba(88,166,255,0.6);
+  text-shadow: 0 0 6px rgba(88, 166, 255, 0.6);
 }
 
 /* Vertical dividers between groups */
 .illum-divider {
   width: 1px;
   height: 58px;
-  background: linear-gradient(180deg, transparent, #3a4048 30%, #3a4048 70%, transparent);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    #3a4048 30%,
+    #3a4048 70%,
+    transparent
+  );
   flex-shrink: 0;
   margin: 0 3px;
 }
@@ -223,7 +247,9 @@
   color: #aabbcc;
   text-transform: uppercase;
   white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.9), 0 -1px 0 rgba(255,255,255,0.06);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 -1px 0 rgba(255, 255, 255, 0.06);
   line-height: 1;
 }
 
@@ -251,8 +277,8 @@
   border: 1px solid #3a404a;
   border-radius: 3px;
   box-shadow:
-    inset 0 1px 2px rgba(0,0,0,0.8),
-    inset 0 -1px 0 rgba(255,255,255,0.04);
+    inset 0 1px 2px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -283,18 +309,18 @@
   border: 1px solid #555;
   border-bottom: 2px solid #222;
   box-shadow:
-    2px 0 4px rgba(0,0,0,0.6),
-    -1px 0 2px rgba(255,255,255,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    2px 0 4px rgba(0, 0, 0, 0.6),
+    -1px 0 2px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform-origin: bottom center;
-  transform: rotate(-22deg);   /* default = OFF = lever tilts down/forward */
-  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  transform: rotate(-22deg); /* default = OFF = lever tilts down/forward */
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   z-index: 2;
 }
 
 .flip-switch[data-state="on"] .switch-lever {
-  transform: rotate(22deg);    /* ON = lever tilts back */
+  transform: rotate(22deg); /* ON = lever tilts back */
 }
 
 /* LED indicator below switch */
@@ -305,7 +331,9 @@
   background: #1a0000;
   border: 1px solid #330000;
   box-shadow: none;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
 }
 
 .flip-switch[data-state="on"] .switch-led {
@@ -313,7 +341,7 @@
   border-color: #00bb33;
   box-shadow:
     0 0 4px #00ff44,
-    0 0 8px rgba(0,255,68,0.5);
+    0 0 8px rgba(0, 255, 68, 0.5);
 }
 
 /* Special amber LED for master */
@@ -322,7 +350,7 @@
   border-color: #cc8800;
   box-shadow:
     0 0 4px #ffbb00,
-    0 0 10px rgba(255,170,0,0.6);
+    0 0 10px rgba(255, 170, 0, 0.6);
 }
 
 /* ── DAY / NVG DOUBLE TOGGLE ───────────────────────── */
@@ -340,7 +368,7 @@
   letter-spacing: 0.12em;
   color: #aabbcc;
   text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
   line-height: 1;
   white-space: nowrap;
 }
@@ -364,7 +392,9 @@
   border-radius: 2px;
   transition: background 0.15s;
 }
-.day-nvg-option:hover { background: rgba(255,255,255,0.05); }
+.day-nvg-option:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
 
 .day-nvg-option-label {
   font-size: 7px;
@@ -393,11 +423,11 @@
   border: 1px solid #555;
   border-bottom: 2px solid #222;
   box-shadow:
-    2px 0 4px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    2px 0 4px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform-origin: bottom center;
   transform: rotate(-25deg);
-  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .day-nvg-option[data-active="true"] .day-nvg-lever {
@@ -410,13 +440,17 @@
   border-radius: 50%;
   background: #1a1000;
   border: 1px solid #332200;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
 }
 
 .day-nvg-option[data-active="true"] .day-nvg-option-led {
   background: #ffcc00;
   border-color: #cc9900;
-  box-shadow: 0 0 4px #ffdd00, 0 0 8px rgba(255,204,0,0.5);
+  box-shadow:
+    0 0 4px #ffdd00,
+    0 0 8px rgba(255, 204, 0, 0.5);
 }
 
 /* ── ROTARY DIMMER DIAL ────────────────────────────── */
@@ -432,13 +466,17 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 35%, #585858 0%, #2a2a2a 50%, #111 100%);
+  background: radial-gradient(
+    circle at 35% 35%,
+    #585858 0%,
+    #2a2a2a 50%,
+    #111 100%
+  );
   box-shadow:
-    0 3px 6px rgba(0,0,0,0.9),
-    0 1px 2px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 rgba(0,0,0,0.6);
+    0 3px 6px rgba(0, 0, 0, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
   position: relative;
   border: 2px solid #1a1a1a;
   outline: 1px solid #3a3a3a;
@@ -447,24 +485,72 @@
 
 /* Knurled edge ring */
 .dimmer-dial::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -3px;
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    #2a2a2a 0deg, #3a3a3a 6deg, #2a2a2a 12deg, #3a3a3a 18deg, #2a2a2a 24deg,
-    #3a3a3a 30deg, #2a2a2a 36deg, #3a3a3a 42deg, #2a2a2a 48deg, #3a3a3a 54deg,
-    #2a2a2a 60deg, #3a3a3a 66deg, #2a2a2a 72deg, #3a3a3a 78deg, #2a2a2a 84deg,
-    #3a3a3a 90deg, #2a2a2a 96deg, #3a3a3a 102deg, #2a2a2a 108deg, #3a3a3a 114deg,
-    #2a2a2a 120deg, #3a3a3a 126deg, #2a2a2a 132deg, #3a3a3a 138deg, #2a2a2a 144deg,
-    #3a3a3a 150deg, #2a2a2a 156deg, #3a3a3a 162deg, #2a2a2a 168deg, #3a3a3a 174deg,
-    #2a2a2a 180deg, #3a3a3a 186deg, #2a2a2a 192deg, #3a3a3a 198deg, #2a2a2a 204deg,
-    #3a3a3a 210deg, #2a2a2a 216deg, #3a3a3a 222deg, #2a2a2a 228deg, #3a3a3a 234deg,
-    #2a2a2a 240deg, #3a3a3a 246deg, #2a2a2a 252deg, #3a3a3a 258deg, #2a2a2a 264deg,
-    #3a3a3a 270deg, #2a2a2a 276deg, #3a3a3a 282deg, #2a2a2a 288deg, #3a3a3a 294deg,
-    #2a2a2a 300deg, #3a3a3a 306deg, #2a2a2a 312deg, #3a3a3a 318deg, #2a2a2a 324deg,
-    #3a3a3a 330deg, #2a2a2a 336deg, #3a3a3a 342deg, #2a2a2a 348deg, #3a3a3a 354deg,
+    #2a2a2a 0deg,
+    #3a3a3a 6deg,
+    #2a2a2a 12deg,
+    #3a3a3a 18deg,
+    #2a2a2a 24deg,
+    #3a3a3a 30deg,
+    #2a2a2a 36deg,
+    #3a3a3a 42deg,
+    #2a2a2a 48deg,
+    #3a3a3a 54deg,
+    #2a2a2a 60deg,
+    #3a3a3a 66deg,
+    #2a2a2a 72deg,
+    #3a3a3a 78deg,
+    #2a2a2a 84deg,
+    #3a3a3a 90deg,
+    #2a2a2a 96deg,
+    #3a3a3a 102deg,
+    #2a2a2a 108deg,
+    #3a3a3a 114deg,
+    #2a2a2a 120deg,
+    #3a3a3a 126deg,
+    #2a2a2a 132deg,
+    #3a3a3a 138deg,
+    #2a2a2a 144deg,
+    #3a3a3a 150deg,
+    #2a2a2a 156deg,
+    #3a3a3a 162deg,
+    #2a2a2a 168deg,
+    #3a3a3a 174deg,
+    #2a2a2a 180deg,
+    #3a3a3a 186deg,
+    #2a2a2a 192deg,
+    #3a3a3a 198deg,
+    #2a2a2a 204deg,
+    #3a3a3a 210deg,
+    #2a2a2a 216deg,
+    #3a3a3a 222deg,
+    #2a2a2a 228deg,
+    #3a3a3a 234deg,
+    #2a2a2a 240deg,
+    #3a3a3a 246deg,
+    #2a2a2a 252deg,
+    #3a3a3a 258deg,
+    #2a2a2a 264deg,
+    #3a3a3a 270deg,
+    #2a2a2a 276deg,
+    #3a3a3a 282deg,
+    #2a2a2a 288deg,
+    #3a3a3a 294deg,
+    #2a2a2a 300deg,
+    #3a3a3a 306deg,
+    #2a2a2a 312deg,
+    #3a3a3a 318deg,
+    #2a2a2a 324deg,
+    #3a3a3a 330deg,
+    #2a2a2a 336deg,
+    #3a3a3a 342deg,
+    #2a2a2a 348deg,
+    #3a3a3a 354deg,
     #2a2a2a 360deg
   );
   z-index: -1;
@@ -472,7 +558,7 @@
 
 /* Pointer dot on the dial */
 .dimmer-dial::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 3px;
   left: 50%;
@@ -481,7 +567,7 @@
   height: 6px;
   background: #ffffff;
   border-radius: 1px;
-  box-shadow: 0 0 3px rgba(255,255,255,0.8);
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
 }
 
 /* Tick marks arc around dial */
@@ -495,15 +581,15 @@
 .dimmer-value {
   font-size: 7.5px;
   color: #556677;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   line-height: 1;
 }
 
 /* Dial interaction highlight */
 .dimmer-dial-wrap:hover .dimmer-dial {
   box-shadow:
-    0 3px 6px rgba(0,0,0,0.9),
-    0 0 8px rgba(88,166,255,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.15),
-    inset 0 -1px 0 rgba(0,0,0,0.6);
+    0 3px 6px rgba(0, 0, 0, 0.9),
+    0 0 8px rgba(88, 166, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
 }
