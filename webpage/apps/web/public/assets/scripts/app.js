@@ -437,7 +437,7 @@
       }
       if (pnlEl && data.today_pnl !== undefined) {
         const pnl = Number(data.today_pnl);
-        const sign = pnl >= 0 ? '+' : '';
+        const sign = pnl >= 0 ? '+' : '-';
         pnlEl.textContent = sign + '$' + Math.abs(pnl).toFixed(2);
         pnlEl.style.color = pnl >= 0
           ? 'var(--color-state-success)'
