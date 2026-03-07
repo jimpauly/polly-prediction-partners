@@ -167,6 +167,17 @@
   font-family: 'Courier New', 'Consolas', monospace;
   user-select: none;
   flex-shrink: 0;
+  transition: box-shadow var(--_glow-transition), border-color var(--_glow-transition);
+}
+
+/* Panel glows when master switch is ON */
+.illum-panel[data-master="on"] {
+  border-top-color: #5a7090;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.8),
+    0 0 12px rgba(88,166,255,calc(var(--fx-master-scale) * 0.4)),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.5);
 }
 
 /* Panel title strip */
@@ -180,6 +191,12 @@
   text-transform: uppercase;
   font-family: 'Courier New', monospace;
   pointer-events: none;
+  transition: color var(--_glow-transition), text-shadow var(--_glow-transition);
+}
+
+.illum-panel[data-master="on"] .illum-panel-title {
+  color: #aabbcc;
+  text-shadow: 0 0 6px rgba(88,166,255,0.6);
 }
 
 /* Vertical dividers between groups */
@@ -407,16 +424,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 1px;
   cursor: ns-resize;
-}
-
-.dimmer-label {
-  font-size: 7.5px;
-  letter-spacing: 0.1em;
-  color: #778899;
-  text-transform: uppercase;
-  line-height: 1;
 }
 
 .dimmer-dial {
@@ -497,14 +506,4 @@
     0 0 8px rgba(88,166,255,0.2),
     inset 0 1px 0 rgba(255,255,255,0.15),
     inset 0 -1px 0 rgba(0,0,0,0.6);
-}
-
-/* ── Compact sub-label (inside switch group) ─────── */
-.switch-sublabel {
-  font-size: 7px;
-  color: #556677;
-  letter-spacing: 0.06em;
-  text-align: center;
-  line-height: 1;
-  text-transform: uppercase;
 }

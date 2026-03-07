@@ -100,7 +100,7 @@
       <div class="flex items-center gap-3">
         <span class="text-2xl" role="img" aria-label="Robot logo">🤖</span>
         <div>
-          <h1 class="app-title">
+          <h1 class="app-title glow-text-primary">
             <span class="app-title__accent">Paulie's</span> Prediction Partners
           </h1>
           <p class="text-xs text-muted m-0">Prediction Trading</p>
@@ -110,7 +110,7 @@
     <!-- ╔══════════════════════════════════════════════════╗
          ║   ILLUMINATION CONTROL PANEL (COCKPIT STYLE)   ║
          ╚══════════════════════════════════════════════════╝ -->
-    <div class="illum-panel" id="illum-panel" role="region" aria-label="Illumination Control Panel">
+    <div class="illum-panel" id="illum-panel" data-master="off" role="region" aria-label="Illumination Control Panel">
 
       <span class="illum-panel-title">⬛ ILLUMINATION CONTROL</span>
 
@@ -145,7 +145,6 @@
             <div class="switch-led"></div>
           </div>
           <div class="dimmer-dial-wrap" data-name="master" title="Master dimmer — drag up/down or scroll">
-            <div class="dimmer-label">DIM</div>
             <div class="dimmer-dial"></div>
             <div class="dimmer-value">100%</div>
           </div>
@@ -158,28 +157,21 @@
       <div class="illum-group" title="Text illumination channels">
         <div class="illum-group-label">TEXT</div>
         <div class="illum-switches-row">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
-            <div class="switch-sublabel">PRI</div>
-            <div class="flip-switch" data-channel="textPrimary" data-state="on" title="Text Primary ON/OFF">
-              <div class="switch-housing">
-                <div class="switch-guard-ring"></div>
-                <div class="switch-lever"></div>
-              </div>
-              <div class="switch-led"></div>
+          <div class="flip-switch" data-channel="textPrimary" data-state="on" title="Text Primary ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
             </div>
+            <div class="switch-led"></div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
-            <div class="switch-sublabel">SEC</div>
-            <div class="flip-switch" data-channel="textSecondary" data-state="on" title="Text Secondary ON/OFF">
-              <div class="switch-housing">
-                <div class="switch-guard-ring"></div>
-                <div class="switch-lever"></div>
-              </div>
-              <div class="switch-led"></div>
+          <div class="flip-switch" data-channel="textSecondary" data-state="on" title="Text Secondary ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
             </div>
+            <div class="switch-led"></div>
           </div>
           <div class="dimmer-dial-wrap" data-name="text" title="Text shared dimmer">
-            <div class="dimmer-label">DIM</div>
             <div class="dimmer-dial"></div>
             <div class="dimmer-value">100%</div>
           </div>
@@ -192,28 +184,21 @@
       <div class="illum-group" title="Border/bar illumination channels">
         <div class="illum-group-label">BARS</div>
         <div class="illum-switches-row">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
-            <div class="switch-sublabel">PRI</div>
-            <div class="flip-switch" data-channel="barsPrimary" data-state="on" title="Bars Primary ON/OFF">
-              <div class="switch-housing">
-                <div class="switch-guard-ring"></div>
-                <div class="switch-lever"></div>
-              </div>
-              <div class="switch-led"></div>
+          <div class="flip-switch" data-channel="barsPrimary" data-state="on" title="Bars Primary ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
             </div>
+            <div class="switch-led"></div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
-            <div class="switch-sublabel">SEC</div>
-            <div class="flip-switch" data-channel="barsSecondary" data-state="on" title="Bars Secondary ON/OFF">
-              <div class="switch-housing">
-                <div class="switch-guard-ring"></div>
-                <div class="switch-lever"></div>
-              </div>
-              <div class="switch-led"></div>
+          <div class="flip-switch" data-channel="barsSecondary" data-state="on" title="Bars Secondary ON/OFF">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
             </div>
+            <div class="switch-led"></div>
           </div>
           <div class="dimmer-dial-wrap" data-name="bars" title="Bars shared dimmer">
-            <div class="dimmer-label">DIM</div>
             <div class="dimmer-dial"></div>
             <div class="dimmer-value">100%</div>
           </div>
@@ -234,7 +219,6 @@
             <div class="switch-led"></div>
           </div>
           <div class="dimmer-dial-wrap" data-name="flood" title="Flood dimmer">
-            <div class="dimmer-label">DIM</div>
             <div class="dimmer-dial"></div>
             <div class="dimmer-value">100%</div>
           </div>
@@ -255,7 +239,6 @@
             <div class="switch-led"></div>
           </div>
           <div class="dimmer-dial-wrap" data-name="display" title="Display dimmer">
-            <div class="dimmer-label">DIM</div>
             <div class="dimmer-dial"></div>
             <div class="dimmer-value">100%</div>
           </div>

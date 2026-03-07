@@ -38,6 +38,9 @@
   const DIMMER_MIN = 0.25;
   const DIMMER_MAX = 1.0;
 
+  /** Pixels of vertical drag equivalent to full-range dimmer sweep. */
+  const DIMMER_DRAG_SCALE = 150;
+
   /* ------------------------------------------------------------------------
      State
      ------------------------------------------------------------------------ */
@@ -155,6 +158,10 @@
     syncDimmer('bars',     state.barsDim);
     syncDimmer('flood',    state.flood.dim);
     syncDimmer('display',  state.display.dim);
+
+    // Sync panel-level data-master attribute for CSS active state
+    const panel = document.getElementById('illum-panel');
+    if (panel) panel.dataset.master = state.master.on ? 'on' : 'off';
   }
 
   function syncSwitch(channel, on) {
@@ -237,6 +244,24 @@
       e.preventDefault();
     });
 
+    // Touch support
+    wrap.addEventListener('touchstart', (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      dragging = true;
+      startY   = e.touches[0].clientY;
+      startVal = getVal();
+      e.preventDefault();
+    }, { passive: false });
+
+    wrap.addEventListener('touchmove', (e) => {
+      if (!dragging || !e.touches || e.touches.length === 0) return;
+      const dy = startY - e.touches[0].clientY;
+      setVal(startVal + dy / DIMMER_DRAG_SCALE);
+      e.preventDefault();
+    }, { passive: false });
+
+    wrap.addEventListener('touchend', () => { dragging = false; });
+
     // Wheel support
     wrap.addEventListener('wheel', (e) => {
       e.preventDefault();
@@ -247,7 +272,7 @@
     document.addEventListener('mousemove', (e) => {
       if (!dragging) return;
       const dy = startY - e.clientY; // upward = increase
-      setVal(startVal + dy / 150);
+      setVal(startVal + dy / DIMMER_DRAG_SCALE);
     });
 
     document.addEventListener('mouseup', () => { dragging = false; });
