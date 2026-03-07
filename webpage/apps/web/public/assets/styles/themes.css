@@ -91,12 +91,12 @@
 }
 
 /* ==========================================================================
-   2. MOSAIC-1993 — Early web browser, chunky borders, Courier font
+   2. MOSAIC-1993 — Windows 3.1 Silver chrome, chiseled borders, Teal BG
    ========================================================================== */
 [data-theme="mosaic-1993"][data-mode="light"] {
-  --color-bg-canvas: #c0c0c0;
-  --color-bg-surface: #d4d0c8;
-  --color-bg-surface-raised: #e4e0d8;
+  --color-bg-canvas: #008080;
+  --color-bg-surface: #c0c0c0;
+  --color-bg-surface-raised: #d4d0c8;
   --color-bg-overlay: rgba(0, 0, 0, 0.4);
   --color-fg-default: #000000;
   --color-fg-muted: #333333;
@@ -146,26 +146,26 @@
 }
 
 /* ==========================================================================
-   3. GEN7-COCKPIT — Military avionics, green/amber on dark
+   3. GEN7-COCKPIT — Dark Gull Gray (FS 36231), MFD Green / Night Vision NVG
    ========================================================================== */
 [data-theme="gen7-cockpit"][data-mode="light"] {
-  --color-bg-canvas: #d4d9c3;
-  --color-bg-surface: #c8ceaf;
-  --color-bg-surface-raised: #dce2c8;
-  --color-bg-overlay: rgba(30, 40, 20, 0.5);
-  --color-fg-default: #1e2a10;
-  --color-fg-muted: #3b4a28;
-  --color-fg-subtle: #6b7a58;
-  --color-border-default: #8a9474;
-  --color-border-muted: #b0b89a;
-  --color-accent-primary: #4a7c2e;
-  --color-accent-secondary: #c8a000;
-  --color-link-default: #2e6b1a;
-  --color-state-success: #3a8c1e;
-  --color-state-warning: #c8a000;
-  --color-state-error: #b03020;
-  --color-state-info: #4a7c2e;
-  --color-shadow: rgba(30, 40, 20, 0.15);
+  --color-bg-canvas: #6b7063;
+  --color-bg-surface: #5c6053;
+  --color-bg-surface-raised: #7a7e70;
+  --color-bg-overlay: rgba(10, 15, 8, 0.6);
+  --color-fg-default: #d8e0c8;
+  --color-fg-muted: #a8b498;
+  --color-fg-subtle: #7a8868;
+  --color-border-default: #4a5040;
+  --color-border-muted: #3a4030;
+  --color-accent-primary: #4fc845;
+  --color-accent-secondary: #d4a800;
+  --color-link-default: #5de050;
+  --color-state-success: #4fc845;
+  --color-state-warning: #d4a800;
+  --color-state-error: #e04030;
+  --color-state-info: #40c8d0;
+  --color-shadow: rgba(10, 15, 8, 0.3);
   --font-family-base: "Share Tech Mono", "Lucida Console", monospace;
   --font-family-mono: "Share Tech Mono", "Lucida Console", monospace;
   --border-radius-sm: 2px;
@@ -201,26 +201,26 @@
 }
 
 /* ==========================================================================
-   4. USSR-COCKPIT — Soviet instrument panel, red/amber
+   4. USSR-COCKPIT — Soviet Cold War. MiG Turquoise (#3d90a2) / Night Intercept
    ========================================================================== */
 [data-theme="ussr-cockpit"][data-mode="light"] {
-  --color-bg-canvas: #d6cbb8;
-  --color-bg-surface: #c8bba6;
-  --color-bg-surface-raised: #e0d5c2;
-  --color-bg-overlay: rgba(60, 20, 10, 0.5);
-  --color-fg-default: #2a1008;
-  --color-fg-muted: #5a3020;
-  --color-fg-subtle: #8a6a50;
-  --color-border-default: #8a7a68;
-  --color-border-muted: #b0a28e;
+  --color-bg-canvas: #2d7a8c;
+  --color-bg-surface: #3d90a2;
+  --color-bg-surface-raised: #4ea8bc;
+  --color-bg-overlay: rgba(0, 20, 30, 0.55);
+  --color-fg-default: #f0faff;
+  --color-fg-muted: #b8dce8;
+  --color-fg-subtle: #7ab0c0;
+  --color-border-default: #1e6070;
+  --color-border-muted: #2a7888;
   --color-accent-primary: #cc2200;
   --color-accent-secondary: #d4a800;
-  --color-link-default: #a01a00;
-  --color-state-success: #5a8a1e;
+  --color-link-default: #ff4422;
+  --color-state-success: #44bb22;
   --color-state-warning: #d4a800;
   --color-state-error: #cc2200;
-  --color-state-info: #4a6a8a;
-  --color-shadow: rgba(60, 20, 10, 0.18);
+  --color-state-info: #88ddff;
+  --color-shadow: rgba(0, 20, 30, 0.25);
   --font-family-base: "Courier New", "Lucida Console", monospace;
   --font-family-mono: "Courier New", "Lucida Console", monospace;
   --border-radius-sm: 1px;
@@ -230,23 +230,23 @@
 }
 
 [data-theme="ussr-cockpit"][data-mode="dark"] {
-  --color-bg-canvas: #0e0806;
-  --color-bg-surface: #1a100a;
-  --color-bg-surface-raised: #241810;
-  --color-bg-overlay: rgba(0, 0, 0, 0.75);
-  --color-fg-default: #ff6633;
-  --color-fg-muted: #cc4422;
-  --color-fg-subtle: #883318;
-  --color-border-default: #4a2210;
-  --color-border-muted: #301508;
+  --color-bg-canvas: #0a1a22;
+  --color-bg-surface: #3d90a2;
+  --color-bg-surface-raised: #4ea8bc;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-fg-default: #ffffff;
+  --color-fg-muted: #c0e0ec;
+  --color-fg-subtle: #7ab0c0;
+  --color-border-default: #1e5060;
+  --color-border-muted: #143848;
   --color-accent-primary: #ff2200;
   --color-accent-secondary: #ffaa00;
-  --color-link-default: #ff8844;
+  --color-link-default: #ff6644;
   --color-state-success: #44cc22;
   --color-state-warning: #ffaa00;
   --color-state-error: #ff2200;
   --color-state-info: #44aaff;
-  --color-shadow: rgba(255, 34, 0, 0.1);
+  --color-shadow: rgba(61, 144, 162, 0.15);
   --font-family-base: "Courier New", "Lucida Console", monospace;
   --font-family-mono: "Courier New", "Lucida Console", monospace;
   --border-radius-sm: 1px;
@@ -256,26 +256,26 @@
 }
 
 /* ==========================================================================
-   5. NEON-VICE-1985 — Miami Vice, hot pink / cyan neon
+   5. NEON-VICE-1985 — Miami pastels, linen suits, art deco pinks / Ocean Drive Midnight
    ========================================================================== */
 [data-theme="neon-vice-1985"][data-mode="light"] {
-  --color-bg-canvas: #fff0f5;
-  --color-bg-surface: #ffe4f0;
-  --color-bg-surface-raised: #fff5fa;
-  --color-bg-overlay: rgba(80, 0, 60, 0.4);
-  --color-fg-default: #2a0a2a;
-  --color-fg-muted: #6a2a5a;
-  --color-fg-subtle: #9a6a8a;
-  --color-border-default: #e8a0cc;
-  --color-border-muted: #f0c8e0;
-  --color-accent-primary: #ff1493;
+  --color-bg-canvas: #f5e8d8;
+  --color-bg-surface: #f0d8c8;
+  --color-bg-surface-raised: #faf0e8;
+  --color-bg-overlay: rgba(80, 0, 60, 0.35);
+  --color-fg-default: #2a0a1a;
+  --color-fg-muted: #6a2a4a;
+  --color-fg-subtle: #a87088;
+  --color-border-default: #e8a0c0;
+  --color-border-muted: #f0c8d8;
+  --color-accent-primary: #e8187a;
   --color-accent-secondary: #00ced1;
-  --color-link-default: #d6006e;
+  --color-link-default: #c8006a;
   --color-state-success: #00c896;
-  --color-state-warning: #ffaa00;
-  --color-state-error: #ff2060;
+  --color-state-warning: #e8a800;
+  --color-state-error: #e82050;
   --color-state-info: #00bcd4;
-  --color-shadow: rgba(255, 20, 147, 0.12);
+  --color-shadow: rgba(232, 24, 122, 0.1);
   --font-family-base: "Orbitron", "Segoe UI", Tahoma, sans-serif;
   --font-family-mono: "Fira Code", "Courier New", monospace;
   --border-radius-sm: 2px;
@@ -285,15 +285,15 @@
 }
 
 [data-theme="neon-vice-1985"][data-mode="dark"] {
-  --color-bg-canvas: #0d0015;
-  --color-bg-surface: #19002a;
-  --color-bg-surface-raised: #250040;
+  --color-bg-canvas: #0a0015;
+  --color-bg-surface: #160025;
+  --color-bg-surface-raised: #22003a;
   --color-bg-overlay: rgba(0, 0, 0, 0.7);
-  --color-fg-default: #ffe0f0;
-  --color-fg-muted: #cc90b8;
-  --color-fg-subtle: #886088;
-  --color-border-default: #5a1050;
-  --color-border-muted: #3a0830;
+  --color-fg-default: #f8e0f0;
+  --color-fg-muted: #c890c0;
+  --color-fg-subtle: #8860a0;
+  --color-border-default: #5a1060;
+  --color-border-muted: #3a0845;
   --color-accent-primary: #ff1493;
   --color-accent-secondary: #00ffe5;
   --color-link-default: #ff69b4;
@@ -725,23 +725,23 @@
 }
 
 [data-theme="ledger-1920"][data-mode="dark"] {
-  --color-bg-canvas: #181208;
-  --color-bg-surface: #221a0e;
-  --color-bg-surface-raised: #2e2414;
-  --color-bg-overlay: rgba(0, 0, 0, 0.7);
-  --color-fg-default: #e0d0a8;
-  --color-fg-muted: #b0a078;
-  --color-fg-subtle: #706040;
-  --color-border-default: #4a3e24;
-  --color-border-muted: #342a16;
-  --color-accent-primary: #c89840;
-  --color-accent-secondary: #40a870;
-  --color-link-default: #dab060;
-  --color-state-success: #50a850;
-  --color-state-warning: #c89840;
-  --color-state-error: #c04040;
-  --color-state-info: #5080a8;
-  --color-shadow: rgba(0, 0, 0, 0.35);
+  --color-bg-canvas: #080600;
+  --color-bg-surface: #100e00;
+  --color-bg-surface-raised: #1a1800;
+  --color-bg-overlay: rgba(0, 0, 0, 0.8);
+  --color-fg-default: #f0d860;
+  --color-fg-muted: #c8a830;
+  --color-fg-subtle: #8a7020;
+  --color-border-default: #4a3a10;
+  --color-border-muted: #2e2408;
+  --color-accent-primary: #e8c000;
+  --color-accent-secondary: #ffffff;
+  --color-link-default: #ffda40;
+  --color-state-success: #50c050;
+  --color-state-warning: #e8c000;
+  --color-state-error: #ee4040;
+  --color-state-info: #60a0e0;
+  --color-shadow: rgba(232, 192, 0, 0.12);
   --font-family-base: "IM Fell English", "Baskerville", "Palatino", serif;
   --font-family-mono: "Courier New", Courier, monospace;
   --border-radius-sm: 0px;
@@ -861,26 +861,26 @@
 }
 
 /* ==========================================================================
-   16. PHOSPHOR — Green phosphor CRT terminal
+   16. PHOSPHOR — P3 Amber CRT (light) / Green Phosphor CRT (dark)
    ========================================================================== */
 [data-theme="phosphor"][data-mode="light"] {
-  --color-bg-canvas: #e0f0e0;
-  --color-bg-surface: #d0e8d0;
-  --color-bg-surface-raised: #e8f8e8;
-  --color-bg-overlay: rgba(0, 40, 0, 0.4);
-  --color-fg-default: #0a2a0a;
-  --color-fg-muted: #1a5a1a;
-  --color-fg-subtle: #4a8a4a;
-  --color-border-default: #70b870;
-  --color-border-muted: #a0d0a0;
-  --color-accent-primary: #1a8a1a;
-  --color-accent-secondary: #4a4a4a;
-  --color-link-default: #0a6a0a;
-  --color-state-success: #1a8a1a;
-  --color-state-warning: #8a8a1a;
-  --color-state-error: #8a1a1a;
-  --color-state-info: #1a6a8a;
-  --color-shadow: rgba(0, 40, 0, 0.1);
+  --color-bg-canvas: #0e0800;
+  --color-bg-surface: #1a1000;
+  --color-bg-surface-raised: #261800;
+  --color-bg-overlay: rgba(0, 0, 0, 0.75);
+  --color-fg-default: #ffb300;
+  --color-fg-muted: #cc8800;
+  --color-fg-subtle: #885500;
+  --color-border-default: #442a00;
+  --color-border-muted: #2a1800;
+  --color-accent-primary: #ffaa00;
+  --color-accent-secondary: #ff6600;
+  --color-link-default: #ffd040;
+  --color-state-success: #ffb300;
+  --color-state-warning: #ff6600;
+  --color-state-error: #ff3300;
+  --color-state-info: #ffcc66;
+  --color-shadow: rgba(255, 179, 0, 0.08);
   --font-family-base: "VT323", "Lucida Console", "Courier New", monospace;
   --font-family-mono: "VT323", "Lucida Console", "Courier New", monospace;
   --border-radius-sm: 0px;
@@ -1275,23 +1275,23 @@
 }
 
 [data-theme="dreamcore"][data-mode="dark"] {
-  --color-bg-canvas: #120818;
-  --color-bg-surface: #1c1028;
-  --color-bg-surface-raised: #28183a;
-  --color-bg-overlay: rgba(0, 0, 0, 0.65);
-  --color-fg-default: #e8d8f8;
-  --color-fg-muted: #b098d0;
-  --color-fg-subtle: #706090;
-  --color-border-default: #3a2050;
-  --color-border-muted: #281438;
-  --color-accent-primary: #d080f0;
-  --color-accent-secondary: #70e8d0;
-  --color-link-default: #e0a0ff;
-  --color-state-success: #60e0a0;
-  --color-state-warning: #e8c050;
-  --color-state-error: #f06080;
-  --color-state-info: #70b0f0;
-  --color-shadow: rgba(208, 128, 240, 0.1);
+  --color-bg-canvas: #000000;
+  --color-bg-surface: #080408;
+  --color-bg-surface-raised: #100810;
+  --color-bg-overlay: rgba(0, 0, 0, 0.85);
+  --color-fg-default: #d8c8e8;
+  --color-fg-muted: #8070a0;
+  --color-fg-subtle: #504060;
+  --color-border-default: #281830;
+  --color-border-muted: #180c20;
+  --color-accent-primary: #8820c0;
+  --color-accent-secondary: #30b0a0;
+  --color-link-default: #b060e0;
+  --color-state-success: #40a870;
+  --color-state-warning: #c09030;
+  --color-state-error: #c03060;
+  --color-state-info: #4080c0;
+  --color-shadow: rgba(0, 0, 0, 0.6);
   --font-family-base: "Comfortaa", "Century Gothic", "Futura", sans-serif;
   --font-family-mono: "Fira Code", monospace;
   --border-radius-sm: 10px;
