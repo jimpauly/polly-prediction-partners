@@ -239,6 +239,25 @@ body {
   margin-bottom: 0;
 }
 
+/* ---------- Bento / masonry grid for main region non-paint cards --------- */
+.main-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* Cards inside the bento grid don't need their own bottom margin. */
+.main-bento-grid > .card {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .main-bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Region titles (engraved cockpit style) ---------------------- */
 .region-title {
   margin-bottom: var(--space-1);
