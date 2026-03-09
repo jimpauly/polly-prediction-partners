@@ -19,13 +19,11 @@
 
   function defaultState() {
     return {
-      pages: [
-        { title: "My Notes", body: "<div><br></div>" }
-      ],
+      pages: [{ title: "My Notes", body: "<div><br></div>" }],
       currentPage: 0,
       bold: false,
       heading: true,
-      bullets: false
+      bullets: false,
     };
   }
 
@@ -40,7 +38,9 @@
           return parsed;
         }
       }
-    } catch (_) { /* silent */ }
+    } catch (_) {
+      /* silent */
+    }
     return defaultState();
   }
 
@@ -48,11 +48,16 @@
     if (!state) return;
     syncCurrentPage();
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        pages: state.pages,
-        currentPage: state.currentPage
-      }));
-    } catch (_) { /* silent */ }
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          pages: state.pages,
+          currentPage: state.currentPage,
+        }),
+      );
+    } catch (_) {
+      /* silent */
+    }
   }
 
   function scheduleSave() {
@@ -66,21 +71,27 @@
     var e = document.createElement(tag);
     if (attrs) {
       Object.keys(attrs).forEach(function (k) {
-        if (k === "className") { e.className = attrs[k]; }
-        else if (k === "style" && typeof attrs[k] === "object") {
-          Object.keys(attrs[k]).forEach(function (s) { e.style[s] = attrs[k][s]; });
-        }
-        else if (k.indexOf("on") === 0) {
+        if (k === "className") {
+          e.className = attrs[k];
+        } else if (k === "style" && typeof attrs[k] === "object") {
+          Object.keys(attrs[k]).forEach(function (s) {
+            e.style[s] = attrs[k][s];
+          });
+        } else if (k.indexOf("on") === 0) {
           e.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
+        } else {
+          e.setAttribute(k, attrs[k]);
         }
-        else { e.setAttribute(k, attrs[k]); }
       });
     }
     if (children !== undefined && children !== null) {
       (Array.isArray(children) ? children : [children]).forEach(function (c) {
         if (c == null) return;
-        if (typeof c === "string") { e.appendChild(document.createTextNode(c)); }
-        else { e.appendChild(c); }
+        if (typeof c === "string") {
+          e.appendChild(document.createTextNode(c));
+        } else {
+          e.appendChild(c);
+        }
       });
     }
     return e;
@@ -95,7 +106,10 @@
     var checks = tmp.querySelectorAll("input[type=checkbox]");
     for (var i = 0; i < checks.length; i++) {
       var mark = checks[i].checked ? "[x] " : "[ ] ";
-      checks[i].parentNode.replaceChild(document.createTextNode(mark), checks[i]);
+      checks[i].parentNode.replaceChild(
+        document.createTextNode(mark),
+        checks[i],
+      );
     }
     /* Convert <br> and block elements to newlines */
     var brs = tmp.querySelectorAll("br");
@@ -124,28 +138,46 @@
   function buildFileMenu() {
     var wrap = el("div", { className: "todo-file-menu" });
 
-    var btn = el("button", {
-      className: "todo-file-menu-btn",
-      title: "File menu",
-      onClick: function () {
-        var isOpen = dropdown.style.display === "block";
-        dropdown.style.display = isOpen ? "none" : "block";
-      }
-    }, "\uD83D\uDCC1 File");
+    var btn = el(
+      "button",
+      {
+        className: "todo-file-menu-btn",
+        title: "File menu",
+        onClick: function () {
+          var isOpen = dropdown.style.display === "block";
+          dropdown.style.display = isOpen ? "none" : "block";
+        },
+      },
+      "\uD83D\uDCC1 File",
+    );
 
     var dropdown = el("div", { className: "todo-file-dropdown" });
     dropdown.style.display = "none";
 
-    var itemNew = el("button", {
-      className: "todo-file-dropdown-item",
-      onClick: function () { addPage(); dropdown.style.display = "none"; }
-    }, "+ New Page");
+    var itemNew = el(
+      "button",
+      {
+        className: "todo-file-dropdown-item",
+        onClick: function () {
+          addPage();
+          dropdown.style.display = "none";
+        },
+      },
+      "+ New Page",
+    );
     dropdown.appendChild(itemNew);
 
-    var itemSave = el("button", {
-      className: "todo-file-dropdown-item",
-      onClick: function () { downloadTxt(); dropdown.style.display = "none"; }
-    }, "\uD83D\uDCBE Save as .txt");
+    var itemSave = el(
+      "button",
+      {
+        className: "todo-file-dropdown-item",
+        onClick: function () {
+          downloadTxt();
+          dropdown.style.display = "none";
+        },
+      },
+      "\uD83D\uDCBE Save as .txt",
+    );
     dropdown.appendChild(itemSave);
 
     wrap.appendChild(btn);
@@ -168,11 +200,17 @@
     var group = el("div", { className: "todo-bar-group" });
 
     /* Bold */
-    var btnBold = el("button", {
-      className: "todo-tb-btn" + (state.bold ? " active" : ""),
-      title: "Toggle Bold (Ctrl+B)",
-      onClick: function () { toggleBold(); }
-    }, "B");
+    var btnBold = el(
+      "button",
+      {
+        className: "todo-tb-btn" + (state.bold ? " active" : ""),
+        title: "Toggle Bold (Ctrl+B)",
+        onClick: function () {
+          toggleBold();
+        },
+      },
+      "B",
+    );
     btnBold.style.fontWeight = "800";
     dom.btnBold = btnBold;
     group.appendChild(btnBold);
@@ -181,28 +219,38 @@
     var btnSize = el("button", {
       className: "todo-tb-btn" + (state.heading ? " active" : ""),
       title: "Toggle Heading / Body text",
-      onClick: function () { toggleHeading(); }
+      onClick: function () {
+        toggleHeading();
+      },
     });
     btnSize.innerHTML = state.heading ? "H1" : "Aa";
     dom.btnSize = btnSize;
     group.appendChild(btnSize);
 
     /* Bullets */
-    var btnBullet = el("button", {
-      className: "todo-tb-btn" + (state.bullets ? " active" : ""),
-      title: "Toggle Bullet List",
-      onClick: function () { toggleBullets(); }
-    }, "\u2022");
+    var btnBullet = el(
+      "button",
+      {
+        className: "todo-tb-btn" + (state.bullets ? " active" : ""),
+        title: "Toggle Bullet List",
+        onClick: function () {
+          toggleBullets();
+        },
+      },
+      "\u2022",
+    );
     dom.btnBullet = btnBullet;
     group.appendChild(btnBullet);
 
     /* Add Task */
     var btnTask = el("button", {
       className: "todo-tb-btn",
-      title: "Add Task Checkbox"
+      title: "Add Task Checkbox",
     });
     btnTask.innerHTML = "&#9744;";
-    btnTask.addEventListener("click", function () { insertTask(); });
+    btnTask.addEventListener("click", function () {
+      insertTask();
+    });
     group.appendChild(btnTask);
 
     return group;
@@ -219,7 +267,7 @@
     var editor = el("div", {
       className: "todo-editor",
       contentEditable: "true",
-      spellcheck: "true"
+      spellcheck: "true",
     });
     editor.setAttribute("role", "textbox");
     editor.setAttribute("aria-multiline", "true");
@@ -234,11 +282,17 @@
   function buildPageNav() {
     var group = el("div", { className: "todo-bar-group" });
 
-    var btnPrev = el("button", {
-      className: "todo-tb-btn",
-      title: "Previous Page",
-      onClick: function () { goPage(state.currentPage - 1); }
-    }, "\u25C0");
+    var btnPrev = el(
+      "button",
+      {
+        className: "todo-tb-btn",
+        title: "Previous Page",
+        onClick: function () {
+          goPage(state.currentPage - 1);
+        },
+      },
+      "\u25C0",
+    );
     dom.btnPrev = btnPrev;
     group.appendChild(btnPrev);
 
@@ -246,20 +300,32 @@
     dom.pageIndicator = indicator;
     group.appendChild(indicator);
 
-    var btnNext = el("button", {
-      className: "todo-tb-btn",
-      title: "Next Page",
-      onClick: function () { goPage(state.currentPage + 1); }
-    }, "\u25B6");
+    var btnNext = el(
+      "button",
+      {
+        className: "todo-tb-btn",
+        title: "Next Page",
+        onClick: function () {
+          goPage(state.currentPage + 1);
+        },
+      },
+      "\u25B6",
+    );
     dom.btnNext = btnNext;
     group.appendChild(btnNext);
 
     /* Delete page */
-    var btnDel = el("button", {
-      className: "todo-tb-btn todo-pg-del",
-      title: "Delete this page",
-      onClick: function () { deletePage(); }
-    }, "\uD83D\uDDD1");
+    var btnDel = el(
+      "button",
+      {
+        className: "todo-tb-btn todo-pg-del",
+        title: "Delete this page",
+        onClick: function () {
+          deletePage();
+        },
+      },
+      "\uD83D\uDDD1",
+    );
     dom.btnDel = btnDel;
     group.appendChild(btnDel);
 
@@ -287,7 +353,8 @@
 
   function updatePageNav() {
     if (!dom.pageIndicator) return;
-    dom.pageIndicator.textContent = "Page " + (state.currentPage + 1) + " of " + state.pages.length;
+    dom.pageIndicator.textContent =
+      "Page " + (state.currentPage + 1) + " of " + state.pages.length;
     dom.btnPrev.disabled = state.currentPage <= 0;
     dom.btnNext.disabled = state.currentPage >= state.pages.length - 1;
     dom.btnDel.disabled = state.pages.length <= 1;
@@ -422,14 +489,23 @@
 
   function convertBracketTasks() {
     if (!dom.editor) return;
-    var walker = document.createTreeWalker(dom.editor, NodeFilter.SHOW_TEXT, null, false);
+    var walker = document.createTreeWalker(
+      dom.editor,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false,
+    );
     var node;
     var replacements = [];
     while ((node = walker.nextNode())) {
       var text = node.nodeValue;
       var match = text.match(/^\[( |x)\]\s*/);
       if (match) {
-        replacements.push({ node: node, checked: match[1] === "x", matchLen: match[0].length });
+        replacements.push({
+          node: node,
+          checked: match[1] === "x",
+          matchLen: match[0].length,
+        });
       }
     }
     for (var i = replacements.length - 1; i >= 0; i--) {
@@ -506,8 +582,15 @@
       if (e.key === "Enter") {
         var sel = window.getSelection();
         if (sel.anchorNode) {
-          var block = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
-          while (block && block !== dom.editor && block.parentElement !== dom.editor) {
+          var block =
+            sel.anchorNode.nodeType === 1
+              ? sel.anchorNode
+              : sel.anchorNode.parentElement;
+          while (
+            block &&
+            block !== dom.editor &&
+            block.parentElement !== dom.editor
+          ) {
             block = block.parentElement;
           }
           if (block && block.tagName === "H1") {
@@ -525,7 +608,9 @@
     /* Paste: strip formatting to plain text for cleanliness */
     handlers.onPaste = function (e) {
       e.preventDefault();
-      var text = (e.clipboardData || window.clipboardData).getData("text/plain");
+      var text = (e.clipboardData || window.clipboardData).getData(
+        "text/plain",
+      );
       document.execCommand("insertText", false, text);
     };
     dom.editor.addEventListener("paste", handlers.onPaste);
@@ -785,7 +870,6 @@
     "  flex-shrink: 0;",
     "}",
 
-
     /* Placeholder when editor empty */
     ".todo-editor:empty::before {",
     "  content: 'Start typing your notes\\2026';",
@@ -816,7 +900,7 @@
     ".todo-editor-wrap::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }",
     ".todo-editor-wrap::-webkit-scrollbar-thumb:hover { background: #64748b; }",
 
-    ""
+    "",
   ].join("\n");
 
   /* ── Public: init ───────────────────────────────────────────── */
@@ -876,10 +960,14 @@
       autosaveTimer = null;
     }
     if (dom.editor) {
-      if (handlers.onInput) dom.editor.removeEventListener("input", handlers.onInput);
-      if (handlers.onEditorClick) dom.editor.removeEventListener("click", handlers.onEditorClick);
-      if (handlers.onKeyDown) dom.editor.removeEventListener("keydown", handlers.onKeyDown);
-      if (handlers.onPaste) dom.editor.removeEventListener("paste", handlers.onPaste);
+      if (handlers.onInput)
+        dom.editor.removeEventListener("input", handlers.onInput);
+      if (handlers.onEditorClick)
+        dom.editor.removeEventListener("click", handlers.onEditorClick);
+      if (handlers.onKeyDown)
+        dom.editor.removeEventListener("keydown", handlers.onKeyDown);
+      if (handlers.onPaste)
+        dom.editor.removeEventListener("paste", handlers.onPaste);
     }
     if (handlers.onDocClickFileMenu) {
       document.removeEventListener("click", handlers.onDocClickFileMenu);
@@ -896,7 +984,6 @@
 
   window.TodoApp = {
     init: init,
-    destroy: destroy
+    destroy: destroy,
   };
-
 })();
