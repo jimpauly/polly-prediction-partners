@@ -336,6 +336,7 @@ _End Chapter 0._
 - **Typography**
   - Larger headers/titles should look like physical etched text on an actual control panel
   - Smaller headers/labels should look like label maker stickers
+  - **Font-Size Normalization:** Each theme may use a unique font, but visual text size must stay within ±1 size of the Webpage (modern default) baseline. A per-theme `--font-size-scale` CSS variable compensates for fonts that render visually larger or smaller than Inter.
 
 ### Regions & Elements:
 
@@ -389,14 +390,11 @@ _End Chapter 0._
 #### Left Sidebar:
 
 - **`System Design`** header — Aligned top, centered
-  - **`Mode`:** Light/dark toggle (side-by-side, centered)
+  - **`Modes`:** Single card containing Light/Dark toggle and 3D/2D toggle side-by-side in one row.
   - **`System Theme`:** Buttons to select system design theme
-  - **3D Toggle:** Alters architectural elevation effects. Bezels make things look cooler automatically. One more simple idea to make 3D effective and not lame.
-- **Light/Dark Mode Toggle Button**
-  - **When in light mode:** displays a button that looks like dark mode.
-  - **When in dark mode:** displays a button that looks like light mode.
-- **3D/2D Toggle Button**
-  - Alters architectural elevation effects. Bezels automatically enhance appearance.
+- **Modes Card**
+  - **Light/Dark Toggle:** Single button that toggles between modes. In light mode it displays "🌙 Dark" (invitation to switch); in dark mode it displays "☀️ Light".
+  - **3D/2D Toggle:** Single button next to the Light/Dark toggle. Alters architectural elevation effects. Bezels automatically enhance appearance.
 - **24-Theme Selector Button Card**
   - 24 theme buttons representing 48 total palettes (24 themes × light/dark modes).
   - The Light/Dark mode toggle controls which variant displays.
@@ -405,7 +403,9 @@ _End Chapter 0._
   - Button selectors accurately pull from and represent their theme regardless of current selection.
   - **When in light or day mode:** all theme buttons display in light mode.
   - **When in dark or night mode:** all theme buttons display in dark mode.
-  - **Button styling:** `font-size: 12px`, padding `6px 2px 4px 2px`, `font-weight: 700`, centered.
+  - **Button structure:** Each button has a right-angle outer border (border-radius: 0) colored with the theme's accent color, with the button background showing the theme's background color. Inside each button is a shrinkwrapped text `<span>` label with a slightly rounded border (3px radius) showing the theme's surface/body color as background, the theme's foreground as text color, and the theme's border-default as the label border color. This displays 4 theme colors per button: bg, surface, accent border, and border-default.
+  - **Layout:** Single column, equal widths, buttons almost touching (1px gap). Widths reactive to widest text label. The grid, card, and sidebar shrinkwrap reactively.
+  - **Button styling:** `font-size: 12px`, padding `4px`, `font-weight: 700`, centered.
 - **Simple Visibility Toggles** for tools while developing
   - **Rulers:** X-axis and Y-axis precision rulers. Hidden by default; toggle to show/hide for alignment assistance during development.
   - **Grid:** Toggleable `60×60px` overlay for layout assistance during development.

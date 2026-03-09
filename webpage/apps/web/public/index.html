@@ -286,24 +286,14 @@
         >◀</button>
       </div>
 
-      <!-- Light/Dark Mode Toggle -->
-      <div class="sidebar-panel" aria-label="Mode selection">
+      <!-- Modes (Light/Dark + 3D/2D) -->
+      <div class="sidebar-panel" aria-label="Mode toggles">
         <div class="sidebar-panel__header">
-          <span class="sidebar-panel__title glow-text-secondary">Mode</span>
+          <span class="sidebar-panel__title glow-text-secondary">Modes</span>
         </div>
         <div class="sidebar-panel__body" style="display:flex;justify-content:center;gap:var(--space-2)">
-          <button id="mode-light-btn" class="btn btn-sm" aria-label="Switch to light mode" style="min-width:80px">☀️ Light</button>
-          <button id="mode-dark-btn" class="btn btn-sm" aria-label="Switch to dark mode" style="min-width:80px">🌙 Dark</button>
-        </div>
-      </div>
-
-      <!-- 3D / 2D Toggle -->
-      <div class="sidebar-panel" aria-label="3D toggle">
-        <div class="sidebar-panel__header">
-          <span class="sidebar-panel__title glow-text-secondary">3D Toggle</span>
-        </div>
-        <div class="sidebar-panel__body" style="display:flex;justify-content:center;gap:var(--space-2)">
-          <button id="toggle-3d" class="btn btn-sm btn-ghost" aria-label="Toggle 3D/2D mode" style="min-width:80px">🧊 3D Off</button>
+          <button id="mode-toggle-btn" class="btn btn-sm" aria-label="Toggle light/dark mode" style="min-width:80px">🌙 Dark</button>
+          <button id="toggle-3d" class="btn btn-sm" aria-label="Toggle 3D/2D mode" style="min-width:80px">🧊 3D Off</button>
         </div>
       </div>
 
@@ -1098,28 +1088,24 @@
         container: document.getElementById('theme-selector-mount')
       });
 
-      /* ---- Mode toggle (left sidebar) ---- */
-      const modeLightBtn = document.getElementById('mode-light-btn');
-      const modeDarkBtn = document.getElementById('mode-dark-btn');
-      function updateModeButtons() {
+      /* ---- Mode toggle (left sidebar — single button) ---- */
+      const modeToggleBtn = document.getElementById('mode-toggle-btn');
+      function updateModeToggleBtn() {
         const currentMode = document.documentElement.dataset.mode;
         if (currentMode === 'light') {
-          modeLightBtn.classList.add('btn-primary');
-          modeDarkBtn.classList.remove('btn-primary');
+          modeToggleBtn.textContent = '🌙 Dark';
+          modeToggleBtn.classList.remove('btn-primary');
         } else {
-          modeDarkBtn.classList.add('btn-primary');
-          modeLightBtn.classList.remove('btn-primary');
+          modeToggleBtn.textContent = '☀️ Light';
+          modeToggleBtn.classList.add('btn-primary');
         }
       }
-      modeLightBtn.addEventListener('click', () => {
-        ThemeManager.setMode('light');
-        updateModeButtons();
+      modeToggleBtn.addEventListener('click', () => {
+        ThemeManager.toggleMode();
+        updateModeToggleBtn();
       });
-      modeDarkBtn.addEventListener('click', () => {
-        ThemeManager.setMode('dark');
-        updateModeButtons();
-      });
-      updateModeButtons();
+      document.addEventListener('modechange', updateModeToggleBtn);
+      updateModeToggleBtn();
 
       /* ---- 3D Toggle (left sidebar) ---- */
       const toggle3d = document.getElementById('toggle-3d');
