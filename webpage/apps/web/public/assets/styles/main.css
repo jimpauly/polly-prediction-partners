@@ -1755,7 +1755,9 @@ textarea.input {
   border-radius: var(--border-radius-md);
   box-shadow: 0 -4px 20px var(--color-shadow);
   overflow: hidden;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
 }
 
 .byob-panel--hidden {
@@ -1899,12 +1901,11 @@ textarea.input {
 }
 
 .mfd-body {
-  background:
-    radial-gradient(
-      ellipse at 20% 80%,
-      color-mix(in srgb, var(--color-accent-primary) 4%, transparent) 0%,
-      transparent 70%
-    );
+  background: radial-gradient(
+    ellipse at 20% 80%,
+    color-mix(in srgb, var(--color-accent-primary) 4%, transparent) 0%,
+    transparent 70%
+  );
 }
 
 .mfd-label {

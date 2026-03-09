@@ -76,13 +76,13 @@ const AgentDashboard = (() => {
 
   /* Top-performing LLM models (Feb 2026) for BYOB radio selectors */
   const LLM_MODELS = [
-    { id: "openai",   label: "GPT (OpenAI)",       placeholder: "sk-..." },
-    { id: "claude",   label: "Claude (Anthropic)",  placeholder: "sk-ant-..." },
-    { id: "gemini",   label: "Gemini (Google)",     placeholder: "AIza..." },
-    { id: "grok",     label: "Grok (xAI)",          placeholder: "xai-..." },
-    { id: "deepseek", label: "DeepSeek",            placeholder: "sk-..." },
-    { id: "qwen",     label: "Qwen (Alibaba)",      placeholder: "sk-..." },
-    { id: "llama",    label: "Llama (Meta)",         placeholder: "meta-..." },
+    { id: "openai", label: "GPT (OpenAI)", placeholder: "sk-..." },
+    { id: "claude", label: "Claude (Anthropic)", placeholder: "sk-ant-..." },
+    { id: "gemini", label: "Gemini (Google)", placeholder: "AIza..." },
+    { id: "grok", label: "Grok (xAI)", placeholder: "xai-..." },
+    { id: "deepseek", label: "DeepSeek", placeholder: "sk-..." },
+    { id: "qwen", label: "Qwen (Alibaba)", placeholder: "sk-..." },
+    { id: "llama", label: "Llama (Meta)", placeholder: "meta-..." },
   ];
 
   let pollIntervalId = null;
@@ -209,7 +209,7 @@ const AgentDashboard = (() => {
         <label class="byob-model-radio">
           <input type="radio" name="byob-llm" value="${m.id}">
           <span class="byob-model-label">${m.label}</span>
-        </label>`
+        </label>`,
     ).join("");
 
     /* Build numbered-line editor */
@@ -258,8 +258,9 @@ const AgentDashboard = (() => {
     if (editor && lineNums) {
       const updateLines = () => {
         const count = Math.max(editor.value.split("\n").length, 8);
-        lineNums.innerHTML = Array.from({ length: count }, (_, i) =>
-          `<span>${i + 1}</span>`
+        lineNums.innerHTML = Array.from(
+          { length: count },
+          (_, i) => `<span>${i + 1}</span>`,
         ).join("");
       };
       editor.addEventListener("input", updateLines);
