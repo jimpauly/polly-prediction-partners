@@ -417,6 +417,14 @@ const TradingStudio = (() => {
 
   async function onConnected(environment) {
     connected = true;
+
+    /* Close the public-data WebSocket since the main one takes over */
+    if (publicWs) {
+      publicWs.onclose = null; /* prevent reconnect */
+      publicWs.close();
+      publicWs = null;
+    }
+
     const preConnect = document.getElementById("trading-pre-connect");
     const iface = document.getElementById("trading-interface");
     if (preConnect) preConnect.style.display = "none";
@@ -1575,13 +1583,18 @@ const TradingStudio = (() => {
   }
 
   let publicWs = null;
+  let publicWsRetryDelay = 5000;
 
   function connectPublicWebSocket() {
     /* Lightweight WebSocket that listens for public_data_ready events
        so the Trading Studio auto-refreshes when the backend finishes
        fetching public Kalshi data. */
+    if (connected) return; /* Main WS handles everything when connected */
     try {
       publicWs = new WebSocket("ws://127.0.0.1:8000/api/events");
+      publicWs.onopen = () => {
+        publicWsRetryDelay = 5000; /* Reset backoff on successful connect */
+      };
       publicWs.onmessage = (event) => {
         try {
           const msg = JSON.parse(event.data);
@@ -1601,10 +1614,11 @@ const TradingStudio = (() => {
         }
       };
       publicWs.onclose = () => {
-        /* Reconnect after a delay */
+        /* Reconnect with exponential backoff (max 60s) */
         setTimeout(() => {
           if (!connected) connectPublicWebSocket();
-        }, 5000);
+        }, publicWsRetryDelay);
+        publicWsRetryDelay = Math.min(publicWsRetryDelay * 1.5, 60000);
       };
       publicWs.onerror = () => {
         /* silent — backend may not be running yet, retry on close */
