@@ -2498,6 +2498,230 @@ select:focus {
 }
 
 /* ============================================================
+   Series Detail View — Kalshi-style drill-down into a series.
+   Shows breadcrumb, hero header, frequency filters, and
+   event panels with outcome rows.
+   ============================================================ */
+
+.ks-series-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+
+/* -- Breadcrumb bar -- */
+.ks-detail-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  flex-shrink: 0;
+}
+.ks-detail-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--color-bg-surface, #1a1a2e);
+  color: var(--color-fg-default);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.ks-detail-back-btn:hover {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+.ks-detail-crumb {
+  color: var(--color-fg-muted);
+  opacity: 0.8;
+}
+.ks-detail-crumb-sep {
+  color: var(--color-fg-muted);
+  opacity: 0.5;
+}
+.ks-detail-crumb-current {
+  color: var(--color-fg-default);
+  font-weight: 600;
+}
+
+/* -- Hero header -- */
+.ks-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  background: var(--color-bg-surface, #1a1a2e);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.ks-detail-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ks-detail-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+.ks-detail-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ks-detail-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-fg-default);
+  line-height: 1.2;
+}
+.ks-detail-subtitle {
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  opacity: 0.8;
+}
+.ks-detail-stats {
+  display: flex;
+  gap: 16px;
+}
+.ks-detail-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 12px;
+  min-width: 60px;
+}
+.ks-detail-stat-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-fg-muted);
+  font-weight: 600;
+}
+.ks-detail-stat-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-fg-default);
+  font-family: var(--font-family-mono, monospace);
+}
+
+/* -- Filters row inside detail view -- */
+.ks-detail-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+.ks-detail-market-count {
+  font-size: 11px;
+  color: var(--color-fg-muted);
+  margin-left: auto;
+}
+
+/* -- Event panels -- */
+.ks-detail-events {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.ks-detail-event-panel {
+  background: var(--color-bg-surface, #1a1a2e);
+  border: 1px solid var(--color-border-muted, rgba(255, 255, 255, 0.08));
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+.ks-detail-event-panel:hover {
+  border-color: var(--color-accent-primary, #3b82f6);
+}
+.ks-detail-event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--color-border-muted);
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ks-detail-event-header--closed {
+  opacity: 0.6;
+}
+.ks-detail-event-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.ks-detail-event-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-fg-default);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ks-detail-event-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.ks-detail-event-close {
+  font-size: 11px;
+  color: var(--color-fg-muted);
+  opacity: 0.7;
+}
+.ks-detail-event-remaining {
+  font-size: 11px;
+  color: var(--color-fg-muted);
+  font-family: var(--font-family-mono, monospace);
+}
+.ks-detail-event-status--open {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-state-success, #22c55e);
+  padding: 1px 6px;
+  border: 1px solid var(--color-state-success, #22c55e);
+  border-radius: 4px;
+}
+.ks-detail-event-status--closed {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-state-error, #ef4444);
+  padding: 1px 6px;
+  border: 1px solid var(--color-state-error, #ef4444);
+  border-radius: 4px;
+}
+
+/* -- Empty state -- */
+.ks-detail-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-size: 13px;
+  color: var(--color-fg-muted);
+  opacity: 0.7;
+}
+
+/* ============================================================
    Kalshi-Style Navigation & Layout
    Top category bar + left subcategory sidebar + main content
    ============================================================ */

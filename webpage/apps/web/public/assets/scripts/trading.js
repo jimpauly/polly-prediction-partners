@@ -20,6 +20,8 @@ const TradingStudio = (() => {
   let websocket = null;
   let approvalExpiryTimeout =
     null; /* stores approval overlay auto-close timer */
+  let currentSeriesDetail = null; /* series key when in detail view */
+  let seriesDetailFreqFilter = "all"; /* frequency filter inside detail view */
 
   /* Kalshi-style category mapping — matches Kalshi platform top nav.
      Each category maps to Kalshi event categories and keyword matchers. */
@@ -286,6 +288,18 @@ const TradingStudio = (() => {
     nav.addEventListener("click", (e) => {
       const tab = e.target.closest(".ks-cat-tab");
       if (!tab) return;
+
+      /* Close series detail view if open */
+      if (currentSeriesDetail) {
+        currentSeriesDetail = null;
+        const detailView = document.getElementById("series-detail-view");
+        const grid = document.getElementById("series-cards-grid");
+        const filtersRow = document.querySelector(".trading-filters");
+        if (detailView) detailView.style.display = "none";
+        if (grid) grid.style.display = "";
+        if (filtersRow) filtersRow.style.display = "";
+      }
+
       nav
         .querySelectorAll(".ks-cat-tab")
         .forEach((t) => t.classList.remove("active"));
@@ -305,11 +319,17 @@ const TradingStudio = (() => {
       const item = e.target.closest(".ks-sidebar-item");
       if (!item) return;
 
+      /* If in series detail view, series-nav items have their own handlers */
+      if (item.dataset.seriesNav) return;
+
       /* Handle expandable items with children */
       if (item.classList.contains("ks-sidebar-parent")) {
         item.classList.toggle("ks-sidebar-expanded");
         return;
       }
+
+      /* Close series detail view if open */
+      if (currentSeriesDetail) closeSeriesDetail();
 
       nav
         .querySelectorAll(".ks-sidebar-item")
@@ -929,6 +949,16 @@ const TradingStudio = (() => {
         if (market) expandCard(market);
       });
     });
+
+    /* Bind series panel header click → open series detail view */
+    const header = panel.querySelector(".ks-panel-header");
+    if (header) {
+      header.style.cursor = "pointer";
+      header.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return;
+        openSeriesDetail(seriesKey);
+      });
+    }
 
     return panel;
   }
@@ -1811,6 +1841,302 @@ const TradingStudio = (() => {
       toast.style.transform = "translateX(20px)";
       setTimeout(() => toast.remove(), 300);
     }, 4000);
+  }
+
+  /* ============================================================
+     Series Detail View — Kalshi-style drill-down into a series
+     Shows all events/markets for a given series_ticker, grouped
+     by event, with breadcrumb navigation and related-series sidebar.
+     ============================================================ */
+
+  function openSeriesDetail(seriesKey) {
+    currentSeriesDetail = seriesKey;
+    seriesDetailFreqFilter = "all";
+
+    const grid = document.getElementById("series-cards-grid");
+    const detailView = document.getElementById("series-detail-view");
+    const showMore = document.getElementById("show-more-container");
+    const filtersRow = document.querySelector(".trading-filters");
+    if (!detailView) return;
+
+    /* Hide grid, show detail view */
+    if (grid) grid.style.display = "none";
+    if (showMore) showMore.style.display = "none";
+    if (filtersRow) filtersRow.style.display = "none";
+    detailView.style.display = "flex";
+
+    renderSeriesDetail();
+    updateSeriesDetailSidebar();
+  }
+
+  function closeSeriesDetail() {
+    currentSeriesDetail = null;
+
+    const grid = document.getElementById("series-cards-grid");
+    const detailView = document.getElementById("series-detail-view");
+    const filtersRow = document.querySelector(".trading-filters");
+    if (grid) grid.style.display = "";
+    if (detailView) detailView.style.display = "none";
+    if (filtersRow) filtersRow.style.display = "";
+
+    /* Restore sidebar to category subcategories */
+    updateSidebar();
+    renderCards();
+  }
+
+  function renderSeriesDetail() {
+    if (!currentSeriesDetail) return;
+
+    const seriesKey = currentSeriesDetail;
+    const seriesDisplay = getSeriesDisplay(seriesKey);
+    const catBreadcrumb = deriveCategoryBreadcrumb(seriesKey);
+
+    /* Collect all markets belonging to this series */
+    const seriesMarkets = markets.filter((m) => {
+      const st = (m.series_ticker || m.event_ticker || "").toLowerCase();
+      return st === seriesKey.toLowerCase();
+    });
+
+    /* -- Breadcrumb -- */
+    const breadcrumbEl = document.getElementById("series-detail-breadcrumb");
+    if (breadcrumbEl) {
+      breadcrumbEl.innerHTML = `
+        <button class="ks-detail-back-btn" id="series-detail-back" aria-label="Back to market grid">
+          ← Back
+        </button>
+        <span class="ks-detail-crumb">${escapeHtml(catBreadcrumb)}</span>
+        <span class="ks-detail-crumb-sep">›</span>
+        <span class="ks-detail-crumb-current">${escapeHtml(seriesDisplay.label)}</span>
+      `;
+      document.getElementById("series-detail-back").addEventListener("click", closeSeriesDetail);
+    }
+
+    /* -- Header with series icon, title, and stats -- */
+    const headerEl = document.getElementById("series-detail-header");
+    if (headerEl) {
+      const totalVolume = seriesMarkets.reduce(
+        (sum, m) => sum + (parseFloat(m.volume_24h_fp) || 0),
+        0,
+      );
+      const activeCount = seriesMarkets.filter(
+        (m) => !isMarketClosed(m),
+      ).length;
+      const eventCount = new Set(seriesMarkets.map((m) => m.event_ticker)).size;
+
+      headerEl.innerHTML = `
+        <div class="ks-detail-hero">
+          <span class="ks-detail-icon">${seriesDisplay.icon}</span>
+          <div class="ks-detail-hero-text">
+            <h2 class="ks-detail-title">${escapeHtml(seriesDisplay.label)}</h2>
+            <span class="ks-detail-subtitle">${escapeHtml(seriesKey.toUpperCase())} · ${eventCount} event${eventCount !== 1 ? "s" : ""} · ${activeCount} active market${activeCount !== 1 ? "s" : ""}</span>
+          </div>
+        </div>
+        <div class="ks-detail-stats">
+          <div class="ks-detail-stat">
+            <span class="ks-detail-stat-label">Markets</span>
+            <span class="ks-detail-stat-value">${seriesMarkets.length}</span>
+          </div>
+          <div class="ks-detail-stat">
+            <span class="ks-detail-stat-label">24h Volume</span>
+            <span class="ks-detail-stat-value">${formatVolume(String(totalVolume))}</span>
+          </div>
+          <div class="ks-detail-stat">
+            <span class="ks-detail-stat-label">Active</span>
+            <span class="ks-detail-stat-value">${activeCount}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    /* -- Frequency filter pills for series detail -- */
+    const filtersEl = document.getElementById("series-detail-filters");
+    if (filtersEl) {
+      const frequencies = detectSeriesFrequencies(seriesMarkets);
+      filtersEl.innerHTML = `
+        <div class="ks-freq-pills">
+          <button class="ks-freq-pill${seriesDetailFreqFilter === "all" ? " active" : ""}" data-detail-freq="all">All</button>
+          ${frequencies.map((f) => `<button class="ks-freq-pill${seriesDetailFreqFilter === f.key ? " active" : ""}" data-detail-freq="${escapeAttr(f.key)}">${escapeHtml(f.label)}</button>`).join("")}
+        </div>
+        <span class="ks-detail-market-count">${seriesMarkets.length} total market${seriesMarkets.length !== 1 ? "s" : ""}</span>
+      `;
+      filtersEl.querySelectorAll(".ks-freq-pill").forEach((pill) => {
+        pill.addEventListener("click", () => {
+          seriesDetailFreqFilter = pill.dataset.detailFreq;
+          renderSeriesDetail();
+        });
+      });
+    }
+
+    /* -- Event groups (grouped by event_ticker, sorted by close time) -- */
+    const eventsEl = document.getElementById("series-detail-events");
+    if (!eventsEl) return;
+
+    /* Apply frequency filter */
+    let filteredMarkets = seriesMarkets;
+    if (seriesDetailFreqFilter !== "all") {
+      filteredMarkets = seriesMarkets.filter(
+        (m) => detectFrequency(m) === seriesDetailFreqFilter,
+      );
+    }
+
+    /* Group by event_ticker */
+    const eventGroups = new Map();
+    filteredMarkets.forEach((m) => {
+      const ek = m.event_ticker || "unknown";
+      if (!eventGroups.has(ek)) eventGroups.set(ek, []);
+      eventGroups.get(ek).push(m);
+    });
+
+    /* Sort events: open events first (by close time ascending), then closed */
+    const sortedGroups = [...eventGroups.entries()].sort((a, b) => {
+      const aClose = a[1][0].close_time
+        ? new Date(a[1][0].close_time).getTime()
+        : Infinity;
+      const bClose = b[1][0].close_time
+        ? new Date(b[1][0].close_time).getTime()
+        : Infinity;
+      const aClosed = aClose < Date.now();
+      const bClosed = bClose < Date.now();
+      if (aClosed !== bClosed) return aClosed ? 1 : -1;
+      return aClose - bClose;
+    });
+
+    if (sortedGroups.length === 0) {
+      eventsEl.innerHTML = `
+        <div class="ks-detail-empty">No markets match the selected frequency filter.</div>
+      `;
+      return;
+    }
+
+    eventsEl.innerHTML = "";
+    sortedGroups.forEach(([eventTicker, eventMarkets]) => {
+      const eventPanel = buildSeriesEventPanel(eventTicker, eventMarkets);
+      eventsEl.appendChild(eventPanel);
+    });
+  }
+
+  function buildSeriesEventPanel(eventTicker, eventMarkets) {
+    const panel = document.createElement("div");
+    panel.className = "ks-detail-event-panel";
+
+    const eventData = events[eventTicker];
+    const eventTitle = eventData?.title || eventTicker.replace(/-/g, " ");
+    const repMarket = eventMarkets[0];
+    const closeTime = repMarket.close_time
+      ? new Date(repMarket.close_time)
+      : null;
+    const isClosed =
+      closeTime && closeTime.getTime() < Date.now();
+    const closeStr = closeTime ? formatEventCloseTime(closeTime) : "";
+    const freq = detectFrequency(repMarket);
+    const freqLabels = {
+      "15min": "15 Min",
+      "1h": "Hourly",
+      "6h": "6 Hour",
+      "24h": "Daily",
+      "7d": "Weekly",
+      other: "",
+    };
+    const freqLabel = freqLabels[freq] || "";
+    const timeRemaining = closeTime ? formatTimeRemaining(closeTime) : "";
+
+    panel.innerHTML = `
+      <div class="ks-detail-event-header${isClosed ? " ks-detail-event-header--closed" : ""}">
+        <div class="ks-detail-event-title-row">
+          <span class="ks-detail-event-title">${escapeHtml(eventTitle)}</span>
+          ${freqLabel ? `<span class="series-card-freq-badge">${escapeHtml(freqLabel)}</span>` : ""}
+        </div>
+        <div class="ks-detail-event-meta">
+          ${closeStr ? `<span class="ks-detail-event-close">${escapeHtml(closeStr)}</span>` : ""}
+          ${timeRemaining ? `<span class="ks-detail-event-remaining">${escapeHtml(timeRemaining)}</span>` : ""}
+          ${isClosed ? '<span class="ks-detail-event-status--closed">Closed</span>' : '<span class="ks-detail-event-status--open">Open</span>'}
+        </div>
+      </div>
+      <div class="ks-outcome-table">
+        <div class="ks-outcome-header-row">
+          <span class="ks-outcome-header-cell ks-outcome-cell-desc">Outcome</span>
+          <span class="ks-outcome-header-cell ks-outcome-cell-chance">Chance</span>
+          <span class="ks-outcome-header-cell ks-outcome-cell-actions"></span>
+        </div>
+        ${eventMarkets.map((m) => buildOutcomeRow(m)).join("")}
+      </div>
+    `;
+
+    /* Bind outcome row clicks */
+    panel.querySelectorAll(".ks-outcome-row").forEach((row) => {
+      row.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return;
+        const ticker = row.dataset.ticker;
+        const market = eventMarkets.find((m) => m.ticker === ticker);
+        if (market) expandCard(market);
+      });
+    });
+
+    return panel;
+  }
+
+  function detectSeriesFrequencies(seriesMarkets) {
+    const found = new Set();
+    seriesMarkets.forEach((m) => {
+      const f = detectFrequency(m);
+      if (f !== "other") found.add(f);
+    });
+    const freqOrder = [
+      { key: "15min", label: "15 Min" },
+      { key: "1h", label: "Hourly" },
+      { key: "6h", label: "6 Hour" },
+      { key: "24h", label: "Daily" },
+      { key: "7d", label: "Weekly" },
+    ];
+    return freqOrder.filter((f) => found.has(f.key));
+  }
+
+  function updateSeriesDetailSidebar() {
+    const nav = document.getElementById("trading-subcategory-nav");
+    const sidebar = document.getElementById("trading-subcategory-sidebar");
+    if (!nav || !currentSeriesDetail) return;
+
+    /* Show related series in the same category */
+    const catBreadcrumb = deriveCategoryBreadcrumb(currentSeriesDetail);
+
+    /* Collect all unique series tickers from markets in same category */
+    const relatedSeries = new Map();
+    markets.forEach((m) => {
+      const st = m.series_ticker || m.event_ticker || "";
+      if (!st) return;
+      const mCat = deriveCategoryBreadcrumb(st);
+      if (mCat.toLowerCase() === catBreadcrumb.toLowerCase()) {
+        if (!relatedSeries.has(st)) {
+          const display = getSeriesDisplay(st);
+          relatedSeries.set(st, {
+            key: st,
+            label: display.label,
+            icon: display.icon,
+            priority: display.priority,
+          });
+        }
+      }
+    });
+
+    const sortedRelated = [...relatedSeries.values()].sort(
+      (a, b) => a.priority - b.priority,
+    );
+
+    if (sidebar) sidebar.classList.remove("ks-sidebar-hidden");
+
+    nav.innerHTML = sortedRelated
+      .map(
+        (s) =>
+          `<button class="ks-sidebar-item${s.key.toLowerCase() === currentSeriesDetail.toLowerCase() ? " active" : ""}" data-series-nav="${escapeAttr(s.key)}">${s.icon} ${escapeHtml(s.label)}</button>`,
+      )
+      .join("");
+
+    /* Bind clicks to navigate between related series */
+    nav.querySelectorAll("[data-series-nav]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openSeriesDetail(btn.dataset.seriesNav);
+      });
+    });
   }
 
   /* ---- Utility Functions ---- */
