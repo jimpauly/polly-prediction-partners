@@ -1602,12 +1602,4 @@
     inset 2px 2px 0 0 #202020;
 }
 
-/* Theme selector swatch buttons — flat Win3.1 style */
-[data-theme="mosaic-1993"] .theme-selector__swatch {
-  font-family: "Times", serif;
-}
 
-[data-theme="mosaic-1993"] .theme-selector__swatch-label {
-  font-family: "Times", serif;
-  border-radius: 0;
-}
