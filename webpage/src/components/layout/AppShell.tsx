@@ -445,7 +445,7 @@ function ConnectCompact({ onConnect, onDisconnect, connected, loading }: Connect
         ))}
       </div>
       <input className="input" placeholder="API Key ID" value={keyId} onChange={(e) => setKeyId(e.target.value)} style={{ fontSize: 11, padding: "3px 6px" }} />
-      <textarea className="input" placeholder="Private Key PEM" value={pem} onChange={(e) => setPem(e.target.value)} style={{ fontSize: 10, padding: "3px 6px", resize: "none", height: 40, fontFamily: "var(--font-family-mono)" }} />
+      <textarea className="input" placeholder="Private Key PEM" value={pem} onChange={(e) => setPem(e.target.value)} style={{ fontSize: 10, padding: "3px 6px", resize: "none", height: 40, fontFamily: "var(--font-family-mono)", WebkitTextSecurity: "disc" as never }} />
       {err && <div style={{ fontSize: 10, color: "var(--color-state-error)" }}>{err}</div>}
       <button
         className="btn btn-sm btn-primary"

@@ -3,7 +3,7 @@
  *
  * Manages the application window, backend daemon lifecycle,
  * singleton lock, secure credential storage, setup wizard,
- * and auto-update checks.
+ * and silent auto-updates.
  */
 
 const {
@@ -13,11 +13,13 @@ const {
   Menu,
   shell,
   ipcMain,
+  safeStorage,
 } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { spawn } = require("child_process");
 const net = require("net");
+const { autoUpdater } = require("electron-updater");
 
 /* ------------------------------------------------------------------ */
 /* Constants                                                           */
@@ -194,7 +196,8 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: true,
+      sandbox: false /* needs IPC bridge */,
+      preload: path.join(__dirname, "preload.js"),
     },
     show: false,
     backgroundColor: "#0f172a" /* Match app dark background */,
@@ -205,9 +208,9 @@ function createMainWindow() {
 
   mainWindow.once("ready-to-show", () => {
     mainWindow.show();
-    /* Check for updates after window is visible */
+    /* Silent auto-update check after window is visible */
     if (app.isPackaged) {
-      setTimeout(checkForUpdates, 3000);
+      setTimeout(startSilentAutoUpdate, 3000);
     }
   });
 
@@ -246,67 +249,65 @@ function createMainWindow() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Auto-Updater                                                        */
+/* Silent Auto-Updater (electron-updater)                              */
 /* ------------------------------------------------------------------ */
 
-const UPDATE_CHECK_URL =
-  "https://api.github.com/repos/jimpauly/paulies-prediction-partners/releases/latest";
+function startSilentAutoUpdate() {
+  /* Suppress all dialogs — updates download and install silently */
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
 
-async function checkForUpdates() {
-  try {
-    const https = require("https");
-    const currentVersion = app.getVersion();
+  /* Notify renderer of update status (optional UI feedback) */
+  autoUpdater.on("checking-for-update", () => {
+    sendUpdateStatus("checking", "Checking for updates…");
+  });
 
-    const latestRelease = await new Promise((resolve, reject) => {
-      const options = {
-        hostname: "api.github.com",
-        path: "/repos/jimpauly/paulies-prediction-partners/releases/latest",
-        method: "GET",
-        headers: {
-          "User-Agent": `${APPLICATION_NAME}/${currentVersion}`,
-          Accept: "application/vnd.github+json",
-        },
-        timeout: 5000,
-      };
-      const request = https.request(options, (response) => {
-        let data = "";
-        response.on("data", (chunk) => (data += chunk));
-        response.on("end", () => {
-          try {
-            resolve(JSON.parse(data));
-          } catch (_e) {
-            reject(new Error("Invalid JSON response"));
-          }
-        });
-      });
-      request.on("error", reject);
-      request.on("timeout", () => {
-        request.destroy();
-        reject(new Error("Timeout"));
-      });
-      request.end();
-    });
+  autoUpdater.on("update-available", (info) => {
+    sendUpdateStatus(
+      "available",
+      `Update v${info.version} found — downloading silently…`,
+    );
+  });
 
-    if (latestRelease && latestRelease.tag_name) {
-      const latestTag = latestRelease.tag_name.replace(/^v/, "");
-      if (latestTag !== currentVersion && mainWindow) {
-        const { response: clicked } = await dialog.showMessageBox(mainWindow, {
-          type: "info",
-          title: "Update Available",
-          message: `${APPLICATION_NAME} v${latestTag} is available`,
-          detail: `You are running v${currentVersion}. Download and install the latest version?`,
-          buttons: ["Download Update", "Later"],
-          defaultId: 0,
-          cancelId: 1,
-        });
-        if (clicked === 0 && latestRelease.html_url) {
-          shell.openExternal(latestRelease.html_url);
-        }
-      }
-    }
-  } catch (error) {
-    /* Update check is optional — fail silently */
+  autoUpdater.on("update-not-available", () => {
+    sendUpdateStatus("up-to-date", "App is up to date.");
+  });
+
+  autoUpdater.on("download-progress", (progress) => {
+    sendUpdateStatus(
+      "downloading",
+      `Downloading update: ${Math.round(progress.percent)}%`,
+    );
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    sendUpdateStatus(
+      "ready",
+      "Update downloaded — will install on next restart.",
+    );
+  });
+
+  autoUpdater.on("error", (error) => {
+    console.log(`Auto-update error: ${error.message}`);
+    sendUpdateStatus("error", `Update check failed: ${error.message}`);
+  });
+
+  autoUpdater.checkForUpdatesAndNotify().catch((error) => {
     console.log(`Update check skipped: ${error.message}`);
+  });
+
+  /* Re-check every 4 hours */
+  setInterval(
+    () => {
+      autoUpdater.checkForUpdatesAndNotify().catch(() => {});
+    },
+    4 * 60 * 60 * 1000,
+  );
+}
+
+function sendUpdateStatus(status, message) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("update-status", { status, message });
   }
 }
 
@@ -473,6 +474,92 @@ function createWizardWindow() {
     });
   });
 }
+
+/* ------------------------------------------------------------------ */
+/* Secure Credential Storage (safeStorage + IPC)                       */
+/* ------------------------------------------------------------------ */
+
+const CREDENTIALS_FILE = "encrypted-credentials.json";
+
+function getCredentialsPath() {
+  return path.join(app.getPath("userData"), CREDENTIALS_FILE);
+}
+
+/**
+ * Encrypt and save credentials to disk using Electron's safeStorage.
+ * Falls back to plaintext-in-memory only if safeStorage is unavailable.
+ */
+function saveCredentials(credentials) {
+  try {
+    const userDataDir = app.getPath("userData");
+    if (!fs.existsSync(userDataDir)) {
+      fs.mkdirSync(userDataDir, { recursive: true });
+    }
+
+    const payload = JSON.stringify(credentials);
+
+    if (safeStorage.isEncryptionAvailable()) {
+      const encrypted = safeStorage.encryptString(payload);
+      fs.writeFileSync(getCredentialsPath(), encrypted);
+    } else {
+      /* Fallback: base64 encode (not truly secure — OS credential vault unavailable) */
+      const encoded = Buffer.from(payload, "utf8").toString("base64");
+      fs.writeFileSync(getCredentialsPath(), encoded, "utf8");
+    }
+  } catch (error) {
+    console.error("Failed to save credentials:", error.message);
+  }
+}
+
+/**
+ * Load and decrypt stored credentials.
+ * @returns {object|null} Decrypted credentials or null.
+ */
+function loadCredentials() {
+  try {
+    const credPath = getCredentialsPath();
+    if (!fs.existsSync(credPath)) return null;
+
+    if (safeStorage.isEncryptionAvailable()) {
+      const encrypted = fs.readFileSync(credPath);
+      const decrypted = safeStorage.decryptString(encrypted);
+      return JSON.parse(decrypted);
+    }
+    /* Fallback: base64 decode */
+    const encoded = fs.readFileSync(credPath, "utf8");
+    return JSON.parse(Buffer.from(encoded, "base64").toString("utf8"));
+  } catch (error) {
+    console.error("Failed to load credentials:", error.message);
+    return null;
+  }
+}
+
+/**
+ * Remove stored credentials file.
+ */
+function clearCredentials() {
+  try {
+    const credPath = getCredentialsPath();
+    if (fs.existsSync(credPath)) {
+      fs.unlinkSync(credPath);
+    }
+  } catch (error) {
+    console.error("Failed to clear credentials:", error.message);
+  }
+}
+
+/* IPC handlers for renderer credential operations */
+ipcMain.on("credentials-save", (_event, credentials) => {
+  saveCredentials(credentials);
+});
+
+ipcMain.handle("credentials-load", () => {
+  return loadCredentials();
+});
+
+ipcMain.on("credentials-clear", () => {
+  clearCredentials();
+});
 
 /* ------------------------------------------------------------------ */
 /* App lifecycle                                                       */

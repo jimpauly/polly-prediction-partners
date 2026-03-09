@@ -65,6 +65,29 @@
     if (apiKeyInput) apiKeyInput.addEventListener('input', validateApiInputs);
     if (rsaKeyInput) rsaKeyInput.addEventListener('input', validateApiInputs);
 
+    /* ---- Restore saved credentials (Electron desktop only) ---- */
+    if (typeof window.electronBridge !== 'undefined' && window.electronBridge.loadCredentials) {
+      window.electronBridge.loadCredentials().then(creds => {
+        if (!creds) return;
+        if (creds.mode) {
+          const modeRadio = document.querySelector(`input[name="api-mode"][value="${creds.mode}"]`);
+          if (modeRadio) {
+            modeRadio.checked = true;
+            selectedMode = creds.mode;
+            if (apiKeyInput) apiKeyInput.disabled = false;
+            if (rsaKeyInput) rsaKeyInput.disabled = false;
+          }
+        }
+        if (creds.apiKeyId && apiKeyInput) {
+          apiKeyInput.value = creds.apiKeyId;
+        }
+        if (creds.privateKeyPem && rsaKeyInput) {
+          rsaKeyInput.value = creds.privateKeyPem;
+        }
+        validateApiInputs();
+      }).catch(() => { /* credentials not available */ });
+    }
+
     if (connectButton) {
       connectButton.addEventListener('click', async () => {
         const apiKeyValue = apiKeyInput ? apiKeyInput.value.trim() : '';
@@ -94,6 +117,15 @@
         } catch (networkError) {
           /* Backend not running — proceed in offline/demo mode */
           console.warn('Backend not reachable, proceeding in offline mode:', networkError.message);
+        }
+
+        /* Save credentials securely for next launch (Electron only) */
+        if (typeof window.electronBridge !== 'undefined' && window.electronBridge.saveCredentials) {
+          window.electronBridge.saveCredentials({
+            mode: selectedMode,
+            apiKeyId: apiKeyValue,
+            privateKeyPem: rsaKeyValue,
+          });
         }
 
         /* Clear credentials from DOM immediately */
@@ -130,6 +162,11 @@
 
         /* Notify Trading Studio of connection */
         TradingStudio.onConnected(selectedMode);
+
+        /* Notify AgentDashboard */
+        if (typeof AgentDashboard !== 'undefined' && AgentDashboard.onConnected) {
+          AgentDashboard.onConnected();
+        }
 
         /* Auto-navigate to Trading Studio */
         const tradeButton = document.querySelector('.studio-button[data-studio="trade"]');
