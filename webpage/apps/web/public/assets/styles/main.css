@@ -36,7 +36,9 @@ html {
 body {
   min-height: 100vh;
   font-family: var(--font-family-base);
-  font-size: calc(clamp(0.9rem, 0.2vw + 0.82rem, 1rem) * var(--font-size-scale, 1));
+  font-size: calc(
+    clamp(0.9rem, 0.2vw + 0.82rem, 1rem) * var(--font-size-scale, 1)
+  );
   line-height: 1.5;
   color: var(--color-fg-default);
   background: var(--color-bg-canvas);
