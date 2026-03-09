@@ -59,11 +59,11 @@ body {
   --space-6: 16px;
   --space-8: 24px;
 
-  --layout-shell-padding: clamp(8px, 0.7vw, 16px);
-  --layout-shell-gap: clamp(8px, 0.65vw, 14px);
-  --layout-sidebar-width: clamp(240px, 19vw, 340px);
-  --layout-nav-height: clamp(36px, 4vh, 52px);
-  --layout-foot-height: clamp(150px, 18vh, 240px);
+  --layout-shell-padding: clamp(4px, 0.7vw, 16px);
+  --layout-shell-gap: clamp(4px, 0.65vw, 14px);
+  --layout-sidebar-width: clamp(80px, 19vw, 340px);
+  --layout-nav-height: clamp(28px, 4vh, 52px);
+  --layout-foot-height: clamp(90px, 18vh, 240px);
   --layout-main-max-width: min(1600px, 100%);
 
   /* Foreground colour for text rendered on top of accent/state backgrounds.
@@ -166,7 +166,7 @@ body {
 
 .app-title {
   font-family: var(--font-family-base);
-  font-size: 1.5rem;
+  font-size: clamp(0.85rem, 1.2vw, 1.5rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--color-fg-default);
@@ -231,8 +231,8 @@ body {
 
 /* ---------- Action Bar -------------------------------------------------- */
 .region-action {
-  flex: 1 1 360px;
-  min-width: 300px;
+  flex: 1 1 clamp(100px, 25vw, 360px);
+  min-width: clamp(80px, 20vw, 300px);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -240,7 +240,7 @@ body {
 
 /* ---------- Bottom Bar -------------------------------------------------- */
 .region-bottom {
-  flex: 2 1 680px;
+  flex: 2 1 clamp(200px, 50vw, 680px);
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -292,13 +292,13 @@ body {
   margin-bottom: 0;
 }
 
-@media (max-width: 640px) {
-  .main-bento-grid {
-    grid-template-columns: 1fr;
-  }
-  .main-bento-grid--top {
-    grid-template-columns: 1fr;
-  }
+/* Bento grid columns: fluid auto-fill instead of breakpoint-based */
+.main-bento-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+}
+
+.main-bento-grid--top {
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
 }
 
 /* ---------- Region titles (engraved cockpit style) ---------------------- */
@@ -2400,16 +2400,16 @@ textarea.input {
 
 #bottom-bar .hangar-agent-card {
   flex: 0 0 50% !important;
-  min-width: 340px;
+  min-width: clamp(120px, 30vw, 340px);
 }
 
 #bottom-bar .hangar-mfd-card {
   flex: 0 0 calc(50% - 18px) !important;
-  min-width: 300px;
+  min-width: clamp(100px, 25vw, 300px);
 }
 
 #bottom-bar #api-key-card {
-  flex: 0 0 200px !important;
+  flex: 0 0 clamp(100px, 15vw, 200px) !important;
 }
 
 #bottom-bar .card--compact .card-body {
@@ -2496,72 +2496,46 @@ textarea.input {
 }
 
 /* ==========================================================================
-   32. RESPONSIVE DESKTOP BREAKPOINTS
+   32. FLUID VIEWPORT SCALING
+   ==========================================================================
+   All 7 regions remain visible at every viewport size (landscape phone to
+   4 K).  Layout proportions are driven purely by clamp() / vw / vh in the
+   :root custom properties — no media-query breakpoints that hide regions or
+   reflow the grid.
    ========================================================================== */
-@media (max-width: 1680px) {
-  :root {
-    --layout-sidebar-width: clamp(220px, 18vw, 300px);
-    --layout-main-max-width: 100%;
+
+/* Ensure footer flex row never stacks vertically at any size */
+.region-foot {
+  flex-wrap: nowrap;
+}
+
+/* Sidebar content: hide horizontal overflow at narrow widths */
+.region-left,
+.region-right {
+  min-width: 0;
+}
+
+/* Touch targets: ensure adequate size on small viewports (44px minimum) */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  select,
+  a {
+    min-height: 44px;
   }
 }
 
-@media (max-width: 1440px) {
-  :root {
-    --layout-sidebar-width: clamp(200px, 17vw, 260px);
-    --layout-foot-height: clamp(170px, 24vh, 280px);
-  }
-
-  .app-title {
-    font-size: clamp(1.2rem, 1.2vw, 1.45rem);
-  }
+/* Bottom bar cards: fluid min-widths for narrow viewports */
+#bottom-bar .hangar-agent-card {
+  min-width: clamp(120px, 30vw, 340px);
 }
 
-@media (max-width: 1240px) {
-  .app-shell {
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
-    grid-template-rows: auto var(--layout-nav-height) minmax(0, 1fr) var(
-        --layout-foot-height
-      );
-    grid-template-areas:
-      "header header"
-      "nav nav"
-      "main right"
-      "foot foot";
-  }
-
-  .region-left {
-    display: none;
-  }
-
-  .region-main {
-    padding-right: var(--space-3);
-  }
+#bottom-bar .hangar-mfd-card {
+  min-width: clamp(100px, 25vw, 300px);
 }
 
-@media (max-width: 1040px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      "header"
-      "nav"
-      "main"
-      "right"
-      "foot";
-  }
-
-  .region-right {
-    max-height: 34vh;
-  }
-
-  .region-foot {
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .region-action {
-    min-width: 0;
-  }
+#bottom-bar #api-key-card {
+  flex: 0 0 clamp(100px, 15vw, 200px) !important;
 }
 
 /* ============================================================
@@ -2629,19 +2603,7 @@ textarea.input {
   padding: 8px;
 }
 
-/* Series cards grid — responsive columns */
+/* Series cards grid — fluid columns using auto-fill (no breakpoints) */
 .series-cards-row {
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-}
-
-@media (max-width: 1200px) {
-  .series-cards-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .series-cards-row {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
 }

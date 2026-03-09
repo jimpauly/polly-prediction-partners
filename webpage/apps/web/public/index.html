@@ -25,7 +25,7 @@
     .app-shell.right-collapsed { grid-template-columns: var(--layout-sidebar-width) minmax(0, 1fr) 0; }
     .app-shell.left-collapsed.right-collapsed { grid-template-columns: 0 1fr 0; }
     .app-shell.left-collapsed .region-left,
-    .app-shell.right-collapsed .region-right { overflow: hidden; padding: 0; border: none; }
+    .app-shell.right-collapsed .region-right { overflow: hidden; padding: 0; border: none; min-width: 0; width: 0; }
 
     /* Palette viewer swatches */
     .palette-grid {
