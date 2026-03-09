@@ -881,29 +881,29 @@
 
       <!-- BOTTOM BAR — "Hangar Bay" (full width, scrolls horizontally) -->
       <footer id="bottom-bar" class="region region-bottom glow-bars-primary" role="contentinfo" aria-label="Hangar Bay">
-        <div style="display:flex;flex-direction:column;gap:var(--space-2);width:100%;padding:var(--space-2)">
-          <span class="region-title glow-text-primary" style="margin:0">Hangar Bay</span>
+        <div style="display:flex;flex-direction:column;gap:var(--space-1);width:100%;padding:var(--space-1);min-height:0">
+          <span class="region-title glow-text-primary" style="margin:0;flex-shrink:0">Hangar Bay</span>
 
-          <div style="display:flex;gap:var(--space-3);align-items:stretch;flex-wrap:nowrap;overflow-x:auto;flex:1">
+          <div style="display:flex;gap:var(--space-2);align-items:stretch;flex-wrap:nowrap;overflow-x:auto;flex:1;min-height:0">
 
             <!-- Agent Access Card (~40% of bottom bar) -->
-            <div class="card card--compact hangar-agent-card" style="flex:0 0 40%;min-width:260px">
-              <div class="card-header" style="padding:4px 8px">
+            <div class="card card--compact hangar-agent-card" style="min-width:200px">
+              <div class="card-header" style="padding:3px 6px">
                 <span style="font-weight:700">🤖 Agent Access</span>
                 <span style="font-family:var(--font-family-mono);font-size:10px;font-weight:700;color:var(--color-fg-subtle);margin-left:auto" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
               </div>
-              <div class="card-body" style="padding:4px 8px;flex:1;display:flex;flex-direction:column">
+              <div class="card-body" style="padding:3px 6px;flex:1;display:flex;flex-direction:column">
                 <!-- Dynamic agent cards rendered by AgentDashboard module -->
-                <div id="agent-cards-container" style="display:flex;gap:var(--space-1);flex-wrap:nowrap;align-items:stretch;flex:1"></div>
+                <div id="agent-cards-container" style="display:flex;gap:var(--space-1);flex-wrap:nowrap;align-items:stretch;flex:1;min-width:0"></div>
               </div>
             </div>
 
             <!-- P/L Multi-Function Display (~30% of bottom bar) -->
-            <div class="card card--compact hangar-mfd-card" style="flex:0 0 30%;min-width:220px">
-              <div class="card-header mfd-header" style="padding:4px 8px">
+            <div class="card card--compact hangar-mfd-card" style="min-width:180px">
+              <div class="card-header mfd-header" style="padding:3px 6px">
                 <span style="font-weight:700">📟 P/L MFD</span>
               </div>
-              <div class="card-body mfd-body" style="padding:6px 8px;flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
+              <div class="card-body mfd-body" style="padding:4px 6px;flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
 
                 <!-- MFD Display Area: Top buttons | Canvas + Right readouts | Bottom buttons -->
                 <div class="mfd-display" style="flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
@@ -962,11 +962,11 @@
             </div>
 
             <!-- Connect API Keys Card (~20% of bottom bar) -->
-            <div id="api-key-card" class="card card--compact" style="flex:0 0 20%;min-width:160px">
-              <div class="card-header" style="padding:4px 8px">
+            <div id="api-key-card" class="card card--compact" style="min-width:130px">
+              <div class="card-header" style="padding:3px 6px">
                 <span style="font-weight:700">🔑 Connect API Keys</span>
               </div>
-              <div class="card-body card-inner" style="padding:6px 8px;display:flex;flex-direction:column;gap:4px;flex:1">
+              <div class="card-body card-inner" style="padding:4px 6px;display:flex;flex-direction:column;gap:3px;flex:1">
                 <div class="api-mode-selector" style="display:flex;gap:var(--space-2);align-items:center">
                   <label class="radio">
                     <input type="radio" name="api-mode" value="live"> Live
@@ -1007,11 +1007,11 @@
             </div>
 
             <!-- Market Mode Indicator (~10% of bottom bar) -->
-            <div class="card card--compact hangar-market-mode-card" style="flex:1 0 10%;min-width:90px;text-align:center">
-              <div class="card-header" style="padding:4px 8px">
+            <div class="card card--compact hangar-market-mode-card" style="min-width:70px;text-align:center">
+              <div class="card-header" style="padding:3px 6px">
                 <span style="font-weight:700">Market Mode</span>
               </div>
-              <div class="card-body" style="padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;justify-content:center">
+              <div class="card-body" style="padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;justify-content:center">
                 <div id="connection-light" class="indicator-light" style="width:22px;height:22px;border-radius:50%;background:var(--color-fg-subtle);box-shadow:0 0 6px var(--color-fg-subtle)"></div>
                 <span id="connection-status" style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted)">OFFLINE</span>
                 <div style="display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:auto">

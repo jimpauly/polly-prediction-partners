@@ -59,11 +59,11 @@ body {
   --space-6: 16px;
   --space-8: 24px;
 
-  --layout-shell-padding: clamp(4px, 0.7vw, 16px);
-  --layout-shell-gap: clamp(4px, 0.65vw, 14px);
-  --layout-sidebar-width: clamp(80px, 19vw, 340px);
-  --layout-nav-height: clamp(28px, 4vh, 52px);
-  --layout-foot-height: clamp(90px, 18vh, 240px);
+  --layout-shell-padding: clamp(3px, 0.55vw, 16px);
+  --layout-shell-gap: clamp(3px, 0.5vw, 14px);
+  --layout-sidebar-width: clamp(80px, 17vw, 320px);
+  --layout-nav-height: clamp(26px, 3.5vh, 52px);
+  --layout-foot-height: clamp(80px, 16vh, 220px);
   --layout-main-max-width: min(1600px, 100%);
 
   /* Foreground colour for text rendered on top of accent/state backgrounds.
@@ -120,7 +120,7 @@ body {
 /* ---------- Region containers ------------------------------------------- */
 .region {
   position: relative;
-  padding: var(--space-3);
+  padding: var(--space-2);
   border: 1px solid var(--color-border-muted);
   background: var(--color-bg-surface);
   transition:
@@ -148,6 +148,7 @@ body {
   display: flex;
   gap: var(--layout-shell-gap);
   overflow: hidden;
+  min-height: 0;
 }
 
 /* ---------- Header Bar -------------------------------------------------- */
@@ -155,7 +156,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-1) var(--space-3);
   background: linear-gradient(
     180deg,
     var(--color-bg-surface-raised) 0%,
@@ -191,11 +192,12 @@ body {
 .region-nav {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: 0 var(--space-4);
+  gap: var(--space-1);
+  padding: 0 var(--space-3);
   overflow-x: auto;
   overflow-y: hidden;
   z-index: 9;
+  min-height: 0;
 }
 
 /* ---------- Main Region ------------------------------------------------- */
@@ -204,7 +206,9 @@ body {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--space-4);
+  padding: var(--space-3);
+  min-width: 0;
+  min-height: 0;
 }
 
 .main-region-header {
@@ -213,8 +217,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding-bottom: var(--space-3);
-  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-2);
   border-bottom: 1px solid var(--color-border-muted);
 }
 
@@ -223,30 +227,34 @@ body {
 .region-right {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
   overflow-y: auto;
   overflow-x: hidden;
+  min-width: 0;
 }
 
 /* Sidebar borders handled by .region base — gap provides separation */
 
 /* ---------- Action Bar -------------------------------------------------- */
 .region-action {
-  flex: 1 1 clamp(100px, 25vw, 360px);
-  min-width: clamp(80px, 20vw, 300px);
+  flex: 1 1 clamp(80px, 18vw, 300px);
+  min-width: clamp(70px, 14vw, 240px);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  min-height: 0;
 }
 
 /* ---------- Bottom Bar -------------------------------------------------- */
 .region-bottom {
-  flex: 2 1 clamp(200px, 50vw, 680px);
+  flex: 2 1 clamp(160px, 42vw, 620px);
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
+  align-items: stretch;
+  gap: var(--space-2);
   overflow-x: auto;
   overflow-y: hidden;
+  min-width: 0;
+  min-height: 0;
 }
 
 /* Constrain content width and keep balanced reading measure in main region. */
@@ -267,13 +275,13 @@ body {
 .main-bento-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4);
+  gap: var(--space-3);
   align-items: start;
 }
 
 /* Top bento: Active Theme left (~1/3), right stack (~2/3) */
 .main-bento-grid--top {
-  grid-template-columns: 2fr 5fr;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 5fr);
   align-items: stretch;
 }
 
@@ -281,7 +289,8 @@ body {
 .main-bento-right-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  min-width: 0;
 }
 
 .main-bento-right-stack > .card {
@@ -291,8 +300,8 @@ body {
 /* Bottom right row: System Logs + Web Elements side by side */
 .main-bento-right-bottom {
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: var(--space-4);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--space-3);
   align-items: stretch;
 }
 
@@ -398,10 +407,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-3);
   border-bottom: 1px solid var(--color-border-muted);
   font-family: var(--font-family-mono);
-  font-size: clamp(0.74rem, 0.14vw + 0.68rem, 0.9rem);
+  font-size: clamp(0.72rem, 0.14vw + 0.66rem, 0.88rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -409,7 +418,7 @@ body {
 }
 
 .card-body {
-  padding: clamp(10px, 0.8vw, 14px);
+  padding: clamp(6px, 0.6vw, 12px);
 }
 
 .card-footer {
@@ -423,13 +432,13 @@ body {
 
 /* Compact variant */
 .card--compact .card-header {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-2);
 }
 .card--compact .card-body {
-  padding: var(--space-3);
+  padding: var(--space-2);
 }
 .card--compact .card-footer {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-2);
 }
 
 /* ==========================================================================
@@ -748,8 +757,8 @@ textarea.input {
 .sidebar-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-1);
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-1);
   border-radius: var(--border-radius-md);
   background: color-mix(in srgb, var(--color-bg-surface) 88%, transparent);
 }
@@ -758,7 +767,7 @@ textarea.input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: var(--space-2);
+  padding-bottom: var(--space-1);
   border-bottom: 1px solid var(--color-border-muted);
 }
 
@@ -2266,7 +2275,7 @@ textarea.input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-1);
   width: 100%;
 }
 
@@ -2274,13 +2283,13 @@ textarea.input {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  padding: var(--space-3) var(--space-6);
+  font-size: clamp(11px, 0.8vw, 14px);
+  padding: var(--space-1) var(--space-4);
   font-weight: 700;
   text-align: center;
   width: 88%;
   min-width: 0;
-  border: 3px solid;
+  border: 2px solid;
   border-radius: var(--border-radius-md);
   cursor: pointer;
   transition:
@@ -2293,10 +2302,10 @@ textarea.input {
 
 .theme-selector__swatch-label {
   display: inline-block;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border: 1px solid;
   border-radius: 0;
-  font-size: 14px;
+  font-size: clamp(11px, 0.8vw, 14px);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -2443,8 +2452,9 @@ textarea.input {
   align-items: stretch !important;
   align-content: flex-start;
   flex-wrap: nowrap !important;
-  row-gap: var(--space-3);
+  row-gap: var(--space-2);
   flex: 1;
+  min-width: 0;
 }
 
 #bottom-bar .card {
@@ -2453,23 +2463,23 @@ textarea.input {
 }
 
 #bottom-bar .hangar-agent-card {
-  flex: 0 0 40% !important;
-  min-width: clamp(120px, 25vw, 300px);
+  flex: 1 1 35% !important;
+  min-width: clamp(100px, 18vw, 280px);
 }
 
 #bottom-bar .hangar-mfd-card {
-  flex: 0 0 30% !important;
-  min-width: clamp(100px, 20vw, 260px);
+  flex: 1 1 28% !important;
+  min-width: clamp(90px, 15vw, 240px);
 }
 
 #bottom-bar #api-key-card {
-  flex: 0 0 20% !important;
-  min-width: clamp(100px, 13vw, 200px);
+  flex: 1 1 20% !important;
+  min-width: clamp(80px, 10vw, 180px);
 }
 
 #bottom-bar .hangar-market-mode-card {
-  flex: 1 0 10% !important;
-  min-width: 90px;
+  flex: 0 1 auto !important;
+  min-width: 70px;
 }
 
 #bottom-bar .card--compact .card-body {
@@ -2583,15 +2593,15 @@ textarea.input {
 
 /* Bottom bar cards: fluid min-widths for narrow viewports */
 #bottom-bar .hangar-agent-card {
-  min-width: clamp(120px, 30vw, 340px);
+  min-width: clamp(100px, 18vw, 280px);
 }
 
 #bottom-bar .hangar-mfd-card {
-  min-width: clamp(100px, 25vw, 300px);
+  min-width: clamp(90px, 15vw, 240px);
 }
 
 #bottom-bar #api-key-card {
-  flex: 0 0 clamp(100px, 15vw, 200px) !important;
+  flex: 1 1 clamp(80px, 10vw, 180px) !important;
 }
 
 /* ============================================================
