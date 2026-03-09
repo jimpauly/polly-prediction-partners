@@ -353,17 +353,21 @@ _End Chapter 0._
 
 #### Header Bar:
 
-- **`Paulie's`** — Beautiful, professionally designed header and title. Aligned left, vertically centered.
-  - **Large Robot emoji**
-  - **Illumination Control Panel** — Right-aligned, vertically centered. Looks like an overhead control panel. See photos for inspiration.
-    - **Channels & Groups:** Chunky flip toggles and rotary dimmer dials.
-    - **DAY/NVG & Light/Dark:** Two different switches on the same circuit. Both toggle between the same light and dark modes but offer different visual aesthetics (standard UI controls vs. aircraft-style instrument controls). Default: Day/Light mode.
-    - **Master:** Switch OFF; dimmer at max.
+- **`Paulie's Prediction Partners 🤖`** — Title with robot emoji after the name. No subtext. Aligned left, vertically centered.
+  - **Placeholder circle** — centered in the header bar between title and illumination panel.
+  - **Illumination Control Panel** — Right-aligned, vertically centered. Overhead control panel aesthetic.
+    - **"ILLUMINATION" sticker label** — vertical text on the left side of the panel card, reads bottom-to-top like a stickered label.
+    - **Channels & Groups:** Horizontal flip switches (up=on, down=off) and rotary dimmer dials. No on/off text labels — let users discover.
+    - **Channel labels** — positioned to the left of their channel, read vertically (bottom-to-top). Frees vertical height for detail.
+    - **DAY/NVG:** Single flip switch toggling DAY (light) / NVG (dark) mode. Same circuit as the Light/Dark sidebar toggle.
+    - **Master:** Switch OFF; dimmer at max (displayed as 10).
     - **Text:** Primary & secondary ON; dimmer at max.
     - **Bars:** Primary & secondary ON; dimmer at max.
     - **Flood:** ON; dimmer at max.
     - **Display:** ON; dimmer at max.
-    - Ensure consistency in spacing and heights/sizes of switches and dials.
+    - **Dimmer display values:** 10 (max) to 2.5 (min), nearest round number. No percent sign.
+    - **Flip-switch housing height** matches dimmer dial + intensity sub-label height.
+    - **Theming:** All panel colours pull from the active theme palette via CSS custom properties — no static hex colours.
     - Everything set to ON and MAX except Master ON/OFF.
     - Once Master is flipped ON, full illumination effects applied.
     - Must be accurate to real physics and electronics for illumination controls.
@@ -665,14 +669,17 @@ _Intentional misnaming preserved_
   - DAY/Light mode reduces illumination intensity to 60%; NVG/Dark mode runs at 100% intensity.
   - Other names: Overhead Control Panel. Lighting Control Panel. Lighting Panel. Lighting Interface.
   - **Physics model:** glow that spreads follows an inverse-square approximation.
-  - **Intensity Hierarchy:** DAY/Light mode sets base illumination intensity to 60%; NVG/Dark mode sets base to 100%. Dimmer dials then secondarily modulate intensity within the range of 0.25 to 1.00 on top of the mode-based intensity value. Always apply mode rules first, then dimmer dial rules.
+  - **Intensity Hierarchy:** DAY/Light mode sets base illumination intensity to 60%; NVG/Dark mode sets base to 100%. Dimmer dials then secondarily modulate intensity within the range of 0.25 to 1.00 (displayed as 2.5 to 10) on top of the mode-based intensity value. Always apply mode rules first, then dimmer dial rules.
 
 #### Controls:
 
 - Each layer/group has one On/Off Switch and one rotary Dimmer Dial.
 - Text and Bar groups have two On/Off Switches and one dimmer dial.
-  - **DAY/NVG** - toggle is tied and equal to Light/Dark toggle. These are two different switches on the same circuit—both toggle between light and dark illumination modes, but offer different visual aesthetics: Light/Dark for standard UI controls, and DAY/NVG for aircraft-style instrument controls. When one is toggled, the other responds accordingly. They visually flip to show which mode is currently active.
-    - The two modes override each other and are mutually exclusive.
+- **All flip switches** are horizontal, flipping up (on) and down (off). No on/off labels.
+- **Channel labels** sit to the left of their channel, read vertically (bottom-to-top).
+- **Dimmer values** display as 10 (max) to 2.5 (min) — value × 10, nearest round number. No percent sign.
+- **Panel colours** must reference the active theme palette (CSS custom properties) — no static hex colours.
+  - **DAY/NVG** — single flip switch tied to the Light/Dark toggle. Same circuit — toggling one updates the other. Mutually exclusive modes.
   - **Master** - global ON/OFF Illumination switch, OFF default; Global DIM Dial, DIM MAX default.
   - **Text** - controls glow, luminance, and opacity for primary and secondary text groups; Find 100% of text elements and apply these effects.
     - **Primary Text** — Whichever text groups feel like primary text groups (high priority, important content).
@@ -708,7 +715,7 @@ _Intentional misnaming preserved_
 - Define default states for all channels
 - Plan for master control (global dimming, emergency mode)
 - Establish CSS variable naming for effects
-- **Base Intensity by Mode:** In dark mode, set illumination base to 100% intensity. In light mode, set base to 60% intensity. Dimmer dials then multiply or scale this base value within the 0.25–1.00 range.
+- **Base Intensity by Mode:** In dark mode, set illumination base to 100% intensity. In light mode, set base to 60% intensity. Dimmer dials then multiply or scale this base value within the 0.25–1.00 range (displayed as 2.5–10).
 - Apply mode rules first (sets base intensity), then dimmer dial rules on top (scales the base).
 - Keep JavaScript state in sync with HTML attributes
 - Update UI when state changes (don't just change state silently)
