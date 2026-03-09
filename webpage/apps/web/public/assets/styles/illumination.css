@@ -166,7 +166,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0;
+  gap: 4px;
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--color-bg-surface-raised) 80%, transparent) 0%,
     var(--color-bg-surface) 40%,
@@ -223,7 +223,8 @@
 
 .illum-panel-label-text {
   font-size: 6px;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.55em;
+  word-spacing: 0.8em;
   color: var(--color-fg-muted);
   text-transform: uppercase;
   font-family: var(--font-family-mono);
@@ -417,8 +418,8 @@
 }
 
 .dimmer-dial {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 35%,
@@ -438,16 +439,28 @@
   transition: transform 0.1s ease;
 }
 
-/* Knurled edge ring with grip ticks */
+/* 7 straight tick marks connecting inner and outer circles */
 .dimmer-dial::before {
   content: "";
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: repeating-conic-gradient(
+  background: conic-gradient(
     from 0deg,
-    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 0deg 3deg,
-    color-mix(in srgb, var(--color-bg-canvas) 82%, transparent) 3deg 10deg
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 0deg 2deg,
+    transparent 2deg 51.43deg,
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 51.43deg 53.43deg,
+    transparent 53.43deg 102.86deg,
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 102.86deg 104.86deg,
+    transparent 104.86deg 154.29deg,
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 154.29deg 156.29deg,
+    transparent 156.29deg 205.71deg,
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 205.71deg 207.71deg,
+    transparent 207.71deg 257.14deg,
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 257.14deg 259.14deg,
+    transparent 259.14deg 308.57deg,
+    color-mix(in srgb, var(--color-fg-subtle) 55%, var(--color-bg-canvas)) 308.57deg 310.57deg,
+    transparent 310.57deg 360deg
   );
   border: 1px solid color-mix(in srgb, var(--color-border-default) 40%, transparent);
   z-index: -1;
@@ -457,11 +470,11 @@
 .dimmer-dial::after {
   content: "";
   position: absolute;
-  top: 3px;
+  top: 2px;
   left: 50%;
   transform: translateX(-50%);
   width: 3px;
-  height: 6px;
+  height: 5px;
   background: var(--color-fg-default);
   border-radius: 1px;
   box-shadow: 0 0 3px color-mix(in srgb, var(--color-fg-default) 80%, transparent);
