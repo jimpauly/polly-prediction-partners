@@ -282,38 +282,41 @@ const TradingStudio = (() => {
 
   /* ---- Filtering ---- */
 
+  /* ---- Category Matching Helper ---- */
+
+  /* Maps our navigation categories to Kalshi event category substrings */
+  const CATEGORY_MATCH_RULES = {
+    politics:        ["politic"],
+    sports:          ["sport"],
+    culture:         ["cultur", "entertain"],
+    crypto:          ["crypto"],
+    climate:         ["climat", "weather"],
+    economics:       ["econom"],
+    mentions:        ["mention"],
+    companies:       ["compan"],
+    financials:      ["financ"],
+    tech_and_science:["tech", "scienc"],
+  };
+
+  function categoryMatchesLabel(category, label) {
+    const lower = label.toLowerCase();
+    const rules = CATEGORY_MATCH_RULES[category];
+    if (!rules) return false;
+    return rules.some((r) => lower.includes(r));
+  }
+
   function matchesCategory(market, category) {
     /* Check event category from live data first */
     const eventTicker = market.event_ticker || "";
     const eventData = events[eventTicker];
-    if (eventData && eventData.category) {
-      const evtCategory = eventData.category.toLowerCase();
-      /* Map Kalshi event categories to our navigation categories */
-      if (category === "politics" && evtCategory.includes("politic")) return true;
-      if (category === "sports" && evtCategory.includes("sport")) return true;
-      if (category === "culture" && (evtCategory.includes("cultur") || evtCategory.includes("entertain"))) return true;
-      if (category === "crypto" && evtCategory.includes("crypto")) return true;
-      if (category === "climate" && (evtCategory.includes("climat") || evtCategory.includes("weather"))) return true;
-      if (category === "economics" && evtCategory.includes("econom")) return true;
-      if (category === "mentions" && evtCategory.includes("mention")) return true;
-      if (category === "companies" && evtCategory.includes("compan")) return true;
-      if (category === "financials" && evtCategory.includes("financ")) return true;
-      if (category === "tech_and_science" && (evtCategory.includes("tech") || evtCategory.includes("scienc"))) return true;
+    if (eventData && eventData.category && categoryMatchesLabel(category, eventData.category)) {
+      return true;
     }
 
     /* Market-level category (added in schema) */
-    const marketCategory = (market.category || "").toLowerCase();
-    if (marketCategory) {
-      if (category === "politics" && marketCategory.includes("politic")) return true;
-      if (category === "sports" && marketCategory.includes("sport")) return true;
-      if (category === "culture" && (marketCategory.includes("cultur") || marketCategory.includes("entertain"))) return true;
-      if (category === "crypto" && marketCategory.includes("crypto")) return true;
-      if (category === "climate" && (marketCategory.includes("climat") || marketCategory.includes("weather"))) return true;
-      if (category === "economics" && marketCategory.includes("econom")) return true;
-      if (category === "mentions" && marketCategory.includes("mention")) return true;
-      if (category === "companies" && marketCategory.includes("compan")) return true;
-      if (category === "financials" && marketCategory.includes("financ")) return true;
-      if (category === "tech_and_science" && (marketCategory.includes("tech") || marketCategory.includes("scienc"))) return true;
+    const marketCategory = market.category || "";
+    if (marketCategory && categoryMatchesLabel(category, marketCategory)) {
+      return true;
     }
 
     /* Fallback: keyword matching on tickers/titles */
@@ -538,18 +541,8 @@ const TradingStudio = (() => {
     const subcats = new Set();
 
     Object.values(events).forEach((evt) => {
-      const evtCategory = (evt.category || "").toLowerCase();
-      let matches = false;
-
-      if (category === "politics" && evtCategory.includes("politic")) matches = true;
-      if (category === "sports" && evtCategory.includes("sport")) matches = true;
-      if (category === "culture" && (evtCategory.includes("cultur") || evtCategory.includes("entertain"))) matches = true;
-      if (category === "crypto" && evtCategory.includes("crypto")) matches = true;
-      if (category === "climate" && (evtCategory.includes("climat") || evtCategory.includes("weather"))) matches = true;
-      if (category === "economics" && evtCategory.includes("econom")) matches = true;
-      if (category === "companies" && evtCategory.includes("compan")) matches = true;
-      if (category === "financials" && evtCategory.includes("financ")) matches = true;
-      if (category === "tech_and_science" && (evtCategory.includes("tech") || evtCategory.includes("scienc"))) matches = true;
+      const evtCategory = evt.category || "";
+      const matches = categoryMatchesLabel(category, evtCategory);
 
       if (matches && evt.sub_title) {
         /* Extract a short label from the event sub_title or series_ticker */
@@ -561,17 +554,18 @@ const TradingStudio = (() => {
     return [...subcats].sort();
   }
 
+  /* Known series patterns — module-level constant for performance */
+  const KNOWN_SERIES_MAP = {
+    NFL: "NFL", NBA: "NBA", MLB: "MLB", NHL: "NHL",
+    KXBTC: "BTC", KXETH: "ETH", KXSOL: "SOL",
+  };
+
   function deriveSubcategoryLabel(evt) {
     /* Try to extract a meaningful subcategory label from event metadata */
     const seriesTicker = (evt.series_ticker || "").toUpperCase();
     const title = evt.title || evt.sub_title || "";
 
-    /* Known series patterns */
-    const knownSeries = {
-      NFL: "NFL", NBA: "NBA", MLB: "MLB", NHL: "NHL",
-      KXBTC: "BTC", KXETH: "ETH", KXSOL: "SOL",
-    };
-    for (const [key, label] of Object.entries(knownSeries)) {
+    for (const [key, label] of Object.entries(KNOWN_SERIES_MAP)) {
       if (seriesTicker.includes(key)) return label;
     }
 
@@ -768,11 +762,13 @@ const TradingStudio = (() => {
       : "ks-outcome-timer";
     const freqBadge = renderFrequencyBadge(market);
 
-    /* Format chance display like Kalshi: "<1%" or "99%" */
+    /* Format chance display like Kalshi: "<1%" or ">99%" */
     let chanceDisplay = "—";
     if (chancePercent !== null) {
-      if (chancePercent < 1 && chancePercent > 0) chanceDisplay = "<1%";
-      else if (chancePercent > 99 && chancePercent < 100) chanceDisplay = ">99%";
+      if (chancePercent <= 0) chanceDisplay = "<1%";
+      else if (chancePercent < 1) chanceDisplay = "<1%";
+      else if (chancePercent >= 100) chanceDisplay = ">99%";
+      else if (chancePercent > 99) chanceDisplay = ">99%";
       else chanceDisplay = chancePercent + "%";
     }
 
@@ -1628,7 +1624,6 @@ const TradingStudio = (() => {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const ampm = hours >= 12 ? "pm" : "am";
     hours = hours % 12 || 12;
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "EST";
     const tzAbbr = new Date().toLocaleTimeString("en-us", { timeZoneName: "short" }).split(" ").pop();
     return `${month} ${day} @ ${hours}:${minutes}${ampm} ${tzAbbr}`;
   }
