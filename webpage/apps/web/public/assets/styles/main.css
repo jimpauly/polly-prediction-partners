@@ -174,6 +174,17 @@ body {
   color: var(--color-accent-primary);
 }
 
+/* Placeholder circle centred in the header bar */
+.header-center-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  background: var(--color-bg-surface);
+  flex-shrink: 0;
+  /* sits in the absolute centre — the header uses justify-content:space-between */
+}
+
 /* ---------- Nav Bar ----------------------------------------------------- */
 .region-nav {
   display: flex;

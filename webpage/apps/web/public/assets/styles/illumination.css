@@ -164,21 +164,24 @@
 
 .illum-panel {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 6px;
-  background: linear-gradient(180deg, #252a31 0%, #1a1e24 40%, #111418 100%);
-  border: 1px solid #3a4048;
-  border-top: 2px solid #4a5060;
-  border-bottom: 2px solid #0a0c0f;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--color-bg-surface-raised) 80%, transparent) 0%,
+    var(--color-bg-surface) 40%,
+    color-mix(in srgb, var(--color-bg-canvas) 85%, transparent) 100%);
+  border: 1px solid var(--color-border-default);
+  border-top: 2px solid var(--color-border-muted);
+  border-bottom: 2px solid color-mix(in srgb, var(--color-bg-canvas) 90%, black);
   border-radius: 4px;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 10px 5px 0;
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+    0 2px 8px var(--color-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 8%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--color-bg-canvas) 50%, transparent);
   position: relative;
   height: 82px;
-  font-family: "Courier New", "Consolas", monospace;
+  font-family: var(--font-family-mono);
   user-select: none;
   flex-shrink: 0;
   transition:
@@ -188,44 +191,56 @@
 
 /* Panel glows when master switch is ON */
 .illum-panel[data-master="on"] {
-  border-top-color: #5a7090;
+  border-top-color: color-mix(in srgb, var(--color-accent-primary) 50%, var(--color-border-muted));
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.8),
-    0 0 12px rgba(88, 166, 255, calc(var(--fx-master-scale) * 0.4)),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+    0 2px 8px var(--color-shadow),
+    0 0 12px color-mix(in srgb, var(--color-accent-primary) calc(var(--fx-master-scale) * 40%), transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 8%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--color-bg-canvas) 50%, transparent);
 }
 
-/* Panel title strip */
-.illum-panel-title {
-  position: absolute;
-  top: 3px;
-  left: 10px;
-  font-size: 8px;
-  letter-spacing: 0.18em;
-  color: #8899aa;
+/* ── Vertical sticker label on the left side ── */
+.illum-panel-label-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  padding: 2px 4px;
+  min-width: 18px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--color-accent-primary) 15%, var(--color-bg-surface)),
+    color-mix(in srgb, var(--color-accent-primary) 8%, var(--color-bg-surface)));
+  border-right: 1px solid var(--color-border-muted);
+  border-radius: 3px 0 0 3px;
+  flex-shrink: 0;
+}
+
+.illum-panel-label-text {
+  font-size: 7.5px;
+  letter-spacing: 0.22em;
+  color: var(--color-fg-muted);
   text-transform: uppercase;
-  font-family: "Courier New", monospace;
-  pointer-events: none;
-  transition:
-    color var(--_glow-transition),
-    text-shadow var(--_glow-transition);
+  font-family: var(--font-family-mono);
+  white-space: nowrap;
+  transition: color var(--_glow-transition), text-shadow var(--_glow-transition);
 }
 
-.illum-panel[data-master="on"] .illum-panel-title {
-  color: #aabbcc;
-  text-shadow: 0 0 6px rgba(88, 166, 255, 0.6);
+.illum-panel[data-master="on"] .illum-panel-label-text {
+  color: var(--color-accent-primary);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--color-accent-primary) 60%, transparent);
 }
 
 /* Vertical dividers between groups */
 .illum-divider {
   width: 1px;
-  height: 58px;
+  align-self: stretch;
   background: linear-gradient(
     180deg,
     transparent,
-    #3a4048 30%,
-    #3a4048 70%,
+    var(--color-border-default) 30%,
+    var(--color-border-default) 70%,
     transparent
   );
   flex-shrink: 0;
@@ -235,31 +250,33 @@
 /* ── CHANNEL GROUP ─────────────────────────────────── */
 .illum-group {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 2px;
-  padding-top: 14px; /* make room for panel title */
+  gap: 4px;
 }
 
 .illum-group-label {
-  font-size: 8.5px;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 7.5px;
   letter-spacing: 0.12em;
-  color: #aabbcc;
+  color: var(--color-fg-muted);
   text-transform: uppercase;
   white-space: nowrap;
   text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.9),
-    0 -1px 0 rgba(255, 255, 255, 0.06);
+    0 1px 2px var(--color-shadow);
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .illum-switches-row {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 4px;
 }
 
-/* ── FLIP SWITCH ───────────────────────────────────── */
+/* ── FLIP SWITCH (horizontal, flips up/down) ───────── */
 .flip-switch {
   display: flex;
   flex-direction: column;
@@ -273,12 +290,14 @@
 .switch-housing {
   width: 14px;
   height: 26px;
-  background: linear-gradient(180deg, #2a2e34 0%, #1a1e24 100%);
-  border: 1px solid #3a404a;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--color-bg-surface-raised) 70%, var(--color-bg-canvas)),
+    var(--color-bg-canvas));
+  border: 1px solid var(--color-border-default);
   border-radius: 3px;
   box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.8),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    inset 0 1px 2px var(--color-shadow),
+    inset 0 -1px 0 color-mix(in srgb, var(--color-fg-default) 4%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -290,7 +309,7 @@
 .switch-guard-ring {
   position: absolute;
   inset: -2px;
-  border: 1px solid #2a3040;
+  border: 1px solid color-mix(in srgb, var(--color-border-default) 60%, transparent);
   border-radius: 4px;
   pointer-events: none;
 }
@@ -300,27 +319,27 @@
   height: 18px;
   background: linear-gradient(
     135deg,
-    #6a7080 0%,
-    #4a5060 30%,
-    #383c44 60%,
-    #2a2e34 100%
+    var(--color-fg-subtle) 0%,
+    var(--color-fg-muted) 30%,
+    color-mix(in srgb, var(--color-bg-surface-raised) 60%, var(--color-fg-subtle)) 60%,
+    var(--color-bg-surface-raised) 100%
   );
   border-radius: 2px 2px 3px 3px;
-  border: 1px solid #555;
-  border-bottom: 2px solid #222;
+  border: 1px solid var(--color-border-default);
+  border-bottom: 2px solid color-mix(in srgb, var(--color-bg-canvas) 80%, black);
   box-shadow:
-    2px 0 4px rgba(0, 0, 0, 0.6),
-    -1px 0 2px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform-origin: bottom center;
-  transform: rotate(-22deg); /* default = OFF = lever tilts down/forward */
+    2px 0 4px var(--color-shadow),
+    -1px 0 2px color-mix(in srgb, var(--color-fg-default) 8%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 20%, transparent);
+  transform-origin: center center;
+  transform: translateY(4px); /* OFF = lever pushed down */
   transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   z-index: 2;
 }
 
 .flip-switch[data-state="on"] .switch-lever {
-  transform: rotate(22deg); /* ON = lever tilts back */
+  transform: translateY(-4px); /* ON = lever pushed up */
 }
 
 /* LED indicator below switch */
@@ -328,8 +347,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #1a0000;
-  border: 1px solid #330000;
+  background: color-mix(in srgb, var(--color-state-error) 20%, var(--color-bg-canvas));
+  border: 1px solid color-mix(in srgb, var(--color-state-error) 30%, transparent);
   box-shadow: none;
   transition:
     background 0.2s,
@@ -337,120 +356,50 @@
 }
 
 .flip-switch[data-state="on"] .switch-led {
-  background: #00ee44;
-  border-color: #00bb33;
+  background: var(--color-state-success);
+  border-color: color-mix(in srgb, var(--color-state-success) 80%, black);
   box-shadow:
-    0 0 4px #00ff44,
-    0 0 8px rgba(0, 255, 68, 0.5);
+    0 0 4px var(--color-state-success),
+    0 0 8px color-mix(in srgb, var(--color-state-success) 50%, transparent);
 }
 
 /* Special amber LED for master */
 .flip-switch.master-switch[data-state="on"] .switch-led {
-  background: #ffaa00;
-  border-color: #cc8800;
+  background: var(--color-state-warning);
+  border-color: color-mix(in srgb, var(--color-state-warning) 80%, black);
   box-shadow:
-    0 0 4px #ffbb00,
-    0 0 10px rgba(255, 170, 0, 0.6);
+    0 0 4px var(--color-state-warning),
+    0 0 10px color-mix(in srgb, var(--color-state-warning) 60%, transparent);
 }
 
-/* ── DAY / NVG DOUBLE TOGGLE ───────────────────────── */
-.day-nvg-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 14px;
-  gap: 2px;
-  position: relative;
+/* ── DAY / NVG SINGLE TOGGLE (uses same flip-switch style) ── */
+.day-nvg-toggle .switch-lever {
+  transform: translateY(-4px); /* DAY = lever up (default) */
 }
 
-.day-nvg-label {
-  font-size: 8.5px;
-  letter-spacing: 0.12em;
-  color: #aabbcc;
-  text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-  line-height: 1;
-  white-space: nowrap;
+.day-nvg-toggle[data-mode="nvg"] .switch-lever {
+  transform: translateY(4px); /* NVG = lever down */
 }
 
-.day-nvg-switches {
-  display: flex;
-  gap: 2px;
-  background: linear-gradient(180deg, #1a1e24, #111418);
-  border: 1px solid #2a3040;
-  border-radius: 3px;
-  padding: 2px 3px;
+.day-nvg-led {
+  background: color-mix(in srgb, var(--color-state-warning) 20%, var(--color-bg-canvas)) !important;
+  border-color: color-mix(in srgb, var(--color-state-warning) 30%, transparent) !important;
 }
 
-.day-nvg-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  cursor: pointer;
-  padding: 1px 2px;
-  border-radius: 2px;
-  transition: background 0.15s;
-}
-.day-nvg-option:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.day-nvg-option-label {
-  font-size: 7px;
-  letter-spacing: 0.08em;
-  color: #778899;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-.day-nvg-option[data-active="true"] .day-nvg-option-label {
-  color: #ffdd88;
-}
-
-/* Double-throw style: two levers on shared bar */
-.day-nvg-lever {
-  width: 10px;
-  height: 20px;
-  background: linear-gradient(
-    135deg,
-    #6a7080 0%,
-    #4a5060 30%,
-    #383c44 60%,
-    #2a2e34 100%
-  );
-  border-radius: 2px 2px 3px 3px;
-  border: 1px solid #555;
-  border-bottom: 2px solid #222;
+.day-nvg-toggle[data-mode="day"] .day-nvg-led {
+  background: var(--color-state-warning) !important;
+  border-color: color-mix(in srgb, var(--color-state-warning) 80%, black) !important;
   box-shadow:
-    2px 0 4px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform-origin: bottom center;
-  transform: rotate(-25deg);
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    0 0 4px var(--color-state-warning),
+    0 0 8px color-mix(in srgb, var(--color-state-warning) 50%, transparent) !important;
 }
 
-.day-nvg-option[data-active="true"] .day-nvg-lever {
-  transform: rotate(25deg);
-}
-
-.day-nvg-option-led {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #1a1000;
-  border: 1px solid #332200;
-  transition:
-    background 0.2s,
-    box-shadow 0.2s;
-}
-
-.day-nvg-option[data-active="true"] .day-nvg-option-led {
-  background: #ffcc00;
-  border-color: #cc9900;
+.day-nvg-toggle[data-mode="nvg"] .day-nvg-led {
+  background: var(--color-state-success) !important;
+  border-color: color-mix(in srgb, var(--color-state-success) 80%, black) !important;
   box-shadow:
-    0 0 4px #ffdd00,
-    0 0 8px rgba(255, 204, 0, 0.5);
+    0 0 4px var(--color-state-success),
+    0 0 8px color-mix(in srgb, var(--color-state-success) 50%, transparent) !important;
 }
 
 /* ── ROTARY DIMMER DIAL ────────────────────────────── */
@@ -468,18 +417,18 @@
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 35%,
-    #585858 0%,
-    #2a2a2a 50%,
-    #111 100%
+    var(--color-fg-subtle) 0%,
+    color-mix(in srgb, var(--color-bg-surface-raised) 40%, var(--color-bg-canvas)) 50%,
+    var(--color-bg-canvas) 100%
   );
   box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.9),
-    0 1px 2px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+    0 3px 6px var(--color-shadow),
+    0 1px 2px var(--color-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 12%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--color-bg-canvas) 60%, transparent);
   position: relative;
-  border: 2px solid #1a1a1a;
-  outline: 1px solid #3a3a3a;
+  border: 2px solid var(--color-bg-canvas);
+  outline: 1px solid var(--color-border-default);
   transition: transform 0.1s ease;
 }
 
@@ -491,67 +440,17 @@
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    #2a2a2a 0deg,
-    #3a3a3a 6deg,
-    #2a2a2a 12deg,
-    #3a3a3a 18deg,
-    #2a2a2a 24deg,
-    #3a3a3a 30deg,
-    #2a2a2a 36deg,
-    #3a3a3a 42deg,
-    #2a2a2a 48deg,
-    #3a3a3a 54deg,
-    #2a2a2a 60deg,
-    #3a3a3a 66deg,
-    #2a2a2a 72deg,
-    #3a3a3a 78deg,
-    #2a2a2a 84deg,
-    #3a3a3a 90deg,
-    #2a2a2a 96deg,
-    #3a3a3a 102deg,
-    #2a2a2a 108deg,
-    #3a3a3a 114deg,
-    #2a2a2a 120deg,
-    #3a3a3a 126deg,
-    #2a2a2a 132deg,
-    #3a3a3a 138deg,
-    #2a2a2a 144deg,
-    #3a3a3a 150deg,
-    #2a2a2a 156deg,
-    #3a3a3a 162deg,
-    #2a2a2a 168deg,
-    #3a3a3a 174deg,
-    #2a2a2a 180deg,
-    #3a3a3a 186deg,
-    #2a2a2a 192deg,
-    #3a3a3a 198deg,
-    #2a2a2a 204deg,
-    #3a3a3a 210deg,
-    #2a2a2a 216deg,
-    #3a3a3a 222deg,
-    #2a2a2a 228deg,
-    #3a3a3a 234deg,
-    #2a2a2a 240deg,
-    #3a3a3a 246deg,
-    #2a2a2a 252deg,
-    #3a3a3a 258deg,
-    #2a2a2a 264deg,
-    #3a3a3a 270deg,
-    #2a2a2a 276deg,
-    #3a3a3a 282deg,
-    #2a2a2a 288deg,
-    #3a3a3a 294deg,
-    #2a2a2a 300deg,
-    #3a3a3a 306deg,
-    #2a2a2a 312deg,
-    #3a3a3a 318deg,
-    #2a2a2a 324deg,
-    #3a3a3a 330deg,
-    #2a2a2a 336deg,
-    #3a3a3a 342deg,
-    #2a2a2a 348deg,
-    #3a3a3a 354deg,
-    #2a2a2a 360deg
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 0deg,
+    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 6deg,
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 12deg,
+    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 18deg,
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 24deg,
+    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 30deg,
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 36deg,
+    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 42deg,
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 48deg,
+    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 54deg,
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 60deg
   );
   z-index: -1;
 }
@@ -565,9 +464,9 @@
   transform: translateX(-50%);
   width: 3px;
   height: 6px;
-  background: #ffffff;
+  background: var(--color-fg-default);
   border-radius: 1px;
-  box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 3px color-mix(in srgb, var(--color-fg-default) 80%, transparent);
 }
 
 /* Tick marks arc around dial */
@@ -580,16 +479,16 @@
 
 .dimmer-value {
   font-size: 7.5px;
-  color: #556677;
-  font-family: "Courier New", monospace;
+  color: var(--color-fg-subtle);
+  font-family: var(--font-family-mono);
   line-height: 1;
 }
 
 /* Dial interaction highlight */
 .dimmer-dial-wrap:hover .dimmer-dial {
   box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.9),
-    0 0 8px rgba(88, 166, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+    0 3px 6px var(--color-shadow),
+    0 0 8px color-mix(in srgb, var(--color-accent-primary) 20%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 15%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--color-bg-canvas) 60%, transparent);
 }

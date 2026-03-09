@@ -7,7 +7,7 @@
 
    Master defaults OFF; every other channel defaults ON at MAX (1.00).
    DAY mode (data-mode="light") → 60 % base.  NVG (dark) → 100 %.
-   Dimmers scale 0.25 – 1.00.  State persists via localStorage.
+   Dimmers scale 0.25 – 1.00 (displayed as 2.5 – 10).  State persists via localStorage.
 
    Uses the CSS computed-variables physics model from illumination.css:
      --fx-master-switch, --fx-master-dim, --fx-mode-base  (master layer)
@@ -147,11 +147,9 @@
      ------------------------------------------------------------------------ */
 
   function syncPanelUI() {
-    // DAY/NVG
-    document.querySelectorAll(".day-nvg-option").forEach((el) => {
-      const val = el.dataset.value;
-      el.dataset.active = val === state.mode ? "true" : "false";
-    });
+    // DAY/NVG single toggle
+    const dnToggle = document.getElementById("day-nvg-toggle");
+    if (dnToggle) dnToggle.dataset.mode = state.mode;
 
     // Flip switches
     syncSwitch("master", state.master.on);
@@ -188,7 +186,15 @@
     const valEl = el.querySelector(".dimmer-value");
     const angle = -135 + value * 270; // -135° = min, +135° = max
     if (dial) dial.style.transform = `rotate(${angle}deg)`;
-    if (valEl) valEl.textContent = Math.round(value * 100) + "%";
+    // Display as 10 (max) down to 2.5 (min) — value × 10, nearest round number
+    if (valEl) {
+      const display = value * 10;
+      // Show integer when whole, one decimal otherwise (e.g. 2.5)
+      valEl.textContent =
+        display === Math.floor(display)
+          ? String(Math.round(display))
+          : display.toFixed(1);
+    }
   }
 
   /* ------------------------------------------------------------------------
@@ -339,20 +345,17 @@
     wrap.addEventListener("dblclick", () => setVal(1.0));
   }
 
-  /** Wire DAY/NVG toggle */
+  /** Wire DAY/NVG single toggle */
   function wireDayNvg() {
-    document.querySelectorAll(".day-nvg-option").forEach((el) => {
-      el.addEventListener("click", () => {
-        const val = el.dataset.value;
-        state.mode = val;
-        // Also update the html data-mode attribute for theme system
-        document.documentElement.dataset.mode =
-          val === "nvg" ? "dark" : "light";
-        update();
-        // Notify ThemeManager if available
-        if (window.ThemeManager)
-          window.ThemeManager.setMode(val === "nvg" ? "dark" : "light");
-      });
+    const toggle = document.getElementById("day-nvg-toggle");
+    if (!toggle) return;
+    toggle.addEventListener("click", () => {
+      state.mode = state.mode === "day" ? "nvg" : "day";
+      document.documentElement.dataset.mode =
+        state.mode === "nvg" ? "dark" : "light";
+      update();
+      if (window.ThemeManager)
+        window.ThemeManager.setMode(state.mode === "nvg" ? "dark" : "light");
     });
   }
 

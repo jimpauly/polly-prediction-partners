@@ -98,35 +98,34 @@
     <!-- ================================================================== -->
     <header id="header-bar" class="region region-header glow-bars-primary" role="banner">
       <div class="flex items-center gap-3">
-        <span class="text-2xl" role="img" aria-label="Robot logo">🤖</span>
-        <div>
-          <h1 class="app-title glow-text-primary">
-            <span class="app-title__accent">Paulie's</span> Prediction Partners
-          </h1>
-          <p class="text-xs text-muted m-0">Prediction Trading</p>
-        </div>
+        <h1 class="app-title glow-text-primary">
+          <span class="app-title__accent">Paulie's</span> Prediction Partners <span role="img" aria-label="Robot logo">🤖</span>
+        </h1>
       </div>
+
+      <!-- Placeholder circle in center of header -->
+      <div class="header-center-placeholder" aria-hidden="true"></div>
 
     <!-- ╔══════════════════════════════════════════════════╗
          ║   ILLUMINATION CONTROL PANEL (COCKPIT STYLE)   ║
          ╚══════════════════════════════════════════════════╝ -->
     <div class="illum-panel" id="illum-panel" data-master="off" role="region" aria-label="Illumination Control Panel">
 
-      <span class="illum-panel-title">⬛ ILLUMINATION CONTROL</span>
+      <!-- Vertical sticker label on left side -->
+      <div class="illum-panel-label-strip">
+        <span class="illum-panel-label-text">ILLUMINATION</span>
+      </div>
 
       <!-- ── DAY / NVG ───────────────────────────────── -->
-      <div class="day-nvg-group" title="Mode: DAY = Light, NVG = Dark">
-        <div class="day-nvg-label">MODE</div>
-        <div class="day-nvg-switches">
-          <div class="day-nvg-option" data-value="day" data-active="true" title="DAY / LIGHT mode">
-            <div class="day-nvg-option-label">DAY</div>
-            <div class="day-nvg-lever"></div>
-            <div class="day-nvg-option-led"></div>
-          </div>
-          <div class="day-nvg-option" data-value="nvg" data-active="false" title="NVG / DARK mode">
-            <div class="day-nvg-option-label">NVG</div>
-            <div class="day-nvg-lever"></div>
-            <div class="day-nvg-option-led"></div>
+      <div class="illum-group" title="Mode: DAY = Light, NVG = Dark">
+        <div class="illum-group-label">MODE</div>
+        <div class="illum-switches-row">
+          <div class="flip-switch day-nvg-toggle" id="day-nvg-toggle" data-mode="day" title="DAY/NVG toggle">
+            <div class="switch-housing">
+              <div class="switch-guard-ring"></div>
+              <div class="switch-lever"></div>
+            </div>
+            <div class="switch-led day-nvg-led"></div>
           </div>
         </div>
       </div>
@@ -146,7 +145,7 @@
           </div>
           <div class="dimmer-dial-wrap" data-name="master" title="Master dimmer — drag up/down or scroll">
             <div class="dimmer-dial"></div>
-            <div class="dimmer-value">100%</div>
+            <div class="dimmer-value">10</div>
           </div>
         </div>
       </div>
@@ -173,7 +172,7 @@
           </div>
           <div class="dimmer-dial-wrap" data-name="text" title="Text shared dimmer">
             <div class="dimmer-dial"></div>
-            <div class="dimmer-value">100%</div>
+            <div class="dimmer-value">10</div>
           </div>
         </div>
       </div>
@@ -200,7 +199,7 @@
           </div>
           <div class="dimmer-dial-wrap" data-name="bars" title="Bars shared dimmer">
             <div class="dimmer-dial"></div>
-            <div class="dimmer-value">100%</div>
+            <div class="dimmer-value">10</div>
           </div>
         </div>
       </div>
@@ -220,7 +219,7 @@
           </div>
           <div class="dimmer-dial-wrap" data-name="flood" title="Flood dimmer">
             <div class="dimmer-dial"></div>
-            <div class="dimmer-value">100%</div>
+            <div class="dimmer-value">10</div>
           </div>
         </div>
       </div>
@@ -240,7 +239,7 @@
           </div>
           <div class="dimmer-dial-wrap" data-name="display" title="Display dimmer">
             <div class="dimmer-dial"></div>
-            <div class="dimmer-value">100%</div>
+            <div class="dimmer-value">10</div>
           </div>
         </div>
       </div>
