@@ -414,15 +414,21 @@ _End Chapter 0._
 
 - **`Inspector Panel`** header — Aligned top, centered
   - **`To-Do List` App** (card, `width: 100%`)
-    - **Spiral Notebook** pages look like they're in or connected to a spiral notebook.
-    - **Bold Text Toggle:** Small square button. Can bold H1 and Aa sizes.
-    - **H1 / Aa Toggle:** H1 size default; auto-switch to regular Aa style after first paragraph.
-    - **Bullet List Toggler** (icon button below notepad) — Toggling preserves other paragraph lines.
-    - **Saves file** as `.txt` in Documents.
+    - **Spiral Notebook** — Spiral ring binding strip along top edge.
+    - **File Dropdown Menu** — Top-left of notepad, above the editor.
+      - **New Page** — Creates a new blank notebook page.
+      - **Save as .txt** — Downloads all pages as plain text.
+    - **Notebook Paper** — College-ruled lines; fills vertical space dynamically with inspector panel height. Line width stays constant (does not stretch horizontally).
+    - **Text Toggle Toolbar** — Positioned underneath the notepad editor area.
+      - **Bold Text Toggle:** Small square button. Can bold H1 and Aa sizes.
+      - **H1 / Aa Toggle:** H1 size default; auto-switch to regular Aa style after first paragraph.
+      - **Bullet List Toggler** (icon button) — Toggling preserves other paragraph lines.
+      - **Task Checkbox** — Inserts a checkbox task line.
     - **Cannot load files**.
-  - **Send-an-Idea Card**
-    - Exports message in an email to `chickensaurusrex@outlook.com` for main user.
-    - Display only the send-an-idea button (do not display email address).
+  - **Suggestion Box Card** — Pinned to bottom of inspector panel (visible across all tabs).
+    - **Complaint Textarea** — Placeholder text: "type complaints here". Cynical tone, not hostile.
+    - **Submit Grievance Button** — Exports textarea content via mailto to `chickensaurusrex@outlook.com`.
+    - Display only the button and textarea (do not display email address).
 
 #### Bottom Bar:
 

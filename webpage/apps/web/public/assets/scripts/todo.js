@@ -119,7 +119,50 @@
     return strip;
   }
 
-  /* ── Build: Toolbar ─────────────────────────────────────────── */
+  /* ── Build: File dropdown menu ────────────────────────────────── */
+
+  function buildFileMenu() {
+    var wrap = el("div", { className: "todo-file-menu" });
+
+    var btn = el("button", {
+      className: "todo-file-menu-btn",
+      title: "File menu",
+      onClick: function () {
+        var isOpen = dropdown.style.display === "block";
+        dropdown.style.display = isOpen ? "none" : "block";
+      }
+    }, "\uD83D\uDCC1 File");
+
+    var dropdown = el("div", { className: "todo-file-dropdown" });
+    dropdown.style.display = "none";
+
+    var itemNew = el("button", {
+      className: "todo-file-dropdown-item",
+      onClick: function () { addPage(); dropdown.style.display = "none"; }
+    }, "+ New Page");
+    dropdown.appendChild(itemNew);
+
+    var itemSave = el("button", {
+      className: "todo-file-dropdown-item",
+      onClick: function () { downloadTxt(); dropdown.style.display = "none"; }
+    }, "\uD83D\uDCBE Save as .txt");
+    dropdown.appendChild(itemSave);
+
+    wrap.appendChild(btn);
+    wrap.appendChild(dropdown);
+
+    /* Close dropdown when clicking outside */
+    handlers.onDocClickFileMenu = function (e) {
+      if (!wrap.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    };
+    document.addEventListener("click", handlers.onDocClickFileMenu);
+
+    return wrap;
+  }
+
+  /* ── Build: Toolbar (formatting tools only) ─────────────────── */
 
   function buildToolbar() {
     var bar = el("div", { className: "todo-toolbar" });
@@ -161,27 +204,6 @@
     btnTask.innerHTML = "&#9744;";
     btnTask.addEventListener("click", function () { insertTask(); });
     bar.appendChild(btnTask);
-
-    /* Separator */
-    bar.appendChild(el("div", { className: "todo-tb-sep" }));
-
-    /* New Page */
-    var btnNew = el("button", {
-      className: "todo-tb-btn",
-      title: "New Page"
-    });
-    btnNew.textContent = "+";
-    btnNew.addEventListener("click", function () { addPage(); });
-    bar.appendChild(btnNew);
-
-    /* Save */
-    var btnSave = el("button", {
-      className: "todo-tb-btn",
-      title: "Save as .txt"
-    });
-    btnSave.textContent = "\uD83D\uDCBE";
-    btnSave.addEventListener("click", function () { downloadTxt(); });
-    bar.appendChild(btnSave);
 
     return bar;
   }
@@ -548,14 +570,67 @@
     "  flex-shrink: 0;",
     "}",
 
-    /* Toolbar */
+    /* File dropdown menu */
+    ".todo-file-menu {",
+    "  position: relative;",
+    "  flex-shrink: 0;",
+    "  z-index: 10;",
+    "  padding: 4px 10px 4px 42px;",
+    "  background: var(--color-bg-surface, #f8fafc);",
+    "  border-bottom: 1px solid var(--color-border-muted, #e2e8f0);",
+    "}",
+    ".todo-file-menu-btn {",
+    "  font-size: 12px;",
+    "  font-family: var(--font-family-mono, monospace);",
+    "  padding: 3px 10px;",
+    "  border: 1px solid var(--color-border-muted, #cbd5e1);",
+    "  border-radius: 4px;",
+    "  background: var(--color-bg-surface, #fff);",
+    "  color: var(--color-fg-default, #334155);",
+    "  cursor: pointer;",
+    "  transition: background 0.15s;",
+    "}",
+    ".todo-file-menu-btn:hover {",
+    "  background: var(--color-accent-primary, #3b82f6);",
+    "  color: #fff;",
+    "}",
+    ".todo-file-dropdown {",
+    "  position: absolute;",
+    "  top: 100%;",
+    "  left: 42px;",
+    "  min-width: 140px;",
+    "  background: var(--color-bg-surface, #fff);",
+    "  border: 1px solid var(--color-border-muted, #cbd5e1);",
+    "  border-radius: 6px;",
+    "  box-shadow: 0 4px 12px rgba(0,0,0,0.15);",
+    "  z-index: 20;",
+    "  overflow: hidden;",
+    "}",
+    ".todo-file-dropdown-item {",
+    "  display: block;",
+    "  width: 100%;",
+    "  text-align: left;",
+    "  padding: 6px 12px;",
+    "  font-size: 12px;",
+    "  border: none;",
+    "  background: none;",
+    "  color: var(--color-fg-default, #334155);",
+    "  cursor: pointer;",
+    "  transition: background 0.1s;",
+    "}",
+    ".todo-file-dropdown-item:hover {",
+    "  background: var(--color-accent-primary, #3b82f6);",
+    "  color: #fff;",
+    "}",
+
+    /* Toolbar (now below editor) */
     ".todo-toolbar {",
     "  display: flex;",
     "  align-items: center;",
     "  gap: 4px;",
     "  padding: 6px 10px 6px 42px;",
     "  background: var(--color-bg-surface, #f8fafc);",
-    "  border-bottom: 1px solid var(--color-border-muted, #e2e8f0);",
+    "  border-top: 1px solid var(--color-border-muted, #e2e8f0);",
     "  flex-shrink: 0;",
     "  flex-wrap: wrap;",
     "}",
@@ -802,8 +877,9 @@
     dom.root = root;
 
     root.appendChild(buildSpiral());
-    root.appendChild(buildToolbar());
+    root.appendChild(buildFileMenu());
     root.appendChild(buildEditor());
+    root.appendChild(buildToolbar());
     root.appendChild(buildPageNav());
 
     container.appendChild(root);
@@ -828,6 +904,9 @@
       if (handlers.onEditorClick) dom.editor.removeEventListener("click", handlers.onEditorClick);
       if (handlers.onKeyDown) dom.editor.removeEventListener("keydown", handlers.onKeyDown);
       if (handlers.onPaste) dom.editor.removeEventListener("paste", handlers.onPaste);
+    }
+    if (handlers.onDocClickFileMenu) {
+      document.removeEventListener("click", handlers.onDocClickFileMenu);
     }
     if (dom.root && dom.root.parentNode) {
       dom.root.parentNode.removeChild(dom.root);

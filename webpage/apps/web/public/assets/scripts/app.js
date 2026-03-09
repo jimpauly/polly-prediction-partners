@@ -379,8 +379,10 @@
     const button = document.getElementById('send-idea-button');
     if (button) {
       button.addEventListener('click', () => {
-        const subject = encodeURIComponent("Paulie's Prediction Partners - Idea");
-        const body = encodeURIComponent('Here is my idea:\n\n');
+        const textarea = document.getElementById('idea-complaint-box');
+        const complaint = textarea ? textarea.value.trim() : '';
+        const subject = encodeURIComponent("Paulie's Prediction Partners - Grievance");
+        const body = encodeURIComponent(complaint || '(No complaint provided — impressive restraint.)');
         window.location.href = `mailto:chickensaurusrex@outlook.com?subject=${subject}&body=${body}`;
       });
     }

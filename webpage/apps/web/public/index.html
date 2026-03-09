@@ -863,20 +863,7 @@
       <!-- Notes Panel -->
       <div data-inspector-panel="notes" style="flex:1;overflow:auto;display:flex;flex-direction:column">
         <!-- To-Do / Notes App -->
-        <div id="todo-container" class="flex-1 overflow-auto" aria-label="Notes and to-do application"></div>
-
-        <hr class="divider">
-
-        <!-- Send-an-Idea Card -->
-        <div class="sidebar-panel" aria-label="Send an idea">
-          <div class="sidebar-panel__header">
-            <span class="sidebar-panel__title glow-text-secondary">Send an Idea</span>
-          </div>
-          <div class="sidebar-panel__body" style="text-align:center">
-            <p class="text-xs text-muted" style="margin-bottom:var(--space-2)">Have an idea for Paulie's? Send it our way!</p>
-            <button id="send-idea-button" class="btn btn-sm btn-primary" aria-label="Send an idea via email">💡 Send an Idea</button>
-          </div>
-        </div>
+        <div id="todo-container" style="flex:1;display:flex;flex-direction:column;overflow:auto" aria-label="Notes and to-do application"></div>
       </div>
 
       <!-- Positions Panel -->
@@ -887,6 +874,17 @@
       <!-- History Panel -->
       <div data-inspector-panel="history" style="display:none;flex:1;overflow:auto;padding:8px">
         <div id="inspector-history-panel" class="inspector-panel-content"></div>
+      </div>
+
+      <!-- Send-an-Idea Card (bottom of inspector panel) -->
+      <div class="sidebar-panel send-idea-bottom" aria-label="Send an idea" style="flex-shrink:0">
+        <div class="sidebar-panel__header">
+          <span class="sidebar-panel__title glow-text-secondary">Suggestion Box</span>
+        </div>
+        <div class="sidebar-panel__body" style="text-align:center">
+          <textarea id="idea-complaint-box" class="idea-complaint-textarea" placeholder="type complaints here" rows="2" aria-label="Type your complaints or suggestions"></textarea>
+          <button id="send-idea-button" class="btn btn-sm btn-primary" style="margin-top:var(--space-1)" aria-label="Send an idea via email">📮 Submit Grievance</button>
+        </div>
       </div>
     </aside>
 
