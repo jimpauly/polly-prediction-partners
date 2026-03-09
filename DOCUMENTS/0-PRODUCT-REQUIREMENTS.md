@@ -433,9 +433,35 @@ _End Chapter 0._
 #### Bottom Bar:
 
 - **`Hangar Bay`** header — Aligned left, vertically centered
+  - **Layout:** Agent Access Card (~50% width) + P/L Multi-Function Display (~50% width) side-by-side. Remaining cards (API Keys, Account, MODE) visible via horizontal scroll.
   - **`Agent Access`** card — For elements to control trading agents and their algorithms
-    - **Graph display window** labeled **`+/- $`** professionally
-    - **More ideas** to visualize or interface with agents
+    - **7 agents total.** 3 agents active on first build. Agents 4, 5, 7 under construction. Agent 6 is user-configurable.
+      - 1. **`PERITIA`** — 🎯 BTC 15-min Candlestick. Active.
+      - 2. **`PRIME`** — 📊 Majority Signal. Active.
+      - 3. **`PRAXIS`** — 🧠 Sports Markets. Active.
+      - 4. **`PATIENS`** — 🕰️ Long-term Holds. Under construction (🚧🏗️ cute display).
+      - 5. **`PAVIS`** — 🛡️ Defensive Strategy. Under construction (🚧🏗️ cute display).
+      - 6. **`BRING-YOUR-OWN-BOT`** — 🤖 Custom LLM Agent. Configurable via menu.
+        - **⚙️ Configure button** opens overlay panel (does not change agent card size; all agent cards are equal size).
+          - **Code editor** — Numbered lines, basic vim-like text area. No fancy features, just clean and pretty.
+          - **`🔌 Plug in Algorithm` button** — Grayed out / disabled. Placeholder for future functionality.
+          - **LLM API Keys selector** — Radio buttons for the 7 top-performing LLM models (Feb 2026):
+            - GPT (OpenAI), Claude (Anthropic — all Claude models under one button), Gemini (Google), Grok (xAI), DeepSeek, Qwen (Alibaba), Llama (Meta).
+          - **API key text input** — Disabled until a model is selected. Placeholder updates per model.
+          - Once a valid LLM API key is entered, Agent 6 is fully hooked up and functional through the user's personal LLM API keys.
+      - 7. **`AGNT007`** — 🕵️ Stealth Operations. Under construction (🚧🏗️ cute display).
+    - **Individual Agent Control Dials:** `Auto`, `Semi-Auto`, `Safe`.
+    - **Agent Status Display** — Shows agent status in multiple ways.
+  - **`P/L Multi-Function Display`** card — Moved from Action Bar into Bottom Bar, directly after Agent Access card.
+    - Equal height with all bottom bar cards. Styled like a real cockpit MFD.
+    - **Throttle Control** — Oceanliner/Submarine throttle design: `Full-Auto`, `Semi-Auto`, `Full-Stop` (default).
+    - **Profit/Loss Line Graph** — Display `No data` if no data available.
+      - **`+/- $`** professionally labeled.
+      - Each agent gets their own colored line.
+      - Five small buttons for X-axis views: `24h`, `1w`, `1m`, `1y`, `all`.
+      - Five small buttons for Y-axis views: `$10`, `$100`, `$1k`, `$10k`, `all`.
+    - **Agent Heatmap** — 7 heat bars (one per agent), color-coded by mode.
+    - **Win Rate Gauge** — Aggregated win % across all agents.
 - **Connect API Keys**
   - After successful key login, all trading cards and components appear in bottom bar and main region.
   - Card with text inputs for user API keys
@@ -444,27 +470,12 @@ _End Chapter 0._
     - **Multi-line text box** for larger RSA key.
     - **`Connect Kalshi Stream` button** ungrays once correctly-formatted keys are entered.
 - **Live/Demo Trading Mode Indicator Lights** — Pulsing, glowing indicator.
-- **Agent Access**
-  - **Individual agent controls**.
-  - **Agent Access Card** — For interactive agent interface
-    - 5 agents. 3 agents active on first build. access cards 4 and 5 are grayed out.
-    - **Individual Agent Control Dials:** `Auto`, `Semi-Auto`, `Safe`.
-    - **Agent Status Display** — Shows agent status in multiple ways.
 
 #### Action Bar:
 
 - **`Ignition`** header — Aligned top, centered
   - **Do not align gutter lines** between main region/sidebar with gutter lines between bottom bars.
-- **Global Control for Agents:**
-  - Oceanliner or Submarine Throttle design: `Full-Auto`, `Semi-Auto`, `Full-Stop` (default).
-- **Profit/Loss Line Graph** — Display `No data` if no data available
-  - **`+/- $`** professionally labeled.
-  - One main line for portfolio balance (simple, charcoal).
-  - Each agent gets their own colored line.
-  - Accurate profit/loss data per agent; colors pulled from active theme color palette.
-  - Five small buttons for X-axis views: `24 hours`, `1 week`, `1 month`, `1 year`, `all`.
-  - Five small buttons for Y-axis views: `$10`, `$100`, `$1k`, `$10k`, `all`.
-  - This is a packed region. Fit everything creatively, plus two more ways to visualize and interface with agents and performance.
+  - P/L MFD content moved to Hangar Bay bottom bar. Ignition bar now serves as a lightweight status/reference panel.
 
 #### Main Region:
 

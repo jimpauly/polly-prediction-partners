@@ -36,23 +36,54 @@ const AgentDashboard = (() => {
       defaultMode: "safe",
       active: true,
     },
-    vigil: {
-      displayName: "VIGIL",
-      icon: "🛡️",
-      description: "Risk Sentinel",
-      chartColor: "#64748b" /* slate */,
+    patiens: {
+      displayName: "PATIENS",
+      icon: "🕰️",
+      description: "Long-term Holds",
+      chartColor: "#f59e0b" /* amber */,
       defaultMode: "safe",
       active: false,
+      underConstruction: true,
     },
-    nexus: {
-      displayName: "NEXUS",
-      icon: "🔗",
-      description: "Cross-Market",
+    pavis: {
+      displayName: "PAVIS",
+      icon: "🛡️",
+      description: "Defensive Strategy",
       chartColor: "#64748b" /* slate */,
       defaultMode: "safe",
       active: false,
+      underConstruction: true,
+    },
+    byob: {
+      displayName: "BRING-YOUR-OWN-BOT",
+      icon: "🤖",
+      description: "Custom LLM Agent",
+      chartColor: "#06b6d4" /* cyan */,
+      defaultMode: "safe",
+      active: true,
+      isByob: true,
+    },
+    agnt007: {
+      displayName: "AGNT007",
+      icon: "🕵️",
+      description: "Stealth Operations",
+      chartColor: "#64748b" /* slate */,
+      defaultMode: "safe",
+      active: false,
+      underConstruction: true,
     },
   };
+
+  /* Top-performing LLM models (Feb 2026) for BYOB radio selectors */
+  const LLM_MODELS = [
+    { id: "openai",   label: "GPT (OpenAI)",       placeholder: "sk-..." },
+    { id: "claude",   label: "Claude (Anthropic)",  placeholder: "sk-ant-..." },
+    { id: "gemini",   label: "Gemini (Google)",     placeholder: "AIza..." },
+    { id: "grok",     label: "Grok (xAI)",          placeholder: "xai-..." },
+    { id: "deepseek", label: "DeepSeek",            placeholder: "sk-..." },
+    { id: "qwen",     label: "Qwen (Alibaba)",      placeholder: "sk-..." },
+    { id: "llama",    label: "Llama (Meta)",         placeholder: "meta-..." },
+  ];
 
   let pollIntervalId = null;
   let isConnected = false;
@@ -90,13 +121,32 @@ const AgentDashboard = (() => {
     container.innerHTML = "";
     Object.entries(AGENT_CONFIG).forEach(([agentName, config]) => {
       const card = document.createElement("div");
-      card.className = config.active
-        ? "agent-card"
-        : "agent-card agent-card--inactive";
       card.id = `agent-card-${agentName}`;
       card.dataset.agent = agentName;
 
-      if (config.active) {
+      if (config.underConstruction) {
+        card.className = "agent-card agent-card--construction";
+        card.innerHTML = `
+          <span class="agent-card__avatar">${config.icon}</span>
+          <span class="agent-card__name">${config.displayName}</span>
+          <span class="agent-card__role">${config.description}</span>
+          <div class="agent-card__construction">
+            <span class="agent-card__construction-emoji">🚧</span>
+            <span class="agent-card__construction-label">Under<br>Construction</span>
+            <span class="agent-card__construction-emoji">🏗️</span>
+          </div>
+        `;
+      } else if (config.isByob) {
+        card.className = "agent-card agent-card--byob";
+        card.innerHTML = `
+          <span class="agent-card__avatar">${config.icon}</span>
+          <span class="agent-card__name">${config.displayName}</span>
+          <span class="agent-card__role">${config.description}</span>
+          <div class="agent-card__status-dot" id="agent-dot-${agentName}" title="Status: Awaiting Config"></div>
+          <button class="byob-menu-toggle" id="byob-toggle-btn" title="Configure your own bot">⚙️ Configure</button>
+        `;
+      } else if (config.active) {
+        card.className = "agent-card";
         card.innerHTML = `
           <span class="agent-card__avatar">${config.icon}</span>
           <span class="agent-card__name">${config.displayName}</span>
@@ -131,6 +181,7 @@ const AgentDashboard = (() => {
           </div>
         `;
       } else {
+        card.className = "agent-card agent-card--inactive";
         card.innerHTML = `
           <span class="agent-card__avatar">${config.icon}</span>
           <span class="agent-card__name">${config.displayName}</span>
@@ -141,6 +192,115 @@ const AgentDashboard = (() => {
 
       container.appendChild(card);
     });
+
+    /* Render the BYOB overlay panel (hidden by default) */
+    renderByobPanel(container);
+  }
+
+  /* ---- BYOB (Bring-Your-Own-Bot) Panel ---- */
+
+  function renderByobPanel(container) {
+    const panel = document.createElement("div");
+    panel.id = "byob-panel";
+    panel.className = "byob-panel byob-panel--hidden";
+
+    const modelRadios = LLM_MODELS.map(
+      (m) => `
+        <label class="byob-model-radio">
+          <input type="radio" name="byob-llm" value="${m.id}">
+          <span class="byob-model-label">${m.label}</span>
+        </label>`
+    ).join("");
+
+    /* Build numbered-line editor */
+    panel.innerHTML = `
+      <div class="byob-panel__header">
+        <span style="font-weight:700;font-size:11px">🤖 Bring-Your-Own-Bot Config</span>
+        <button class="byob-panel__close" id="byob-close-btn" title="Close">✕</button>
+      </div>
+      <div class="byob-panel__body">
+        <div class="byob-editor-wrapper">
+          <div class="byob-editor-lines" id="byob-line-nums"></div>
+          <textarea class="byob-editor-textarea" id="byob-editor" rows="8"
+            spellcheck="false" placeholder="// paste or write your algorithm here…"></textarea>
+        </div>
+        <button class="btn btn-sm byob-plugin-btn" disabled title="Coming soon">🔌 Plug in Algorithm</button>
+        <div class="byob-model-selector">
+          <span class="byob-model-selector__title">LLM API Keys</span>
+          <div class="byob-model-grid">${modelRadios}</div>
+          <input type="text" class="input byob-api-key-input" id="byob-api-key"
+            placeholder="Enter your LLM API key…" disabled>
+        </div>
+      </div>
+    `;
+
+    /* Append to body so it escapes any stacking context */
+    document.body.appendChild(panel);
+
+    bindByobEvents(panel);
+  }
+
+  function bindByobEvents(panel) {
+    /* Toggle panel visibility */
+    document.addEventListener("click", (e) => {
+      if (e.target.closest("#byob-toggle-btn")) {
+        panel.classList.toggle("byob-panel--hidden");
+        e.stopPropagation();
+      }
+      if (e.target.closest("#byob-close-btn")) {
+        panel.classList.add("byob-panel--hidden");
+      }
+    });
+
+    /* Line numbers for the code editor */
+    const editor = panel.querySelector("#byob-editor");
+    const lineNums = panel.querySelector("#byob-line-nums");
+    if (editor && lineNums) {
+      const updateLines = () => {
+        const count = Math.max(editor.value.split("\n").length, 8);
+        lineNums.innerHTML = Array.from({ length: count }, (_, i) =>
+          `<span>${i + 1}</span>`
+        ).join("");
+      };
+      editor.addEventListener("input", updateLines);
+      editor.addEventListener("scroll", () => {
+        lineNums.scrollTop = editor.scrollTop;
+      });
+      updateLines();
+    }
+
+    /* Enable API key input when a model is selected */
+    const apiKeyInput = panel.querySelector("#byob-api-key");
+    const radios = panel.querySelectorAll('input[name="byob-llm"]');
+    radios.forEach((r) => {
+      r.addEventListener("change", () => {
+        if (apiKeyInput) {
+          apiKeyInput.disabled = false;
+          const model = LLM_MODELS.find((m) => m.id === r.value);
+          apiKeyInput.placeholder = model
+            ? model.placeholder
+            : "Enter your LLM API key…";
+        }
+      });
+    });
+
+    /* When API key is entered, activate BYOB agent */
+    if (apiKeyInput) {
+      apiKeyInput.addEventListener("input", () => {
+        const dot = document.getElementById("agent-dot-byob");
+        if (apiKeyInput.value.trim().length > 8) {
+          if (dot) {
+            dot.className = "agent-card__status-dot dot-live";
+            dot.title = "Status: Connected via LLM API";
+          }
+        } else {
+          if (dot) {
+            dot.className = "agent-card__status-dot";
+            dot.title = "Status: Awaiting Config";
+          }
+        }
+      });
+    }
   }
 
   /* ---- Bind Agent Mode Buttons ---- */

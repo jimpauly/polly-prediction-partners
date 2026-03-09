@@ -1681,6 +1681,277 @@ textarea.input {
   border-radius: var(--border-radius-sm, 3px);
   margin-top: auto;
 }
+
+/* --- Under-construction agent cards --- */
+.agent-card--construction {
+  opacity: 0.55;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-bg-surface-raised),
+    var(--color-bg-surface-raised) 6px,
+    var(--color-bg-surface) 6px,
+    var(--color-bg-surface) 12px
+  );
+}
+
+.agent-card__construction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  margin-top: auto;
+}
+
+.agent-card__construction-emoji {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.agent-card__construction-label {
+  font-family: var(--font-family-mono);
+  font-size: 6px;
+  font-weight: 800;
+  color: var(--color-fg-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* --- BYOB agent card --- */
+.agent-card--byob {
+  border-style: dashed;
+  border-color: var(--color-accent-primary);
+}
+
+.byob-menu-toggle {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border: 1px solid var(--color-accent-primary);
+  border-radius: 3px;
+  background: var(--color-bg-surface);
+  color: var(--color-accent-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: auto;
+}
+.byob-menu-toggle:hover {
+  background: var(--color-accent-primary);
+  color: #fff;
+}
+
+/* --- BYOB Config Panel (overlay) --- */
+.byob-panel {
+  position: fixed;
+  bottom: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(500px, 90vw);
+  z-index: 9999;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 -4px 20px var(--color-shadow);
+  overflow: hidden;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.byob-panel--hidden {
+  display: none;
+}
+
+.byob-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--color-bg-surface-raised);
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+.byob-panel__close {
+  background: none;
+  border: none;
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+.byob-panel__close:hover {
+  color: var(--color-state-error);
+}
+
+.byob-panel__body {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* --- Code editor --- */
+.byob-editor-wrapper {
+  display: flex;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-bg-canvas);
+  font-family: var(--font-family-mono);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.byob-editor-lines {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 6px 6px 4px;
+  background: var(--color-bg-surface-raised);
+  color: var(--color-fg-subtle);
+  user-select: none;
+  text-align: right;
+  min-width: 28px;
+  overflow: hidden;
+  border-right: 1px solid var(--color-border-muted);
+}
+
+.byob-editor-lines span {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.byob-editor-textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 6px 8px;
+  background: transparent;
+  color: var(--color-fg-default);
+  font-family: var(--font-family-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  tab-size: 2;
+}
+
+.byob-plugin-btn {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  font-size: 10px;
+}
+
+/* --- LLM Model Selector --- */
+.byob-model-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.byob-model-selector__title {
+  font-family: var(--font-family-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-fg-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.byob-model-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.byob-model-radio {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-family: var(--font-family-mono);
+  cursor: pointer;
+  color: var(--color-fg-muted);
+}
+
+.byob-model-radio input[type="radio"] {
+  margin: 0;
+  width: 10px;
+  height: 10px;
+}
+
+.byob-model-label {
+  white-space: nowrap;
+}
+
+.byob-api-key-input {
+  padding: 3px 6px;
+  height: 22px;
+  font-size: 10px;
+  font-family: var(--font-family-mono);
+}
+
+/* --- MFD (Multi-Function Display) in Bottom Bar --- */
+.mfd-header {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-surface-raised) 0%,
+    var(--color-bg-surface) 100%
+  );
+}
+
+.mfd-body {
+  background:
+    radial-gradient(
+      ellipse at 20% 80%,
+      color-mix(in srgb, var(--color-accent-primary) 4%, transparent) 0%,
+      transparent 70%
+    );
+}
+
+.mfd-label {
+  font-family: var(--font-family-mono);
+  font-weight: 700;
+  font-size: 8px;
+  color: var(--color-fg-muted);
+  letter-spacing: 0.08em;
+}
+
+.mfd-throttle-label {
+  font-family: var(--font-family-mono);
+  font-weight: 700;
+  font-size: 7px;
+  color: var(--color-fg-subtle);
+  white-space: nowrap;
+}
+
+/* --- Hangar Bay layout helpers --- */
+.hangar-agent-card,
+.hangar-mfd-card {
+  flex-shrink: 0 !important;
+}
+
+/* Compact agent cards for 7-agent grid */
+#agent-cards-container .agent-card {
+  min-width: 56px;
+  max-width: 80px;
+  flex: 1 1 0;
+  padding: 3px 2px;
+  gap: 1px;
+}
+
+#agent-cards-container .agent-card__avatar {
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+}
+
+#agent-cards-container .agent-card__name {
+  font-size: 6px;
+  letter-spacing: 0.2px;
+}
+
+#agent-cards-container .agent-card__role {
+  font-size: 5.5px;
+  max-width: 70px;
 }
 
 /* ==========================================================================
@@ -2103,15 +2374,22 @@ textarea.input {
 }
 
 #bottom-bar .card {
-  flex: 1 1 200px !important;
-  width: auto;
-  min-width: min(200px, 100%);
   display: flex;
   flex-direction: column;
 }
 
+#bottom-bar .hangar-agent-card {
+  flex: 0 0 50% !important;
+  min-width: 340px;
+}
+
+#bottom-bar .hangar-mfd-card {
+  flex: 0 0 calc(50% - 18px) !important;
+  min-width: 300px;
+}
+
 #bottom-bar #api-key-card {
-  flex: 1.2 1 220px !important;
+  flex: 0 0 200px !important;
 }
 
 #bottom-bar .card--compact .card-body {
