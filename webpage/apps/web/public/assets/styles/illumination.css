@@ -302,10 +302,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  border-top: 1px solid
-    color-mix(in srgb, var(--color-border-default) 45%, transparent);
-  padding-top: 4px;
-  margin-top: 2px;
+  padding-top: 3px;
 }
 
 /* ── FLIP SWITCH (horizontal, flips up/down) ───────── */
@@ -317,6 +314,7 @@
   cursor: pointer;
   position: relative;
   width: 18px;
+  min-height: 44px;
 }
 
 .switch-housing {
@@ -461,8 +459,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   cursor: ns-resize;
+  min-height: 44px;
 }
 
 .dimmer-dial {
@@ -816,33 +815,7 @@
       color-mix(in srgb, var(--color-state-warning) 12%, transparent);
 }
 
-/* ── Dial option labels (temporary — for picking preferred style) ── */
-[data-dial-style] .dimmer-dial-wrap::after {
-  content: "";
-  font-size: 5.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--color-accent-primary);
-  font-family: var(--font-family-mono);
-  text-transform: uppercase;
-  opacity: 0.7;
-  margin-top: 1px;
-}
-[data-dial-style="a"] .dimmer-dial-wrap::after {
-  content: "OPT A";
-}
-[data-dial-style="b"] .dimmer-dial-wrap::after {
-  content: "OPT B";
-}
-[data-dial-style="c"] .dimmer-dial-wrap::after {
-  content: "OPT C";
-}
-[data-dial-style="d"] .dimmer-dial-wrap::after {
-  content: "OPT D";
-}
-[data-dial-style="e"] .dimmer-dial-wrap::after {
-  content: "OPT E";
-}
+/* Dial option labels removed — style "b" (Knurled Edge) chosen as final */
 
 /* Dial interaction highlight — per-style hover */
 .dimmer-dial-wrap:hover .dimmer-dial {
