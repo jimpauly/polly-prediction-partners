@@ -7,6 +7,10 @@ const Gauges = (() => {
   function initialize() {
     drawAllGauges();
     setInterval(drawAllGauges, 3000);
+
+    // Immediately redraw on theme/mode change so gauges don't lag behind
+    document.addEventListener('themechange', function () { drawAllGauges(); });
+    document.addEventListener('modechange', function () { drawAllGauges(); });
   }
 
   function drawAllGauges() {

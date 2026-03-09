@@ -41,6 +41,12 @@
       border: 1px solid var(--color-border-muted);
       border-radius: var(--border-radius-md);
       background: var(--color-bg-surface);
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .palette-swatch:hover {
+      border-color: var(--color-accent-primary);
+      box-shadow: 0 2px 6px var(--color-shadow);
     }
     .palette-swatch__color {
       width: 100%;
@@ -53,11 +59,7 @@
       font-size: 0.6rem;
       color: var(--color-fg-muted);
       word-break: break-all;
-    }
-    .palette-swatch__value {
-      font-family: var(--font-family-mono);
-      font-size: 0.6rem;
-      color: var(--color-fg-subtle);
+      transition: color 0.15s;
     }
 
     /* Gauge placeholders */
@@ -398,47 +400,63 @@
       >
         <h2 class="region-title region-title--centered glow-text-primary">Viewing Port</h2>
 
-        <!-- Bento grid: System Gauges + Live Logs -->
-        <div class="main-bento-grid mb-4">
+        <!-- Bento grid: Active Palette + Man-o-meters / Live Logs -->
+        <div class="main-bento-grid main-bento-grid--top mb-4">
 
-          <!-- Map Gauges (Battery, Network, Memory, CPU) -->
+          <!-- Active Palette -->
           <div class="card">
             <div class="card-header">
-              <span>🔧 System Gauges</span>
+              <span>🎨 Active Palette</span>
+              <span id="palette-theme-name" class="text-xs text-accent"></span>
             </div>
-            <div class="card-body" style="display:flex;gap:var(--space-3);justify-content:space-around;flex-wrap:wrap">
-              <div id="gauge-battery" class="gauge-container" style="text-align:center">
-                <canvas width="72" height="72"></canvas>
-                <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
-                <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">BATT</div>
-              </div>
-              <div id="gauge-network" class="gauge-container" style="text-align:center">
-                <canvas width="72" height="72"></canvas>
-                <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
-                <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">NET</div>
-              </div>
-              <div id="gauge-memory" class="gauge-container" style="text-align:center">
-                <canvas width="72" height="72"></canvas>
-                <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
-                <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">MEM</div>
-              </div>
-              <div id="gauge-cpu" class="gauge-container" style="text-align:center">
-                <canvas width="72" height="72"></canvas>
-                <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
-                <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">CPU</div>
-              </div>
+            <div class="card-body">
+              <div id="palette-viewer" class="palette-grid" aria-label="Current theme color swatches"></div>
             </div>
           </div>
 
-          <!-- Live Logs Terminal -->
-          <div class="card">
-            <div class="card-header">
-              <span>📟 Live Logs</span>
+          <!-- Man-o-meters + Live Logs (stacked right column) -->
+          <div class="main-bento-right-stack">
+
+            <!-- Man-o-meters (Battery, Network, Memory, CPU) -->
+            <div class="card">
+              <div class="card-header">
+                <span>🔧 Man-o-meters</span>
+              </div>
+              <div class="card-body" style="display:flex;gap:var(--space-3);justify-content:space-around;flex-wrap:wrap">
+                <div id="gauge-battery" class="gauge-container" style="text-align:center">
+                  <canvas width="72" height="72"></canvas>
+                  <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
+                  <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">BATT</div>
+                </div>
+                <div id="gauge-network" class="gauge-container" style="text-align:center">
+                  <canvas width="72" height="72"></canvas>
+                  <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
+                  <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">NET</div>
+                </div>
+                <div id="gauge-memory" class="gauge-container" style="text-align:center">
+                  <canvas width="72" height="72"></canvas>
+                  <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
+                  <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">MEM</div>
+                </div>
+                <div id="gauge-cpu" class="gauge-container" style="text-align:center">
+                  <canvas width="72" height="72"></canvas>
+                  <div class="gauge-value" style="font-family:var(--font-family-mono);color:var(--color-fg-muted)">—</div>
+                  <div style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted);letter-spacing:0.1em">CPU</div>
+                </div>
+              </div>
             </div>
-            <div class="card-body p-0">
-              <div id="live-logs" style="font-family:var(--font-family-mono);padding:var(--space-2);background:var(--color-bg-canvas);min-height:100px;max-height:120px;overflow-y:auto;color:var(--color-fg-muted);line-height:1.6"></div>
+
+            <!-- Live Logs Terminal -->
+            <div class="card">
+              <div class="card-header">
+                <span>📟 Live Logs</span>
+              </div>
+              <div class="card-body p-0">
+                <div id="live-logs" style="font-family:var(--font-family-mono);padding:var(--space-2);background:var(--color-bg-canvas);min-height:100px;max-height:120px;overflow-y:auto;color:var(--color-fg-muted);line-height:1.6"></div>
+              </div>
             </div>
-          </div>
+
+          </div><!-- /.main-bento-right-stack -->
 
         </div><!-- /.main-bento-grid -->
 
@@ -452,26 +470,12 @@
           </div>
         </div>
 
-        <!-- Bento grid: Theme Palette Viewer + Web Elements Showcase -->
-        <div class="main-bento-grid">
-
-          <!-- Palette Viewer -->
-          <div class="card">
-            <div class="card-header">
-              <span>🎨 Theme Palette Viewer</span>
-              <span id="palette-theme-name" class="text-xs text-accent"></span>
-            </div>
-            <div class="card-body">
-              <div id="palette-viewer" class="palette-grid" aria-label="Current theme color swatches"></div>
-            </div>
+        <!-- Web Elements Showcase -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <span>🧩 Web Elements Showcase</span>
           </div>
-
-          <!-- Web Elements Showcase -->
-          <div class="card">
-            <div class="card-header">
-              <span>🧩 Web Elements Showcase</span>
-            </div>
-            <div class="card-body flex flex-col gap-4">
+          <div class="card-body flex flex-col gap-4">
             <!-- Buttons -->
             <div>
               <p class="text-sm font-semibold mb-2 text-muted">Buttons</p>
@@ -534,8 +538,6 @@
             </div>
           </div>
         </div>
-
-        </div><!-- /.main-bento-grid -->
       </section>
 
       <!-- Trading Studio -->
@@ -1184,15 +1186,39 @@
       });
 
       /* ---- Palette viewer ---- */
-      const paletteProps = [
-        'color-bg-canvas', 'color-bg-surface', 'color-bg-surface-raised', 'color-bg-overlay',
-        'color-fg-default', 'color-fg-muted', 'color-fg-subtle', 'color-fg-on-accent',
-        'color-border-default', 'color-border-muted',
-        'color-accent-primary', 'color-accent-secondary',
-        'color-link-default',
-        'color-state-success', 'color-state-warning', 'color-state-error', 'color-state-info',
-        'color-shadow'
+      const paletteEntries = [
+        { prop: 'color-bg-canvas', label: 'Page Background' },
+        { prop: 'color-bg-surface', label: 'Card Background' },
+        { prop: 'color-bg-surface-raised', label: 'Raised Surface' },
+        { prop: 'color-bg-overlay', label: 'Overlay' },
+        { prop: 'color-fg-default', label: 'Text' },
+        { prop: 'color-fg-muted', label: 'Soft Text' },
+        { prop: 'color-fg-subtle', label: 'Faint Text' },
+        { prop: 'color-fg-on-accent', label: 'Text on Color' },
+        { prop: 'color-border-default', label: 'Border' },
+        { prop: 'color-border-muted', label: 'Soft Border' },
+        { prop: 'color-accent-primary', label: 'Main Color' },
+        { prop: 'color-accent-secondary', label: 'Second Color' },
+        { prop: 'color-link-default', label: 'Link' },
+        { prop: 'color-state-success', label: 'Success' },
+        { prop: 'color-state-warning', label: 'Warning' },
+        { prop: 'color-state-error', label: 'Error' },
+        { prop: 'color-state-info', label: 'Info' },
+        { prop: 'color-shadow', label: 'Shadow' }
       ];
+
+      function copyColorToClipboard(hexValue, swatchEl) {
+        navigator.clipboard.writeText(hexValue).then(() => {
+          const label = swatchEl.querySelector('.palette-swatch__label');
+          const original = label.textContent;
+          label.textContent = 'color copied to clipboard';
+          label.style.color = 'var(--color-state-success)';
+          setTimeout(() => {
+            label.textContent = original;
+            label.style.color = '';
+          }, 1500);
+        }).catch(() => {});
+      }
 
       function renderPalette() {
         const viewer = document.getElementById('palette-viewer');
@@ -1203,14 +1229,15 @@
           document.documentElement.dataset.theme + ' / ' + document.documentElement.dataset.mode;
 
         viewer.innerHTML = '';
-        paletteProps.forEach(prop => {
-          const val = styles.getPropertyValue('--' + prop).trim();
+        paletteEntries.forEach(entry => {
+          const val = styles.getPropertyValue('--' + entry.prop).trim();
           const swatch = document.createElement('div');
           swatch.className = 'palette-swatch';
+          swatch.style.cursor = 'pointer';
           swatch.innerHTML =
-            `<div class="palette-swatch__color" style="background:var(--${prop})" aria-label="${prop}: ${val}"></div>` +
-            `<span class="palette-swatch__label">--${prop}</span>` +
-            `<span class="palette-swatch__value">${val}</span>`;
+            `<div class="palette-swatch__color" style="background:var(--${entry.prop})" aria-label="${entry.label}: ${val}"></div>` +
+            `<span class="palette-swatch__label">${entry.label}</span>`;
+          swatch.addEventListener('click', () => copyColorToClipboard(val, swatch));
           viewer.appendChild(swatch);
         });
       }

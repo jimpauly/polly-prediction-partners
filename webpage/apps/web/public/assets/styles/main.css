@@ -268,6 +268,23 @@ body {
   align-items: start;
 }
 
+/* Top bento: palette left, stacked gauges+logs right */
+.main-bento-grid--top {
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+
+/* Right-column stack: gauges above live logs */
+.main-bento-right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.main-bento-right-stack > .card {
+  margin-bottom: 0;
+}
+
 /* Cards inside the bento grid don't need their own bottom margin. */
 .main-bento-grid > .card {
   margin-bottom: 0;
@@ -275,6 +292,9 @@ body {
 
 @media (max-width: 640px) {
   .main-bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .main-bento-grid--top {
     grid-template-columns: 1fr;
   }
 }

@@ -485,16 +485,22 @@ _End Chapter 0._
 - Keep main stage stocked with diverse elements, cards, and displays for visual testing.
 - Prevent cards from overflowing region bounds; be creative with design.
 - Fill full width and height; center both horizontally and vertically.
-- **Creative Design Cards and Elements:**
-  - **Hero:** Keep thin and compact to preserve vertical space.
-  - **Map Gauges:** Battery, Network Downlink, Memory (no mocks), CPU, GPU, etc.
-    - Diverse mechanical manometers and plumbing.
-  - **Live Logs:** Terminal printing 7 events at a time (click, resize, focus). Keep compact; include errors/warnings.
-  - **Web Elements:** Assorted, non-functional elements for visual testing.
-  - **Palette Viewer:** Accurate with each theme selection and light/dark mode.
-    - Random unique splat-shaped color swatches for selected palette (the 12 major or common selectors).
+- **Layout — Top Bento Grid (2 columns):**
+  - **Left column — Active Palette card (first card):**
+    - Renamed from "Theme Palette Viewer" to "Active Palette."
+    - Accurate with each theme selection and light/dark mode.
+    - Friendly swatch labels (e.g., "Page Background", "Text", "Main Color") — no code-speak.
+    - No hex codes displayed; clicking a swatch silently copies its hex value to clipboard.
+      - Brief "color copied to clipboard" toast on click — no upfront explanation, let users discover it.
+  - **Right column — stacked vertically:**
+    - **Man-o-meters** (renamed from "System Gauges"): Battery, Network, Memory, CPU.
+      - Diverse mechanical manometers and plumbing.
+      - Immediately redraws on theme/mode change (no lag).
+    - **Live Logs** (below Man-o-meters): Terminal printing 7 events at a time (click, resize, focus). Keep compact; include errors/warnings.
+- **Below top grid — full width:**
   - **MS Paint 1998 Clone:** Fully functional with tools (New, Open, Save, Save As, etc.). Should look exactly like Microsoft Paint 1998.
     - should have the maximize toggle in the top right that makes it fill to take up the entire main region. All other components leave the main region until the maximized is retoggled.
+  - **Web Elements Showcase:** Assorted, non-functional elements for visual testing.
   - What else should we have in the design studio?
 
 ##### Trading Studio
