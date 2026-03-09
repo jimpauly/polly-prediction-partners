@@ -16,7 +16,7 @@
   var THEMES = [
     {
       id: "webpage",
-      name: "Webpage",
+      name: "WebPage Default",
       description: "2026 webpage. Modern default. Diverse colors, professional",
     },
     {
@@ -27,9 +27,9 @@
     },
     {
       id: "gen7-cockpit",
-      name: "Gen-7 Cockpit",
+      name: "Gen5 Cockpit",
       description:
-        "Gen 7 Fighter. Dark Gull Gray (FS 36231), MFD Green / NVG Night Vision",
+        "Gen 5 Fighter. Dark Gull Gray (FS 36231), MFD Green / NVG Night Vision",
     },
     {
       id: "ussr-cockpit",
@@ -197,15 +197,15 @@
         accent: "#000080",
         surface: "#c0c0c0",
         border: "#808080",
-        borderMuted: "#a0a0a0",
+        borderMuted: "#c0c0c0",
       },
       dark: {
-        bg: "#3a3a3a",
-        fg: "#c0c0c0",
-        accent: "#6666cc",
-        surface: "#2a2a2a",
-        border: "#606060",
-        borderMuted: "#505050",
+        bg: "#ff7f7f",
+        fg: "#ffffff",
+        accent: "#ffff7f",
+        surface: "#3f3f3f",
+        border: "#7f7f7f",
+        borderMuted: "#3f3f3f",
       },
     },
     "gen7-cockpit": {

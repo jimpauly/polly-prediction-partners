@@ -291,9 +291,9 @@
         <div class="sidebar-panel__header">
           <span class="sidebar-panel__title glow-text-secondary">Modes</span>
         </div>
-        <div class="sidebar-panel__body" style="display:flex;justify-content:center;gap:var(--space-2)">
-          <button id="mode-toggle-btn" class="btn btn-sm" aria-label="Toggle light/dark mode" style="min-width:80px">🌙 Dark</button>
-          <button id="toggle-3d" class="btn btn-sm" aria-label="Toggle 3D/2D mode" style="min-width:80px">🧊 3D Off</button>
+        <div class="sidebar-panel__body" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)">
+          <button id="mode-toggle-btn" class="btn btn-sm" aria-label="Toggle light/dark mode" style="width:100%">🌙 Dark</button>
+          <button id="toggle-3d" class="btn btn-sm" aria-label="Toggle 3D/2D mode" style="width:100%">🧊 3D Off</button>
         </div>
       </div>
 
@@ -309,22 +309,7 @@
         </div>
       </div>
 
-      <hr class="divider">
 
-      <!-- Visibility Toggles (Dev Tools) -->
-      <div class="sidebar-panel" aria-label="Visibility tools">
-        <div class="sidebar-panel__header">
-          <span class="sidebar-panel__title glow-text-secondary">Visibility</span>
-        </div>
-        <div class="sidebar-panel__body flex flex-col gap-2">
-          <label class="checkbox text-xs">
-            <input type="checkbox" id="toggle-rulers"> Rulers (X/Y)
-          </label>
-          <label class="checkbox text-xs">
-            <input type="checkbox" id="toggle-grid"> Grid (60×60px)
-          </label>
-        </div>
-      </div>
     </aside>
 
     <!-- ================================================================== -->
@@ -1114,19 +1099,6 @@
         is3d = !is3d;
         document.documentElement.classList.toggle('mode-3d', is3d);
         toggle3d.textContent = is3d ? '🧊 3D On' : '🧊 3D Off';
-      });
-
-      /* ---- Visibility toggles ---- */
-      document.getElementById('toggle-rulers')?.addEventListener('change', (e) => {
-        document.querySelectorAll('.ruler-overlay').forEach(el => {
-          el.style.display = e.target.checked ? 'block' : 'none';
-        });
-        if (e.target.checked && typeof Rulers !== 'undefined') Rulers.draw();
-      });
-      document.getElementById('toggle-grid')?.addEventListener('change', (e) => {
-        document.querySelectorAll('.grid-overlay').forEach(el => {
-          el.style.display = e.target.checked ? 'block' : 'none';
-        });
       });
 
       /* ---- Tab switching logic ---- */

@@ -2210,9 +2210,10 @@ textarea.input {
 }
 
 .theme-selector__grid {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: 1px;
+  width: 100%;
 }
 
 .theme-selector__swatch {
@@ -2223,6 +2224,7 @@ textarea.input {
   padding: 4px 4px;
   font-weight: 700;
   text-align: center;
+  width: 100%;
   min-width: 0;
   border: 2px solid;
   border-radius: 0;
@@ -2257,13 +2259,13 @@ textarea.input {
 }
 
 .theme-selector--grid {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  width: auto;
+  width: 100%;
 }
 
 .sidebar-panel__body .theme-selector--grid {
-  width: auto;
+  width: 100%;
 }
 
 /* ==========================================================================

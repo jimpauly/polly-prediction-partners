@@ -103,23 +103,23 @@
 [data-theme="mosaic-1993"][data-mode="light"] {
   --color-bg-canvas: #008080;
   --color-bg-surface: #c0c0c0;
-  --color-bg-surface-raised: #d4d0c8;
-  --color-bg-overlay: rgba(0, 0, 0, 0.4);
+  --color-bg-surface-raised: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.50);
   --color-fg-default: #000000;
-  --color-fg-muted: #333333;
+  --color-fg-muted: #808080;
   --color-fg-subtle: #808080;
   --color-border-default: #808080;
-  --color-border-muted: #a0a0a0;
+  --color-border-muted: #c0c0c0;
   --color-accent-primary: #000080;
   --color-accent-secondary: #008080;
-  --color-link-default: #0000ee;
+  --color-link-default: #0000ff;
   --color-state-success: #008000;
   --color-state-warning: #808000;
   --color-state-error: #ff0000;
   --color-state-info: #000080;
   --color-shadow: rgba(0, 0, 0, 0.25);
-  --font-family-base: "Courier New", Courier, monospace;
-  --font-family-mono: "Courier New", Courier, monospace;
+  --font-family-base: "Times", serif;
+  --font-family-mono: "Fixedsys", "Courier New", Courier, monospace;
   --border-radius-sm: 0px;
   --border-radius-md: 0px;
   --border-radius-lg: 0px;
@@ -128,25 +128,25 @@
 }
 
 [data-theme="mosaic-1993"][data-mode="dark"] {
-  --color-bg-canvas: #2a2a2a;
-  --color-bg-surface: #3a3a3a;
-  --color-bg-surface-raised: #4a4a4a;
-  --color-bg-overlay: rgba(0, 0, 0, 0.6);
-  --color-fg-default: #c0c0c0;
-  --color-fg-muted: #a0a0a0;
-  --color-fg-subtle: #707070;
-  --color-border-default: #606060;
-  --color-border-muted: #505050;
-  --color-accent-primary: #6666cc;
-  --color-accent-secondary: #66cccc;
-  --color-link-default: #8888ff;
-  --color-state-success: #44bb44;
-  --color-state-warning: #bbbb44;
-  --color-state-error: #ff4444;
-  --color-state-info: #6666cc;
-  --color-shadow: rgba(0, 0, 0, 0.5);
-  --font-family-base: "Courier New", Courier, monospace;
-  --font-family-mono: "Courier New", Courier, monospace;
+  --color-bg-canvas: #ff7f7f;
+  --color-bg-surface: #3f3f3f;
+  --color-bg-surface-raised: #000000;
+  --color-bg-overlay: rgba(255, 255, 255, 0.50);
+  --color-fg-default: #ffffff;
+  --color-fg-muted: #7f7f7f;
+  --color-fg-subtle: #7f7f7f;
+  --color-border-default: #7f7f7f;
+  --color-border-muted: #3f3f3f;
+  --color-accent-primary: #ffff7f;
+  --color-accent-secondary: #ff7f7f;
+  --color-link-default: #ffff00;
+  --color-state-success: #ff7fff;
+  --color-state-warning: #7f7fff;
+  --color-state-error: #00ffff;
+  --color-state-info: #ffff7f;
+  --color-shadow: rgba(255, 255, 255, 0.25);
+  --font-family-base: "Times", serif;
+  --font-family-mono: "Fixedsys", "Courier New", Courier, monospace;
   --border-radius-sm: 0px;
   --border-radius-md: 0px;
   --border-radius-lg: 0px;
@@ -1396,4 +1396,206 @@
   --border-radius-md: 8px;
   --border-radius-lg: 14px;
   --transition-speed: 0.25s;
+}
+
+/* ==========================================================================
+   MOSAIC-1993 — Windows 3.1 Structural Overrides
+   Chiseled 3D borders, inset/outset bevels, Win3.1 title bars
+   ========================================================================== */
+
+/* Outset bevel (raised) — classic Win3.1 button/panel look */
+[data-theme="mosaic-1993"][data-mode="light"] .region,
+[data-theme="mosaic-1993"][data-mode="light"] .card,
+[data-theme="mosaic-1993"][data-mode="light"] .sidebar-panel,
+[data-theme="mosaic-1993"][data-mode="light"] .btn {
+  border: none;
+  box-shadow:
+    inset -1px -1px 0 0 #000000,
+    inset  1px  1px 0 0 #ffffff,
+    inset -2px -2px 0 0 #808080,
+    inset  2px  2px 0 0 #dfdfdf;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .region,
+[data-theme="mosaic-1993"][data-mode="dark"] .card,
+[data-theme="mosaic-1993"][data-mode="dark"] .sidebar-panel,
+[data-theme="mosaic-1993"][data-mode="dark"] .btn {
+  border: none;
+  box-shadow:
+    inset -1px -1px 0 0 #ffffff,
+    inset  1px  1px 0 0 #000000,
+    inset -2px -2px 0 0 #7f7f7f,
+    inset  2px  2px 0 0 #202020;
+}
+
+/* Inset bevel — text inputs, list boxes */
+[data-theme="mosaic-1993"][data-mode="light"] input,
+[data-theme="mosaic-1993"][data-mode="light"] select,
+[data-theme="mosaic-1993"][data-mode="light"] textarea {
+  border: none;
+  box-shadow:
+    inset -1px -1px 0 0 #dfdfdf,
+    inset  1px  1px 0 0 #808080,
+    inset -2px -2px 0 0 #ffffff,
+    inset  2px  2px 0 0 #000000;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] input,
+[data-theme="mosaic-1993"][data-mode="dark"] select,
+[data-theme="mosaic-1993"][data-mode="dark"] textarea {
+  border: none;
+  box-shadow:
+    inset -1px -1px 0 0 #202020,
+    inset  1px  1px 0 0 #7f7f7f,
+    inset -2px -2px 0 0 #000000,
+    inset  2px  2px 0 0 #ffffff;
+}
+
+/* Active button pressed state — inverted bevel */
+[data-theme="mosaic-1993"][data-mode="light"] .btn:active,
+[data-theme="mosaic-1993"][data-mode="light"] .btn.active,
+[data-theme="mosaic-1993"][data-mode="light"] .btn-primary {
+  box-shadow:
+    inset -1px -1px 0 0 #dfdfdf,
+    inset  1px  1px 0 0 #000000,
+    inset -2px -2px 0 0 #ffffff,
+    inset  2px  2px 0 0 #808080;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .btn:active,
+[data-theme="mosaic-1993"][data-mode="dark"] .btn.active,
+[data-theme="mosaic-1993"][data-mode="dark"] .btn-primary {
+  box-shadow:
+    inset -1px -1px 0 0 #202020,
+    inset  1px  1px 0 0 #ffffff,
+    inset -2px -2px 0 0 #000000,
+    inset  2px  2px 0 0 #7f7f7f;
+}
+
+/* Win3.1 title bars — sidebar panel headers & card headers */
+[data-theme="mosaic-1993"][data-mode="light"] .sidebar-panel__header,
+[data-theme="mosaic-1993"][data-mode="light"] .card-header {
+  background: #000080;
+  color: #ffffff;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .sidebar-panel__header,
+[data-theme="mosaic-1993"][data-mode="dark"] .card-header {
+  background: #ffff7f;
+  color: #000000;
+}
+
+[data-theme="mosaic-1993"][data-mode="light"] .sidebar-panel__title,
+[data-theme="mosaic-1993"][data-mode="light"] .card-header span {
+  color: #ffffff;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .sidebar-panel__title,
+[data-theme="mosaic-1993"][data-mode="dark"] .card-header span {
+  color: #000000;
+}
+
+/* Region title — Win3.1 style */
+[data-theme="mosaic-1993"] .region-title {
+  font-family: "Times", serif;
+  letter-spacing: 0.02em;
+}
+
+/* Nav tabs — Win3.1 tab style */
+[data-theme="mosaic-1993"][data-mode="light"] .nav-tab {
+  border-radius: 0;
+  border: none;
+  box-shadow:
+    inset -1px -1px 0 0 #808080,
+    inset  1px  1px 0 0 #ffffff;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .nav-tab {
+  border-radius: 0;
+  border: none;
+  box-shadow:
+    inset -1px -1px 0 0 #7f7f7f,
+    inset  1px  1px 0 0 #000000;
+}
+
+[data-theme="mosaic-1993"][data-mode="light"] .nav-tab.active {
+  background: #c0c0c0;
+  color: #000000;
+  box-shadow:
+    inset -1px  0 0 0 #808080,
+    inset  1px  1px 0 0 #ffffff,
+    inset  0    2px 0 0 #ffffff;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .nav-tab.active {
+  background: #3f3f3f;
+  color: #ffffff;
+  box-shadow:
+    inset -1px  0 0 0 #7f7f7f,
+    inset  1px  1px 0 0 #000000,
+    inset  0    2px 0 0 #000000;
+}
+
+/* Dividers — Win3.1 etched line */
+[data-theme="mosaic-1993"][data-mode="light"] .divider,
+[data-theme="mosaic-1993"][data-mode="light"] hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to bottom, #808080 0%, #808080 50%, #ffffff 50%, #ffffff 100%);
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] .divider,
+[data-theme="mosaic-1993"][data-mode="dark"] hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to bottom, #7f7f7f 0%, #7f7f7f 50%, #000000 50%, #000000 100%);
+}
+
+/* Scrollbars — Win3.1 style */
+[data-theme="mosaic-1993"][data-mode="light"] ::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+[data-theme="mosaic-1993"][data-mode="light"] ::-webkit-scrollbar-track {
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+
+[data-theme="mosaic-1993"][data-mode="light"] ::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  box-shadow:
+    inset -1px -1px 0 0 #000000,
+    inset  1px  1px 0 0 #ffffff,
+    inset -2px -2px 0 0 #808080,
+    inset  2px  2px 0 0 #dfdfdf;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] ::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] ::-webkit-scrollbar-track {
+  background: #3f3f3f;
+  border: 1px solid #7f7f7f;
+}
+
+[data-theme="mosaic-1993"][data-mode="dark"] ::-webkit-scrollbar-thumb {
+  background: #3f3f3f;
+  box-shadow:
+    inset -1px -1px 0 0 #ffffff,
+    inset  1px  1px 0 0 #000000,
+    inset -2px -2px 0 0 #7f7f7f,
+    inset  2px  2px 0 0 #202020;
+}
+
+/* Theme selector swatch buttons — flat Win3.1 style */
+[data-theme="mosaic-1993"] .theme-selector__swatch {
+  font-family: "Times", serif;
+}
+
+[data-theme="mosaic-1993"] .theme-selector__swatch-label {
+  font-family: "Times", serif;
+  border-radius: 0;
 }

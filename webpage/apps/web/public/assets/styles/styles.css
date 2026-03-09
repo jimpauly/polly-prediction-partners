@@ -427,22 +427,6 @@ body {
   gap: 3px;
   padding: 4px;
 }
-.visibility-toggles {
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.visibility-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  cursor: pointer;
-}
-.visibility-toggle input[type="checkbox"] {
-  accent-color: var(--color-bg-brand);
-}
 
 /* ---- Region: Right Sidebar ---- */
 .region-sidebar-right {
