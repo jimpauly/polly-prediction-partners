@@ -4,7 +4,9 @@
 
 const Telemetry = (() => {
   let pingData = [];
-  const MAX_PING_POINTS = 30;
+  const MAX_PING_POINTS = 30; /* ~30 seconds at 1-second intervals */
+  const PING_Y_MIN = 0;
+  const PING_Y_MAX = 300;
   let animationFrameId = null;
   let backendHealthInterval = null;
 
@@ -45,7 +47,7 @@ const Telemetry = (() => {
         const base = navigator.connection?.effectiveType === "4g" ? 20 : 50;
         rtt = base + Math.random() * 30;
       }
-      pingData.push(rtt);
+      pingData.push(Math.min(rtt, PING_Y_MAX));
       if (pingData.length > MAX_PING_POINTS) pingData.shift();
 
       /* Update ping label */
@@ -72,34 +74,41 @@ const Telemetry = (() => {
         return;
       }
 
-      const maxPing = Math.max(...pingData, 100);
-      const minPing = Math.min(...pingData, 0);
-      const range = maxPing - minPing || 1;
+      /* Static Y axis: 0ms at top, 300ms at bottom (inverted) */
+      const range = PING_Y_MAX - PING_Y_MIN;
 
       const computedStyle = getComputedStyle(document.documentElement);
       const lineColor =
         computedStyle.getPropertyValue("--color-state-success").trim() ||
         "#16a34a";
 
+      /* Build points array */
+      const points = pingData.map((value, index) => ({
+        x: (index / (MAX_PING_POINTS - 1)) * width,
+        y: (value / range) * (height - 4) + 2, /* 0ms = top (y=2), 300ms = bottom (y=height-2) */
+      }));
+
+      /* Draw smooth bezier curve through points */
       context.beginPath();
       context.strokeStyle = lineColor;
       context.lineWidth = 1.5;
       context.lineJoin = "round";
       context.lineCap = "round";
 
-      pingData.forEach((value, index) => {
-        const x = (index / (MAX_PING_POINTS - 1)) * width;
-        const y = height - ((value - minPing) / range) * (height - 4) - 2;
-        if (index === 0) context.moveTo(x, y);
-        else context.lineTo(x, y);
-      });
+      context.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const cpx = (prev.x + curr.x) / 2;
+        context.bezierCurveTo(cpx, prev.y, cpx, curr.y, curr.x, curr.y);
+      }
 
       context.stroke();
 
-      /* Fill under the line */
+      /* Fill under the curve */
       const gradient = context.createLinearGradient(0, 0, 0, height);
-      gradient.addColorStop(0, lineColor + "25");
-      gradient.addColorStop(1, lineColor + "00");
+      gradient.addColorStop(0, lineColor + "00");
+      gradient.addColorStop(1, lineColor + "25");
       context.lineTo(width, height);
       context.lineTo(0, height);
       context.closePath();
@@ -110,7 +119,7 @@ const Telemetry = (() => {
     }
 
     collectPing();
-    setInterval(collectPing, 2000);
+    setInterval(collectPing, 1000); /* 1-second intervals for ~30s history */
     drawSparkline();
   }
 

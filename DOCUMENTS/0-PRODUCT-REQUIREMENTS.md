@@ -371,17 +371,16 @@ _End Chapter 0._
 #### Nav Bar:
 
 - **No header** in nav bar
-  - **`Navigation`** text label — Aligned left, vertically centered
-  - **Studio Selector** — Card with chunky radio buttons for `Design`, `Trade`, `Fly`, `Convert`. Aligned left, vertically centered.
-    - **Design:** Default studio. Creative modern webpage.
-    - **Trading:** Trading active; main region switches to markets or series cards.
-    - **Flight SIM:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
-      - **ISS live video feeds**
-    - **Converter:** File converters, image converters, PDF filler, URL to MP3/MP4 converter.
+  - **`HUD`** text label — Aligned left, vertically centered
   - **Telemetry** card — Aligned right, vertically centered
-    - **PING:** Live `<canvas>` tiny sparkline using `navigator.connection.rtt` (calming, slow-smooth animation, real-time).
-    - **SPD:** Static text `"MACH 4.20"` (only allowed mock data ever).
-    - **DATE/TIME:** Real-time clock — Format `M/D` and 24-hour `HH:MM`. Exclude seconds (it's stressful).
+    - **PING:** Live `<canvas>` tiny sparkline using `navigator.connection.rtt`
+      - Smooth bezier curves (curvy up-and-down motion, not jagged lines)
+      - Static Y axis from 0ms (top) to 300ms (bottom) — values are inverted/flipped
+      - X axis shows ~30 seconds of history (1-second sample intervals)
+      - No axis labels, no axis lines — keep the sparkline minimal and cute
+      - Shorter width canvas; only "PING" as a text label beside it
+    - **SVC:** Backend health indicator dot
+    - **DATE/TIME:** Real-time clock — Format `M/D` and 24-hour `HH:MM:SS`
 
 #### Left Sidebar:
 
@@ -459,7 +458,14 @@ _End Chapter 0._
 
 #### Main Region:
 
-- **`Viewing Port`** header — Aligned top, centered
+- **Studio Tabs** header — Row of tab buttons at top of main region, horizontally aligned
+  - **`Design`**, **`Trade`**, **`Fly`**, **`Convert`** — Switching tabs changes only the main region content (no page reload)
+    - **Design:** Default studio. Creative modern webpage.
+    - **Trading:** Trading active; main region switches to markets or series cards.
+    - **Flight SIM:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
+      - **ISS live video feeds**
+    - **Converter:** File converters, image converters, PDF filler, URL to MP3/MP4 converter.
+- **`Viewing Port`** header — Aligned top, centered (within Design Studio)
 
 ##### Design Studio
 
@@ -717,8 +723,8 @@ _Intentional misnaming preserved_
 - Document variable purposes with brief dev notes in code
 - Plan for scoped variables (component-level)
 - Theme and illumination state persist when switching studios. They reset on new browser session
-- One `index.html`. Studio selector in Nav Bar switches state — no page reloads, no routing.
-- The Header, Nav, sidebars, Bottom and Action Bar never change between studios. Only Main Region's content changes.
+- One `index.html`. Studio tabs in the Main Region header switch state — no page reloads, no routing.
+- The Header, Nav (HUD), sidebars, Bottom and Action Bar never change between studios. Only Main Region's content changes.
 - Design Studio is the default landing state — our UI shows off itself with web design skills first.
 - Trading Studio activates when API keys are connected. The Main Region becomes a live data interface that resembles navigating Kalshi.
 - Agents run in the backend regardless of which studio is active.

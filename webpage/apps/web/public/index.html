@@ -252,57 +252,12 @@
     <!-- NAV BAR                                                            -->
     <!-- ================================================================== -->
     <nav id="nav-bar" class="region region-nav glow-bars-secondary" role="navigation" aria-label="Studio navigation">
-      <span class="region-title glow-text-secondary" style="margin:0;white-space:nowrap">Navigation</span>
-      <ul class="nav-tabs" role="tablist">
-        <li role="presentation">
-          <button
-            class="nav-tab active glow-text-secondary"
-            role="tab"
-            id="tab-design"
-            aria-selected="true"
-            aria-controls="studio-design"
-            data-studio="design"
-          >🎨 Design</button>
-        </li>
-        <li role="presentation">
-          <button
-            class="nav-tab glow-text-secondary"
-            role="tab"
-            id="tab-trading"
-            aria-selected="false"
-            aria-controls="studio-trading"
-            data-studio="trading"
-            tabindex="-1"
-          >📈 Trade</button>
-        </li>
-        <li role="presentation">
-          <button
-            class="nav-tab glow-text-secondary"
-            role="tab"
-            id="tab-fly"
-            aria-selected="false"
-            aria-controls="studio-fly"
-            data-studio="fly"
-            tabindex="-1"
-          >✈️ Fly</button>
-        </li>
-        <li role="presentation">
-          <button
-            class="nav-tab glow-text-secondary"
-            role="tab"
-            id="tab-converter"
-            aria-selected="false"
-            aria-controls="studio-converter"
-            data-studio="converter"
-            tabindex="-1"
-          >🔄 Convert</button>
-        </li>
-      </ul>
+      <span class="region-title glow-text-secondary" style="margin:0;white-space:nowrap">HUD</span>
       <!-- Telemetry Card (right-aligned) -->
-      <div class="flex items-center gap-3 ml-auto" style="font-family:var(--font-family-mono);white-space:nowrap;font-size:11px">
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-family:var(--font-family-mono);white-space:nowrap;font-size:11px">
         <div class="flex items-center gap-1" title="Network latency">
           <span style="font-weight:700;color:var(--color-fg-muted)">PING</span>
-          <canvas id="ping-sparkline" width="60" height="16" style="display:block"></canvas>
+          <canvas id="ping-sparkline" width="48" height="16" style="display:block"></canvas>
           <span id="ping-label" style="color:var(--color-fg-muted);min-width:32px">—ms</span>
         </div>
         <div title="Backend health" style="display:flex;align-items:center;gap:3px">
@@ -385,6 +340,55 @@
     <!-- MAIN REGION                                                        -->
     <!-- ================================================================== -->
     <main id="main-region" class="region region-main glow-flood" role="main" aria-label="Main content area">
+
+      <!-- Studio Tabs (moved from nav bar into main region header) -->
+      <div class="main-region-header">
+        <ul class="nav-tabs" role="tablist">
+          <li role="presentation">
+            <button
+              class="nav-tab active glow-text-secondary"
+              role="tab"
+              id="tab-design"
+              aria-selected="true"
+              aria-controls="studio-design"
+              data-studio="design"
+            >🎨 Design</button>
+          </li>
+          <li role="presentation">
+            <button
+              class="nav-tab glow-text-secondary"
+              role="tab"
+              id="tab-trading"
+              aria-selected="false"
+              aria-controls="studio-trading"
+              data-studio="trading"
+              tabindex="-1"
+            >📈 Trade</button>
+          </li>
+          <li role="presentation">
+            <button
+              class="nav-tab glow-text-secondary"
+              role="tab"
+              id="tab-fly"
+              aria-selected="false"
+              aria-controls="studio-fly"
+              data-studio="fly"
+              tabindex="-1"
+            >✈️ Fly</button>
+          </li>
+          <li role="presentation">
+            <button
+              class="nav-tab glow-text-secondary"
+              role="tab"
+              id="tab-converter"
+              aria-selected="false"
+              aria-controls="studio-converter"
+              data-studio="converter"
+              tabindex="-1"
+            >🔄 Convert</button>
+          </li>
+        </ul>
+      </div>
 
       <!-- Design Studio -->
       <section
