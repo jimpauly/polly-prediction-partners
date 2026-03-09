@@ -1025,13 +1025,70 @@
 
       <!-- ACTION BAR — "Ignition" (~1/3 width) -->
       <div id="action-bar" class="region region-action glow-bars-secondary" role="toolbar" aria-label="Ignition controls">
-        <div style="display:flex;flex-direction:column;gap:var(--space-2);height:100%;padding:var(--space-2)">
-          <span class="region-title glow-text-secondary" style="margin:0;text-align:center">Ignition</span>
+        <div class="ignition-panel">
 
-          <div style="display:flex;gap:var(--space-3);flex:1;align-items:center;justify-content:center">
-            <span style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-subtle);letter-spacing:0.08em;text-align:center;opacity:0.6">P/L MFD moved to<br>Hangar Bay ⬅️</span>
+          <!-- Panel header with title and serial -->
+          <div class="ignition-panel__header">
+            <span class="ignition-panel__corner ignition-panel__corner--tl">◤</span>
+            <span class="ignition-panel__title glow-text-secondary">IGNITION</span>
+            <span class="ignition-panel__serial">PPP·CTRL·MK4</span>
+            <span class="ignition-panel__corner ignition-panel__corner--tr">◥</span>
           </div>
-        </div>
+
+          <!-- Status readout strip -->
+          <div class="ignition-status-bar">
+            <span class="ignition-status-key">MODE</span>
+            <span class="ignition-status-sep">╠═</span>
+            <span class="ignition-status-value" id="ignition-mode-display">FULL·STOP</span>
+            <span class="ignition-status-dot" id="ignition-status-dot" data-state="stop"></span>
+          </div>
+
+          <!-- ── The three state selector buttons ── -->
+          <div class="ignition-states" role="group" aria-label="Global agent throttle">
+
+            <!-- FULL AUTO -->
+            <button class="ign-btn ign-btn--auto" id="ign-btn-auto" data-ign-state="auto"
+                    aria-label="Global: Full Auto — all agents trade autonomously">
+              <div class="ign-btn__row ign-btn__row--top">
+                <span class="ign-btn__indicator" aria-hidden="true">◉</span>
+                <span class="ign-btn__mode">FULL AUTO</span>
+              </div>
+              <div class="ign-btn__desc">AUTONOMOUS OPS</div>
+              <div class="ign-btn__spec">CTRL-BUS·LIVE · ALL AGENTS ENGAGED</div>
+            </button>
+
+            <!-- SEMI AUTO -->
+            <button class="ign-btn ign-btn--semi" id="ign-btn-semi" data-ign-state="semi"
+                    aria-label="Global: Semi Auto — agents require operator confirmation">
+              <div class="ign-btn__row ign-btn__row--top">
+                <span class="ign-btn__indicator" aria-hidden="true">◉</span>
+                <span class="ign-btn__mode">SEMI AUTO</span>
+              </div>
+              <div class="ign-btn__desc">CONFIRM REQ.</div>
+              <div class="ign-btn__spec">THRESHOLD·95% · ALERT ARMED</div>
+            </button>
+
+            <!-- FULL STOP -->
+            <button class="ign-btn ign-btn--stop ign-btn--active" id="ign-btn-stop" data-ign-state="stop"
+                    aria-label="Global: Full Stop — all agents halted, safe mode">
+              <div class="ign-btn__row ign-btn__row--top">
+                <span class="ign-btn__indicator" aria-hidden="true">⊘</span>
+                <span class="ign-btn__mode">FULL STOP</span>
+              </div>
+              <div class="ign-btn__desc">AGENTS HALTED</div>
+              <div class="ign-btn__spec">RISK LOCKED · SAFE ARMED</div>
+            </button>
+
+          </div><!-- /.ignition-states -->
+
+          <!-- Panel footer nameplate -->
+          <div class="ignition-panel__footer">
+            <span class="ignition-panel__corner ignition-panel__corner--bl">◣</span>
+            <span class="ignition-panel__foot-text">PPP-TH-MK4-REV2 · 2026 · GLOBAL THROTTLE</span>
+            <span class="ignition-panel__corner ignition-panel__corner--br">◢</span>
+          </div>
+
+        </div><!-- /.ignition-panel -->
       </div>
 
     </div><!-- /.region-foot -->
@@ -1316,25 +1373,62 @@
         });
       }
 
-      /* ---- Throttle Control ---- */
-      const throttleTrack = document.getElementById('throttle-track');
-      const throttleHandle = document.getElementById('throttle-handle');
-      if (throttleTrack && throttleHandle) {
-        const positions = [
-          { top: 'calc(100% - 18px)', value: 0, label: 'Full-Stop' },
-          { top: 'calc(50% - 8px)', value: 1, label: 'Semi-Auto' },
-          { top: '2px', value: 2, label: 'Full-Auto' },
-        ];
-        let currentPosition = 0;
-        throttleTrack.addEventListener('click', () => {
-          currentPosition = (currentPosition + 1) % positions.length;
-          const pos = positions[currentPosition];
-          throttleHandle.style.top = pos.top;
-          throttleHandle.style.bottom = 'auto';
-          throttleTrack.setAttribute('aria-valuenow', pos.value);
-          throttleTrack.setAttribute('aria-valuetext', pos.label);
+      /* ---- Ignition Panel (Action Bar global throttle) ---- */
+      (function initIgnitionPanel() {
+        const STATE_CONFIG = {
+          auto:  { label: 'FULL·AUTO',  dot: 'auto',  mfdIdx: 2, mfdTop: '2px',                  mfdLabel: 'Full-Auto'  },
+          semi:  { label: 'SEMI·AUTO',  dot: 'semi',  mfdIdx: 1, mfdTop: 'calc(50% - 8px)',       mfdLabel: 'Semi-Auto'  },
+          stop:  { label: 'FULL·STOP',  dot: 'stop',  mfdIdx: 0, mfdTop: 'calc(100% - 18px)',     mfdLabel: 'Full-Stop'  },
+        };
+
+        let currentState = 'stop';
+
+        const modeDisplay  = document.getElementById('ignition-mode-display');
+        const statusDot    = document.getElementById('ignition-status-dot');
+        const throttleTrack  = document.getElementById('throttle-track');
+        const throttleHandle = document.getElementById('throttle-handle');
+
+        function applyState(state) {
+          currentState = state;
+          const cfg = STATE_CONFIG[state];
+
+          /* Update status strip */
+          if (modeDisplay) modeDisplay.textContent = cfg.label;
+          if (statusDot)   statusDot.dataset.state = cfg.dot;
+
+          /* Highlight active button, dim others */
+          document.querySelectorAll('.ign-btn').forEach(btn => {
+            btn.classList.toggle('ign-btn--active', btn.dataset.ignState === state);
+          });
+
+          /* Sync MFD mini-throttle */
+          if (throttleHandle) {
+            throttleHandle.style.top    = cfg.mfdTop;
+            throttleHandle.style.bottom = 'auto';
+          }
+          if (throttleTrack) {
+            throttleTrack.setAttribute('aria-valuenow', cfg.mfdIdx);
+            throttleTrack.setAttribute('aria-valuetext', cfg.mfdLabel);
+          }
+        }
+
+        /* Wire up the three buttons */
+        ['auto', 'semi', 'stop'].forEach(state => {
+          const btn = document.getElementById(`ign-btn-${state}`);
+          if (btn) btn.addEventListener('click', () => applyState(state));
         });
-      }
+
+        /* MFD mini-throttle still cycles on its own click */
+        if (throttleTrack && throttleHandle) {
+          const mfdOrder = ['stop', 'semi', 'auto'];
+          throttleTrack.addEventListener('click', () => {
+            const idx = mfdOrder.indexOf(currentState);
+            applyState(mfdOrder[(idx + 1) % mfdOrder.length]);
+          });
+        }
+
+        applyState('stop'); /* default: engines halted */
+      })();
 
       /* ---- Fly Studio Profit Progress ---- */
       async function updateFlyProgress() {
