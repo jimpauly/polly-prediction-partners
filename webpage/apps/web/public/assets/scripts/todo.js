@@ -119,7 +119,49 @@
     return strip;
   }
 
-  /* ── Build: Toolbar ─────────────────────────────────────────── */
+  /* ── Build: File dropdown menu ────────────────────────────────── */
+
+  function buildFileMenu() {
+    var wrap = el("div", { className: "todo-file-menu" });
+
+    var btn = el("button", {
+      className: "todo-file-menu-btn",
+      title: "File menu",
+      onClick: function () {
+        var isOpen = dropdown.style.display === "block";
+        dropdown.style.display = isOpen ? "none" : "block";
+      }
+    }, "\uD83D\uDCC1 File");
+
+    var dropdown = el("div", { className: "todo-file-dropdown" });
+    dropdown.style.display = "none";
+
+    var itemNew = el("button", {
+      className: "todo-file-dropdown-item",
+      onClick: function () { addPage(); dropdown.style.display = "none"; }
+    }, "+ New Page");
+    dropdown.appendChild(itemNew);
+
+    var itemSave = el("button", {
+      className: "todo-file-dropdown-item",
+      onClick: function () { downloadTxt(); dropdown.style.display = "none"; }
+    }, "\uD83D\uDCBE Save as .txt");
+    dropdown.appendChild(itemSave);
+
+    wrap.appendChild(btn);
+    wrap.appendChild(dropdown);
+
+    /* Close dropdown when clicking outside */
+    document.addEventListener("click", function (e) {
+      if (!wrap.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    return wrap;
+  }
+
+  /* ── Build: Toolbar (formatting tools only) ─────────────────── */
 
   function buildToolbar() {
     var bar = el("div", { className: "todo-toolbar" });
@@ -161,27 +203,6 @@
     btnTask.innerHTML = "&#9744;";
     btnTask.addEventListener("click", function () { insertTask(); });
     bar.appendChild(btnTask);
-
-    /* Separator */
-    bar.appendChild(el("div", { className: "todo-tb-sep" }));
-
-    /* New Page */
-    var btnNew = el("button", {
-      className: "todo-tb-btn",
-      title: "New Page"
-    });
-    btnNew.textContent = "+";
-    btnNew.addEventListener("click", function () { addPage(); });
-    bar.appendChild(btnNew);
-
-    /* Save */
-    var btnSave = el("button", {
-      className: "todo-tb-btn",
-      title: "Save as .txt"
-    });
-    btnSave.textContent = "\uD83D\uDCBE";
-    btnSave.addEventListener("click", function () { downloadTxt(); });
-    bar.appendChild(btnSave);
 
     return bar;
   }
