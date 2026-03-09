@@ -2232,6 +2232,7 @@ textarea.input {
     border-color var(--transition-speed),
     box-shadow var(--transition-speed),
     transform var(--transition-speed);
+  font-family: var(--font-family-mono);
   letter-spacing: 0.02em;
 }
 

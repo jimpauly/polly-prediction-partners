@@ -173,8 +173,6 @@
   /* Representative colors per theme — used to style selector buttons */
   var THEME_COLORS = {
     webpage: {
-      fontBase: '"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-      borderRadiusMd: "8px",
       light: {
         bg: "#f8f9fa",
         fg: "#1a1a2e",
@@ -193,8 +191,6 @@
       },
     },
     "mosaic-1993": {
-      fontBase: '"Times", serif',
-      borderRadiusMd: "0px",
       light: {
         bg: "#008080",
         fg: "#000000",
@@ -213,8 +209,6 @@
       },
     },
     "gen7-cockpit": {
-      fontBase: '"Share Tech Mono", "Lucida Console", monospace',
-      borderRadiusMd: "4px",
       light: {
         bg: "#5c6053",
         fg: "#d8e0c8",
@@ -233,8 +227,6 @@
       },
     },
     "ussr-cockpit": {
-      fontBase: '"Courier New", "Lucida Console", monospace',
-      borderRadiusMd: "3px",
       light: {
         bg: "#3d90a2",
         fg: "#f0faff",
@@ -253,8 +245,6 @@
       },
     },
     "neon-vice-1985": {
-      fontBase: '"Orbitron", "Segoe UI", Tahoma, sans-serif',
-      borderRadiusMd: "6px",
       light: {
         bg: "#f0d8c8",
         fg: "#2a0a1a",
@@ -273,8 +263,6 @@
       },
     },
     "neon-city-2085": {
-      fontBase: '"Rajdhani", "Exo 2", "Segoe UI", sans-serif',
-      borderRadiusMd: "4px",
       light: {
         bg: "#e4dcf8",
         fg: "#1a0a30",
@@ -293,8 +281,6 @@
       },
     },
     coniforest: {
-      fontBase: '"Merriweather", Georgia, "Times New Roman", serif',
-      borderRadiusMd: "8px",
       light: {
         bg: "#e8e4d8",
         fg: "#1a2e14",
@@ -313,8 +299,6 @@
       },
     },
     rainforest: {
-      fontBase: '"Nunito", "Trebuchet MS", Helvetica, sans-serif',
-      borderRadiusMd: "12px",
       light: {
         bg: "#dff0df",
         fg: "#0c2810",
@@ -333,8 +317,6 @@
       },
     },
     "art-deco": {
-      fontBase: '"Poiret One", "Didot", "Bodoni MT", Georgia, serif',
-      borderRadiusMd: "2px",
       light: {
         bg: "#f0e8d0",
         fg: "#1a1408",
@@ -353,8 +335,6 @@
       },
     },
     holographic: {
-      fontBase: '"Quicksand", "Poppins", "Segoe UI", sans-serif',
-      borderRadiusMd: "16px",
       light: {
         bg: "#f0f0ff",
         fg: "#2a1a3a",
@@ -373,8 +353,6 @@
       },
     },
     vapor: {
-      fontBase: '"VT323", "Segoe UI", Impact, sans-serif',
-      borderRadiusMd: "4px",
       light: {
         bg: "#ffe8f4",
         fg: "#3a1040",
@@ -393,8 +371,6 @@
       },
     },
     paper: {
-      fontBase: '"Lora", "Palatino Linotype", Palatino, Georgia, serif',
-      borderRadiusMd: "4px",
       light: {
         bg: "#f5ede0",
         fg: "#2a2018",
@@ -413,8 +389,6 @@
       },
     },
     "ledger-1920": {
-      fontBase: '"IM Fell English", "Baskerville", "Palatino", serif',
-      borderRadiusMd: "2px",
       light: {
         bg: "#ecdcbe",
         fg: "#2a1e0c",
@@ -433,8 +407,6 @@
       },
     },
     blueprint: {
-      fontBase: '"Tekton Pro", "Lucida Sans", "Trebuchet MS", sans-serif',
-      borderRadiusMd: "2px",
       light: {
         bg: "#dce8f4",
         fg: "#0a1a30",
@@ -453,8 +425,6 @@
       },
     },
     chalkboard: {
-      fontBase: '"Patrick Hand", "Comic Sans MS", cursive, sans-serif',
-      borderRadiusMd: "4px",
       light: {
         bg: "#d0dac4",
         fg: "#1a2a14",
@@ -473,8 +443,6 @@
       },
     },
     phosphor: {
-      fontBase: '"VT323", "Lucida Console", "Courier New", monospace',
-      borderRadiusMd: "2px",
       light: {
         bg: "#1a1000",
         fg: "#ffb300",
@@ -493,8 +461,6 @@
       },
     },
     volcano: {
-      fontBase: '"Oswald", "Impact", "Arial Narrow", sans-serif',
-      borderRadiusMd: "6px",
       light: {
         bg: "#f0e0d4",
         fg: "#2a0e06",
@@ -513,8 +479,6 @@
       },
     },
     oceanic: {
-      fontBase: '"Raleway", "Gill Sans", "Century Gothic", sans-serif',
-      borderRadiusMd: "10px",
       light: {
         bg: "#dceef4",
         fg: "#082030",
@@ -533,8 +497,6 @@
       },
     },
     steampunk: {
-      fontBase: '"Cinzel", "Copperplate", "Palatino", serif',
-      borderRadiusMd: "4px",
       light: {
         bg: "#e4d4b8",
         fg: "#2a1a0a",
@@ -553,8 +515,6 @@
       },
     },
     dieselpunk: {
-      fontBase: '"Archivo Black", "Impact", "Franklin Gothic Medium", sans-serif',
-      borderRadiusMd: "2px",
       light: {
         bg: "#d0cec8",
         fg: "#1a1a1a",
@@ -573,8 +533,6 @@
       },
     },
     solarpunk: {
-      fontBase: '"Nunito Sans", "Trebuchet MS", "Verdana", sans-serif',
-      borderRadiusMd: "14px",
       light: {
         bg: "#e8f4d4",
         fg: "#142a08",
@@ -593,8 +551,6 @@
       },
     },
     stonepunk: {
-      fontBase: '"Cardo", "Garamond", "Georgia", serif',
-      borderRadiusMd: "2px",
       light: {
         bg: "#dcd4c4",
         fg: "#2a2018",
@@ -613,8 +569,6 @@
       },
     },
     dreamcore: {
-      fontBase: '"Comfortaa", "Century Gothic", "Futura", sans-serif',
-      borderRadiusMd: "18px",
       light: {
         bg: "#f0e4ff",
         fg: "#30204a",
@@ -633,8 +587,6 @@
       },
     },
     "frutiger-aero": {
-      fontBase: '"Frutiger", "Segoe UI", "Helvetica Neue", Arial, sans-serif',
-      borderRadiusMd: "8px",
       light: {
         bg: "#dceefa",
         fg: "#0a1e3a",
@@ -891,9 +843,6 @@
     /* Outer button: theme bg + accent border */
     btn.style.background = pal.bg;
     btn.style.borderColor = pal.accent;
-    /* Per-theme typography and architecture */
-    if (c.fontBase) btn.style.fontFamily = c.fontBase;
-    if (c.borderRadiusMd) btn.style.borderRadius = c.borderRadiusMd;
     /* Inner label span: surface bg, fg text, border-default color */
     var label = btn.querySelector(".theme-selector__swatch-label");
     if (label) {
