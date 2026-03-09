@@ -378,7 +378,7 @@
 
 .switch-housing {
   width: 14px;
-  height: 32px;
+  height: 32px; /* PRD §1 Panel Layout: "Flip-switch housings are tall (32px)" */
   background: linear-gradient(
     180deg,
     color-mix(
@@ -518,7 +518,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 3px; /* PRD §1 Panel Layout: "increased gap between dimmer dials and Nixie-tube value indicators (3px)" */
   cursor: ns-resize;
 }
 
