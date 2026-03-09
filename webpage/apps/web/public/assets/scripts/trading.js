@@ -2069,9 +2069,9 @@ const TradingStudio = (() => {
 
     const toast = document.createElement("div");
     const colorMap = {
-      success: "var(--color-state-success, #22c55e)",
-      error: "var(--color-state-error, var(--color-state-danger, #ef4444))",
-      info: "var(--color-state-info, #3b82f6)",
+      success: "var(--color-state-success)",
+      error: "var(--color-state-error)",
+      info: "var(--color-state-info)",
     };
     const borderColor = colorMap[type] || colorMap.info;
     toast.style.cssText = `

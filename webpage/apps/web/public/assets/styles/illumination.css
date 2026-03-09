@@ -3,15 +3,15 @@
    ==========================================================================
    Simulates cockpit lighting physics with 7 addressable channels.
    DAY (light) mode: 60 % base intensity.  NVG (dark) mode: 100 %.
-   Dimmers scale 0.25 – 1.00.  Master switch defaults OFF.
+   Dimmers scale 0.25 – 1.00.  Master switch defaults ON.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. ROOT DEFAULTS — Master OFF, all channels ON at MAX
+   1. ROOT DEFAULTS — Master ON, all channels ON at MAX
    -------------------------------------------------------------------------- */
 :root {
   /* ---- Master control -------------------------------------------------- */
-  --fx-master-switch: 0; /* 0 = OFF (default), 1 = ON        */
+  --fx-master-switch: 1; /* 1 = ON (default), 0 = OFF              */
   --fx-master-dim: 1; /* dimmer: 0.25 – 1.00              */
   --fx-mode-base: 0.6; /* DAY (light) mode base intensity   */
 
@@ -68,7 +68,10 @@
     0 0 calc(var(--fx-glow-text-primary) * 6px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-text-primary) * 16px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-text-primary) * 30px) var(--color-accent-primary);
-  transition: text-shadow var(--_glow-transition);
+  opacity: calc(0.7 + var(--fx-glow-text-primary) * 0.3);
+  transition:
+    text-shadow var(--_glow-transition),
+    opacity var(--_glow-transition);
 }
 
 /* ---- 3b. TEXT GLOW — secondary ----------------------------------------- */
@@ -76,7 +79,10 @@
   text-shadow:
     0 0 calc(var(--fx-glow-text-secondary) * 5px) var(--color-accent-secondary),
     0 0 calc(var(--fx-glow-text-secondary) * 14px) var(--color-accent-secondary);
-  transition: text-shadow var(--_glow-transition);
+  opacity: calc(0.5 + var(--fx-glow-text-secondary) * 0.5);
+  transition:
+    text-shadow var(--_glow-transition),
+    opacity var(--_glow-transition);
 }
 
 /* ---- 3c. BARS GLOW — primary (region borders) -------------------------- */
@@ -132,15 +138,47 @@
     filter var(--_glow-transition);
 }
 
+/* ---- 3g. COMBINED — display + bars-secondary (don't override shadows) -- */
+.glow-display.glow-bars-secondary {
+  box-shadow:
+    0 0 calc(var(--fx-glow-bars-secondary) * 3px) var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-bars-secondary) * 10px) var(--color-accent-secondary),
+    inset 0 0 calc(var(--fx-glow-bars-secondary) * 4px)
+      var(--color-accent-secondary),
+    0 0 calc(var(--fx-glow-display) * 8px) var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-display) * 12px)
+      color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  border-color: var(--color-accent-secondary);
+  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+}
+
+/* ---- 3h. COMBINED — display + bars-primary (don't override shadows) ---- */
+.glow-display.glow-bars-primary {
+  box-shadow:
+    0 0 calc(var(--fx-glow-bars-primary) * 4px) var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-bars-primary) * 12px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-bars-primary) * 6px)
+      var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-display) * 8px) var(--color-accent-primary),
+    0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
+    inset 0 0 calc(var(--fx-glow-display) * 12px)
+      color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  border-color: var(--color-accent-primary);
+  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+}
+
 /* ==========================================================================
-   3g. COMBINED GLOW TRANSITIONS — smooth changes & reduced motion
+   3i. COMBINED GLOW TRANSITIONS — smooth changes & reduced motion
    ========================================================================== */
 .glow-text-primary,
 .glow-text-secondary,
 .glow-bars-primary,
 .glow-bars-secondary,
 .glow-flood,
-.glow-display {
+.glow-display,
+.glow-display.glow-bars-secondary,
+.glow-display.glow-bars-primary {
   transition-timing-function: ease;
 }
 
@@ -336,7 +374,7 @@
 
 .switch-housing {
   width: 14px;
-  height: 28px;
+  height: 32px; /* PRD §1 Panel Layout: "Flip-switch housings are tall (32px)" */
   background: linear-gradient(
     180deg,
     color-mix(
@@ -476,7 +514,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 3px; /* PRD §1 Panel Layout: "increased gap between dimmer dials and Nixie-tube value indicators (3px)" */
   cursor: ns-resize;
 }
 

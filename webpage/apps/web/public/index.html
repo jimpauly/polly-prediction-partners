@@ -111,7 +111,7 @@
     <!-- ╔══════════════════════════════════════════════════╗
          ║   ILLUMINATION CONTROL PANEL (COCKPIT STYLE)   ║
          ╚══════════════════════════════════════════════════╝ -->
-    <div class="illum-panel" id="illum-panel" data-master="off" role="region" aria-label="Illumination Control Panel">
+    <div class="illum-panel" id="illum-panel" data-master="on" role="region" aria-label="Illumination Control Panel">
 
       <!-- Top header strip — thin blank bar mirroring the bottom nameplate -->
       <div class="illum-panel-header-strip" aria-hidden="true"></div>
@@ -264,16 +264,16 @@
       <!-- Telemetry Card (right-aligned) -->
       <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-family:var(--font-family-mono);white-space:nowrap;font-size:11px">
         <div class="flex items-center gap-1" title="Network latency">
-          <span style="font-weight:700;color:var(--color-fg-muted)">PING</span>
+          <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">PING</span>
           <canvas id="ping-sparkline" width="48" height="16" style="display:block"></canvas>
           <span id="ping-label" style="color:var(--color-fg-muted);min-width:32px">—ms</span>
         </div>
         <div title="Backend health" style="display:flex;align-items:center;gap:3px">
-          <span style="font-weight:700;color:var(--color-fg-muted)">SVC</span>
+          <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">SVC</span>
           <div id="backend-health-dot" style="width:6px;height:6px;border-radius:50%;background:var(--color-fg-subtle);transition:all 0.5s" title="Backend offline"></div>
         </div>
         <div title="Date and time">
-          <span style="font-weight:700;color:var(--color-fg-muted)">DATE/TIME</span>
+          <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">DATE/TIME</span>
           <span id="datetime-display" style="color:var(--color-fg-default)">--/-- --:--:--</span>
         </div>
       </div>
@@ -294,7 +294,7 @@
       </div>
 
       <!-- Modes (Light/Dark + 3D/2D) -->
-      <div class="sidebar-panel" aria-label="Mode toggles">
+      <div class="sidebar-panel glow-display glow-bars-secondary" aria-label="Mode toggles">
         <div class="sidebar-panel__header">
           <span class="sidebar-panel__title glow-text-secondary">Modes</span>
         </div>
@@ -307,7 +307,7 @@
       <hr class="divider">
 
       <!-- 24-Theme Selector -->
-      <div class="sidebar-panel" aria-label="Theme selection">
+      <div class="sidebar-panel glow-display glow-bars-secondary" aria-label="Theme selection">
         <div class="sidebar-panel__header">
           <span class="sidebar-panel__title glow-text-secondary">System Theme</span>
         </div>
@@ -386,10 +386,10 @@
         <div class="main-bento-grid main-bento-grid--top mb-4">
 
           <!-- Active Theme -->
-          <div class="card">
+          <div class="card glow-display glow-bars-secondary">
             <div class="card-header">
-              <span>🎨 Active Theme</span>
-              <span id="palette-theme-name" class="text-xs text-accent"></span>
+              <span class="glow-text-primary">🎨 Active Theme</span>
+              <span id="palette-theme-name" class="text-xs text-accent glow-text-secondary"></span>
             </div>
             <div class="card-body">
               <div id="palette-viewer" class="palette-grid" aria-label="Current theme color swatches"></div>
@@ -400,9 +400,9 @@
           <div class="main-bento-right-stack">
 
             <!-- Man-0'-Meters (Battery, Network, Memory, CPU) -->
-            <div class="card">
+            <div class="card glow-display glow-bars-secondary">
               <div class="card-header">
-                <span>🔧 Man-0'-Meters</span>
+                <span class="glow-text-primary">🔧 Man-0'-Meters</span>
               </div>
               <div class="card-body" style="display:flex;gap:var(--space-3);justify-content:space-around;flex-wrap:wrap">
                 <div id="gauge-battery" class="gauge-container" style="text-align:center">
@@ -432,9 +432,9 @@
             <div class="main-bento-right-bottom">
 
               <!-- System Logs Terminal -->
-              <div class="card">
+              <div class="card glow-display glow-bars-secondary">
                 <div class="card-header">
-                  <span>📟 System Logs</span>
+                  <span class="glow-text-primary">📟 System Logs</span>
                 </div>
                 <div class="card-body p-0">
                   <div id="live-logs" style="font-family:var(--font-family-mono);padding:var(--space-2);background:var(--color-bg-canvas);min-height:100px;max-height:120px;overflow-y:auto;color:var(--color-fg-muted);line-height:1.6"></div>
@@ -442,14 +442,14 @@
               </div>
 
               <!-- Web Elements Showcase -->
-              <div class="card">
+              <div class="card glow-display glow-bars-secondary">
                 <div class="card-header">
-                  <span>🧩 Web Elements</span>
+                  <span class="glow-text-primary">🧩 Web Elements</span>
                 </div>
                 <div class="card-body flex flex-col gap-4">
                   <!-- Buttons -->
                   <div>
-                    <p class="text-sm font-semibold mb-2 text-muted">Buttons</p>
+                    <p class="text-sm font-semibold mb-2 text-muted glow-text-secondary">Buttons</p>
                     <div class="flex flex-wrap gap-2">
                       <button class="btn btn-primary">Primary</button>
                       <button class="btn btn-secondary">Secondary</button>
@@ -460,7 +460,7 @@
                   </div>
                   <!-- Inputs -->
                   <div>
-                    <p class="text-sm font-semibold mb-2 text-muted">Form Inputs</p>
+                    <p class="text-sm font-semibold mb-2 text-muted glow-text-secondary">Form Inputs</p>
                     <div class="flex flex-wrap gap-2 items-end">
                       <div class="form-group" style="min-width:180px">
                         <label class="form-label" for="demo-input">Text Input</label>
@@ -486,7 +486,7 @@
                   </div>
                   <!-- Alerts -->
                   <div>
-                    <p class="text-sm font-semibold mb-2 text-muted">Alerts</p>
+                    <p class="text-sm font-semibold mb-2 text-muted glow-text-secondary">Alerts</p>
                     <div class="flex flex-col gap-2">
                       <div class="alert alert-success" role="alert"><span class="alert__content">Success — operation completed.</span></div>
                       <div class="alert alert-warning" role="alert"><span class="alert__content">Warning — check your settings.</span></div>
@@ -495,7 +495,7 @@
                   </div>
                   <!-- Loading -->
                   <div>
-                    <p class="text-sm font-semibold mb-2 text-muted">Loading States</p>
+                    <p class="text-sm font-semibold mb-2 text-muted glow-text-secondary">Loading States</p>
                     <div class="flex gap-3 items-center">
                       <div class="spinner spinner--sm"></div>
                       <div class="spinner"></div>
@@ -517,9 +517,9 @@
         </div><!-- /.main-bento-grid -->
 
         <!-- MS Paint 1998 -->
-        <div class="card mb-4">
+        <div class="card mb-4 glow-display glow-bars-secondary">
           <div class="card-header">
-            <span>🖌️ MS Paint 1998</span>
+            <span class="glow-text-primary">🖌️ MS Paint 1998</span>
           </div>
           <div class="card-body p-1">
             <div id="paint-container" aria-label="Paint application canvas"></div>
@@ -539,8 +539,8 @@
         <div id="trading-pre-connect" class="trading-pre-connect" style="display:none">
           <div class="no-data-container">
             <div class="no-data-icon">📡</div>
-            <h2 class="empty-state__title" style="margin-bottom:4px">Connect to Start Trading</h2>
-            <p class="no-data-subtitle">Enter your Kalshi API key in the bottom bar to begin</p>
+            <h2 class="empty-state__title glow-text-primary" style="margin-bottom:4px">Connect to Start Trading</h2>
+            <p class="no-data-subtitle glow-text-secondary">Enter your Kalshi API key in the bottom bar to begin</p>
           </div>
         </div>
 
@@ -654,12 +654,12 @@
 
         <!-- Expanded card overlay -->
         <div id="expanded-card-overlay" class="expanded-card-overlay" style="display:none">
-          <div id="expanded-card-content" class="expanded-card"></div>
+          <div id="expanded-card-content" class="expanded-card glow-display glow-bars-secondary"></div>
         </div>
 
         <!-- Semi-auto approval overlay -->
         <div id="approval-overlay" class="approval-overlay" style="display:none">
-          <div class="approval-card">
+          <div class="approval-card glow-display glow-bars-secondary">
             <div class="approval-header">
               <span style="font-weight:700">⚡ Trade Approval Required</span>
             </div>
@@ -693,8 +693,8 @@
             <div class="fly-locked__cockpit-art" aria-hidden="true">
               ✈️
             </div>
-            <h3 class="fly-locked__title">Flight Deck Locked</h3>
-            <p class="fly-locked__description">
+            <h3 class="fly-locked__title glow-text-primary">Flight Deck Locked</h3>
+            <p class="fly-locked__description glow-text-secondary">
               The Flight Deck unlocks when your agents reach <strong>$2,000 in total profit</strong>.
               Keep the agents running — this reward cockpit will activate automatically.
             </p>
@@ -707,28 +707,28 @@
                 <div id="fly-profit-fill" class="fly-locked__progress-fill" style="width:0%"></div>
               </div>
             </div>
-            <p class="fly-locked__hint">
+            <p class="fly-locked__hint glow-text-secondary">
               💡 The Flight Deck features a live ISS orbital feed, real-time flight radar, and a full 3D cockpit simulation.
             </p>
           </div>
 
           <!-- Unlocked state: flight simulation preview (hidden until unlocked) -->
           <div id="fly-unlocked-state" class="fly-unlocked" style="display:none">
-            <div class="card mb-4">
+            <div class="card mb-4 glow-display glow-bars-secondary">
               <div class="card-header">
-                <span>🛰️ ISS Live Feed</span>
-                <span class="text-xs text-muted ml-auto">Track International Space Station</span>
+                <span class="glow-text-primary">🛰️ ISS Live Feed</span>
+                <span class="text-xs text-muted ml-auto glow-text-secondary">Track International Space Station</span>
               </div>
               <div class="card-body" style="text-align:center;padding:40px">
-                <p class="text-muted">ISS live feed will display here when orbital API is connected.</p>
+                <p class="text-muted glow-text-secondary">ISS live feed will display here when orbital API is connected.</p>
               </div>
             </div>
-            <div class="card">
+            <div class="card glow-display glow-bars-secondary">
               <div class="card-header">
-                <span>✈️ Flight Radar</span>
+                <span class="glow-text-primary">✈️ Flight Radar</span>
               </div>
               <div class="card-body" style="text-align:center;padding:40px">
-                <p class="text-muted">Real-time flight radar will display here.</p>
+                <p class="text-muted glow-text-secondary">Real-time flight radar will display here.</p>
               </div>
             </div>
           </div>
@@ -748,12 +748,12 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:4px">
 
           <!-- Prediction Market Calculator -->
-          <div class="card">
+          <div class="card glow-display glow-bars-secondary">
             <div class="card-header">
-              <span>🎯 Prediction Market Calculator</span>
+              <span class="glow-text-primary">🎯 Prediction Market Calculator</span>
             </div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
-              <p class="text-xs text-muted">Calculate returns for YES/NO contracts on Kalshi prediction markets.</p>
+              <p class="text-xs text-muted glow-text-secondary">Calculate returns for YES/NO contracts on Kalshi prediction markets.</p>
               <div class="form-group">
                 <label class="form-label" for="calc-investment">Investment ($)</label>
                 <input id="calc-investment" class="input" type="number" min="1" max="10000" value="100" step="1">
@@ -773,12 +773,12 @@
           </div>
 
           <!-- Probability / Kelly Criterion Calculator -->
-          <div class="card">
+          <div class="card glow-display glow-bars-secondary">
             <div class="card-header">
-              <span>📐 Kelly Criterion Sizer</span>
+              <span class="glow-text-primary">📐 Kelly Criterion Sizer</span>
             </div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
-              <p class="text-xs text-muted">Optimal bet sizing using the Kelly Criterion formula.</p>
+              <p class="text-xs text-muted glow-text-secondary">Optimal bet sizing using the Kelly Criterion formula.</p>
               <div class="form-group">
                 <label class="form-label" for="kelly-edge">Your Edge (Win probability %)</label>
                 <input id="kelly-edge" class="input" type="number" min="1" max="99" value="55" step="1">
@@ -799,12 +799,12 @@
           </div>
 
           <!-- Cents ↔ Dollars ↔ Probability Converter -->
-          <div class="card">
+          <div class="card glow-display glow-bars-secondary">
             <div class="card-header">
-              <span>🔄 Price Converter</span>
+              <span class="glow-text-primary">🔄 Price Converter</span>
             </div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
-              <p class="text-xs text-muted">Convert between contract price formats.</p>
+              <p class="text-xs text-muted glow-text-secondary">Convert between contract price formats.</p>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
                 <div class="form-group">
                   <label class="form-label" for="conv-cents">Cents</label>
@@ -824,9 +824,9 @@
           </div>
 
           <!-- Quick Reference Card -->
-          <div class="card">
+          <div class="card glow-display glow-bars-secondary">
             <div class="card-header">
-              <span>📚 Quick Reference</span>
+              <span class="glow-text-primary">📚 Quick Reference</span>
             </div>
             <div class="card-body" style="font-size:11px;display:flex;flex-direction:column;gap:6px">
               <div style="font-weight:700;margin-bottom:4px;color:var(--color-accent-primary)">Kalshi Contract Basics</div>
@@ -889,7 +889,7 @@
       </div>
 
       <!-- Send-an-Idea Card (bottom of inspector panel) -->
-      <div class="sidebar-panel send-idea-bottom" aria-label="Send an idea" style="flex-shrink:0">
+      <div class="sidebar-panel send-idea-bottom glow-display glow-bars-secondary" aria-label="Send an idea" style="flex-shrink:0">
         <div class="sidebar-panel__body" style="text-align:center">
           <textarea id="idea-complaint-box" class="idea-complaint-textarea" placeholder="ideas and requests" rows="2" aria-label="Type your ideas and requests"></textarea>
           <button id="send-idea-button" class="btn btn-sm btn-primary" style="margin-top:var(--space-1)" aria-label="Send email to Paulie's">📮 Send email to Paulie's</button>
@@ -910,10 +910,10 @@
           <div style="display:flex;gap:var(--space-2);align-items:stretch;flex-wrap:nowrap;overflow-x:auto;flex:1;min-height:0">
 
             <!-- Agent Access Card (~40% of bottom bar) -->
-            <div class="card card--compact hangar-agent-card" style="min-width:200px">
+            <div class="card card--compact hangar-agent-card glow-display glow-bars-secondary" style="min-width:200px">
               <div class="card-header" style="padding:3px 6px">
-                <span style="font-weight:700">🤖 Agent Access</span>
-                <span style="font-family:var(--font-family-mono);font-size:10px;font-weight:700;color:var(--color-fg-subtle);margin-left:auto" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
+                <span class="glow-text-primary" style="font-weight:700">🤖 Agent Access</span>
+                <span class="glow-text-secondary" style="font-family:var(--font-family-mono);font-size:10px;font-weight:700;color:var(--color-fg-subtle);margin-left:auto" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
               </div>
               <div class="card-body" style="padding:3px 6px;flex:1;display:flex;flex-direction:column">
                 <!-- Dynamic agent cards rendered by AgentDashboard module -->
@@ -922,9 +922,9 @@
             </div>
 
             <!-- P/L Multi-Function Display (~30% of bottom bar) -->
-            <div class="card card--compact hangar-mfd-card" style="min-width:180px">
+            <div class="card card--compact hangar-mfd-card glow-display glow-bars-secondary" style="min-width:180px">
               <div class="card-header mfd-header" style="padding:3px 6px">
-                <span style="font-weight:700">📟 P/L MFD</span>
+                <span class="glow-text-primary" style="font-weight:700">📟 P/L MFD</span>
               </div>
               <div class="card-body mfd-body" style="padding:4px 6px;flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
 
@@ -985,9 +985,9 @@
             </div>
 
             <!-- Connect API Keys Card (~20% of bottom bar) -->
-            <div id="api-key-card" class="card card--compact" style="min-width:130px">
+            <div id="api-key-card" class="card card--compact glow-display glow-bars-secondary" style="min-width:130px">
               <div class="card-header" style="padding:3px 6px">
-                <span style="font-weight:700">🔑 Connect API Keys</span>
+                <span class="glow-text-primary" style="font-weight:700">🔑 Connect API Keys</span>
               </div>
               <div class="card-body card-inner" style="padding:4px 6px;display:flex;flex-direction:column;gap:3px;flex:1">
                 <div class="api-mode-selector" style="display:flex;gap:var(--space-2);align-items:center">
@@ -1005,9 +1005,9 @@
             </div>
 
             <!-- Account Summary Card (hidden — consolidated into 4-card layout) -->
-            <div id="account-summary-card" class="card card--compact" style="display:none;flex:0.8;min-width:140px">
+            <div id="account-summary-card" class="card card--compact glow-display glow-bars-secondary" style="display:none;flex:0.8;min-width:140px">
               <div class="card-header" style="padding:4px 8px">
-                <span style="font-weight:700">📊 Account</span>
+                <span class="glow-text-primary" style="font-weight:700">📊 Account</span>
               </div>
               <div class="card-body" style="padding:6px 8px;flex:1;display:flex;flex-direction:column;gap:6px;font-family:var(--font-family-mono)">
                 <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -1030,9 +1030,9 @@
             </div>
 
             <!-- Market Mode Indicator (~10% of bottom bar) -->
-            <div class="card card--compact hangar-market-mode-card" style="min-width:70px;text-align:center">
+            <div class="card card--compact hangar-market-mode-card glow-display glow-bars-secondary" style="min-width:70px;text-align:center">
               <div class="card-header" style="padding:3px 6px">
-                <span style="font-weight:700">Market Mode</span>
+                <span class="glow-text-primary" style="font-weight:700">Market Mode</span>
               </div>
               <div class="card-body" style="padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;justify-content:center">
                 <div id="connection-light" class="indicator-light" style="width:22px;height:22px;border-radius:50%;background:var(--color-fg-subtle);box-shadow:0 0 6px var(--color-fg-subtle)"></div>
@@ -1056,7 +1056,7 @@
           <div class="ignition-panel__header">
             <span class="ignition-panel__corner ignition-panel__corner--tl">◤</span>
             <span class="ignition-panel__title glow-text-secondary">IGNITION</span>
-            <span class="ignition-panel__serial">PPP·CTRL·MK4</span>
+            <span class="ignition-panel__serial glow-text-secondary">PPP·CTRL·MK4</span>
             <span class="ignition-panel__corner ignition-panel__corner--tr">◥</span>
           </div>
 
@@ -1560,13 +1560,13 @@
           <span style="opacity:0.6">Contracts</span>
           <span style="font-weight:800">${contracts.toFixed(2)}</span>
           <span style="opacity:0.6">If WIN (total)</span>
-          <span style="font-weight:800;color:#22c55e">$${winPayout.toFixed(2)}</span>
+          <span style="font-weight:800;color:var(--color-state-success)">$${winPayout.toFixed(2)}</span>
           <span style="opacity:0.6">Net Profit</span>
-          <span style="font-weight:800;color:#22c55e">+$${netProfit.toFixed(2)}</span>
+          <span style="font-weight:800;color:var(--color-state-success)">+$${netProfit.toFixed(2)}</span>
           <span style="opacity:0.6">ROI</span>
-          <span style="font-weight:800;color:#22c55e">+${roi.toFixed(1)}%</span>
+          <span style="font-weight:800;color:var(--color-state-success)">+${roi.toFixed(1)}%</span>
           <span style="opacity:0.6">If LOSE</span>
-          <span style="font-weight:800;color:#ef4444">-$${lossAmount.toFixed(2)}</span>
+          <span style="font-weight:800;color:var(--color-state-error)">-$${lossAmount.toFixed(2)}</span>
           <span style="opacity:0.6">Implied Prob</span>
           <span style="font-weight:800">${impliedProb}%</span>
         </div>
@@ -1604,7 +1604,7 @@
       results.innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
           <span style="opacity:0.6">Kelly %</span>
-          <span style="font-weight:800;color:${kelly > 0 ? '#22c55e' : '#ef4444'}">${(kelly * 100).toFixed(1)}%</span>
+          <span style="font-weight:800;color:var(${kelly > 0 ? '--color-state-success' : '--color-state-error'})">${(kelly * 100).toFixed(1)}%</span>
           <span style="opacity:0.6">Full Kelly Bet</span>
           <span style="font-weight:800">$${betAmount.toFixed(2)}</span>
           <span style="opacity:0.6">Half Kelly (safer)</span>
@@ -1612,9 +1612,9 @@
           <span style="opacity:0.6">Net Odds (b)</span>
           <span style="font-weight:800">${b.toFixed(2)}×</span>
           <span style="opacity:0.6">EV on bankroll</span>
-          <span style="font-weight:800;color:${ev > 0 ? '#22c55e' : '#ef4444'}">${ev > 0 ? '+' : ''}$${ev.toFixed(2)}</span>
+          <span style="font-weight:800;color:var(${ev > 0 ? '--color-state-success' : '--color-state-error'})">${ev > 0 ? '+' : ''}$${ev.toFixed(2)}</span>
         </div>
-        ${kelly <= 0 ? '<div style="color:#f59e0b;font-size:10px;margin-top:4px">⚠ Negative edge — Kelly says skip this trade</div>' : ''}
+        ${kelly <= 0 ? '<div style="color:var(--color-state-warning);font-size:10px;margin-top:4px">⚠ Negative edge — Kelly says skip this trade</div>' : ''}
       `;
     }
 

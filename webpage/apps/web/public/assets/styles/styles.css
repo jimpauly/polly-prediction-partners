@@ -848,7 +848,7 @@ body {
   color: #fbbf24;
 }
 .terminal .log-error {
-  color: #ef4444;
+  color: var(--color-state-error);
 }
 .terminal .log-info {
   color: #38bdf8;
@@ -1366,7 +1366,7 @@ input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
 }
 
 /* ============================================================
@@ -1432,7 +1432,7 @@ select:focus {
   }
   50% {
     opacity: 1;
-    text-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--color-accent-primary) 40%, transparent);
   }
 }
 
@@ -1574,7 +1574,7 @@ select:focus {
 }
 .series-card:hover {
   border-color: var(--color-border-focus);
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent-primary) 10%, transparent);
 }
 
 /* ---- Card Enter Animation ---- */
@@ -1608,7 +1608,7 @@ select:focus {
 .series-card-timer {
   font-size: 9px;
   font-weight: 700;
-  color: var(--color-state-warning, #f59e0b);
+  color: var(--color-state-warning);
   background: rgba(245, 158, 11, 0.1);
   padding: 1px 5px;
   border-radius: 3px;
@@ -1660,7 +1660,7 @@ select:focus {
   justify-content: space-between;
   align-items: center;
   padding: 2px 4px;
-  background: rgba(59, 130, 246, 0.06);
+  background: color-mix(in srgb, var(--color-accent-primary) 6%, transparent);
   border-radius: 3px;
 }
 .chance-label {
@@ -1693,22 +1693,22 @@ select:focus {
   text-align: center;
 }
 .yes-button {
-  background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: color-mix(in srgb, var(--color-state-success) 15%, transparent);
+  color: var(--color-state-success);
+  border: 1px solid color-mix(in srgb, var(--color-state-success) 30%, transparent);
 }
 .yes-button:hover {
-  background: rgba(34, 197, 94, 0.3);
-  box-shadow: 0 0 6px rgba(34, 197, 94, 0.2);
+  background: color-mix(in srgb, var(--color-state-success) 30%, transparent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-success) 20%, transparent);
 }
 .no-button {
-  background: rgba(168, 85, 247, 0.15);
+  background: color-mix(in srgb, var(--color-accent-secondary) 15%, transparent);
   color: #a855f7;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 30%, transparent);
 }
 .no-button:hover {
-  background: rgba(168, 85, 247, 0.3);
-  box-shadow: 0 0 6px rgba(168, 85, 247, 0.2);
+  background: color-mix(in srgb, var(--color-accent-secondary) 30%, transparent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--color-accent-secondary) 20%, transparent);
 }
 .yes-button.large,
 .no-button.large {
@@ -1725,7 +1725,7 @@ select:focus {
   opacity: 0.6;
 }
 .status-active {
-  color: #22c55e;
+  color: var(--color-state-success);
 }
 .status-inactive {
   color: var(--color-fg-default);
@@ -1782,7 +1782,7 @@ select:focus {
 .show-more-button:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
 }
 
 /* ---- Expanded Card Overlay ---- */
@@ -1840,8 +1840,8 @@ select:focus {
   transition: all 0.15s ease;
 }
 .close-expanded:hover {
-  border-color: var(--color-state-error, #ef4444);
-  color: var(--color-state-error, #ef4444);
+  border-color: var(--color-state-error);
+  color: var(--color-state-error);
 }
 .expanded-card-body {
   display: flex;
@@ -1910,7 +1910,7 @@ select:focus {
 .expanded-qty-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
 }
 
 /* ---- Approval Overlay ---- */
@@ -1931,7 +1931,7 @@ select:focus {
   padding: 20px;
   width: 400px;
   text-align: center;
-  box-shadow: 0 0 24px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
   animation: overlay-enter 0.25s ease-out;
 }
 .approval-header {
@@ -1976,33 +1976,33 @@ select:focus {
   padding: 8px 24px;
   font-size: 13px;
   font-weight: 800;
-  border: 2px solid #22c55e;
+  border: 2px solid var(--color-state-success);
   border-radius: 6px;
-  background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  background: color-mix(in srgb, var(--color-state-success) 15%, transparent);
+  color: var(--color-state-success);
   cursor: pointer;
   transition: all 0.15s ease;
   text-transform: uppercase;
 }
 .approve-button:hover {
-  background: rgba(34, 197, 94, 0.35);
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+  background: color-mix(in srgb, var(--color-state-success) 35%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-state-success) 30%, transparent);
 }
 .deny-button {
   padding: 8px 24px;
   font-size: 13px;
   font-weight: 800;
-  border: 2px solid #ef4444;
+  border: 2px solid var(--color-state-error);
   border-radius: 6px;
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: color-mix(in srgb, var(--color-state-error) 15%, transparent);
+  color: var(--color-state-error);
   cursor: pointer;
   transition: all 0.15s ease;
   text-transform: uppercase;
 }
 .deny-button:hover {
-  background: rgba(239, 68, 68, 0.35);
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+  background: color-mix(in srgb, var(--color-state-error) 35%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-state-error) 30%, transparent);
 }
 
 /* ============================================================
@@ -2081,8 +2081,8 @@ select:focus {
   align-items: center;
   gap: 4px;
   padding: 2px 4px;
-  background: rgba(34, 197, 94, 0.05);
-  border: 1px solid rgba(34, 197, 94, 0.12);
+  background: color-mix(in srgb, var(--color-state-success) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-state-success) 12%, transparent);
   border-radius: 3px;
   font-size: 10px;
 }
@@ -2093,7 +2093,7 @@ select:focus {
 }
 .returns-yes {
   font-weight: 800;
-  color: #22c55e;
+  color: var(--color-state-success);
 }
 .returns-sep {
   color: var(--color-fg-subtle);
@@ -2111,16 +2111,16 @@ select:focus {
   letter-spacing: 0.3px;
   padding: 1px 4px;
   border-radius: 3px;
-  background: rgba(59, 130, 246, 0.15);
-  color: var(--color-accent-primary, #3b82f6);
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
+  color: var(--color-accent-primary);
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   text-transform: uppercase;
 }
 
 /* ---- Closing Soon Timer ---- */
 .series-card-timer--urgent {
-  color: var(--color-state-error, #ef4444) !important;
-  background: rgba(239, 68, 68, 0.12) !important;
+  color: var(--color-state-error) !important;
+  background: color-mix(in srgb, var(--color-state-error) 12%, transparent) !important;
   animation: urgency-pulse 1.5s ease-in-out infinite;
 }
 @keyframes urgency-pulse {
@@ -2139,7 +2139,7 @@ select:focus {
   align-items: center;
   gap: 6px;
   padding: 3px 4px;
-  background: rgba(59, 130, 246, 0.04);
+  background: color-mix(in srgb, var(--color-accent-primary) 4%, transparent);
   border-radius: 3px;
   flex-wrap: wrap;
 }
@@ -2309,7 +2309,7 @@ select:focus {
   border-bottom: none;
 }
 .ks-outcome-row:hover {
-  background: rgba(59, 130, 246, 0.04);
+  background: color-mix(in srgb, var(--color-accent-primary) 4%, transparent);
 }
 .ks-outcome-row--closed {
   opacity: 0.4;
@@ -2334,7 +2334,7 @@ select:focus {
 .ks-outcome-timer {
   font-size: 9px;
   font-weight: 700;
-  color: var(--color-state-warning, #f59e0b);
+  color: var(--color-state-warning);
   background: rgba(245, 158, 11, 0.1);
   padding: 1px 5px;
   border-radius: 3px;
@@ -2342,8 +2342,8 @@ select:focus {
   flex-shrink: 0;
 }
 .ks-outcome-timer--urgent {
-  color: var(--color-state-error, #ef4444) !important;
-  background: rgba(239, 68, 68, 0.12) !important;
+  color: var(--color-state-error) !important;
+  background: color-mix(in srgb, var(--color-state-error) 12%, transparent) !important;
   animation: urgency-pulse 1.5s ease-in-out infinite;
 }
 
@@ -2371,16 +2371,16 @@ select:focus {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   border-radius: 4px;
-  border: 1px solid var(--color-accent-primary, var(--color-accent, #00d084));
-  color: var(--color-accent-primary, var(--color-accent, #00d084));
+  border: 1px solid var(--color-accent-primary);
+  color: var(--color-accent-primary);
   background: transparent;
   white-space: nowrap;
 }
 /* Strong certainty — filled green like Kalshi's "<1%" and "99%" badges */
 .ks-chance-badge--strong {
-  background: var(--color-accent-primary, var(--color-accent, #00d084));
+  background: var(--color-accent-primary);
   color: #000;
-  border-color: var(--color-accent-primary, var(--color-accent, #00d084));
+  border-color: var(--color-accent-primary);
 }
 
 /* Action buttons cell */
@@ -2401,22 +2401,22 @@ select:focus {
   white-space: nowrap;
 }
 .ks-action-btn.yes-button {
-  background: rgba(34, 197, 94, 0.12);
-  color: #22c55e;
-  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: color-mix(in srgb, var(--color-state-success) 12%, transparent);
+  color: var(--color-state-success);
+  border: 1px solid color-mix(in srgb, var(--color-state-success) 25%, transparent);
 }
 .ks-action-btn.yes-button:hover:not(:disabled) {
-  background: rgba(34, 197, 94, 0.28);
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
+  background: color-mix(in srgb, var(--color-state-success) 28%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-state-success) 20%, transparent);
 }
 .ks-action-btn.no-button {
-  background: rgba(168, 85, 247, 0.12);
+  background: color-mix(in srgb, var(--color-accent-secondary) 12%, transparent);
   color: #a855f7;
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 25%, transparent);
 }
 .ks-action-btn.no-button:hover:not(:disabled) {
-  background: rgba(168, 85, 247, 0.28);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.2);
+  background: color-mix(in srgb, var(--color-accent-secondary) 28%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent-secondary) 20%, transparent);
 }
 .ks-action-btn:disabled {
   opacity: 0.35;
@@ -2430,7 +2430,7 @@ select:focus {
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 700;
-  color: var(--color-accent-primary, #3b82f6);
+  color: var(--color-accent-primary);
   background: transparent;
   border: none;
   border-top: 1px solid var(--color-border-muted);
@@ -2439,7 +2439,7 @@ select:focus {
   transition: background 0.15s ease;
 }
 .ks-more-markets-btn:hover {
-  background: rgba(59, 130, 246, 0.06);
+  background: color-mix(in srgb, var(--color-accent-primary) 6%, transparent);
 }
 
 /* ---- Panel Footer (close time + spread/total) ---- */
@@ -2466,7 +2466,7 @@ select:focus {
   white-space: nowrap;
 }
 .ks-panel-spread-total:hover {
-  color: var(--color-accent-primary, var(--color-accent, #00d084));
+  color: var(--color-accent-primary);
 }
 
 /* ---- Kalshi-style Frequency Pill Buttons ---- */
@@ -2766,7 +2766,7 @@ select:focus {
   color: var(--color-fg-default);
 }
 .ks-cat-tab.active {
-  color: var(--color-accent-primary, var(--color-accent, #00d084));
+  color: var(--color-accent-primary);
   font-weight: 700;
 }
 .ks-cat-tab.active::after {
@@ -2776,7 +2776,7 @@ select:focus {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--color-accent-primary, var(--color-accent, #00d084));
+  background: var(--color-accent-primary);
   border-radius: 1px;
 }
 .ks-cat-dot {
@@ -2852,11 +2852,11 @@ select:focus {
   color: var(--color-fg-strong, var(--color-fg-default));
 }
 .ks-sidebar-item.active {
-  color: var(--color-accent-primary, var(--color-accent, #00d084));
+  color: var(--color-accent-primary);
   font-weight: 700;
   background: rgba(0, 208, 132, 0.06);
   border-left: 2px solid
-    var(--color-accent-primary, var(--color-accent, #00d084));
+    var(--color-accent-primary);
 }
 .ks-sidebar-item .ks-sidebar-chevron {
   font-size: 10px;
@@ -3006,10 +3006,10 @@ select:focus {
   margin-bottom: 4px;
 }
 .orderbook-row.yes {
-  background: rgba(34, 197, 94, 0.06);
+  background: color-mix(in srgb, var(--color-state-success) 6%, transparent);
 }
 .orderbook-row.no {
-  background: rgba(168, 85, 247, 0.06);
+  background: color-mix(in srgb, var(--color-accent-secondary) 6%, transparent);
 }
 .ob-side {
   font-size: 10px;
@@ -3017,7 +3017,7 @@ select:focus {
   width: 24px;
 }
 .orderbook-row.yes .ob-side {
-  color: #22c55e;
+  color: var(--color-state-success);
 }
 .orderbook-row.no .ob-side {
   color: #a855f7;
@@ -3030,15 +3030,15 @@ select:focus {
 .expanded-closed-notice {
   margin-top: 8px;
   padding: 8px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: color-mix(in srgb, var(--color-state-error) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-state-error) 30%, transparent);
   border-radius: 6px;
   font-size: 11px;
-  color: var(--color-state-error, #ef4444);
+  color: var(--color-state-error);
   text-align: center;
 }
 .text-success {
-  color: var(--color-state-success, #22c55e);
+  color: var(--color-state-success);
 }
 
 /* ---- Inspector Panel Tabs ---- */
@@ -3070,8 +3070,8 @@ select:focus {
   background: var(--color-bg-canvas);
 }
 .inspector-tab.active {
-  color: var(--color-accent-primary, #3b82f6);
-  border-bottom-color: var(--color-accent-primary, #3b82f6);
+  color: var(--color-accent-primary);
+  border-bottom-color: var(--color-accent-primary);
   background: transparent;
 }
 .inspector-tab-badge {
@@ -3082,7 +3082,7 @@ select:focus {
   height: 14px;
   font-size: 8px;
   font-weight: 800;
-  background: var(--color-accent-primary, #3b82f6);
+  background: var(--color-accent-primary);
   color: #fff;
   border-radius: 7px;
   padding: 0 3px;
@@ -3131,11 +3131,11 @@ select:focus {
   text-align: center;
 }
 .side-yes {
-  background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  background: color-mix(in srgb, var(--color-state-success) 15%, transparent);
+  color: var(--color-state-success);
 }
 .side-no {
-  background: rgba(168, 85, 247, 0.15);
+  background: color-mix(in srgb, var(--color-accent-secondary) 15%, transparent);
   color: #a855f7;
 }
 .position-row__qty {
@@ -3203,12 +3203,12 @@ select:focus {
   text-transform: uppercase;
 }
 .action-buy {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
+  background: color-mix(in srgb, var(--color-state-success) 10%, transparent);
+  color: var(--color-state-success);
 }
 .action-sell {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--color-state-error, #ef4444);
+  background: color-mix(in srgb, var(--color-state-error) 10%, transparent);
+  color: var(--color-state-error);
 }
 .history-row__price {
   color: var(--color-fg-muted);
@@ -3292,12 +3292,12 @@ select:focus {
   transition: background 0.3s;
 }
 .agent-card__status-dot.dot-live {
-  background: var(--color-state-success, #22c55e);
-  box-shadow: 0 0 4px var(--color-state-success, #22c55e);
+  background: var(--color-state-success);
+  box-shadow: 0 0 4px var(--color-state-success);
 }
 .agent-card__status-dot.dot-warning {
-  background: var(--color-state-warning, #f59e0b);
-  box-shadow: 0 0 4px var(--color-state-warning, #f59e0b);
+  background: var(--color-state-warning);
+  box-shadow: 0 0 4px var(--color-state-warning);
 }
 .agent-card__status-dot.dot-stopped {
   background: var(--color-fg-subtle);
@@ -3341,9 +3341,9 @@ select:focus {
   color: var(--color-fg-default);
 }
 .agent-mode-btn.active {
-  background: var(--color-accent-primary, #3b82f6);
+  background: var(--color-accent-primary);
   color: #fff;
-  border-color: var(--color-accent-primary, #3b82f6);
+  border-color: var(--color-accent-primary);
 }
 
 /* ---- No markets message ---- */
@@ -3444,8 +3444,8 @@ select:focus {
   height: 100%;
   background: linear-gradient(
     90deg,
-    var(--color-accent-primary, #3b82f6),
-    var(--color-state-success, #22c55e)
+    var(--color-accent-primary),
+    var(--color-state-success)
   );
   border-radius: 3px;
   transition: width 1s ease;

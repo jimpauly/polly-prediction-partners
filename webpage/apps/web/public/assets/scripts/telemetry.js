@@ -57,10 +57,10 @@ const Telemetry = (() => {
         pingLabel.textContent = lastPing + "ms";
         pingLabel.style.color =
           lastPing < 50
-            ? "var(--color-state-success, #22c55e)"
+            ? "var(--color-state-success)"
             : lastPing < 150
-              ? "var(--color-state-warning, #f59e0b)"
-              : "var(--color-state-error, #ef4444)";
+              ? "var(--color-state-warning)"
+              : "var(--color-state-error)";
       }
     }
 
@@ -151,12 +151,12 @@ const Telemetry = (() => {
         const elapsed = performance.now() - startTime;
 
         if (response.ok) {
-          statusEl.style.background = "var(--color-state-success, #22c55e)";
+          statusEl.style.background = "var(--color-state-success)";
           statusEl.style.boxShadow =
-            "0 0 4px var(--color-state-success, #22c55e)";
+            "0 0 4px var(--color-state-success)";
           statusEl.title = `Backend healthy (${Math.round(elapsed)}ms)`;
         } else {
-          statusEl.style.background = "var(--color-state-warning, #f59e0b)";
+          statusEl.style.background = "var(--color-state-warning)";
           statusEl.title = `Backend unhealthy (${response.status})`;
         }
       } catch (_err) {

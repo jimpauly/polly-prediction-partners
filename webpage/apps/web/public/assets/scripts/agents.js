@@ -16,7 +16,7 @@ const AgentDashboard = (() => {
       displayName: "PERITIA",
       icon: "🎯",
       description: "BTC 15-min Candlestick",
-      chartColor: "#22c55e" /* green */,
+      chartColorVar: "--color-state-success" /* green */,
       defaultMode: "semi-auto",
       active: true,
     },
@@ -24,7 +24,7 @@ const AgentDashboard = (() => {
       displayName: "PRIME",
       icon: "📊",
       description: "Majority Signal",
-      chartColor: "#3b82f6" /* blue */,
+      chartColorVar: "--color-accent-primary" /* blue / primary accent */,
       defaultMode: "semi-auto",
       active: true,
     },
@@ -32,7 +32,7 @@ const AgentDashboard = (() => {
       displayName: "PRAXIS",
       icon: "🧠",
       description: "Sports Markets",
-      chartColor: "#a855f7" /* purple */,
+      chartColorVar: "--color-accent-secondary" /* purple / secondary accent */,
       defaultMode: "safe",
       active: true,
     },
@@ -40,7 +40,7 @@ const AgentDashboard = (() => {
       displayName: "PATIENS",
       icon: "🕰️",
       description: "Long-term Holds",
-      chartColor: "#f59e0b" /* amber */,
+      chartColorVar: "--color-state-warning" /* amber */,
       defaultMode: "safe",
       active: false,
       underConstruction: true,
@@ -49,7 +49,7 @@ const AgentDashboard = (() => {
       displayName: "PAVIS",
       icon: "🛡️",
       description: "Defensive Strategy",
-      chartColor: "#64748b" /* slate */,
+      chartColorVar: "--color-fg-subtle" /* slate */,
       defaultMode: "safe",
       active: false,
       underConstruction: true,
@@ -58,7 +58,7 @@ const AgentDashboard = (() => {
       displayName: "BRING-YOUR-OWN-BOT",
       icon: "🤖",
       description: "Custom LLM Agent",
-      chartColor: "#06b6d4" /* cyan */,
+      chartColorVar: "--color-state-info" /* cyan */,
       defaultMode: "safe",
       active: true,
       isByob: true,
@@ -67,12 +67,23 @@ const AgentDashboard = (() => {
       displayName: "AGNT007",
       icon: "🕵️",
       description: "Stealth Operations",
-      chartColor: "#64748b" /* slate */,
+      chartColorVar: "--color-fg-muted" /* neutral */,
       defaultMode: "safe",
       active: false,
       underConstruction: true,
     },
   };
+
+  /* Canvas fallback color — only used when no CSS variables are available */
+  const CHART_COLOR_FALLBACK = "#6b7280";
+
+  /** Resolve a CSS custom property to a usable color value for canvas. */
+  function resolveChartColor(config) {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue(config.chartColorVar)
+      .trim();
+    return val || CHART_COLOR_FALLBACK;
+  }
 
   /* Top-performing LLM models (Feb 2026) for BYOB radio selectors */
   const LLM_MODELS = [
@@ -566,7 +577,7 @@ const AgentDashboard = (() => {
       context.lineWidth = 1.5;
       context.lineJoin = "round";
       context.lineCap = "round";
-      context.strokeStyle = config.chartColor;
+      context.strokeStyle = resolveChartColor(config);
       context.globalAlpha = 0.85;
 
       history.forEach((point, index) => {
@@ -583,7 +594,7 @@ const AgentDashboard = (() => {
     let legendX = padding + 2;
     const legendY = height - padding - 4;
     Object.entries(AGENT_CONFIG).forEach(([agentName, config]) => {
-      context.fillStyle = config.chartColor;
+      context.fillStyle = resolveChartColor(config);
       context.fillRect(legendX, legendY, 6, 3);
       legendX += 10;
     });

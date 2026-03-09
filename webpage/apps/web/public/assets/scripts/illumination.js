@@ -5,7 +5,7 @@
    Channels: Master, Text Primary, Text Secondary, Bars Primary,
              Bars Secondary, Flood, Display.
 
-   Master defaults OFF; every other channel defaults ON at MAX (1.00).
+   Master defaults ON; every channel defaults ON at MAX (1.00).
    DAY mode (data-mode="light") → 60 % base.  NVG (dark) → 100 %.
    Dimmers scale 0.25 – 1.00 (displayed as 2.5 – 10).  State persists via localStorage.
 
@@ -47,7 +47,7 @@
 
   const DEFAULT_STATE = {
     mode: "day", // 'day' | 'nvg'
-    master: { on: false, dim: 1.0 },
+    master: { on: true, dim: 1.0 },
     textPrimary: { on: true, dim: 1.0 },
     textSecondary: { on: true, dim: 1.0 },
     textDim: 1.0,

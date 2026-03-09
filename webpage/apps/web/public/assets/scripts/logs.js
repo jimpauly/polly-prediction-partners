@@ -102,9 +102,9 @@ const LiveLogs = (() => {
     /* Color the level indicator */
     const levelColors = {
       info: "var(--color-fg-muted)",
-      warn: "var(--color-state-warning, #f59e0b)",
-      error: "var(--color-state-error, #ef4444)",
-      success: "var(--color-state-success, #22c55e)",
+      warn: "var(--color-state-warning)",
+      error: "var(--color-state-error)",
+      success: "var(--color-state-success)",
     };
     const levelColor = levelColors[level] || levelColors.info;
     const levelIcon =

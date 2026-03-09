@@ -367,13 +367,20 @@ body {
   border-radius: var(--border-radius-md);
   box-shadow: 0 1px 3px var(--color-shadow);
   transition:
-    box-shadow var(--transition-speed),
-    border-color var(--transition-speed),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
     background var(--transition-speed);
 }
 
 .card:hover {
   box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+/* Card hover must not override glow shadows — glow takes precedence */
+.card.glow-display:hover,
+.card.glow-bars-secondary:hover,
+.card.glow-bars-primary:hover {
+  box-shadow: inherit;
 }
 
 /* Shrink-wrap cards to content in utility regions. */
@@ -494,8 +501,8 @@ body {
 }
 
 .btn-primary:hover {
-  background: color-mix(in srgb, var(--color-accent-primary) 85%, #000);
-  border-color: color-mix(in srgb, var(--color-accent-primary) 85%, #000);
+  background: color-mix(in srgb, var(--color-accent-primary) 85%, black);
+  border-color: color-mix(in srgb, var(--color-accent-primary) 85%, black);
 }
 
 /* --- Secondary ---------------------------------------------------------- */
@@ -521,7 +528,7 @@ body {
 }
 
 .btn-danger:hover {
-  background: color-mix(in srgb, var(--color-state-error) 85%, #000);
+  background: color-mix(in srgb, var(--color-state-error) 85%, black);
 }
 
 /* --- Ghost -------------------------------------------------------------- */
@@ -814,7 +821,7 @@ textarea.input {
 }
 
 .idea-complaint-textarea::placeholder {
-  color: #36454f;
+  color: var(--color-fg-subtle);
 }
 
 /* ==========================================================================
@@ -2146,7 +2153,7 @@ textarea.input {
   font-size: 0.75rem;
   line-height: 1.6;
   color: var(--color-fg-default);
-  background: color-mix(in srgb, var(--color-bg-canvas) 95%, #000);
+  background: color-mix(in srgb, var(--color-bg-canvas) 95%, black);
   border: 1px solid var(--color-border-default);
   border-radius: var(--border-radius-md);
   overflow-y: auto;
