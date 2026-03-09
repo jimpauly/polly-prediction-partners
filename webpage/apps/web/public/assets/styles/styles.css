@@ -2185,17 +2185,19 @@ select:focus {
 
 /* ---- Series Panel ---- */
 .ks-series-panel {
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border-muted);
-  border-radius: 8px;
+  background: var(--color-bg-surface, #1a1a2e);
+  border: 1px solid var(--color-border-muted, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
   overflow: hidden;
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  margin-bottom: 12px;
 }
 .ks-series-panel:hover {
-  border-color: var(--color-border-focus);
-  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.08);
+  border-color: var(--color-border-default, rgba(255, 255, 255, 0.14));
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* ---- Panel Header ---- */
@@ -2651,6 +2653,76 @@ select:focus {
   overflow: hidden;
   min-width: 0;
   padding: 0 8px;
+}
+
+/* ---- Skeleton Loading ---- */
+.ks-skeleton-panel {
+  pointer-events: none;
+}
+.ks-skeleton-circle {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--color-bg-surface, #1a1a2e) 25%, rgba(255,255,255,0.06) 50%, var(--color-bg-surface, #1a1a2e) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+.ks-skeleton-line {
+  display: inline-block;
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--color-bg-surface, #1a1a2e) 25%, rgba(255,255,255,0.06) 50%, var(--color-bg-surface, #1a1a2e) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---- Connection-gated button states ---- */
+.ks-needs-connection {
+  position: relative;
+  opacity: 0.7;
+}
+.ks-needs-connection::after {
+  content: "🔒";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 8px;
+  line-height: 1;
+}
+
+/* ---- Agent activity indicator ---- */
+.ks-agent-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: 6px;
+  background: var(--color-accent-primary, #00d4aa);
+  color: #000;
+  font-weight: 700;
+  display: inline-block;
+  animation: agentPulse 2s ease-in-out;
+}
+
+@keyframes agentPulse {
+  0% { opacity: 0; transform: scale(0.8); }
+  20% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.9; transform: scale(1); }
+}
+
+/* ---- Full-auto trade flash ---- */
+.ks-trade-flash {
+  animation: tradeFlash 1.5s ease-out !important;
+}
+
+@keyframes tradeFlash {
+  0% { box-shadow: 0 0 0 0 var(--color-accent-primary, #00d4aa); }
+  25% { box-shadow: 0 0 12px 4px var(--color-accent-primary, #00d4aa); transform: scale(1.05); }
+  100% { box-shadow: 0 0 0 0 transparent; transform: scale(1); }
 }
 
 /* ---- Expanded Card Improvements ---- */

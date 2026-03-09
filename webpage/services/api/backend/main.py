@@ -24,6 +24,7 @@ from backend.api.control_api import create_api as _create_control_api
 from backend.config import Settings
 from backend.services.database import Database
 from backend.services.execution_service import ExecutionService
+from backend.services.kalshi_public_client import KalshiPublicClient
 from backend.services.kalshi_rest_client import KalshiRestClient
 from backend.services.kalshi_websocket_client import KalshiWebSocketClient
 from backend.services.metrics import (
@@ -87,6 +88,7 @@ class Application:
         self.config = Settings()
         self.state_cache = StateCache()
         self.rest_client: KalshiRestClient | None = None
+        self.public_client: KalshiPublicClient | None = None
         self.ws_client: KalshiWebSocketClient | None = None
         self.risk_gateway = RiskGateway(self.config, self.state_cache)
         self.execution_service: ExecutionService | None = None
@@ -608,6 +610,12 @@ class Application:
         # Lifecycle middleware — hooks into connect/disconnect responses
         application = self  # capture for closure
 
+        @app.on_event("startup")
+        async def _startup_public_data() -> None:
+            """Fetch public Kalshi market data on startup so the Trading Studio
+            can display live market cards before API keys are connected."""
+            asyncio.create_task(application._fetch_public_data())
+
         @app.middleware("http")
         async def _lifecycle_middleware(request: Request, call_next: Any) -> Response:
             response: Response = await call_next(request)
@@ -622,6 +630,8 @@ class Application:
                 asyncio.create_task(application._on_api_connect())
             elif path == "/api/connection/disconnect" and method == "POST":
                 asyncio.create_task(application._on_api_disconnect())
+            elif path == "/api/public/refresh" and method == "POST":
+                asyncio.create_task(application._fetch_public_data())
 
             return response
 
@@ -644,6 +654,62 @@ class Application:
             await self._teardown_services()
         except Exception:
             log.exception("post_disconnect_teardown_failed")
+        # Re-populate public data so the Trading Studio still shows markets
+        asyncio.create_task(self._fetch_public_data())
+
+    async def _fetch_public_data(self) -> None:
+        """Fetch public Kalshi market/event data without authentication.
+
+        Populates the state cache so the Trading Studio can render live
+        market cards even before API keys are provided.
+        """
+        try:
+            base_url = self.config.rest_base_url
+            self.public_client = KalshiPublicClient(base_url=base_url)
+
+            all_markets = await self.public_client.fetch_all_active_markets()
+            for m in all_markets:
+                ticker = m.get("ticker", "")
+                if ticker:
+                    await self.state_cache.update_market(ticker, m)
+            log.info("public_markets_fetched", count=len(all_markets))
+
+            all_events = await self.public_client.fetch_all_open_events()
+            for evt in all_events:
+                event_ticker = evt.get("event_ticker", "")
+                if event_ticker:
+                    await self.state_cache.update_event(event_ticker, evt)
+            log.info("public_events_fetched", count=len(all_events))
+
+            # Fetch series data for richer navigation context
+            series_tickers = set()
+            for evt in all_events:
+                st = evt.get("series_ticker", "")
+                if st:
+                    series_tickers.add(st)
+
+            series_count = 0
+            for st in series_tickers:
+                try:
+                    series_data = await self.public_client.get_series(st)
+                    if series_data:
+                        await self.state_cache.update_series(st, series_data)
+                        series_count += 1
+                except Exception:
+                    log.debug("series_fetch_skipped", series_ticker=st)
+            log.info("public_series_fetched", count=series_count)
+
+            if self._broadcaster is not None:
+                await self._broadcaster.broadcast(
+                    "public_data_ready",
+                    {
+                        "markets": len(all_markets),
+                        "events": len(all_events),
+                        "series": series_count,
+                    },
+                )
+        except Exception:
+            log.exception("public_data_fetch_failed")
 
     async def _bootstrap_services(self) -> None:
         """Create clients, run initial reconciliation, subscribe channels,
@@ -893,6 +959,9 @@ class Application:
         try:
             self.risk_gateway.disable_trading()
             await self._teardown_services()
+            if self.public_client is not None:
+                await self.public_client.close()
+                self.public_client = None
             await self.state_cache.clear()
             log.info("graceful_shutdown_complete")
         except Exception:

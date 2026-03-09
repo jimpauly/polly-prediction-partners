@@ -242,6 +242,11 @@ def create_api(
         events = state_cache.get_events()
         return {t: _json_safe(e) for t, e in events.items()}
 
+    @app.get("/api/state/series", tags=["state"])
+    async def get_all_series() -> dict[str, Any]:
+        """All cached series."""
+        return state_cache.get_all_series()
+
     @app.get("/api/state/market/{ticker}", tags=["state"])
     async def get_market(ticker: str) -> dict[str, Any]:
         """Single market by ticker."""
@@ -311,6 +316,16 @@ def create_api(
     async def get_exchange_status() -> dict[str, Any]:
         """Exchange connectivity / health status."""
         return state_cache.get_exchange_status()
+
+    @app.post("/api/public/refresh", tags=["public"])
+    async def refresh_public_data() -> dict[str, Any]:
+        """Trigger a re-fetch of public Kalshi market data.
+
+        This endpoint is available without API key connection and allows
+        the frontend to refresh the market card display on demand.
+        """
+        await broadcaster.broadcast("public_data_refresh_requested", {})
+        return {"message": "Public data refresh requested"}
 
     # ==================================================================
     # Agent Controls
