@@ -152,11 +152,12 @@
     wrap.appendChild(dropdown);
 
     /* Close dropdown when clicking outside */
-    document.addEventListener("click", function (e) {
+    handlers.onDocClickFileMenu = function (e) {
       if (!wrap.contains(e.target)) {
         dropdown.style.display = "none";
       }
-    });
+    };
+    document.addEventListener("click", handlers.onDocClickFileMenu);
 
     return wrap;
   }
@@ -903,6 +904,9 @@
       if (handlers.onEditorClick) dom.editor.removeEventListener("click", handlers.onEditorClick);
       if (handlers.onKeyDown) dom.editor.removeEventListener("keydown", handlers.onKeyDown);
       if (handlers.onPaste) dom.editor.removeEventListener("paste", handlers.onPaste);
+    }
+    if (handlers.onDocClickFileMenu) {
+      document.removeEventListener("click", handlers.onDocClickFileMenu);
     }
     if (dom.root && dom.root.parentNode) {
       dom.root.parentNode.removeChild(dom.root);
