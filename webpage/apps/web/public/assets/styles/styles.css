@@ -2629,7 +2629,8 @@ select:focus {
   color: var(--color-accent-primary, var(--color-accent, #00d084));
   font-weight: 700;
   background: rgba(0, 208, 132, 0.06);
-  border-left: 2px solid var(--color-accent-primary, var(--color-accent, #00d084));
+  border-left: 2px solid
+    var(--color-accent-primary, var(--color-accent, #00d084));
 }
 .ks-sidebar-item .ks-sidebar-chevron {
   font-size: 10px;

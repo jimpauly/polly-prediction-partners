@@ -24,38 +24,231 @@ const TradingStudio = (() => {
   /* Kalshi-style category mapping — matches Kalshi platform top nav.
      Each category maps to Kalshi event categories and keyword matchers. */
   const KALSHI_CATEGORIES = {
-    all:             { label: "Trending", keywords: [] },
-    new:             { label: "New",      keywords: [] },
-    all_markets:     { label: "All",      keywords: [] },
-    politics:        { label: "Politics", keywords: ["president","election","congress","senate","governor","political","trump","biden","democrat","republican","vote","gop","party"] },
-    sports:          { label: "Sports",   keywords: ["nfl","nba","mlb","nhl","soccer","football","basketball","baseball","sports","tennis","golf","mma","ufc","cricket","boxing","chess","esports","motorsport","olympics","f1","nascar","pga","fifa","epl","league","championship","world cup","super bowl"] },
-    culture:         { label: "Culture",  keywords: ["oscar","grammy","emmy","movie","tv","music","entertainment","culture","celebrity","reality","award","box office","streaming","tiktok","youtube","netflix"] },
-    crypto:          { label: "Crypto",   keywords: ["btc","bitcoin","eth","ethereum","sol","crypto","kxbtc","kxeth","kxsol","defi","nft","altcoin","solana","blockchain"] },
-    climate:         { label: "Climate",  keywords: ["weather","temperature","hurricane","snow","rain","climate","storm","tornado","heat","cold","flood","wildfire","noaa"] },
-    economics:       { label: "Economics",keywords: ["fed","cpi","gdp","unemployment","inflation","interest","jobs","economy","fomc","treasury","rate","payroll","pce","durable","housing","retail"] },
-    mentions:        { label: "Mentions", keywords: ["mention","tweet","social","media","viral","trending"] },
-    companies:       { label: "Companies",keywords: ["apple","google","meta","amazon","tesla","nvidia","microsoft","stock","earnings","ipo","market cap","revenue"] },
-    financials:      { label: "Financials", keywords: ["s&p","dow","nasdaq","bond","yield","forex","oil","gold","commodity","vix","spy","qqq","finance"] },
-    tech_and_science:{ label: "Tech & Science", keywords: ["tech","ai","space","spacex","nasa","vaccine","science","quantum","semiconductor","ev","robot","fda","biotech"] },
+    all: { label: "Trending", keywords: [] },
+    new: { label: "New", keywords: [] },
+    all_markets: { label: "All", keywords: [] },
+    politics: {
+      label: "Politics",
+      keywords: [
+        "president",
+        "election",
+        "congress",
+        "senate",
+        "governor",
+        "political",
+        "trump",
+        "biden",
+        "democrat",
+        "republican",
+        "vote",
+        "gop",
+        "party",
+      ],
+    },
+    sports: {
+      label: "Sports",
+      keywords: [
+        "nfl",
+        "nba",
+        "mlb",
+        "nhl",
+        "soccer",
+        "football",
+        "basketball",
+        "baseball",
+        "sports",
+        "tennis",
+        "golf",
+        "mma",
+        "ufc",
+        "cricket",
+        "boxing",
+        "chess",
+        "esports",
+        "motorsport",
+        "olympics",
+        "f1",
+        "nascar",
+        "pga",
+        "fifa",
+        "epl",
+        "league",
+        "championship",
+        "world cup",
+        "super bowl",
+      ],
+    },
+    culture: {
+      label: "Culture",
+      keywords: [
+        "oscar",
+        "grammy",
+        "emmy",
+        "movie",
+        "tv",
+        "music",
+        "entertainment",
+        "culture",
+        "celebrity",
+        "reality",
+        "award",
+        "box office",
+        "streaming",
+        "tiktok",
+        "youtube",
+        "netflix",
+      ],
+    },
+    crypto: {
+      label: "Crypto",
+      keywords: [
+        "btc",
+        "bitcoin",
+        "eth",
+        "ethereum",
+        "sol",
+        "crypto",
+        "kxbtc",
+        "kxeth",
+        "kxsol",
+        "defi",
+        "nft",
+        "altcoin",
+        "solana",
+        "blockchain",
+      ],
+    },
+    climate: {
+      label: "Climate",
+      keywords: [
+        "weather",
+        "temperature",
+        "hurricane",
+        "snow",
+        "rain",
+        "climate",
+        "storm",
+        "tornado",
+        "heat",
+        "cold",
+        "flood",
+        "wildfire",
+        "noaa",
+      ],
+    },
+    economics: {
+      label: "Economics",
+      keywords: [
+        "fed",
+        "cpi",
+        "gdp",
+        "unemployment",
+        "inflation",
+        "interest",
+        "jobs",
+        "economy",
+        "fomc",
+        "treasury",
+        "rate",
+        "payroll",
+        "pce",
+        "durable",
+        "housing",
+        "retail",
+      ],
+    },
+    mentions: {
+      label: "Mentions",
+      keywords: ["mention", "tweet", "social", "media", "viral", "trending"],
+    },
+    companies: {
+      label: "Companies",
+      keywords: [
+        "apple",
+        "google",
+        "meta",
+        "amazon",
+        "tesla",
+        "nvidia",
+        "microsoft",
+        "stock",
+        "earnings",
+        "ipo",
+        "market cap",
+        "revenue",
+      ],
+    },
+    financials: {
+      label: "Financials",
+      keywords: [
+        "s&p",
+        "dow",
+        "nasdaq",
+        "bond",
+        "yield",
+        "forex",
+        "oil",
+        "gold",
+        "commodity",
+        "vix",
+        "spy",
+        "qqq",
+        "finance",
+      ],
+    },
+    tech_and_science: {
+      label: "Tech & Science",
+      keywords: [
+        "tech",
+        "ai",
+        "space",
+        "spacex",
+        "nasa",
+        "vaccine",
+        "science",
+        "quantum",
+        "semiconductor",
+        "ev",
+        "robot",
+        "fda",
+        "biotech",
+      ],
+    },
   };
 
   /* Kalshi-style subcategories per top-level category.
      These are populated dynamically from live events but we have sensible
      defaults matching Kalshi's known navigation structure. */
   const SUBCATEGORY_MAP = {
-    all:             [],
-    new:             [],
-    all_markets:     [],
-    politics:        ["US", "Global", "Senate", "House", "Governor"],
-    sports:          ["Soccer", "Tennis", "Golf", "MMA", "Cricket", "Baseball", "Boxing", "Chess", "Esports", "Motorsport", "Olympics", "NFL", "NBA", "MLB", "NHL"],
-    culture:         ["Awards", "Box Office", "Music", "Streaming"],
-    crypto:          ["BTC", "ETH", "SOL", "Other"],
-    climate:         ["Temperature", "Storms", "Wildfire"],
-    economics:       ["Fed", "CPI", "Jobs", "GDP"],
-    mentions:        [],
-    companies:       ["Tech", "Finance", "Auto", "Energy"],
-    financials:      ["Indices", "Commodities", "Forex"],
-    tech_and_science:["AI", "Space", "EVs", "Biotech"],
+    all: [],
+    new: [],
+    all_markets: [],
+    politics: ["US", "Global", "Senate", "House", "Governor"],
+    sports: [
+      "Soccer",
+      "Tennis",
+      "Golf",
+      "MMA",
+      "Cricket",
+      "Baseball",
+      "Boxing",
+      "Chess",
+      "Esports",
+      "Motorsport",
+      "Olympics",
+      "NFL",
+      "NBA",
+      "MLB",
+      "NHL",
+    ],
+    culture: ["Awards", "Box Office", "Music", "Streaming"],
+    crypto: ["BTC", "ETH", "SOL", "Other"],
+    climate: ["Temperature", "Storms", "Wildfire"],
+    economics: ["Fed", "CPI", "Jobs", "GDP"],
+    mentions: [],
+    companies: ["Tech", "Finance", "Auto", "Energy"],
+    financials: ["Indices", "Commodities", "Forex"],
+    tech_and_science: ["AI", "Space", "EVs", "Biotech"],
   };
 
   /* Series display names and icons for section headers */
@@ -286,16 +479,16 @@ const TradingStudio = (() => {
 
   /* Maps our navigation categories to Kalshi event category substrings */
   const CATEGORY_MATCH_RULES = {
-    politics:        ["politic"],
-    sports:          ["sport"],
-    culture:         ["cultur", "entertain"],
-    crypto:          ["crypto"],
-    climate:         ["climat", "weather"],
-    economics:       ["econom"],
-    mentions:        ["mention"],
-    companies:       ["compan"],
-    financials:      ["financ"],
-    tech_and_science:["tech", "scienc"],
+    politics: ["politic"],
+    sports: ["sport"],
+    culture: ["cultur", "entertain"],
+    crypto: ["crypto"],
+    climate: ["climat", "weather"],
+    economics: ["econom"],
+    mentions: ["mention"],
+    companies: ["compan"],
+    financials: ["financ"],
+    tech_and_science: ["tech", "scienc"],
   };
 
   function categoryMatchesLabel(category, label) {
@@ -309,7 +502,11 @@ const TradingStudio = (() => {
     /* Check event category from live data first */
     const eventTicker = market.event_ticker || "";
     const eventData = events[eventTicker];
-    if (eventData && eventData.category && categoryMatchesLabel(category, eventData.category)) {
+    if (
+      eventData &&
+      eventData.category &&
+      categoryMatchesLabel(category, eventData.category)
+    ) {
       return true;
     }
 
@@ -390,7 +587,10 @@ const TradingStudio = (() => {
       /* "all" = trending — sort by volume descending */
       if (currentCategory === "all") {
         filtered.sort((a, b) => {
-          return (parseFloat(b.volume_24h_fp) || 0) - (parseFloat(a.volume_24h_fp) || 0);
+          return (
+            (parseFloat(b.volume_24h_fp) || 0) -
+            (parseFloat(a.volume_24h_fp) || 0)
+          );
         });
       }
     } else {
@@ -556,8 +756,13 @@ const TradingStudio = (() => {
 
   /* Known series patterns — module-level constant for performance */
   const KNOWN_SERIES_MAP = {
-    NFL: "NFL", NBA: "NBA", MLB: "MLB", NHL: "NHL",
-    KXBTC: "BTC", KXETH: "ETH", KXSOL: "SOL",
+    NFL: "NFL",
+    NBA: "NBA",
+    MLB: "MLB",
+    NHL: "NHL",
+    KXBTC: "BTC",
+    KXETH: "ETH",
+    KXSOL: "SOL",
   };
 
   function deriveSubcategoryLabel(evt) {
@@ -821,8 +1026,10 @@ const TradingStudio = (() => {
 
     /* Check event data first for accurate category */
     for (const market of markets) {
-      if ((market.series_ticker || "").toLowerCase() === lower ||
-          (market.event_ticker || "").toLowerCase() === lower) {
+      if (
+        (market.series_ticker || "").toLowerCase() === lower ||
+        (market.event_ticker || "").toLowerCase() === lower
+      ) {
         const eventData = events[market.event_ticker];
         if (eventData && eventData.category) {
           return eventData.category;
@@ -852,7 +1059,11 @@ const TradingStudio = (() => {
     if (lower.includes("fed") || lower.includes("cpi") || lower.includes("gdp"))
       return "Economics";
     if (lower.includes("temp") || lower.includes("weather")) return "Climate";
-    if (lower.includes("elect") || lower.includes("president") || lower.includes("congress"))
+    if (
+      lower.includes("elect") ||
+      lower.includes("president") ||
+      lower.includes("congress")
+    )
       return "Politics";
     return "Markets";
   }
@@ -1617,14 +1828,30 @@ const TradingStudio = (() => {
 
   function formatEventCloseTime(date) {
     /* Kalshi-style close time: "Jan 25 @ 5:30am EST" */
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const month = months[date.getMonth()];
     const day = date.getDate();
     let hours = date.getHours();
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const ampm = hours >= 12 ? "pm" : "am";
     hours = hours % 12 || 12;
-    const tzAbbr = new Date().toLocaleTimeString("en-us", { timeZoneName: "short" }).split(" ").pop();
+    const tzAbbr = new Date()
+      .toLocaleTimeString("en-us", { timeZoneName: "short" })
+      .split(" ")
+      .pop();
     return `${month} ${day} @ ${hours}:${minutes}${ampm} ${tzAbbr}`;
   }
 
