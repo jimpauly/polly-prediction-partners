@@ -2605,3 +2605,303 @@ textarea.input {
 .series-cards-row {
   grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
 }
+
+/* ==========================================================================
+   IGNITION PANEL — Action Bar Over-Detailed Throttle Control
+   ========================================================================== */
+
+.ignition-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 4px 6px;
+  gap: 3px;
+  font-family: var(--font-family-mono);
+  position: relative;
+  /* Subtle scan-line texture */
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    color-mix(in srgb, var(--color-fg-subtle) 3%, transparent) 2px,
+    color-mix(in srgb, var(--color-fg-subtle) 3%, transparent) 4px
+  );
+}
+
+/* ── Panel header ── */
+.ignition-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-border-default);
+  padding-bottom: 3px;
+  white-space: nowrap;
+}
+
+.ignition-panel__title {
+  font-weight: 900;
+  font-size: clamp(0.6rem, 0.8vw, 0.78rem);
+  letter-spacing: 0.18em;
+  color: var(--color-accent-primary);
+  text-shadow: 0 0 6px var(--color-accent-primary), 0 0 14px var(--color-accent-primary);
+  flex: 1;
+}
+
+.ignition-panel__serial {
+  font-size: clamp(0.48rem, 0.55vw, 0.6rem);
+  letter-spacing: 0.12em;
+  color: var(--color-fg-subtle);
+  opacity: 0.7;
+}
+
+.ignition-panel__corner {
+  font-size: 0.5rem;
+  color: var(--color-border-default);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Status readout strip ── */
+.ignition-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 2px;
+}
+
+.ignition-status-key {
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-fg-subtle);
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.ignition-status-sep {
+  font-size: 0.5rem;
+  color: var(--color-border-muted);
+  flex-shrink: 0;
+}
+
+.ignition-status-value {
+  font-size: clamp(0.55rem, 0.7vw, 0.68rem);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  flex: 1;
+  text-align: center;
+  color: var(--color-fg-default);
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.ignition-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* dot state colours */
+.ignition-status-dot[data-state="auto"] {
+  background: var(--color-state-success);
+  box-shadow: 0 0 5px var(--color-state-success);
+}
+.ignition-status-dot[data-state="semi"] {
+  background: var(--color-state-warning);
+  box-shadow: 0 0 5px var(--color-state-warning);
+}
+.ignition-status-dot[data-state="stop"] {
+  background: var(--color-state-error);
+  box-shadow: 0 0 5px var(--color-state-error);
+}
+
+/* status value glow matches state */
+.ignition-status-bar:has(.ignition-status-dot[data-state="auto"]) .ignition-status-value {
+  color: var(--color-state-success);
+  text-shadow: 0 0 8px var(--color-state-success);
+}
+.ignition-status-bar:has(.ignition-status-dot[data-state="semi"]) .ignition-status-value {
+  color: var(--color-state-warning);
+  text-shadow: 0 0 8px var(--color-state-warning);
+}
+.ignition-status-bar:has(.ignition-status-dot[data-state="stop"]) .ignition-status-value {
+  color: var(--color-state-error);
+  text-shadow: 0 0 8px var(--color-state-error);
+}
+
+/* ── State selector buttons ── */
+.ignition-states {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-height: 0;
+}
+
+.ign-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+  padding: 3px 5px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 2px;
+  background: var(--color-bg-canvas);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inactive state: dimmed */
+.ign-btn:not(.ign-btn--active) {
+  opacity: 0.45;
+}
+
+/* Hover */
+.ign-btn:hover {
+  opacity: 0.75;
+  border-color: var(--color-border-default);
+}
+
+/* Top row: indicator + mode label */
+.ign-btn__row--top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.ign-btn__indicator {
+  font-size: clamp(0.5rem, 0.6vw, 0.65rem);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: text-shadow 0.3s;
+}
+
+.ign-btn__mode {
+  font-size: clamp(0.55rem, 0.72vw, 0.7rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  flex: 1;
+  transition: text-shadow 0.3s, color 0.2s;
+}
+
+.ign-btn__desc {
+  font-size: clamp(0.42rem, 0.5vw, 0.52rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  transition: color 0.2s;
+}
+
+.ign-btn__spec {
+  font-size: clamp(0.38rem, 0.42vw, 0.46rem);
+  letter-spacing: 0.06em;
+  color: var(--color-fg-subtle);
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* ── FULL AUTO — green ── */
+.ign-btn--auto.ign-btn--active {
+  border-color: var(--color-state-success);
+  background: color-mix(in srgb, var(--color-state-success) 8%, var(--color-bg-canvas));
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--color-state-success) 12%, transparent);
+}
+.ign-btn--auto.ign-btn--active .ign-btn__indicator,
+.ign-btn--auto.ign-btn--active .ign-btn__mode {
+  color: var(--color-state-success);
+  text-shadow: 0 0 6px var(--color-state-success), 0 0 16px var(--color-state-success);
+}
+.ign-btn--auto.ign-btn--active .ign-btn__desc {
+  color: var(--color-state-success);
+  opacity: 0.85;
+}
+.ign-btn--auto:not(.ign-btn--active) .ign-btn__indicator,
+.ign-btn--auto:not(.ign-btn--active) .ign-btn__mode {
+  color: var(--color-state-success);
+}
+
+/* ── SEMI AUTO — yellow ── */
+.ign-btn--semi.ign-btn--active {
+  border-color: var(--color-state-warning);
+  background: color-mix(in srgb, var(--color-state-warning) 8%, var(--color-bg-canvas));
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--color-state-warning) 12%, transparent);
+}
+.ign-btn--semi.ign-btn--active .ign-btn__indicator,
+.ign-btn--semi.ign-btn--active .ign-btn__mode {
+  color: var(--color-state-warning);
+  text-shadow: 0 0 6px var(--color-state-warning), 0 0 16px var(--color-state-warning);
+}
+.ign-btn--semi.ign-btn--active .ign-btn__desc {
+  color: var(--color-state-warning);
+  opacity: 0.85;
+}
+.ign-btn--semi:not(.ign-btn--active) .ign-btn__indicator,
+.ign-btn--semi:not(.ign-btn--active) .ign-btn__mode {
+  color: var(--color-state-warning);
+}
+
+/* ── FULL STOP — red ── */
+.ign-btn--stop.ign-btn--active {
+  border-color: var(--color-state-error);
+  background: color-mix(in srgb, var(--color-state-error) 8%, var(--color-bg-canvas));
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--color-state-error) 12%, transparent);
+}
+.ign-btn--stop.ign-btn--active .ign-btn__indicator,
+.ign-btn--stop.ign-btn--active .ign-btn__mode {
+  color: var(--color-state-error);
+  text-shadow: 0 0 6px var(--color-state-error), 0 0 16px var(--color-state-error);
+}
+.ign-btn--stop.ign-btn--active .ign-btn__desc {
+  color: var(--color-state-error);
+  opacity: 0.85;
+}
+.ign-btn--stop:not(.ign-btn--active) .ign-btn__indicator,
+.ign-btn--stop:not(.ign-btn--active) .ign-btn__mode {
+  color: var(--color-state-error);
+}
+
+/* ── Panel footer nameplate ── */
+.ignition-panel__footer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-top: 1px solid var(--color-border-muted);
+  padding-top: 2px;
+}
+
+.ignition-panel__foot-text {
+  flex: 1;
+  font-size: clamp(0.36rem, 0.42vw, 0.46rem);
+  letter-spacing: 0.1em;
+  color: var(--color-fg-subtle);
+  opacity: 0.55;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fluid font scaling for ignition panel within the foot region */
+.region-foot .ignition-panel .ign-btn__mode {
+  font-size: clamp(0.52rem, 0.7vw, 0.7rem);
+}
+.region-foot .ignition-panel .ign-btn__desc {
+  font-size: clamp(0.4rem, 0.48vw, 0.52rem);
+}
