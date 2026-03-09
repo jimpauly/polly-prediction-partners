@@ -242,6 +242,11 @@ def create_api(
         events = state_cache.get_events()
         return {t: _json_safe(e) for t, e in events.items()}
 
+    @app.get("/api/state/series", tags=["state"])
+    async def get_all_series() -> dict[str, Any]:
+        """All cached series."""
+        return state_cache.get_all_series()
+
     @app.get("/api/state/market/{ticker}", tags=["state"])
     async def get_market(ticker: str) -> dict[str, Any]:
         """Single market by ticker."""

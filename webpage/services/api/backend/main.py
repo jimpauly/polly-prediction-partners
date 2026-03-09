@@ -681,10 +681,32 @@ class Application:
                     await self.state_cache.update_event(event_ticker, evt)
             log.info("public_events_fetched", count=len(all_events))
 
+            # Fetch series data for richer navigation context
+            series_tickers = set()
+            for evt in all_events:
+                st = evt.get("series_ticker", "")
+                if st:
+                    series_tickers.add(st)
+
+            series_count = 0
+            for st in series_tickers:
+                try:
+                    series_data = await self.public_client.get_series(st)
+                    if series_data:
+                        await self.state_cache.update_series(st, series_data)
+                        series_count += 1
+                except Exception:
+                    log.debug("series_fetch_skipped", series_ticker=st)
+            log.info("public_series_fetched", count=series_count)
+
             if self._broadcaster is not None:
                 await self._broadcaster.broadcast(
                     "public_data_ready",
-                    {"markets": len(all_markets), "events": len(all_events)},
+                    {
+                        "markets": len(all_markets),
+                        "events": len(all_events),
+                        "series": series_count,
+                    },
                 )
         except Exception:
             log.exception("public_data_fetch_failed")

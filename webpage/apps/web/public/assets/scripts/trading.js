@@ -13,6 +13,7 @@ const TradingStudio = (() => {
 
   let markets = [];
   let events = {};
+  let seriesData = {};
   let displayedCount = 0;
   let currentCategory = "all";
   let currentSubcategory = "all";
@@ -289,8 +290,8 @@ const TradingStudio = (() => {
     const accountBar = document.getElementById("trading-account-bar");
     if (accountBar) accountBar.style.display = "none";
 
-    /* Fetch public market data from backend (populated from Kalshi public API) */
-    fetchPublicData();
+    /* Fetch public market data from backend with retry polling */
+    pollForPublicData();
 
     /* Listen for public_data_ready events from WebSocket */
     connectPublicWebSocket();
@@ -507,7 +508,48 @@ const TradingStudio = (() => {
   async function fetchPublicData() {
     /* Fetch markets and events from the backend's state cache which is
        populated from Kalshi's public (unauthenticated) API on startup. */
-    await Promise.all([fetchMarkets(), fetchEvents()]);
+    await Promise.all([fetchMarkets(), fetchEvents(), fetchSeries()]);
+  }
+
+  async function fetchSeries() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/state/series`);
+      if (!response.ok) return;
+      const data = await response.json();
+      seriesData = data || {};
+    } catch (e) {
+      console.warn("Failed to fetch series:", e);
+    }
+  }
+
+  let _publicDataPollTimer = null;
+  let _publicDataPollAttempts = 0;
+  const _MAX_POLL_ATTEMPTS = 20;
+  const _POLL_BASE_DELAY_MS = 3000;
+  const _POLL_BACKOFF_MULTIPLIER = 1.2;
+  const _MAX_POLL_DELAY_MS = 15000;
+
+  function pollForPublicData() {
+    if (_publicDataPollTimer) clearTimeout(_publicDataPollTimer);
+    _publicDataPollAttempts = 0;
+    _tryFetchPublicData();
+  }
+
+  async function _tryFetchPublicData() {
+    _publicDataPollAttempts++;
+    await fetchPublicData();
+
+    /* If we got markets, stop polling */
+    if (markets.length > 0) {
+      _publicDataPollTimer = null;
+      return;
+    }
+
+    /* Retry with increasing delay up to max attempts */
+    if (_publicDataPollAttempts < _MAX_POLL_ATTEMPTS) {
+      const delay = Math.min(_POLL_BASE_DELAY_MS * Math.pow(_POLL_BACKOFF_MULTIPLIER, _publicDataPollAttempts - 1), _MAX_POLL_DELAY_MS);
+      _publicDataPollTimer = setTimeout(_tryFetchPublicData, delay);
+    }
   }
 
   function updateConnectionState() {
@@ -850,10 +892,35 @@ const TradingStudio = (() => {
     const filtered = filterMarkets();
 
     if (filtered.length === 0) {
-      const message = markets.length === 0
-        ? '<div class="no-markets-message" style="grid-column:1/-1;text-align:center;padding:32px 16px;"><div style="font-size:24px;margin-bottom:8px;">📡</div><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Loading Kalshi Markets…</div><div style="font-size:11px;opacity:0.6;">Fetching live market data from Kalshi. This may take a moment.</div></div>'
-        : '<div class="no-markets-message" style="grid-column:1/-1;">No markets match your current filters</div>';
-      grid.innerHTML = message;
+      if (markets.length === 0) {
+        /* Show skeleton loading panels that match Kalshi's layout */
+        grid.innerHTML = Array(6).fill(null).map(() => `
+            <div class="ks-series-panel ks-skeleton-panel">
+                <div class="ks-panel-header">
+                    <div class="ks-panel-header-left">
+                        <span class="ks-skeleton-circle"></span>
+                        <div class="ks-panel-title-group">
+                            <span class="ks-skeleton-line" style="width:60px;height:10px"></span>
+                            <span class="ks-skeleton-line" style="width:180px;height:14px"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ks-panel-chart" style="padding:8px 14px">
+                    <div class="ks-skeleton-line" style="width:100%;height:60px;border-radius:4px"></div>
+                </div>
+                <div class="ks-outcome-table" style="padding:4px 14px 8px">
+                    <div class="ks-skeleton-line" style="width:100%;height:32px;margin-bottom:6px;border-radius:4px"></div>
+                    <div class="ks-skeleton-line" style="width:100%;height:32px;margin-bottom:6px;border-radius:4px"></div>
+                    <div class="ks-skeleton-line" style="width:100%;height:32px;border-radius:4px"></div>
+                </div>
+                <div class="ks-panel-footer" style="padding:6px 14px">
+                    <span class="ks-skeleton-line" style="width:120px;height:10px"></span>
+                </div>
+            </div>
+        `).join('');
+      } else {
+        grid.innerHTML = '<div class="no-markets-message" style="grid-column:1/-1;">No markets match your current filters</div>';
+      }
       const showMoreContainer = document.getElementById("show-more-container");
       if (showMoreContainer) showMoreContainer.style.display = "none";
       return;
@@ -906,10 +973,22 @@ const TradingStudio = (() => {
     /* Representative market for the series chart */
     const repMarket = seriesMarkets[0];
 
-    /* Build title from event ticker or series display */
-    const seriesTitle = repMarket.yes_sub_title
-      ? deriveSeriesTitle(repMarket)
-      : seriesDisplay.label;
+    /* Build title from event data, then series data, then ticker */
+    let seriesTitle = seriesDisplay.label;
+
+    /* Try event title first (most accurate for Kalshi-style display) */
+    const eventData = events[repMarket.event_ticker];
+    if (eventData && eventData.title) {
+      seriesTitle = eventData.title;
+    } else if (repMarket.yes_sub_title) {
+      seriesTitle = deriveSeriesTitle(repMarket);
+    }
+
+    /* Try series data for even better context */
+    const seriesInfo = seriesData[seriesKey] || seriesData[repMarket.series_ticker];
+    if (seriesInfo && seriesInfo.title && !eventData) {
+      seriesTitle = seriesInfo.title;
+    }
 
     /* Category breadcrumb */
     const catBreadcrumb = deriveCategoryBreadcrumb(seriesKey);

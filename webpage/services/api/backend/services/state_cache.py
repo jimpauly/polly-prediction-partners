@@ -43,6 +43,7 @@ class StateCache:
         # Core state
         self._markets: dict[str, Market] = {}
         self._events: dict[str, Event] = {}
+        self._series: dict[str, Any] = {}
         self._orderbooks: dict[str, dict] = {}
         self._positions: dict[str, dict] = {}
         self._orders: dict[str, Order] = {}
@@ -135,6 +136,20 @@ class StateCache:
 
     def get_events(self) -> dict[str, Event]:
         return dict(self._events)
+
+    # ------------------------------------------------------------------
+    # Series
+    # ------------------------------------------------------------------
+
+    async def update_series(self, series_ticker: str, data: Any) -> None:
+        async with self._lock:
+            self._series[series_ticker] = data
+
+    def get_series(self, series_ticker: str) -> Any:
+        return self._series.get(series_ticker)
+
+    def get_all_series(self) -> dict[str, Any]:
+        return dict(self._series)
 
     # ------------------------------------------------------------------
     # Orderbook
@@ -362,6 +377,7 @@ class StateCache:
         async with self._lock:
             self._markets.clear()
             self._events.clear()
+            self._series.clear()
             self._orderbooks.clear()
             self._positions.clear()
             self._orders.clear()
@@ -391,6 +407,7 @@ class StateCache:
             "events": {
                 t: e.model_dump(mode="json") for t, e in self._events.items()
             },
+            "series": dict(self._series),
             "orderbooks": dict(self._orderbooks),
             "positions": dict(self._positions),
             "orders": {

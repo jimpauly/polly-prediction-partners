@@ -121,6 +121,13 @@ class KalshiPublicClient:
                 break
         return all_markets
 
+    async def get_series(self, series_ticker: str) -> dict | None:
+        """Fetch a single series by ticker (unauthenticated)."""
+        data = await self._get(f"/series/{series_ticker}")
+        if data is None:
+            return None
+        return data.get("series", data)
+
     async def fetch_all_open_events(self) -> list[dict]:
         """Paginate through all open events."""
         all_events: list[dict] = []
