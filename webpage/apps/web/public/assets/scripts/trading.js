@@ -141,11 +141,7 @@ const TradingStudio = (() => {
   }
 
   function bindFilters() {
-    [
-      "filter-volume",
-      "filter-time-to-close",
-      "filter-status",
-    ].forEach((id) => {
+    ["filter-volume", "filter-time-to-close", "filter-status"].forEach((id) => {
       const el = document.getElementById(id);
       if (el)
         el.addEventListener("change", () => {
@@ -367,7 +363,9 @@ const TradingStudio = (() => {
     }
 
     /* Frequency filter (pill buttons) */
-    const activePill = document.querySelector("#freq-pill-group .ks-freq-pill.active");
+    const activePill = document.querySelector(
+      "#freq-pill-group .ks-freq-pill.active",
+    );
     const freqFilter = activePill ? activePill.dataset.freq : "all";
     if (freqFilter && freqFilter !== "all") {
       filtered = filtered.filter((m) => detectFrequency(m) === freqFilter);
@@ -489,7 +487,10 @@ const TradingStudio = (() => {
     const groups = groupBySeries(filtered);
 
     /* Calculate how many total series to show */
-    const seriesLimit = Math.max(CARDS_PER_PAGE, displayedCount + CARDS_PER_PAGE);
+    const seriesLimit = Math.max(
+      CARDS_PER_PAGE,
+      displayedCount + CARDS_PER_PAGE,
+    );
     let seriesRendered = 0;
 
     grid.innerHTML = "";
@@ -520,7 +521,9 @@ const TradingStudio = (() => {
 
     const seriesDisplay = getSeriesDisplay(seriesKey);
     const isExpanded = expandedSeries.has(seriesKey);
-    const rowLimit = isExpanded ? seriesMarkets.length : INITIAL_ROWS_PER_SERIES;
+    const rowLimit = isExpanded
+      ? seriesMarkets.length
+      : INITIAL_ROWS_PER_SERIES;
     const visibleMarkets = seriesMarkets.slice(0, rowLimit);
     const hasMore = seriesMarkets.length > INITIAL_ROWS_PER_SERIES;
 
@@ -655,7 +658,8 @@ const TradingStudio = (() => {
   /* ---- Series title derivation ---- */
 
   /* Pattern that matches price/percentage thresholds like "$87,500 or above" or "50% or below" */
-  const THRESHOLD_PATTERN = /(\$[\d,.]+|\d+(\.\d+)?%?) or (above|below|more|less)/gi;
+  const THRESHOLD_PATTERN =
+    /(\$[\d,.]+|\d+(\.\d+)?%?) or (above|below|more|less)/gi;
 
   function deriveSeriesTitle(market) {
     /* Kalshi titles look like "Bitcoin price today at 8am EST?"
@@ -679,14 +683,23 @@ const TradingStudio = (() => {
 
   function deriveCategoryBreadcrumb(seriesKey) {
     const lower = seriesKey.toLowerCase();
-    if (lower.includes("btc") || lower.includes("eth") || lower.includes("sol") || lower.includes("crypto"))
+    if (
+      lower.includes("btc") ||
+      lower.includes("eth") ||
+      lower.includes("sol") ||
+      lower.includes("crypto")
+    )
       return "Crypto";
-    if (lower.includes("nfl") || lower.includes("nba") || lower.includes("mlb") || lower.includes("nhl"))
+    if (
+      lower.includes("nfl") ||
+      lower.includes("nba") ||
+      lower.includes("mlb") ||
+      lower.includes("nhl")
+    )
       return "Sports";
     if (lower.includes("fed") || lower.includes("cpi") || lower.includes("gdp"))
       return "Economics";
-    if (lower.includes("temp") || lower.includes("weather"))
-      return "Weather";
+    if (lower.includes("temp") || lower.includes("weather")) return "Weather";
     return "Markets";
   }
 
