@@ -211,6 +211,7 @@ body {
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
   padding-bottom: var(--space-3);
   margin-bottom: var(--space-3);
@@ -270,13 +271,13 @@ body {
   align-items: start;
 }
 
-/* Top bento: palette left, stacked gauges+logs right */
+/* Top bento: Active Theme left (~1/3), right stack (~2/3) */
 .main-bento-grid--top {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 5fr;
   align-items: stretch;
 }
 
-/* Right-column stack: gauges above live logs */
+/* Right-column stack: Man-0'-Meters on top, bottom row below */
 .main-bento-right-stack {
   display: flex;
   flex-direction: column;
@@ -287,18 +288,21 @@ body {
   margin-bottom: 0;
 }
 
-/* Cards inside the bento grid don't need their own bottom margin. */
-.main-bento-grid > .card {
+/* Bottom right row: System Logs + Web Elements side by side */
+.main-bento-right-bottom {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+.main-bento-right-bottom > .card {
   margin-bottom: 0;
 }
 
-/* Bento grid columns: fluid auto-fill instead of breakpoint-based */
-.main-bento-grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
-}
-
-.main-bento-grid--top {
-  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+/* Cards inside the bento grid don't need their own bottom margin. */
+.main-bento-grid > .card {
+  margin-bottom: 0;
 }
 
 /* ---------- Region titles (engraved cockpit style) ---------------------- */
