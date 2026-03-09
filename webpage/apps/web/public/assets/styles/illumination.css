@@ -566,17 +566,7 @@
    Classic cockpit/avionics knob with textured outer grip.
    ═══════════════════════════════════════════════════════════ */
 [data-dial-style="b"] .dimmer-dial {
-  background: radial-gradient(
-    circle at 38% 35%,
-    color-mix(
-        in srgb,
-        var(--color-fg-subtle) 30%,
-        var(--color-bg-surface-raised)
-      )
-      0%,
-    var(--color-bg-surface) 50%,
-    color-mix(in srgb, var(--color-bg-canvas) 85%, var(--color-fg-subtle)) 100%
-  );
+  background: var(--color-bg-surface);
   border: 2px solid var(--color-bg-canvas);
   outline: 1px solid var(--color-border-default);
   box-shadow:
