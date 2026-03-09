@@ -316,19 +316,25 @@ def create_api(
         response_model=AgentModeResponse,
     )
     async def set_agent_mode(name: str, body: AgentModeRequest) -> AgentModeResponse:
-        """Set an agent's operating mode (auto / semi-auto / safe)."""
+        """Set an agent's operating mode (auto / semi-auto / safe).
+
+        Switching to ``auto`` or ``semi-auto`` also activates the agent
+        (status → ``running``) so the evaluation loop picks it up.
+        Switching to ``safe`` idles the agent (status → ``idle``).
+        """
         agent = state_cache.get_agent_state(name)
         if agent is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Agent '{name}' not found",
             )
-        updated = agent.model_copy(update={"mode": body.mode})
+        new_status = "running" if body.mode in ("auto", "semi-auto") else "idle"
+        updated = agent.model_copy(update={"mode": body.mode, "status": new_status})
         await state_cache.update_agent_state(name, updated)
-        log.info("agent_mode_changed", agent=name, mode=body.mode)
+        log.info("agent_mode_changed", agent=name, mode=body.mode, status=new_status)
         await broadcaster.broadcast(
             "agent_mode_changed",
-            {"agent_name": name, "mode": body.mode},
+            {"agent_name": name, "mode": body.mode, "status": new_status},
         )
         return AgentModeResponse(agent_name=name, mode=body.mode)
 

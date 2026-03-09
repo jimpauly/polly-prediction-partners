@@ -2164,6 +2164,289 @@ select:focus {
   align-self: center;
 }
 
+/* ============================================================
+   Kalshi-Style Series Panels
+   Groups markets by event series, each rendered as a card with
+   a header, mini-chart, and table of outcome rows — mirroring
+   the Kalshi exchange navigation layout.
+   ============================================================ */
+
+/* ---- Container override: single-column list of panels ---- */
+.series-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+
+/* ---- Series Panel ---- */
+.ks-series-panel {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 8px;
+  overflow: hidden;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.ks-series-panel:hover {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.08);
+}
+
+/* ---- Panel Header ---- */
+.ks-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  gap: 10px;
+}
+.ks-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.ks-panel-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-canvas);
+  border-radius: 50%;
+  border: 1px solid var(--color-border-muted);
+}
+.ks-panel-title-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ks-panel-breadcrumb {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-fg-muted);
+  opacity: 0.7;
+}
+.ks-panel-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-fg-strong, var(--color-fg-default));
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ks-panel-header-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ks-panel-market-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-fg-muted);
+  white-space: nowrap;
+}
+
+/* ---- Panel Chart ---- */
+.ks-panel-chart {
+  padding: 0 14px;
+}
+.ks-panel-canvas {
+  width: 100%;
+  height: 80px;
+  border-radius: 4px;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border-muted);
+}
+
+/* ---- Outcome Table ---- */
+.ks-outcome-table {
+  padding: 0 14px 4px;
+}
+.ks-outcome-header-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 4px;
+  border-bottom: 1px solid var(--color-border-muted);
+}
+.ks-outcome-header-cell {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-fg-muted);
+  opacity: 0.6;
+}
+
+/* ---- Outcome Row ---- */
+.ks-outcome-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--color-border-muted);
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.ks-outcome-row:last-child {
+  border-bottom: none;
+}
+.ks-outcome-row:hover {
+  background: rgba(59, 130, 246, 0.04);
+}
+.ks-outcome-row--closed {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Description cell */
+.ks-outcome-cell-desc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.ks-outcome-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-fg-default);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ks-outcome-timer {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-state-warning, #f59e0b);
+  background: rgba(245, 158, 11, 0.1);
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ks-outcome-timer--urgent {
+  color: var(--color-state-error, #ef4444) !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+  animation: urgency-pulse 1.5s ease-in-out infinite;
+}
+
+/* Chance cell */
+.ks-outcome-cell-chance {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 50px;
+}
+.ks-chance-value {
+  font-size: 16px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Action buttons cell */
+.ks-outcome-cell-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.ks-action-btn {
+  min-width: 72px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.ks-action-btn.yes-button {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+.ks-action-btn.yes-button:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.28);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
+}
+.ks-action-btn.no-button {
+  background: rgba(168, 85, 247, 0.12);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+.ks-action-btn.no-button:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.28);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.2);
+}
+.ks-action-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ---- More Markets Button ---- */
+.ks-more-markets-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-accent-primary, #3b82f6);
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--color-border-muted);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+.ks-more-markets-btn:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+/* ---- Kalshi-style Frequency Pill Buttons ---- */
+.ks-freq-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+.ks-freq-pill {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 14px;
+  background: var(--color-bg-surface);
+  color: var(--color-fg-default);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.ks-freq-pill:hover {
+  border-color: var(--color-border-focus);
+  background: var(--color-bg-canvas);
+}
+.ks-freq-pill.active {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
 /* ---- Expanded Card Improvements ---- */
 .expanded-two-col {
   display: grid;

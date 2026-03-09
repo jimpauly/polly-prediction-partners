@@ -578,7 +578,16 @@
           </nav>
 
           <!-- Filters -->
-          <div class="trading-filters" style="display:flex;gap:8px;align-items:center;padding:2px 0;flex-shrink:0;flex-wrap:wrap">
+          <div class="trading-filters" style="display:flex;gap:8px;align-items:center;padding:4px 0;flex-shrink:0;flex-wrap:wrap">
+            <div class="ks-freq-pills" id="freq-pill-group" aria-label="Frequency filter">
+              <button class="ks-freq-pill active" data-freq="all">All</button>
+              <button class="ks-freq-pill" data-freq="15min">15 Min</button>
+              <button class="ks-freq-pill" data-freq="1h">Hourly</button>
+              <button class="ks-freq-pill" data-freq="6h">6 Hour</button>
+              <button class="ks-freq-pill" data-freq="24h">Daily</button>
+              <button class="ks-freq-pill" data-freq="7d">Weekly</button>
+            </div>
+            <span style="width:1px;height:16px;background:var(--color-border-muted);flex-shrink:0"></span>
             <label class="filter-label-group">
               <span style="color:var(--color-fg-muted);font-size:10px;font-weight:700;text-transform:uppercase">Volume:</span>
               <select id="filter-volume" style="padding:2px 4px;background:var(--color-bg-surface);color:var(--color-fg-default);border:1px solid var(--color-border-muted);border-radius:4px;font-size:10px">
@@ -586,17 +595,6 @@
                 <option value="high">High (10k+)</option>
                 <option value="medium">Medium (1k-10k)</option>
                 <option value="low">Low (&lt;1k)</option>
-              </select>
-            </label>
-            <label class="filter-label-group">
-              <span style="color:var(--color-fg-muted);font-size:10px;font-weight:700;text-transform:uppercase">Freq:</span>
-              <select id="filter-frequency" style="padding:2px 4px;background:var(--color-bg-surface);color:var(--color-fg-default);border:1px solid var(--color-border-muted);border-radius:4px;font-size:10px">
-                <option value="all">All</option>
-                <option value="15min">15 Min</option>
-                <option value="1h">Hourly</option>
-                <option value="6h">6 Hour</option>
-                <option value="24h">Daily</option>
-                <option value="7d">Weekly</option>
               </select>
             </label>
             <label class="filter-label-group">
@@ -1412,11 +1410,16 @@
 
       /* ---- Ignition Panel (Action Bar global throttle) ---- */
       (function initIgnitionPanel() {
+        const BACKEND_URL = 'http://127.0.0.1:8000';
+
         const STATE_CONFIG = {
-          auto:  { label: 'FULL·AUTO',  dot: 'auto' },
-          semi:  { label: 'SEMI·AUTO',  dot: 'semi' },
-          stop:  { label: 'FULL·STOP',  dot: 'stop' },
+          auto:  { label: 'FULL·AUTO',  dot: 'auto',  agentMode: 'auto' },
+          semi:  { label: 'SEMI·AUTO',  dot: 'semi',  agentMode: 'semi-auto' },
+          stop:  { label: 'FULL·STOP',  dot: 'stop',  agentMode: 'safe' },
         };
+
+        /* Active agent names to control via ignition throttle */
+        const ACTIVE_AGENTS = ['peritia', 'prime', 'praxis'];
 
         let currentState = 'stop';
 
@@ -1435,6 +1438,34 @@
           document.querySelectorAll('.ign-btn').forEach(btn => {
             btn.classList.toggle('ign-btn--active', btn.dataset.ignState === state);
           });
+
+          /* Set all active agents to the corresponding mode via backend API.
+             The /api/agents/{name}/mode endpoint now also sets status to
+             "running" (for auto/semi-auto) or "idle" (for safe). */
+          ACTIVE_AGENTS.forEach(agentName => {
+            fetch(`${BACKEND_URL}/api/agents/${encodeURIComponent(agentName)}/mode`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ mode: cfg.agentMode }),
+            }).catch(err => { console.warn(`Ignition: failed to set ${agentName} to ${cfg.agentMode}:`, err.message); });
+          });
+
+          /* Also enable/disable global trading via risk gateway */
+          if (cfg.agentMode === 'safe') {
+            fetch(`${BACKEND_URL}/api/trading/disable`, { method: 'POST' }).catch(err => { console.warn('Ignition: trading disable failed:', err.message); });
+          } else {
+            fetch(`${BACKEND_URL}/api/trading/enable`, { method: 'POST' }).catch(err => { console.warn('Ignition: trading enable failed:', err.message); });
+          }
+
+          /* Keep per-agent mode buttons in sync (if AgentDashboard is loaded) */
+          if (typeof AgentDashboard !== 'undefined' && AgentDashboard.onEvent) {
+            ACTIVE_AGENTS.forEach(agentName => {
+              AgentDashboard.onEvent({
+                type: 'agent_mode_changed',
+                data: { agent_name: agentName, mode: cfg.agentMode },
+              });
+            });
+          }
         }
 
         /* Wire up the three buttons */

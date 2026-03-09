@@ -657,6 +657,13 @@ const AgentDashboard = (() => {
     if (event.type === "fill" || event.type === "agent_update") {
       fetchAgentStats();
     }
+    /* Keep per-agent mode buttons in sync with global throttle changes */
+    if (event.type === "agent_mode_changed" && event.data) {
+      const { agent_name, mode } = event.data;
+      if (agent_name && mode) {
+        updateModeButtonHighlight(agent_name, mode);
+      }
+    }
   }
 
   return {
