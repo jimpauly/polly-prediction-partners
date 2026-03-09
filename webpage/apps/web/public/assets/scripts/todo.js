@@ -165,7 +165,7 @@
   /* ── Build: Toolbar (formatting tools only) ─────────────────── */
 
   function buildToolbar() {
-    var bar = el("div", { className: "todo-toolbar" });
+    var group = el("div", { className: "todo-bar-group" });
 
     /* Bold */
     var btnBold = el("button", {
@@ -175,7 +175,7 @@
     }, "B");
     btnBold.style.fontWeight = "800";
     dom.btnBold = btnBold;
-    bar.appendChild(btnBold);
+    group.appendChild(btnBold);
 
     /* H1/Aa */
     var btnSize = el("button", {
@@ -185,7 +185,7 @@
     });
     btnSize.innerHTML = state.heading ? "H1" : "Aa";
     dom.btnSize = btnSize;
-    bar.appendChild(btnSize);
+    group.appendChild(btnSize);
 
     /* Bullets */
     var btnBullet = el("button", {
@@ -194,7 +194,7 @@
       onClick: function () { toggleBullets(); }
     }, "\u2022");
     dom.btnBullet = btnBullet;
-    bar.appendChild(btnBullet);
+    group.appendChild(btnBullet);
 
     /* Add Task */
     var btnTask = el("button", {
@@ -203,9 +203,9 @@
     });
     btnTask.innerHTML = "&#9744;";
     btnTask.addEventListener("click", function () { insertTask(); });
-    bar.appendChild(btnTask);
+    group.appendChild(btnTask);
 
-    return bar;
+    return group;
   }
 
   /* ── Build: Editor ──────────────────────────────────────────── */
@@ -232,38 +232,38 @@
   /* ── Build: Page nav ────────────────────────────────────────── */
 
   function buildPageNav() {
-    var nav = el("div", { className: "todo-page-nav" });
+    var group = el("div", { className: "todo-bar-group" });
 
     var btnPrev = el("button", {
-      className: "todo-pg-btn",
+      className: "todo-tb-btn",
       title: "Previous Page",
       onClick: function () { goPage(state.currentPage - 1); }
     }, "\u25C0");
     dom.btnPrev = btnPrev;
-    nav.appendChild(btnPrev);
+    group.appendChild(btnPrev);
 
     var indicator = el("span", { className: "todo-pg-indicator" });
     dom.pageIndicator = indicator;
-    nav.appendChild(indicator);
+    group.appendChild(indicator);
 
     var btnNext = el("button", {
-      className: "todo-pg-btn",
+      className: "todo-tb-btn",
       title: "Next Page",
       onClick: function () { goPage(state.currentPage + 1); }
     }, "\u25B6");
     dom.btnNext = btnNext;
-    nav.appendChild(btnNext);
+    group.appendChild(btnNext);
 
     /* Delete page */
     var btnDel = el("button", {
-      className: "todo-pg-btn todo-pg-del",
+      className: "todo-tb-btn todo-pg-del",
       title: "Delete this page",
       onClick: function () { deletePage(); }
     }, "\uD83D\uDDD1");
     dom.btnDel = btnDel;
-    nav.appendChild(btnDel);
+    group.appendChild(btnDel);
 
-    return nav;
+    return group;
   }
 
   /* ── Render / Sync ──────────────────────────────────────────── */
@@ -623,55 +623,75 @@
     "  color: #fff;",
     "}",
 
-    /* Toolbar (now below editor) */
-    ".todo-toolbar {",
+    /* Combined toolbar bar */
+    ".todo-combined-bar {",
     "  display: flex;",
     "  align-items: center;",
-    "  gap: 4px;",
-    "  padding: 6px 10px 6px 42px;",
+    "  justify-content: center;",
+    "  flex-wrap: wrap;",
+    "  gap: 0;",
+    "  padding: 3px 6px;",
     "  background: var(--color-bg-surface, #f8fafc);",
     "  border-top: 1px solid var(--color-border-muted, #e2e8f0);",
     "  flex-shrink: 0;",
-    "  flex-wrap: wrap;",
+    "}",
+    ".todo-bar-group {",
+    "  display: flex;",
+    "  align-items: center;",
+    "  gap: 2px;",
+    "}",
+    ".todo-bar-sep {",
+    "  width: 1px;",
+    "  height: 18px;",
+    "  background: var(--color-border-muted, #cbd5e1);",
+    "  margin: 0 4px;",
+    "  flex-shrink: 0;",
     "}",
     ".todo-tb-btn {",
-    "  min-width: 34px;",
-    "  height: 34px;",
+    "  width: 24px;",
+    "  height: 24px;",
+    "  min-width: 24px;",
     "  border: 1px solid var(--color-border-muted, #cbd5e1);",
-    "  border-radius: 6px;",
+    "  border-radius: 4px;",
     "  background: var(--color-bg-surface, #fff);",
     "  color: var(--color-fg-default, #334155);",
-    "  font-size: 15px;",
+    "  font-size: 11px;",
     "  cursor: pointer;",
     "  display: inline-flex;",
     "  align-items: center;",
     "  justify-content: center;",
-    "  padding: 0 8px;",
-    "  transition: background var(--transition-speed, 0.15s), box-shadow var(--transition-speed, 0.15s), transform 0.1s;",
+    "  padding: 0;",
+    "  transition: background var(--transition-speed, 0.15s), box-shadow var(--transition-speed, 0.15s);",
     "  user-select: none;",
     "}",
     ".todo-tb-btn:hover {",
     "  background: var(--color-accent-primary, #3b82f6);",
     "  color: #fff;",
-    "  box-shadow: 0 2px 6px rgba(0,0,0,0.15);",
-    "  transform: translateY(-1px);",
+    "  box-shadow: 0 1px 3px rgba(0,0,0,0.12);",
     "}",
     ".todo-tb-btn:active {",
-    "  transform: translateY(0);",
     "  box-shadow: none;",
     "}",
     ".todo-tb-btn.active {",
     "  background: var(--color-accent-primary, #3b82f6);",
     "  color: #fff;",
     "  border-color: var(--color-accent-primary, #3b82f6);",
-    "  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);",
+    "  box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);",
     "}",
-    ".todo-tb-sep {",
-    "  width: 1px;",
-    "  height: 22px;",
-    "  background: var(--color-border-muted, #e2e8f0);",
-    "  margin: 0 4px;",
-    "  flex-shrink: 0;",
+    ".todo-tb-btn:disabled {",
+    "  opacity: 0.35;",
+    "  cursor: default;",
+    "}",
+    ".todo-pg-del:hover:not(:disabled) {",
+    "  background: var(--color-state-error, #ef4444);",
+    "  color: #fff;",
+    "}",
+    ".todo-pg-indicator {",
+    "  font-size: 10px;",
+    "  color: var(--color-fg-muted, #64748b);",
+    "  min-width: 50px;",
+    "  text-align: center;",
+    "  user-select: none;",
     "}",
 
     /* Editor wrapper — the notebook paper */
@@ -765,55 +785,6 @@
     "  flex-shrink: 0;",
     "}",
 
-    /* Page navigation */
-    ".todo-page-nav {",
-    "  display: flex;",
-    "  align-items: center;",
-    "  justify-content: center;",
-    "  gap: 8px;",
-    "  padding: 8px 10px;",
-    "  background: var(--color-bg-surface, #f8fafc);",
-    "  border-top: 1px solid var(--color-border-muted, #e2e8f0);",
-    "  flex-shrink: 0;",
-    "}",
-    ".todo-pg-btn {",
-    "  min-width: 32px;",
-    "  height: 30px;",
-    "  border: 1px solid var(--color-border-muted, #cbd5e1);",
-    "  border-radius: 6px;",
-    "  background: var(--color-bg-surface, #fff);",
-    "  color: var(--color-fg-default, #334155);",
-    "  font-size: 14px;",
-    "  cursor: pointer;",
-    "  display: inline-flex;",
-    "  align-items: center;",
-    "  justify-content: center;",
-    "  padding: 0 8px;",
-    "  transition: background var(--transition-speed, 0.15s), opacity 0.15s;",
-    "}",
-    ".todo-pg-btn:hover:not(:disabled) {",
-    "  background: var(--color-accent-primary, #3b82f6);",
-    "  color: #fff;",
-    "}",
-    ".todo-pg-btn:disabled {",
-    "  opacity: 0.35;",
-    "  cursor: default;",
-    "}",
-    ".todo-pg-del {",
-    "  margin-left: 12px;",
-    "  font-size: 15px;",
-    "}",
-    ".todo-pg-del:hover:not(:disabled) {",
-    "  background: var(--color-state-error, #ef4444);",
-    "  color: #fff;",
-    "}",
-    ".todo-pg-indicator {",
-    "  font-size: 13px;",
-    "  color: var(--color-fg-muted, #64748b);",
-    "  min-width: 90px;",
-    "  text-align: center;",
-    "  user-select: none;",
-    "}",
 
     /* Placeholder when editor empty */
     ".todo-editor:empty::before {",
@@ -879,8 +850,13 @@
     root.appendChild(buildSpiral());
     root.appendChild(buildFileMenu());
     root.appendChild(buildEditor());
-    root.appendChild(buildToolbar());
-    root.appendChild(buildPageNav());
+
+    /* Combined toolbar: formatting group | separator | page nav group */
+    var combinedBar = el("div", { className: "todo-combined-bar" });
+    combinedBar.appendChild(buildToolbar());
+    combinedBar.appendChild(el("div", { className: "todo-bar-sep" }));
+    combinedBar.appendChild(buildPageNav());
+    root.appendChild(combinedBar);
 
     container.appendChild(root);
 
