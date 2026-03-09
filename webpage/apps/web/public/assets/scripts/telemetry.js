@@ -85,7 +85,9 @@ const Telemetry = (() => {
       /* Build points array */
       const points = pingData.map((value, index) => ({
         x: (index / (MAX_PING_POINTS - 1)) * width,
-        y: (value / range) * (height - 4) + 2, /* 0ms = top (y=2), 300ms = bottom (y=height-2) */
+        y:
+          (value / range) * (height - 4) +
+          2 /* 0ms = top (y=2), 300ms = bottom (y=height-2) */,
       }));
 
       /* Draw smooth bezier curve through points */
@@ -152,8 +154,7 @@ const Telemetry = (() => {
 
         if (response.ok) {
           statusEl.style.background = "var(--color-state-success)";
-          statusEl.style.boxShadow =
-            "0 0 4px var(--color-state-success)";
+          statusEl.style.boxShadow = "0 0 4px var(--color-state-success)";
           statusEl.title = `Backend healthy (${Math.round(elapsed)}ms)`;
         } else {
           statusEl.style.background = "var(--color-state-warning)";

@@ -1366,7 +1366,8 @@ input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
 }
 
 /* ============================================================
@@ -1432,7 +1433,8 @@ select:focus {
   }
   50% {
     opacity: 1;
-    text-shadow: 0 0 12px color-mix(in srgb, var(--color-accent-primary) 40%, transparent);
+    text-shadow: 0 0 12px
+      color-mix(in srgb, var(--color-accent-primary) 40%, transparent);
   }
 }
 
@@ -1574,7 +1576,8 @@ select:focus {
 }
 .series-card:hover {
   border-color: var(--color-border-focus);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent-primary) 10%, transparent);
+  box-shadow: 0 0 8px
+    color-mix(in srgb, var(--color-accent-primary) 10%, transparent);
 }
 
 /* ---- Card Enter Animation ---- */
@@ -1695,20 +1698,32 @@ select:focus {
 .yes-button {
   background: color-mix(in srgb, var(--color-state-success) 15%, transparent);
   color: var(--color-state-success);
-  border: 1px solid color-mix(in srgb, var(--color-state-success) 30%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-state-success) 30%, transparent);
 }
 .yes-button:hover {
   background: color-mix(in srgb, var(--color-state-success) 30%, transparent);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-success) 20%, transparent);
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-success) 20%, transparent);
 }
 .no-button {
-  background: color-mix(in srgb, var(--color-accent-secondary) 15%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-accent-secondary) 15%,
+    transparent
+  );
   color: #a855f7;
-  border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 30%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-accent-secondary) 30%, transparent);
 }
 .no-button:hover {
-  background: color-mix(in srgb, var(--color-accent-secondary) 30%, transparent);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-accent-secondary) 20%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-accent-secondary) 30%,
+    transparent
+  );
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-accent-secondary) 20%, transparent);
 }
 .yes-button.large,
 .no-button.large {
@@ -1782,7 +1797,8 @@ select:focus {
 .show-more-button:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
+  box-shadow: 0 0 8px
+    color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
 }
 
 /* ---- Expanded Card Overlay ---- */
@@ -1910,7 +1926,8 @@ select:focus {
 .expanded-qty-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
 }
 
 /* ---- Approval Overlay ---- */
@@ -1931,7 +1948,8 @@ select:focus {
   padding: 20px;
   width: 400px;
   text-align: center;
-  box-shadow: 0 0 24px color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
+  box-shadow: 0 0 24px
+    color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
   animation: overlay-enter 0.25s ease-out;
 }
 .approval-header {
@@ -1986,7 +2004,8 @@ select:focus {
 }
 .approve-button:hover {
   background: color-mix(in srgb, var(--color-state-success) 35%, transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-state-success) 30%, transparent);
+  box-shadow: 0 0 12px
+    color-mix(in srgb, var(--color-state-success) 30%, transparent);
 }
 .deny-button {
   padding: 8px 24px;
@@ -2002,7 +2021,8 @@ select:focus {
 }
 .deny-button:hover {
   background: color-mix(in srgb, var(--color-state-error) 35%, transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-state-error) 30%, transparent);
+  box-shadow: 0 0 12px
+    color-mix(in srgb, var(--color-state-error) 30%, transparent);
 }
 
 /* ============================================================
@@ -2082,7 +2102,8 @@ select:focus {
   gap: 4px;
   padding: 2px 4px;
   background: color-mix(in srgb, var(--color-state-success) 5%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-state-success) 12%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-state-success) 12%, transparent);
   border-radius: 3px;
   font-size: 10px;
 }
@@ -2113,14 +2134,19 @@ select:focus {
   border-radius: 3px;
   background: color-mix(in srgb, var(--color-accent-primary) 15%, transparent);
   color: var(--color-accent-primary);
-  border: 1px solid color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   text-transform: uppercase;
 }
 
 /* ---- Closing Soon Timer ---- */
 .series-card-timer--urgent {
   color: var(--color-state-error) !important;
-  background: color-mix(in srgb, var(--color-state-error) 12%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--color-state-error) 12%,
+    transparent
+  ) !important;
   animation: urgency-pulse 1.5s ease-in-out infinite;
 }
 @keyframes urgency-pulse {
@@ -2343,7 +2369,11 @@ select:focus {
 }
 .ks-outcome-timer--urgent {
   color: var(--color-state-error) !important;
-  background: color-mix(in srgb, var(--color-state-error) 12%, transparent) !important;
+  background: color-mix(
+    in srgb,
+    var(--color-state-error) 12%,
+    transparent
+  ) !important;
   animation: urgency-pulse 1.5s ease-in-out infinite;
 }
 
@@ -2403,20 +2433,32 @@ select:focus {
 .ks-action-btn.yes-button {
   background: color-mix(in srgb, var(--color-state-success) 12%, transparent);
   color: var(--color-state-success);
-  border: 1px solid color-mix(in srgb, var(--color-state-success) 25%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-state-success) 25%, transparent);
 }
 .ks-action-btn.yes-button:hover:not(:disabled) {
   background: color-mix(in srgb, var(--color-state-success) 28%, transparent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--color-state-success) 20%, transparent);
+  box-shadow: 0 0 8px
+    color-mix(in srgb, var(--color-state-success) 20%, transparent);
 }
 .ks-action-btn.no-button {
-  background: color-mix(in srgb, var(--color-accent-secondary) 12%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-accent-secondary) 12%,
+    transparent
+  );
   color: #a855f7;
-  border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 25%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-accent-secondary) 25%, transparent);
 }
 .ks-action-btn.no-button:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--color-accent-secondary) 28%, transparent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent-secondary) 20%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-accent-secondary) 28%,
+    transparent
+  );
+  box-shadow: 0 0 8px
+    color-mix(in srgb, var(--color-accent-secondary) 20%, transparent);
 }
 .ks-action-btn:disabled {
   opacity: 0.35;
@@ -2855,8 +2897,7 @@ select:focus {
   color: var(--color-accent-primary);
   font-weight: 700;
   background: rgba(0, 208, 132, 0.06);
-  border-left: 2px solid
-    var(--color-accent-primary);
+  border-left: 2px solid var(--color-accent-primary);
 }
 .ks-sidebar-item .ks-sidebar-chevron {
   font-size: 10px;
@@ -3031,7 +3072,8 @@ select:focus {
   margin-top: 8px;
   padding: 8px;
   background: color-mix(in srgb, var(--color-state-error) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-state-error) 30%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-state-error) 30%, transparent);
   border-radius: 6px;
   font-size: 11px;
   color: var(--color-state-error);
@@ -3135,7 +3177,11 @@ select:focus {
   color: var(--color-state-success);
 }
 .side-no {
-  background: color-mix(in srgb, var(--color-accent-secondary) 15%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-accent-secondary) 15%,
+    transparent
+  );
   color: #a855f7;
 }
 .position-row__qty {
