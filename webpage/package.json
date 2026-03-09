@@ -26,6 +26,13 @@
   "build": {
     "appId": "com.paulies.prediction-partners",
     "productName": "Paulie's Prediction Partners",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "jimpauly",
+        "repo": "paulies-prediction-partners"
+      }
+    ],
     "files": [
       "apps/desktop/**/*",
       "apps/web/public/**/*",
@@ -106,6 +113,7 @@
   },
   "dependencies": {
     "electron": "^35.7.5",
+    "electron-updater": "^6.3.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

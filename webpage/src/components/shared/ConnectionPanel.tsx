@@ -84,7 +84,7 @@ export function ConnectionPanel({ onConnect, onDisconnect, connected, loading }:
           value={pem}
           onChange={(e) => setPem(e.target.value)}
           rows={5}
-          style={{ width: "100%", resize: "vertical", fontFamily: "var(--font-family-mono)", fontSize: 11 }}
+          style={{ width: "100%", resize: "vertical", fontFamily: "var(--font-family-mono)", fontSize: 11, WebkitTextSecurity: "disc" as never }}
         />
       </div>
 

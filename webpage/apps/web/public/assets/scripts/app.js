@@ -65,6 +65,29 @@
     if (apiKeyInput) apiKeyInput.addEventListener('input', validateApiInputs);
     if (rsaKeyInput) rsaKeyInput.addEventListener('input', validateApiInputs);
 
+    /* ---- Restore saved credentials (Electron desktop only) ---- */
+    if (typeof window.electronBridge !== 'undefined' && window.electronBridge.loadCredentials) {
+      window.electronBridge.loadCredentials().then(creds => {
+        if (!creds) return;
+        if (creds.mode) {
+          const modeRadio = document.querySelector(`input[name="api-mode"][value="${creds.mode}"]`);
+          if (modeRadio) {
+            modeRadio.checked = true;
+            selectedMode = creds.mode;
+            if (apiKeyInput) apiKeyInput.disabled = false;
+            if (rsaKeyInput) rsaKeyInput.disabled = false;
+          }
+        }
+        if (creds.apiKeyId && apiKeyInput) {
+          apiKeyInput.value = creds.apiKeyId;
+        }
+        if (creds.privateKeyPem && rsaKeyInput) {
+          rsaKeyInput.value = creds.privateKeyPem;
+        }
+        validateApiInputs();
+      }).catch(() => { /* credentials not available */ });
+    }
+
     if (connectButton) {
       connectButton.addEventListener('click', async () => {
         const apiKeyValue = apiKeyInput ? apiKeyInput.value.trim() : '';
@@ -94,6 +117,15 @@
         } catch (networkError) {
           /* Backend not running — proceed in offline/demo mode */
           console.warn('Backend not reachable, proceeding in offline mode:', networkError.message);
+        }
+
+        /* Save credentials securely for next launch (Electron only) */
+        if (typeof window.electronBridge !== 'undefined' && window.electronBridge.saveCredentials) {
+          window.electronBridge.saveCredentials({
+            mode: selectedMode,
+            apiKeyId: apiKeyValue,
+            privateKeyPem: rsaKeyValue,
+          });
         }
 
         /* Clear credentials from DOM immediately */
@@ -131,48 +163,16 @@
         /* Notify Trading Studio of connection */
         TradingStudio.onConnected(selectedMode);
 
+        /* Notify AgentDashboard */
+        if (typeof AgentDashboard !== 'undefined' && AgentDashboard.onConnected) {
+          AgentDashboard.onConnected();
+        }
+
         /* Auto-navigate to Trading Studio */
         const tradeButton = document.querySelector('.studio-button[data-studio="trade"]');
         if (tradeButton) tradeButton.click();
       });
     }
-  }
-
-  // ---- Throttle Control ----
-  function initializeThrottle() {
-    const track = document.getElementById('throttle-track');
-    const handle = document.getElementById('throttle-handle');
-    if (!track || !handle) return;
-
-    const positions = [
-      { top: 'calc(100% - 18px)', value: 0, label: 'Full-Stop' },   // Bottom
-      { top: 'calc(50% - 8px)', value: 1, label: 'Semi-Auto' },     // Middle
-      { top: '2px', value: 2, label: 'Full-Auto' },                   // Top
-    ];
-    let currentPosition = 0;
-
-    track.addEventListener('click', () => {
-      currentPosition = (currentPosition + 1) % positions.length;
-      const position = positions[currentPosition];
-      handle.style.top = position.top;
-      track.setAttribute('aria-valuenow', position.value);
-      track.setAttribute('aria-valuetext', position.label);
-    });
-
-    track.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowUp' || event.key === 'ArrowRight') {
-        event.preventDefault();
-        currentPosition = Math.min(currentPosition + 1, positions.length - 1);
-      } else if (event.key === 'ArrowDown' || event.key === 'ArrowLeft') {
-        event.preventDefault();
-        currentPosition = Math.max(currentPosition - 1, 0);
-      } else return;
-
-      const position = positions[currentPosition];
-      handle.style.top = position.top;
-      track.setAttribute('aria-valuenow', position.value);
-      track.setAttribute('aria-valuetext', position.label);
-    });
   }
 
   // ---- Agent Dial Controls ----
@@ -189,14 +189,14 @@
     });
   }
 
-  // ---- Axis Buttons ----
+  // ---- MFD Axis Buttons ----
   function initializeAxisButtons() {
-    const axisButtons = document.querySelectorAll('.axis-button');
-    axisButtons.forEach(button => {
+    const mfdAxisButtons = document.querySelectorAll('.mfd-btn[data-axis]');
+    mfdAxisButtons.forEach(button => {
       button.addEventListener('click', () => {
         const axis = button.dataset.axis;
         // Deactivate other buttons in same axis group
-        axisButtons.forEach(b => {
+        mfdAxisButtons.forEach(b => {
           if (b.dataset.axis === axis) b.classList.remove('active');
         });
         button.classList.add('active');
@@ -467,7 +467,6 @@
 
     initializeStudioSwitching();
     initializeApiKeyConnection();
-    initializeThrottle();
     initializeAgentDials();
     initializeAxisButtons();
     initializePlGraph();

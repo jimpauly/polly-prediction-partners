@@ -901,62 +901,54 @@
               <div class="card-header mfd-header" style="padding:4px 8px">
                 <span style="font-weight:700">📟 P/L Multi-Function Display</span>
               </div>
-              <div class="card-body mfd-body" style="padding:6px 8px;flex:1;display:flex;gap:var(--space-2);align-items:stretch">
+              <div class="card-body mfd-body" style="padding:6px 8px;flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
 
-                <!-- Throttle Control -->
-                <div class="mfd-throttle" style="display:flex;flex-direction:column;align-items:center;gap:var(--space-1);min-width:44px">
-                  <span class="mfd-label">THROTTLE</span>
-                  <div id="throttle-track" role="slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="2" aria-valuetext="Full-Stop" tabindex="0" style="position:relative;width:20px;flex:1;background:var(--color-bg-canvas);border:1px solid var(--color-border-default);border-radius:4px;cursor:pointer">
-                    <div id="throttle-handle" style="position:absolute;left:2px;right:2px;height:14px;bottom:2px;background:var(--color-accent-primary);border-radius:3px;transition:top 0.2s"></div>
-                    <div class="mfd-throttle-label" style="position:absolute;right:-24px;top:2px">FULL</div>
-                    <div class="mfd-throttle-label" style="position:absolute;right:-24px;top:calc(50% - 4px)">SEMI</div>
-                    <div class="mfd-throttle-label" style="position:absolute;right:-24px;bottom:2px">STOP</div>
+                <!-- MFD Display Area: Left buttons | Canvas | Right buttons -->
+                <div class="mfd-display" style="flex:1;display:flex;gap:0;min-height:0;align-items:stretch">
+
+                  <!-- LEFT: Y-Axis buttons -->
+                  <div class="mfd-btn-col" style="display:flex;flex-direction:column;gap:2px;justify-content:space-evenly">
+                    <button class="mfd-btn active" data-axis="y" aria-label="Y-axis: $10">$10</button>
+                    <button class="mfd-btn" data-axis="y" aria-label="Y-axis: $100">$100</button>
+                    <button class="mfd-btn" data-axis="y" aria-label="Y-axis: $1k">$1k</button>
+                    <button class="mfd-btn" data-axis="y" aria-label="Y-axis: $10k">$10k</button>
+                    <button class="mfd-btn" data-axis="y" aria-label="Y-axis: All">ALL</button>
                   </div>
-                </div>
 
-                <!-- P/L Graph -->
-                <div style="flex:1;display:flex;flex-direction:column;min-width:0">
-                  <span class="mfd-label">+/- $</span>
-                  <div style="flex:1;display:flex;min-height:0">
-                    <canvas id="pl-graph" width="300" height="80" style="width:100%;flex:1;border:1px solid var(--color-border-muted);border-radius:4px;background:var(--color-bg-canvas)"></canvas>
-                    <div style="display:flex;flex-direction:column;gap:2px;margin-left:2px;justify-content:center">
-                      <button class="axis-btn active" data-axis="y">$10</button>
-                      <button class="axis-btn" data-axis="y">$100</button>
-                      <button class="axis-btn" data-axis="y">$1k</button>
-                      <button class="axis-btn" data-axis="y">$10k</button>
-                      <button class="axis-btn" data-axis="y">all</button>
+                  <!-- CENTER: P/L Chart Canvas -->
+                  <div style="flex:1;display:flex;flex-direction:column;min-width:0;min-height:0">
+                    <span class="mfd-label" style="text-align:center">+/- $</span>
+                    <canvas id="pl-graph" width="300" height="80" style="width:100%;flex:1;border:1px solid var(--color-border-muted);border-radius:2px;background:var(--color-bg-canvas)"></canvas>
+                  </div>
+
+                  <!-- RIGHT: Tool readouts — Heatmap & Win Rate -->
+                  <div class="mfd-btn-col" style="display:flex;flex-direction:column;gap:2px;justify-content:space-evenly;align-items:center">
+                    <span class="mfd-label" style="white-space:nowrap;text-align:center;line-height:1">HEAT</span>
+                    <div id="agent-heatmap" style="display:flex;flex-direction:column;gap:1px">
+                      <div data-agent-heat="peritia" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-success);opacity:0.8" title="PERITIA — Active"></div>
+                      <div data-agent-heat="prime" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-warning);opacity:0.8" title="PRIME — Semi"></div>
+                      <div data-agent-heat="praxis" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.3" title="PRAXIS — Safe"></div>
+                      <div data-agent-heat="patiens" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="PATIENS — Construction"></div>
+                      <div data-agent-heat="pavis" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="PAVIS — Construction"></div>
+                      <div data-agent-heat="byob" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="BYOB — Awaiting Config"></div>
+                      <div data-agent-heat="agnt007" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="AGNT007 — Construction"></div>
                     </div>
+                    <span class="mfd-label" style="white-space:nowrap;text-align:center;line-height:1">WIN%</span>
+                    <div id="win-rate-gauge" style="position:relative;width:20px;height:24px;border:1px solid var(--color-border-muted);border-radius:2px;background:var(--color-bg-canvas);overflow:hidden;display:flex;align-items:flex-end">
+                      <div style="width:100%;height:0%;background:linear-gradient(180deg,var(--color-state-success),var(--color-accent-primary));border-radius:1px;transition:height 0.5s" id="win-rate-fill"></div>
+                    </div>
+                    <span id="win-rate-label" class="mfd-label" style="color:var(--color-fg-muted)">—</span>
                   </div>
-                  <div style="display:flex;gap:2px;margin-top:2px;flex-wrap:wrap">
-                    <button class="axis-btn active" data-axis="x">24h</button>
-                    <button class="axis-btn" data-axis="x">1w</button>
-                    <button class="axis-btn" data-axis="x">1m</button>
-                    <button class="axis-btn" data-axis="x">1y</button>
-                    <button class="axis-btn" data-axis="x">all</button>
-                  </div>
+
                 </div>
 
-                <!-- Agent Status Heatmap -->
-                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:36px">
-                  <span class="mfd-label" style="white-space:nowrap">HEAT</span>
-                  <div id="agent-heatmap" style="display:flex;flex-direction:column;gap:1px;flex:1;justify-content:center">
-                    <div data-agent-heat="peritia" style="width:24px;height:6px;border-radius:2px;background:var(--color-state-success);opacity:0.8" title="PERITIA — Active"></div>
-                    <div data-agent-heat="prime" style="width:24px;height:6px;border-radius:2px;background:var(--color-state-warning);opacity:0.8" title="PRIME — Semi"></div>
-                    <div data-agent-heat="praxis" style="width:24px;height:6px;border-radius:2px;background:var(--color-fg-subtle);opacity:0.3" title="PRAXIS — Safe"></div>
-                    <div data-agent-heat="patiens" style="width:24px;height:6px;border-radius:2px;background:var(--color-fg-subtle);opacity:0.15" title="PATIENS — Construction"></div>
-                    <div data-agent-heat="pavis" style="width:24px;height:6px;border-radius:2px;background:var(--color-fg-subtle);opacity:0.15" title="PAVIS — Construction"></div>
-                    <div data-agent-heat="byob" style="width:24px;height:6px;border-radius:2px;background:var(--color-fg-subtle);opacity:0.15" title="BYOB — Awaiting Config"></div>
-                    <div data-agent-heat="agnt007" style="width:24px;height:6px;border-radius:2px;background:var(--color-fg-subtle);opacity:0.15" title="AGNT007 — Construction"></div>
-                  </div>
-                </div>
-
-                <!-- Win Rate Gauge -->
-                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:32px">
-                  <span class="mfd-label" style="white-space:nowrap">WIN%</span>
-                  <div id="win-rate-gauge" style="position:relative;width:30px;flex:1;border:1px solid var(--color-border-muted);border-radius:3px;background:var(--color-bg-canvas);overflow:hidden;display:flex;align-items:flex-end">
-                    <div style="width:100%;height:0%;background:linear-gradient(180deg,var(--color-state-success),var(--color-accent-primary));border-radius:2px;transition:height 0.5s" id="win-rate-fill"></div>
-                  </div>
-                  <span id="win-rate-label" class="mfd-label" style="color:var(--color-fg-muted)">—</span>
+                <!-- BOTTOM: X-Axis time buttons -->
+                <div class="mfd-btn-row" style="display:flex;gap:2px;justify-content:space-evenly;margin-top:2px">
+                  <button class="mfd-btn active" data-axis="x" aria-label="X-axis: 24 hours">24h</button>
+                  <button class="mfd-btn" data-axis="x" aria-label="X-axis: 1 week">1w</button>
+                  <button class="mfd-btn" data-axis="x" aria-label="X-axis: 1 month">1m</button>
+                  <button class="mfd-btn" data-axis="x" aria-label="X-axis: 1 year">1y</button>
+                  <button class="mfd-btn" data-axis="x" aria-label="X-axis: All time">ALL</button>
                 </div>
 
               </div>
@@ -977,7 +969,7 @@
                   </label>
                 </div>
                 <input id="api-key-input" class="input api-input" type="text" placeholder="API Key" disabled style="padding:3px 6px;height:22px">
-                <textarea id="rsa-key-input" class="input api-input" placeholder="RSA Private Key (PEM)" disabled rows="2" style="padding:3px 6px;resize:none;flex:1"></textarea>
+                <textarea id="rsa-key-input" class="input api-input" placeholder="RSA Private Key (PEM)" disabled rows="2" style="padding:3px 6px;resize:none;flex:1;-webkit-text-security:disc"></textarea>
                 <button id="connect-button" class="btn btn-sm btn-primary connect-button" disabled style="padding:3px 8px">Connect Kalshi Stream</button>
               </div>
             </div>
@@ -1325,6 +1317,32 @@
       if (apiKeyInput) apiKeyInput.addEventListener('input', validateApiInputs);
       if (rsaKeyInput) rsaKeyInput.addEventListener('input', validateApiInputs);
 
+      /* ---- Restore saved credentials (Electron desktop only) ---- */
+      if (typeof window.electronBridge !== 'undefined' && window.electronBridge.loadCredentials) {
+        window.electronBridge.loadCredentials().then(creds => {
+          if (!creds) return;
+          /* Pre-select the saved mode */
+          if (creds.mode) {
+            const modeRadio = document.querySelector(`input[name="api-mode"][value="${creds.mode}"]`);
+            if (modeRadio) {
+              modeRadio.checked = true;
+              selectedMode = creds.mode;
+              if (apiKeyInput) apiKeyInput.disabled = false;
+              if (rsaKeyInput) rsaKeyInput.disabled = false;
+            }
+          }
+          /* Pre-fill API key */
+          if (creds.apiKeyId && apiKeyInput) {
+            apiKeyInput.value = creds.apiKeyId;
+          }
+          /* Pre-fill RSA private key (displayed as dots via CSS) */
+          if (creds.privateKeyPem && rsaKeyInput) {
+            rsaKeyInput.value = creds.privateKeyPem;
+          }
+          validateApiInputs();
+        }).catch(() => { /* credentials not available */ });
+      }
+
       if (connectButton) {
         connectButton.addEventListener('click', async () => {
           const apiKeyValue = apiKeyInput ? apiKeyInput.value.trim() : '';
@@ -1346,6 +1364,15 @@
             });
           } catch (e) {
             console.warn('Backend not reachable, proceeding in offline mode:', e.message);
+          }
+
+          /* Save credentials securely for next launch (Electron only) */
+          if (typeof window.electronBridge !== 'undefined' && window.electronBridge.saveCredentials) {
+            window.electronBridge.saveCredentials({
+              mode: selectedMode,
+              apiKeyId: apiKeyValue,
+              privateKeyPem: rsaKeyValue,
+            });
           }
 
           /* Clear credentials from DOM immediately */
@@ -1379,17 +1406,15 @@
       /* ---- Ignition Panel (Action Bar global throttle) ---- */
       (function initIgnitionPanel() {
         const STATE_CONFIG = {
-          auto:  { label: 'FULL·AUTO',  dot: 'auto',  mfdIdx: 2, mfdTop: '2px',                  mfdLabel: 'Full-Auto'  },
-          semi:  { label: 'SEMI·AUTO',  dot: 'semi',  mfdIdx: 1, mfdTop: 'calc(50% - 8px)',       mfdLabel: 'Semi-Auto'  },
-          stop:  { label: 'FULL·STOP',  dot: 'stop',  mfdIdx: 0, mfdTop: 'calc(100% - 18px)',     mfdLabel: 'Full-Stop'  },
+          auto:  { label: 'FULL·AUTO',  dot: 'auto' },
+          semi:  { label: 'SEMI·AUTO',  dot: 'semi' },
+          stop:  { label: 'FULL·STOP',  dot: 'stop' },
         };
 
         let currentState = 'stop';
 
         const modeDisplay  = document.getElementById('ignition-mode-display');
         const statusDot    = document.getElementById('ignition-status-dot');
-        const throttleTrack  = document.getElementById('throttle-track');
-        const throttleHandle = document.getElementById('throttle-handle');
 
         function applyState(state) {
           currentState = state;
@@ -1403,16 +1428,6 @@
           document.querySelectorAll('.ign-btn').forEach(btn => {
             btn.classList.toggle('ign-btn--active', btn.dataset.ignState === state);
           });
-
-          /* Sync MFD mini-throttle */
-          if (throttleHandle) {
-            throttleHandle.style.top    = cfg.mfdTop;
-            throttleHandle.style.bottom = 'auto';
-          }
-          if (throttleTrack) {
-            throttleTrack.setAttribute('aria-valuenow', cfg.mfdIdx);
-            throttleTrack.setAttribute('aria-valuetext', cfg.mfdLabel);
-          }
         }
 
         /* Wire up the three buttons */
@@ -1421,17 +1436,17 @@
           if (btn) btn.addEventListener('click', () => applyState(state));
         });
 
-        /* MFD mini-throttle still cycles on its own click */
-        if (throttleTrack && throttleHandle) {
-          const mfdOrder = ['stop', 'semi', 'auto'];
-          throttleTrack.addEventListener('click', () => {
-            const idx = mfdOrder.indexOf(currentState);
-            applyState(mfdOrder[(idx + 1) % mfdOrder.length]);
-          });
-        }
-
         applyState('stop'); /* default: engines halted */
       })();
+
+      /* ---- MFD Axis Button Toggle ---- */
+      document.querySelectorAll('.mfd-btn[data-axis]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const axis = btn.dataset.axis;
+          document.querySelectorAll(`.mfd-btn[data-axis="${axis}"]`).forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
 
       /* ---- Fly Studio Profit Progress ---- */
       async function updateFlyProgress() {
