@@ -288,7 +288,7 @@ function startSilentAutoUpdate() {
   });
 
   autoUpdater.on("error", (error) => {
-    console.log(`Auto-update error: ${error.message}`);
+    console.error(`Auto-update error: ${error.message}`);
     sendUpdateStatus("error", `Update check failed: ${error.message}`);
   });
 
@@ -502,7 +502,10 @@ function saveCredentials(credentials) {
       const encrypted = safeStorage.encryptString(payload);
       fs.writeFileSync(getCredentialsPath(), encrypted);
     } else {
-      /* Fallback: base64 encode (not truly secure — OS credential vault unavailable) */
+      /* Fallback: base64 encode — not truly secure; warn user */
+      console.warn(
+        "safeStorage unavailable — credentials stored with base64 encoding only (not encrypted).",
+      );
       const encoded = Buffer.from(payload, "utf8").toString("base64");
       fs.writeFileSync(getCredentialsPath(), encoded, "utf8");
     }
