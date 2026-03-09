@@ -32,16 +32,16 @@
   "_filePatterns_note": "Patterns use the format '**/filename.ext' — matched by exact basename. Files not listed here (e.g. main.css, index.html) affect the full layout → full viewport screenshot.",
   "filePatterns": [
     { "pattern": "**/illumination.css", "regions": ["header"] },
-    { "pattern": "**/illumination.js",  "regions": ["header"] },
-    { "pattern": "**/positions.js",     "regions": ["sidebar-right"] },
-    { "pattern": "**/agents.js",        "regions": ["main"] },
-    { "pattern": "**/trading.js",       "regions": ["main"] },
-    { "pattern": "**/gauges.js",        "regions": ["main"] },
-    { "pattern": "**/logs.js",          "regions": ["main"] },
-    { "pattern": "**/paint.js",         "regions": ["main"] },
-    { "pattern": "**/rulers.js",        "regions": ["main"] },
-    { "pattern": "**/telemetry.js",     "regions": ["main"] },
-    { "pattern": "**/todo.js",          "regions": ["main"] },
-    { "pattern": "**/themes.js",        "regions": ["action-bar"] }
+    { "pattern": "**/illumination.js", "regions": ["header"] },
+    { "pattern": "**/positions.js", "regions": ["sidebar-right"] },
+    { "pattern": "**/agents.js", "regions": ["main"] },
+    { "pattern": "**/trading.js", "regions": ["main"] },
+    { "pattern": "**/gauges.js", "regions": ["main"] },
+    { "pattern": "**/logs.js", "regions": ["main"] },
+    { "pattern": "**/paint.js", "regions": ["main"] },
+    { "pattern": "**/rulers.js", "regions": ["main"] },
+    { "pattern": "**/telemetry.js", "regions": ["main"] },
+    { "pattern": "**/todo.js", "regions": ["main"] },
+    { "pattern": "**/themes.js", "regions": ["action-bar"] }
   ]
 }
