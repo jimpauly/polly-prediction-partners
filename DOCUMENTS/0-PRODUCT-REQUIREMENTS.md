@@ -691,7 +691,7 @@ _Intentional misnaming preserved_
 - `fx.glow.flood`
 - `fx.glow.display`
 
-### Illumination:
+### Illumination Control Panel:
 
 - Objective: simulate cockpit lighting physics for the web interface.
   - Illumination does not change when changing studio, theme, or palette.
@@ -700,15 +700,23 @@ _Intentional misnaming preserved_
   - **Physics model:** glow that spreads follows an inverse-square approximation.
   - **Intensity Hierarchy:** DAY/Light mode sets base illumination intensity to 60%; NVG/Dark mode sets base to 100%. Dimmer dials then secondarily modulate intensity within the range of 0.25 to 1.00 (displayed as 2.5 to 10) on top of the mode-based intensity value. Always apply mode rules first, then dimmer dial rules.
 
+#### Panel Layout:
+
+- **"Illumination Control Panel"** nameplate at the bottom of the panel — horizontal strip styled as an overhead-control-interface engraved label.
+- **Controls row** holds all channel groups horizontally above the nameplate.
+- **Flip-switch housings** are tall (32px); levers are proportionally tall (21px) for a realistic cockpit toggle feel.
+- **Spacing:** increased gap between switch housings and indicator LEDs (4px); increased gap between dimmer dials and Nixie-tube value indicators (3px).
+- **Channel labels** are vertical (bottom-to-top) and aligned to the channel-switches and dimmer-dials only — not offset by the indicator LEDs or Nixie-tube readouts beneath them.
+
 #### Controls:
 
 - Each layer/group has one On/Off Switch and one rotary Dimmer Dial.
 - Text and Bar groups have two On/Off Switches and one dimmer dial.
 - **All flip switches** are horizontal, flipping up (on) and down (off). No on/off labels.
-- **Channel labels** sit to the left of their channel, read vertically (bottom-to-top).
-- **Dimmer values** display as 10 (max) to 2.5 (min) — value × 10, nearest round number. No percent sign.
+- **Dimmer values** styled as **mini Nixie Tubes** — cold-cathode tubes filled with neon gas, wire anodes and multiple cathodes shaped like numerals. Dark glass housing, warm amber/orange glow. Housing height matches channel-indicator LED space.
+- **Dimmer dials** have an inner border ring and grip-ticks (basic dashes around the knurled edge for tactile 3D elevation).
 - **Panel colours** must reference the active theme palette (CSS custom properties) — no static hex colours.
-  - **DAY/NVG** — single flip switch tied to the Light/Dark toggle. Same circuit — toggling one updates the other. Mutually exclusive modes.
+  - **DAY/NVG** — labelled "DAY/NVG" (not "MODE"); single flip switch tied to the Light/Dark toggle. Same circuit — toggling one updates the other. Mutually exclusive modes.
   - **Master** - global ON/OFF Illumination switch, OFF default; Global DIM Dial, DIM MAX default.
   - **Text** - controls glow, luminance, and opacity for primary and secondary text groups; Find 100% of text elements and apply these effects.
     - **Primary Text** — Whichever text groups feel like primary text groups (high priority, important content).
@@ -718,7 +726,7 @@ _Intentional misnaming preserved_
     - secondary bars — all card border opacity and glow intensity; Outer spread into regions' areas.
   - **Flood** - ambient fill within regions — controls opacity and brightness for atmospheric gradient centered wash over whole WebPage.
     - Simulated Post lights that flood their region with light.
-  - **Display** - self-illumination intensity display-like components; simulates LCD/LED or MFD displays.
+  - **Display** — labelled "DISPLAY" (not "DISP"); self-illumination intensity for display-like components; simulates LCD/LED or MFD displays.
     - Displays are cards or content that are windows, dropdown menus, graphs, logs, etc.
 
 #### Effects Tokens:

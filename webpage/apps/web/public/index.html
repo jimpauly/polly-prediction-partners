@@ -113,14 +113,11 @@
          ╚══════════════════════════════════════════════════╝ -->
     <div class="illum-panel" id="illum-panel" data-master="off" role="region" aria-label="Illumination Control Panel">
 
-      <!-- Vertical sticker label on left side -->
-      <div class="illum-panel-label-strip">
-        <span class="illum-panel-label-text">ILLUMINATION</span>
-      </div>
+      <div class="illum-controls-row">
 
       <!-- ── DAY / NVG ───────────────────────────────── -->
       <div class="illum-group" title="Mode: DAY = Light, NVG = Dark">
-        <div class="illum-group-label">MODE</div>
+        <div class="illum-group-label">DAY/NVG</div>
         <div class="illum-switches-row">
           <div class="flip-switch day-nvg-toggle" id="day-nvg-toggle" data-mode="day" title="DAY/NVG toggle">
             <div class="switch-housing">
@@ -230,7 +227,7 @@
 
       <!-- ── DISPLAY ─────────────────────────────────── -->
       <div class="illum-group" title="Display self-illumination">
-        <div class="illum-group-label">DISP</div>
+        <div class="illum-group-label">DISPLAY</div>
         <div class="illum-switches-row">
           <div class="flip-switch" data-channel="display" data-state="on" title="Display ON/OFF">
             <div class="switch-housing">
@@ -244,6 +241,13 @@
             <div class="dimmer-value">10</div>
           </div>
         </div>
+      </div>
+
+      </div><!-- /illum-controls-row -->
+
+      <!-- Bottom label strip — overhead-control-interface nameplate -->
+      <div class="illum-panel-label-strip">
+        <span class="illum-panel-label-text">ILLUMINATION CONTROL PANEL</span>
       </div>
 
     </div><!-- /illum-panel -->
