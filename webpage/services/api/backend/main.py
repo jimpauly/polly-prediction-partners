@@ -553,6 +553,30 @@ class Application:
 
         return all_markets
 
+    async def _fetch_all_events(self) -> list:
+        """Fetch all active events from Kalshi REST and return them as a list.
+
+        Paginates until the cursor is exhausted so the category metadata is
+        complete for Kalshi-style navigation in the UI.
+        """
+        if self.rest_client is None:
+            raise RuntimeError("REST client not initialised before event fetch")
+        all_events: list = []
+        cursor: str | None = None
+
+        while True:
+            page, cursor = await self.rest_client.get_events(
+                status="open",
+                limit=200,
+                cursor=cursor or None,
+                with_nested_markets=False,
+            )
+            all_events.extend(page)
+            if not cursor:
+                break
+
+        return all_events
+
     def create_api(self) -> FastAPI:
         """Create and configure the FastAPI application with lifecycle hooks.
 
@@ -658,6 +682,17 @@ class Application:
             log.info("markets_fetched", count=len(all_markets))
         except Exception:
             log.exception("markets_fetch_failed")
+
+        # Fetch events with category metadata for Kalshi-style navigation.
+        try:
+            all_events = await self._fetch_all_events()
+            for event in all_events:
+                event_ticker = event.get("event_ticker", "")
+                if event_ticker:
+                    await self.state_cache.update_event(event_ticker, event)
+            log.info("events_fetched", count=len(all_events))
+        except Exception:
+            log.exception("events_fetch_failed")
 
         # Execution & reconciliation
         self.execution_service = ExecutionService(

@@ -16,7 +16,7 @@ from typing import Any
 
 import structlog
 
-from backend.models.schemas import AgentState, Fill, Market, Order, RiskEvent
+from backend.models.schemas import AgentState, Event, Fill, Market, Order, RiskEvent
 
 _FILLS_CAP = 1000
 _RISK_EVENTS_CAP = 500
@@ -42,6 +42,7 @@ class StateCache:
 
         # Core state
         self._markets: dict[str, Market] = {}
+        self._events: dict[str, Event] = {}
         self._orderbooks: dict[str, dict] = {}
         self._positions: dict[str, dict] = {}
         self._orders: dict[str, Order] = {}
@@ -110,6 +111,30 @@ class StateCache:
 
     def get_markets(self) -> dict[str, Market]:
         return dict(self._markets)
+
+    # ------------------------------------------------------------------
+    # Event
+    # ------------------------------------------------------------------
+
+    async def update_event(self, event_ticker: str, data: Event | dict) -> None:
+        async with self._lock:
+            if isinstance(data, dict):
+                try:
+                    data = Event.model_validate(data)
+                except Exception as exc:
+                    log.debug(
+                        "event_create_failed",
+                        event_ticker=event_ticker,
+                        error=str(exc),
+                    )
+                    return
+            self._events[event_ticker] = data
+
+    def get_event(self, event_ticker: str) -> Event | None:
+        return self._events.get(event_ticker)
+
+    def get_events(self) -> dict[str, Event]:
+        return dict(self._events)
 
     # ------------------------------------------------------------------
     # Orderbook
@@ -336,6 +361,7 @@ class StateCache:
         """Reset all cached state (e.g. on environment switch)."""
         async with self._lock:
             self._markets.clear()
+            self._events.clear()
             self._orderbooks.clear()
             self._positions.clear()
             self._orders.clear()
@@ -361,6 +387,9 @@ class StateCache:
             "environment": self._environment,
             "markets": {
                 t: m.model_dump(mode="json") for t, m in self._markets.items()
+            },
+            "events": {
+                t: e.model_dump(mode="json") for t, e in self._events.items()
             },
             "orderbooks": dict(self._orderbooks),
             "positions": dict(self._positions),

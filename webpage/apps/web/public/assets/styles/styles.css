@@ -2447,6 +2447,161 @@ select:focus {
   border-color: var(--color-accent);
 }
 
+/* ============================================================
+   Kalshi-Style Navigation & Layout
+   Top category bar + left subcategory sidebar + main content
+   ============================================================ */
+
+/* ---- Category Bar (Kalshi top nav) ---- */
+.ks-category-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-border-muted);
+  flex-shrink: 0;
+}
+.ks-category-bar::-webkit-scrollbar {
+  height: 3px;
+}
+.ks-category-bar::-webkit-scrollbar-thumb {
+  background: var(--color-border-muted);
+  border-radius: 3px;
+}
+
+.ks-cat-tab {
+  white-space: nowrap;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  letter-spacing: 0.2px;
+  position: relative;
+}
+.ks-cat-tab:hover {
+  color: var(--color-fg-default);
+}
+.ks-cat-tab.active {
+  color: var(--color-accent-primary, var(--color-accent, #00d084));
+  font-weight: 700;
+}
+.ks-cat-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-accent-primary, var(--color-accent, #00d084));
+  border-radius: 1px;
+}
+.ks-cat-dot {
+  color: var(--color-fg-muted);
+  opacity: 0.4;
+  font-size: 10px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.ks-cat-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--color-border-muted);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+/* ---- Layout Body: Sidebar + Content ---- */
+.ks-layout-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ---- Left Sidebar ---- */
+.ks-sidebar {
+  width: clamp(100px, 14vw, 200px);
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border-muted);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  padding: 8px 0;
+}
+.ks-sidebar.ks-sidebar-hidden {
+  display: none;
+}
+.ks-sidebar::-webkit-scrollbar {
+  width: 3px;
+}
+.ks-sidebar::-webkit-scrollbar-thumb {
+  background: var(--color-border-muted);
+  border-radius: 3px;
+}
+
+.ks-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ks-sidebar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-fg-default);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  text-align: left;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ks-sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-fg-strong, var(--color-fg-default));
+}
+.ks-sidebar-item.active {
+  color: var(--color-accent-primary, var(--color-accent, #00d084));
+  font-weight: 700;
+  background: rgba(0, 208, 132, 0.06);
+  border-left: 2px solid var(--color-accent-primary, var(--color-accent, #00d084));
+}
+.ks-sidebar-item .ks-sidebar-chevron {
+  font-size: 10px;
+  opacity: 0.5;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+.ks-sidebar-parent.ks-sidebar-expanded .ks-sidebar-chevron {
+  transform: rotate(180deg);
+}
+
+/* ---- Main Content ---- */
+.ks-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  padding: 0 8px;
+}
+
 /* ---- Expanded Card Improvements ---- */
 .expanded-two-col {
   display: grid;

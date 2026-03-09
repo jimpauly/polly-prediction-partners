@@ -25,7 +25,9 @@ class Market(BaseModel):
 
     ticker: str
     event_ticker: str
+    series_ticker: str = ""
     market_type: Literal["binary", "scalar"]
+    category: str = ""
     yes_sub_title: str = ""
     no_sub_title: str = ""
     status: Literal[

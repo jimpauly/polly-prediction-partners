@@ -2,6 +2,7 @@
    Paulie's Prediction Partners — Trading Studio Module
    Manages market cards, category filtering, series grouping,
    real-time updates, expanded card overlay, and approval flow.
+   Kalshi-style navigation: top category bar + left sidebar.
    ============================================================ */
 
 const TradingStudio = (() => {
@@ -11,6 +12,7 @@ const TradingStudio = (() => {
   const CARDS_PER_PAGE = 24;
 
   let markets = [];
+  let events = {};
   let displayedCount = 0;
   let currentCategory = "all";
   let currentSubcategory = "all";
@@ -19,62 +21,41 @@ const TradingStudio = (() => {
   let approvalExpiryTimeout =
     null; /* stores approval overlay auto-close timer */
 
-  const SUBCATEGORY_MAP = {
-    all: ["All"],
-    crypto: ["All", "BTC", "ETH", "SOL", "Other"],
-    sports: ["All", "NFL", "NBA", "MLB", "NHL", "Soccer"],
-    politics: ["All", "US", "Global"],
-    economics: ["All", "Fed", "CPI", "Jobs"],
-    weather: ["All", "Temperature", "Storms"],
-    entertainment: ["All", "Awards", "Box Office"],
-    tech: ["All", "AI", "Space", "EVs"],
-    science: ["All", "Space", "Climate"],
+  /* Kalshi-style category mapping — matches Kalshi platform top nav.
+     Each category maps to Kalshi event categories and keyword matchers. */
+  const KALSHI_CATEGORIES = {
+    all:             { label: "Trending", keywords: [] },
+    new:             { label: "New",      keywords: [] },
+    all_markets:     { label: "All",      keywords: [] },
+    politics:        { label: "Politics", keywords: ["president","election","congress","senate","governor","political","trump","biden","democrat","republican","vote","gop","party"] },
+    sports:          { label: "Sports",   keywords: ["nfl","nba","mlb","nhl","soccer","football","basketball","baseball","sports","tennis","golf","mma","ufc","cricket","boxing","chess","esports","motorsport","olympics","f1","nascar","pga","fifa","epl","league","championship","world cup","super bowl"] },
+    culture:         { label: "Culture",  keywords: ["oscar","grammy","emmy","movie","tv","music","entertainment","culture","celebrity","reality","award","box office","streaming","tiktok","youtube","netflix"] },
+    crypto:          { label: "Crypto",   keywords: ["btc","bitcoin","eth","ethereum","sol","crypto","kxbtc","kxeth","kxsol","defi","nft","altcoin","solana","blockchain"] },
+    climate:         { label: "Climate",  keywords: ["weather","temperature","hurricane","snow","rain","climate","storm","tornado","heat","cold","flood","wildfire","noaa"] },
+    economics:       { label: "Economics",keywords: ["fed","cpi","gdp","unemployment","inflation","interest","jobs","economy","fomc","treasury","rate","payroll","pce","durable","housing","retail"] },
+    mentions:        { label: "Mentions", keywords: ["mention","tweet","social","media","viral","trending"] },
+    companies:       { label: "Companies",keywords: ["apple","google","meta","amazon","tesla","nvidia","microsoft","stock","earnings","ipo","market cap","revenue"] },
+    financials:      { label: "Financials", keywords: ["s&p","dow","nasdaq","bond","yield","forex","oil","gold","commodity","vix","spy","qqq","finance"] },
+    tech_and_science:{ label: "Tech & Science", keywords: ["tech","ai","space","spacex","nasa","vaccine","science","quantum","semiconductor","ev","robot","fda","biotech"] },
   };
 
-  const CATEGORY_KEYWORDS = {
-    crypto: [
-      "btc",
-      "bitcoin",
-      "eth",
-      "ethereum",
-      "sol",
-      "crypto",
-      "kxbtc",
-      "kxeth",
-      "kxsol",
-    ],
-    sports: [
-      "nfl",
-      "nba",
-      "mlb",
-      "nhl",
-      "soccer",
-      "football",
-      "basketball",
-      "baseball",
-      "sports",
-    ],
-    politics: [
-      "president",
-      "election",
-      "congress",
-      "senate",
-      "governor",
-      "political",
-    ],
-    economics: [
-      "fed",
-      "cpi",
-      "gdp",
-      "unemployment",
-      "inflation",
-      "interest",
-      "jobs",
-    ],
-    weather: ["weather", "temperature", "hurricane", "snow", "rain"],
-    entertainment: ["oscar", "grammy", "emmy", "movie", "tv", "music"],
-    tech: ["tech", "ai", "apple", "google", "tesla", "spacex"],
-    science: ["space", "nasa", "climate", "vaccine"],
+  /* Kalshi-style subcategories per top-level category.
+     These are populated dynamically from live events but we have sensible
+     defaults matching Kalshi's known navigation structure. */
+  const SUBCATEGORY_MAP = {
+    all:             [],
+    new:             [],
+    all_markets:     [],
+    politics:        ["US", "Global", "Senate", "House", "Governor"],
+    sports:          ["Soccer", "Tennis", "Golf", "MMA", "Cricket", "Baseball", "Boxing", "Chess", "Esports", "Motorsport", "Olympics", "NFL", "NBA", "MLB", "NHL"],
+    culture:         ["Awards", "Box Office", "Music", "Streaming"],
+    crypto:          ["BTC", "ETH", "SOL", "Other"],
+    climate:         ["Temperature", "Storms", "Wildfire"],
+    economics:       ["Fed", "CPI", "Jobs", "GDP"],
+    mentions:        [],
+    companies:       ["Tech", "Finance", "Auto", "Energy"],
+    financials:      ["Indices", "Commodities", "Forex"],
+    tech_and_science:["AI", "Space", "EVs", "Biotech"],
   };
 
   /* Series display names and icons for section headers */
@@ -95,7 +76,7 @@ const TradingStudio = (() => {
 
   function initialize() {
     bindCategoryTabs();
-    bindSubcategoryTabs();
+    bindSidebarNav();
     bindFilters();
     bindRefreshButton();
     bindShowMore();
@@ -110,31 +91,38 @@ const TradingStudio = (() => {
     const nav = document.getElementById("trading-category-nav");
     if (!nav) return;
     nav.addEventListener("click", (e) => {
-      const tab = e.target.closest(".category-tab");
+      const tab = e.target.closest(".ks-cat-tab");
       if (!tab) return;
       nav
-        .querySelectorAll(".category-tab")
+        .querySelectorAll(".ks-cat-tab")
         .forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
       currentCategory = tab.dataset.category;
       currentSubcategory = "all";
       displayedCount = 0;
-      updateSubcategories();
+      updateSidebar();
       renderCards();
     });
   }
 
-  function bindSubcategoryTabs() {
+  function bindSidebarNav() {
     const nav = document.getElementById("trading-subcategory-nav");
     if (!nav) return;
     nav.addEventListener("click", (e) => {
-      const tab = e.target.closest(".subcategory-tab");
-      if (!tab) return;
+      const item = e.target.closest(".ks-sidebar-item");
+      if (!item) return;
+
+      /* Handle expandable items with children */
+      if (item.classList.contains("ks-sidebar-parent")) {
+        item.classList.toggle("ks-sidebar-expanded");
+        return;
+      }
+
       nav
-        .querySelectorAll(".subcategory-tab")
+        .querySelectorAll(".ks-sidebar-item")
         .forEach((t) => t.classList.remove("active"));
-      tab.classList.add("active");
-      currentSubcategory = tab.dataset.subcategory;
+      item.classList.add("active");
+      currentSubcategory = item.dataset.subcategory;
       displayedCount = 0;
       renderCards();
     });
@@ -226,7 +214,7 @@ const TradingStudio = (() => {
       iface.classList.add("trading-init-animation");
       setTimeout(() => iface.classList.remove("trading-init-animation"), 1500);
     }
-    await fetchMarkets();
+    await Promise.all([fetchMarkets(), fetchEvents()]);
     await fetchAccountSummary();
     connectWebSocket();
 
@@ -251,6 +239,7 @@ const TradingStudio = (() => {
     if (preConnect) preConnect.style.display = "flex";
     if (iface) iface.style.display = "none";
     markets = [];
+    events = {};
     displayedCount = 0;
     renderCards();
     if (websocket) {
@@ -278,13 +267,64 @@ const TradingStudio = (() => {
     }
   }
 
+  async function fetchEvents() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/state/events`);
+      if (!response.ok) return;
+      const data = await response.json();
+      events = data || {};
+      /* Build dynamic sidebar from event categories */
+      updateSidebar();
+    } catch (e) {
+      console.warn("Failed to fetch events:", e);
+    }
+  }
+
   /* ---- Filtering ---- */
 
   function matchesCategory(market, category) {
+    /* Check event category from live data first */
+    const eventTicker = market.event_ticker || "";
+    const eventData = events[eventTicker];
+    if (eventData && eventData.category) {
+      const evtCategory = eventData.category.toLowerCase();
+      /* Map Kalshi event categories to our navigation categories */
+      if (category === "politics" && evtCategory.includes("politic")) return true;
+      if (category === "sports" && evtCategory.includes("sport")) return true;
+      if (category === "culture" && (evtCategory.includes("cultur") || evtCategory.includes("entertain"))) return true;
+      if (category === "crypto" && evtCategory.includes("crypto")) return true;
+      if (category === "climate" && (evtCategory.includes("climat") || evtCategory.includes("weather"))) return true;
+      if (category === "economics" && evtCategory.includes("econom")) return true;
+      if (category === "mentions" && evtCategory.includes("mention")) return true;
+      if (category === "companies" && evtCategory.includes("compan")) return true;
+      if (category === "financials" && evtCategory.includes("financ")) return true;
+      if (category === "tech_and_science" && (evtCategory.includes("tech") || evtCategory.includes("scienc"))) return true;
+    }
+
+    /* Market-level category (added in schema) */
+    const marketCategory = (market.category || "").toLowerCase();
+    if (marketCategory) {
+      if (category === "politics" && marketCategory.includes("politic")) return true;
+      if (category === "sports" && marketCategory.includes("sport")) return true;
+      if (category === "culture" && (marketCategory.includes("cultur") || marketCategory.includes("entertain"))) return true;
+      if (category === "crypto" && marketCategory.includes("crypto")) return true;
+      if (category === "climate" && (marketCategory.includes("climat") || marketCategory.includes("weather"))) return true;
+      if (category === "economics" && marketCategory.includes("econom")) return true;
+      if (category === "mentions" && marketCategory.includes("mention")) return true;
+      if (category === "companies" && marketCategory.includes("compan")) return true;
+      if (category === "financials" && marketCategory.includes("financ")) return true;
+      if (category === "tech_and_science" && (marketCategory.includes("tech") || marketCategory.includes("scienc"))) return true;
+    }
+
+    /* Fallback: keyword matching on tickers/titles */
     const ticker = (market.ticker || "").toLowerCase();
     const event = (market.event_ticker || "").toLowerCase();
-    const keywords = CATEGORY_KEYWORDS[category] || [];
-    return keywords.some((k) => ticker.includes(k) || event.includes(k));
+    const title = (market.yes_sub_title || "").toLowerCase();
+    const combined = ticker + " " + event + " " + title;
+    const catConfig = KALSHI_CATEGORIES[category];
+    if (!catConfig) return false;
+    const keywords = catConfig.keywords || [];
+    return keywords.some((k) => combined.includes(k));
   }
 
   function detectFrequency(market) {
@@ -335,8 +375,23 @@ const TradingStudio = (() => {
   function filterMarkets() {
     let filtered = [...markets];
 
-    /* Category filter */
-    if (currentCategory !== "all") {
+    /* "all" = trending (sort by volume), "new" = sort by creation,
+       "all_markets" = no category filter */
+    if (currentCategory === "new") {
+      filtered.sort((a, b) => {
+        const ta = a.created_time ? new Date(a.created_time).getTime() : 0;
+        const tb = b.created_time ? new Date(b.created_time).getTime() : 0;
+        return tb - ta;
+      });
+    } else if (currentCategory === "all" || currentCategory === "all_markets") {
+      /* "all" = trending — sort by volume descending */
+      if (currentCategory === "all") {
+        filtered.sort((a, b) => {
+          return (parseFloat(b.volume_24h_fp) || 0) - (parseFloat(a.volume_24h_fp) || 0);
+        });
+      }
+    } else {
+      /* Category filter */
       filtered = filtered.filter((m) => matchesCategory(m, currentCategory));
     }
 
@@ -447,18 +502,83 @@ const TradingStudio = (() => {
     return { label: seriesKey, icon: "📋", priority: 99 };
   }
 
-  /* ---- Subcategory Nav ---- */
+  /* ---- Sidebar Nav ---- */
 
-  function updateSubcategories() {
+  function updateSidebar() {
     const nav = document.getElementById("trading-subcategory-nav");
+    const sidebar = document.getElementById("trading-subcategory-sidebar");
     if (!nav) return;
-    const subs = SUBCATEGORY_MAP[currentCategory] || ["All"];
-    nav.innerHTML = subs
+
+    /* Determine subcategories to display */
+    const subs = buildSubcategoriesFromEvents(currentCategory);
+    const staticSubs = SUBCATEGORY_MAP[currentCategory] || [];
+
+    /* Merge: live event data + static defaults, deduplicated */
+    const allSubs = [...new Set([...subs, ...staticSubs])];
+
+    if (allSubs.length === 0) {
+      /* No subcategories for this category — hide sidebar */
+      if (sidebar) sidebar.classList.add("ks-sidebar-hidden");
+      nav.innerHTML = "";
+      return;
+    }
+
+    if (sidebar) sidebar.classList.remove("ks-sidebar-hidden");
+
+    nav.innerHTML = allSubs
       .map(
-        (s, i) =>
-          `<button class="subcategory-tab${i === 0 ? " active" : ""}" data-subcategory="${s.toLowerCase()}">${s}</button>`,
+        (s) =>
+          `<button class="ks-sidebar-item${currentSubcategory === s.toLowerCase() ? " active" : ""}" data-subcategory="${s.toLowerCase()}">${escapeHtml(s)}</button>`,
       )
       .join("");
+  }
+
+  function buildSubcategoriesFromEvents(category) {
+    /* Derive subcategories from live event data for the selected category */
+    const subcats = new Set();
+
+    Object.values(events).forEach((evt) => {
+      const evtCategory = (evt.category || "").toLowerCase();
+      let matches = false;
+
+      if (category === "politics" && evtCategory.includes("politic")) matches = true;
+      if (category === "sports" && evtCategory.includes("sport")) matches = true;
+      if (category === "culture" && (evtCategory.includes("cultur") || evtCategory.includes("entertain"))) matches = true;
+      if (category === "crypto" && evtCategory.includes("crypto")) matches = true;
+      if (category === "climate" && (evtCategory.includes("climat") || evtCategory.includes("weather"))) matches = true;
+      if (category === "economics" && evtCategory.includes("econom")) matches = true;
+      if (category === "companies" && evtCategory.includes("compan")) matches = true;
+      if (category === "financials" && evtCategory.includes("financ")) matches = true;
+      if (category === "tech_and_science" && (evtCategory.includes("tech") || evtCategory.includes("scienc"))) matches = true;
+
+      if (matches && evt.sub_title) {
+        /* Extract a short label from the event sub_title or series_ticker */
+        const label = deriveSubcategoryLabel(evt);
+        if (label) subcats.add(label);
+      }
+    });
+
+    return [...subcats].sort();
+  }
+
+  function deriveSubcategoryLabel(evt) {
+    /* Try to extract a meaningful subcategory label from event metadata */
+    const seriesTicker = (evt.series_ticker || "").toUpperCase();
+    const title = evt.title || evt.sub_title || "";
+
+    /* Known series patterns */
+    const knownSeries = {
+      NFL: "NFL", NBA: "NBA", MLB: "MLB", NHL: "NHL",
+      KXBTC: "BTC", KXETH: "ETH", KXSOL: "SOL",
+    };
+    for (const [key, label] of Object.entries(knownSeries)) {
+      if (seriesTicker.includes(key)) return label;
+    }
+
+    /* Extract first meaningful word from title */
+    const words = title.split(/\s+/).filter((w) => w.length > 2);
+    if (words.length > 0) return words[0];
+    return null;
   }
 
   /* ---- Rendering (Kalshi-style series panels) ---- */
@@ -683,6 +803,18 @@ const TradingStudio = (() => {
 
   function deriveCategoryBreadcrumb(seriesKey) {
     const lower = seriesKey.toLowerCase();
+
+    /* Check event data first for accurate category */
+    for (const market of markets) {
+      if ((market.series_ticker || "").toLowerCase() === lower ||
+          (market.event_ticker || "").toLowerCase() === lower) {
+        const eventData = events[market.event_ticker];
+        if (eventData && eventData.category) {
+          return eventData.category;
+        }
+      }
+    }
+
     if (
       lower.includes("btc") ||
       lower.includes("eth") ||
@@ -694,12 +826,19 @@ const TradingStudio = (() => {
       lower.includes("nfl") ||
       lower.includes("nba") ||
       lower.includes("mlb") ||
-      lower.includes("nhl")
+      lower.includes("nhl") ||
+      lower.includes("soccer") ||
+      lower.includes("tennis") ||
+      lower.includes("golf") ||
+      lower.includes("mma") ||
+      lower.includes("ufc")
     )
       return "Sports";
     if (lower.includes("fed") || lower.includes("cpi") || lower.includes("gdp"))
       return "Economics";
-    if (lower.includes("temp") || lower.includes("weather")) return "Weather";
+    if (lower.includes("temp") || lower.includes("weather")) return "Climate";
+    if (lower.includes("elect") || lower.includes("president") || lower.includes("congress"))
+      return "Politics";
     return "Markets";
   }
 
