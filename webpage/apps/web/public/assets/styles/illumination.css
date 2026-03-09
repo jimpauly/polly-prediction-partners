@@ -381,25 +381,26 @@
   transform: translateY(4px); /* NVG = lever down */
 }
 
-.day-nvg-led {
-  background: color-mix(in srgb, var(--color-state-warning) 20%, var(--color-bg-canvas)) !important;
-  border-color: color-mix(in srgb, var(--color-state-warning) 30%, transparent) !important;
+.flip-switch.day-nvg-toggle .switch-led.day-nvg-led {
+  background: color-mix(in srgb, var(--color-state-warning) 20%, var(--color-bg-canvas));
+  border-color: color-mix(in srgb, var(--color-state-warning) 30%, transparent);
+  box-shadow: none;
 }
 
-.day-nvg-toggle[data-mode="day"] .day-nvg-led {
-  background: var(--color-state-warning) !important;
-  border-color: color-mix(in srgb, var(--color-state-warning) 80%, black) !important;
+.flip-switch.day-nvg-toggle[data-mode="day"] .switch-led.day-nvg-led {
+  background: var(--color-state-warning);
+  border-color: color-mix(in srgb, var(--color-state-warning) 80%, black);
   box-shadow:
     0 0 4px var(--color-state-warning),
-    0 0 8px color-mix(in srgb, var(--color-state-warning) 50%, transparent) !important;
+    0 0 8px color-mix(in srgb, var(--color-state-warning) 50%, transparent);
 }
 
-.day-nvg-toggle[data-mode="nvg"] .day-nvg-led {
-  background: var(--color-state-success) !important;
-  border-color: color-mix(in srgb, var(--color-state-success) 80%, black) !important;
+.flip-switch.day-nvg-toggle[data-mode="nvg"] .switch-led.day-nvg-led {
+  background: var(--color-state-success);
+  border-color: color-mix(in srgb, var(--color-state-success) 80%, black);
   box-shadow:
     0 0 4px var(--color-state-success),
-    0 0 8px color-mix(in srgb, var(--color-state-success) 50%, transparent) !important;
+    0 0 8px color-mix(in srgb, var(--color-state-success) 50%, transparent);
 }
 
 /* ── ROTARY DIMMER DIAL ────────────────────────────── */
@@ -438,19 +439,10 @@
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: conic-gradient(
+  background: repeating-conic-gradient(
     from 0deg,
-    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 0deg,
-    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 6deg,
-    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 12deg,
-    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 18deg,
-    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 24deg,
-    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 30deg,
-    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 36deg,
-    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 42deg,
-    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 48deg,
-    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 54deg,
-    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 60deg
+    color-mix(in srgb, var(--color-bg-canvas) 80%, var(--color-fg-subtle)) 0deg 6deg,
+    color-mix(in srgb, var(--color-border-default) 60%, var(--color-bg-canvas)) 6deg 12deg
   );
   z-index: -1;
 }
