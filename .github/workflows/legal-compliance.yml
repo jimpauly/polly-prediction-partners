@@ -4,9 +4,21 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'LICENSE'
+      - 'PRIVACY.md'
+      - 'SECURITY.md'
+      - '**/requirements.txt'
+      - '.github/workflows/legal-compliance.yml'
   pull_request:
     branches:
       - main
+    paths:
+      - 'LICENSE'
+      - 'PRIVACY.md'
+      - 'SECURITY.md'
+      - '**/requirements.txt'
+      - '.github/workflows/legal-compliance.yml'
   workflow_dispatch:
 
 permissions:
