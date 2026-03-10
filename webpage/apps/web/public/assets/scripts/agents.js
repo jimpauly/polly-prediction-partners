@@ -8,7 +8,7 @@ const AgentDashboard = (() => {
   "use strict";
 
   const BACKEND_URL = "http://127.0.0.1:8000";
-  const POLL_INTERVAL_MS = 8000;
+  const POLL_INTERVAL_MS = 10000;
 
   /* Agent configuration (icons and colours match PRD) */
   const AGENT_CONFIG = {

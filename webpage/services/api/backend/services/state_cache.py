@@ -20,6 +20,7 @@ from backend.models.schemas import AgentState, Event, Fill, Market, Order, RiskE
 
 _FILLS_CAP = 1000
 _RISK_EVENTS_CAP = 500
+_ORDERS_CAP = 2000  # max orders kept in cache; oldest terminal orders evicted first
 
 _AGENT_NAMES = ("prime", "praxis", "peritia")
 
@@ -244,6 +245,40 @@ class StateCache:
 
     def get_orders(self) -> dict[str, Order]:
         return dict(self._orders)
+
+    def evict_terminal_orders(self, cap: int = _ORDERS_CAP) -> int:
+        """Remove oldest filled/cancelled orders when the cache exceeds *cap*.
+
+        Only orders with ``status`` in ``("executed", "canceled")`` are
+        eligible for eviction.  Resting orders are never evicted.
+
+        Returns the number of orders removed.
+        """
+        if len(self._orders) <= cap:
+            return 0
+
+        terminal = [
+            (oid, o)
+            for oid, o in self._orders.items()
+            if hasattr(o, "status") and o.status in ("executed", "canceled")
+        ]
+
+        # Sort by last_update_time ascending so oldest are removed first
+        terminal.sort(
+            key=lambda pair: getattr(pair[1], "last_update_time", None)
+            or datetime.min.replace(tzinfo=timezone.utc),
+        )
+
+        to_remove = len(self._orders) - cap
+        removed = 0
+        for oid, _ in terminal[:to_remove]:
+            del self._orders[oid]
+            removed += 1
+
+        if removed:
+            log.info("orders_evicted", removed=removed, remaining=len(self._orders))
+
+        return removed
 
     # ------------------------------------------------------------------
     # Fill

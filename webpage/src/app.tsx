@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-import type { AgentMode, AgentState, Balance, Fill, Market, Position, TradingStatusResponse, WsEventEnvelope } from "./types/trading";
+import type { AgentMode, AgentState, Balance, Fill, Market, Order, Position, TradingStatusResponse, WsEventEnvelope } from "./types/trading";
 import { stateApi, tradingApi, agentsApi, approvalsApi } from "./utils/apiClient";
 import { useConnection } from "./hooks/useConnection";
 import { useApi } from "./hooks/useApi";
@@ -20,18 +20,21 @@ function App() {
   const agentsApiData = useApi<Record<string, AgentState>>(stateApi.agents, { enabled: connection.connected, interval: 10000 });
   const balanceApi = useApi<Balance>(stateApi.balance, { enabled: connection.connected, interval: 15000 });
   const tradingStatusApi = useApi<TradingStatusResponse>(tradingApi.status, { enabled: connection.connected, interval: 15000 });
+  const ordersApi = useApi<Record<string, Order>>(stateApi.orders, { enabled: connection.connected, interval: 10000 });
 
   // Derived state with real-time WS overlays
   const [markets, setMarkets] = useState<Record<string, Market>>({});
   const [positions, setPositions] = useState<Record<string, Position>>({});
   const [fills, setFills] = useState<Fill[]>([]);
   const [agents, setAgents] = useState<Record<string, AgentState>>({});
+  const [orders, setOrders] = useState<Record<string, Order>>({});
 
   // Sync polled data into local state
   React.useEffect(() => { if (marketsApi.data) setMarkets(marketsApi.data); }, [marketsApi.data]);
   React.useEffect(() => { if (positionsApi.data) setPositions(positionsApi.data); }, [positionsApi.data]);
   React.useEffect(() => { if (fillsApi.data) setFills(fillsApi.data); }, [fillsApi.data]);
   React.useEffect(() => { if (agentsApiData.data) setAgents(agentsApiData.data); }, [agentsApiData.data]);
+  React.useEffect(() => { if (ordersApi.data) setOrders(ordersApi.data); }, [ordersApi.data]);
 
   // WebSocket real-time updates
   const handleWsMessage = useCallback((envelope: WsEventEnvelope) => {
@@ -44,8 +47,16 @@ function App() {
       setFills((prev) => [data as unknown as Fill, ...prev].slice(0, MAX_FILLS));
     } else if (type === "agent_update" && data.agent_name) {
       setAgents((prev) => ({ ...prev, [data.agent_name as string]: data as unknown as AgentState }));
+    } else if (type === "order_update" && data.data) {
+      const orderData = data.data as Record<string, unknown>;
+      const orderId = orderData.order_id as string | undefined;
+      if (orderId) {
+        setOrders((prev) => ({ ...prev, [orderId]: orderData as unknown as Order }));
+      }
+    } else if (type === "order_cancelled" && data.order_id) {
+      ordersApi.refetch();
     }
-  }, []);
+  }, [ordersApi]);
 
   useWebSocket({ enabled: connection.connected, onMessage: handleWsMessage });
 
@@ -55,10 +66,20 @@ function App() {
       await tradingApi.manualOrder({ ticker, side, price_dollars: priceDollars });
       fillsApi.refetch();
       positionsApi.refetch();
+      ordersApi.refetch();
     } catch (err) {
       console.error("Order failed:", err);
     }
-  }, [fillsApi, positionsApi]);
+  }, [fillsApi, positionsApi, ordersApi]);
+
+  const handleCancelOrder = useCallback(async (orderId: string) => {
+    try {
+      await tradingApi.cancelOrder(orderId);
+      ordersApi.refetch();
+    } catch (err) {
+      console.error("Cancel failed:", err);
+    }
+  }, [ordersApi]);
 
   const handleApprove = useCallback(async (clientOrderId: string) => {
     try { await approvalsApi.approve(clientOrderId); } catch (err) { console.error(err); }
@@ -91,10 +112,12 @@ function App() {
       positions={positions}
       fills={fills}
       agents={agents}
+      orders={orders}
       balance={balanceApi.data}
       tradingStatus={tradingStatusApi.data}
       totalTrades={totalTrades}
       onBuy={handleBuy}
+      onCancelOrder={handleCancelOrder}
       onAgentModeChange={handleAgentModeChange}
       onApprove={handleApprove}
       onDeny={handleDeny}
