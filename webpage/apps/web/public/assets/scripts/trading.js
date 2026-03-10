@@ -1991,6 +1991,36 @@ const TradingStudio = (() => {
     }
   }
 
+  /**
+   * Cancel a resting order by its exchange-assigned order ID.
+   * @param {string} orderId
+   */
+  async function cancelOrder(orderId) {
+    if (!connected) {
+      showToast("Not connected — cannot cancel orders", "error");
+      return;
+    }
+    if (!orderId) return;
+
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/orders/${encodeURIComponent(orderId)}/cancel`,
+        { method: "POST", headers: { "Content-Type": "application/json" } },
+      );
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        showToast(
+          errorData.detail || `Cancel failed (${response.status})`,
+          "error",
+        );
+        return;
+      }
+      showToast(`✓ Order ${orderId} cancelled`, "success");
+    } catch (networkError) {
+      showToast("Backend not reachable — cannot cancel order", "error");
+    }
+  }
+
   /* ---- Account Summary ---- */
 
   async function fetchAccountSummary() {
@@ -2453,5 +2483,5 @@ const TradingStudio = (() => {
       .replace(/>/g, "&gt;");
   }
 
-  return { initialize, onConnected, onDisconnected, fetchPublicData };
+  return { initialize, onConnected, onDisconnected, fetchPublicData, cancelOrder };
 })();

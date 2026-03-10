@@ -129,6 +129,10 @@ export const agentsApi = {
   /** Stop an agent (forces safe mode). */
   stop: (name: string): Promise<Record<string, string>> =>
     post(`/agents/${encodeURIComponent(name)}/stop`),
+
+  /** Get performance metrics (wins, losses, PnL, scaling tier) for an agent. */
+  performance: (name: string): Promise<Record<string, unknown>> =>
+    get(`/agents/${encodeURIComponent(name)}/performance`),
 };
 
 // ---------------------------------------------------------------------------
@@ -148,6 +152,10 @@ export const tradingApi = {
   /** Submit a manual order. */
   manualOrder: (order: ManualOrderRequest): Promise<Record<string, unknown>> =>
     post("/trading/manual-order", order),
+
+  /** Cancel a resting order by exchange-assigned order ID. */
+  cancelOrder: (orderId: string): Promise<Record<string, unknown>> =>
+    post(`/orders/${encodeURIComponent(orderId)}/cancel`),
 };
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { ConnectionState } from "../../hooks/useConnection";
-import type { AgentState, Balance, Fill, Market, Position, TradingStatusResponse } from "../../types/trading";
+import type { AgentState, Balance, Fill, Market, Order, Position, TradingStatusResponse } from "../../types/trading";
 import { useTelemetry } from "../../hooks/useTelemetry";
 import { useTheme } from "../../hooks/useTheme";
 import { AGENT_CONFIGS } from "../../constants";
@@ -13,10 +13,12 @@ interface AppShellProps {
   positions: Record<string, Position>;
   fills: Fill[];
   agents: Record<string, AgentState>;
+  orders?: Record<string, Order>;
   balance: Balance | null;
   tradingStatus: TradingStatusResponse | null;
   totalTrades: number;
   onBuy: (ticker: string, side: "yes" | "no", priceDollars: string) => void;
+  onCancelOrder?: (orderId: string) => void;
   onAgentModeChange: (name: string, mode: import("../../types/trading").AgentMode) => void;
   onApprove: (orderId: string) => void;
   onDeny: (orderId: string) => void;
@@ -38,10 +40,12 @@ export function AppShell({
   positions,
   fills,
   agents,
+  orders: _orders,
   balance,
   tradingStatus,
   totalTrades,
   onBuy,
+  onCancelOrder: _onCancelOrder,
   onAgentModeChange,
   onApprove: _onApprove,
   onDeny: _onDeny,
