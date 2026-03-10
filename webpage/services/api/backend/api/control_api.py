@@ -173,6 +173,9 @@ def create_api(
     risk_gateway: Any,
     reconciliation_service: ReconciliationServiceProtocol | None,
     config: Any,
+    *,
+    position_sizer: Any | None = None,
+    database: Any | None = None,
 ) -> tuple[FastAPI, _EventBroadcaster]:
     """Build and return a ``(FastAPI, EventBroadcaster)`` pair.
 
@@ -191,6 +194,10 @@ def create_api(
         Optional reconciliation service implementing ``trigger()`` / ``status()``.
     config:
         :class:`backend.config.Settings` instance.
+    position_sizer:
+        Optional :class:`backend.services.position_sizer.PositionSizer` instance.
+    database:
+        Optional :class:`backend.services.database.Database` instance.
     """
 
     app = FastAPI(
@@ -353,6 +360,16 @@ def create_api(
         updated = agent.model_copy(update={"mode": body.mode, "status": new_status})
         await state_cache.update_agent_state(name, updated)
         log.info("agent_mode_changed", agent=name, mode=body.mode, status=new_status)
+
+        # Persist agent state to database
+        if database is not None:
+            try:
+                await database.save_agent_state(
+                    config.environment, name, updated.model_dump(mode="json"),
+                )
+            except Exception:
+                log.exception("db_save_agent_state_failed", agent=name)
+
         await broadcaster.broadcast(
             "agent_mode_changed",
             {"agent_name": name, "mode": body.mode, "status": new_status},
@@ -392,6 +409,31 @@ def create_api(
             "agent_stopped", {"agent_name": name, "status": "idle", "mode": "safe"},
         )
         return {"agent_name": name, "status": "idle", "mode": "safe"}
+
+    @app.get("/api/agents/{name}/performance", tags=["agents"])
+    async def get_agent_performance(name: str) -> dict[str, Any]:
+        """Get performance metrics (wins, losses, PnL, scaling tier) for an agent.
+
+        Returns position-sizer tracked performance if available, otherwise
+        returns zeroed defaults.
+        """
+        agent = state_cache.get_agent_state(name)
+        if agent is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Agent '{name}' not found",
+            )
+        if position_sizer is not None:
+            return position_sizer.get_agent_record(name)
+        return {
+            "agent_name": name,
+            "wins": 0,
+            "losses": 0,
+            "total_trades": 0,
+            "win_rate": "0",
+            "cumulative_pnl": "0",
+            "current_tier": 0,
+        }
 
     # ==================================================================
     # Trading Controls
@@ -460,6 +502,33 @@ def create_api(
         await broadcaster.broadcast("manual_order", {
             "ticker": body.ticker,
             "side": body.side,
+            "result": result,
+        })
+        return result
+
+    @app.post("/api/orders/{order_id}/cancel", tags=["trading"])
+    async def cancel_order(order_id: str) -> dict[str, Any]:
+        """Cancel a resting order by its exchange-assigned order ID.
+
+        Forwards the request to the execution service which calls the
+        Kalshi REST API and updates the state cache.
+        """
+        try:
+            result = await execution_service.cancel_order(order_id)
+        except RuntimeError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=str(exc),
+            )
+        except Exception:
+            log.exception("cancel_order_failed", order_id=order_id)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Order cancellation failed",
+            )
+
+        await broadcaster.broadcast("order_cancelled", {
+            "order_id": order_id,
             "result": result,
         })
         return result

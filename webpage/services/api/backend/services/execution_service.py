@@ -35,6 +35,8 @@ class ExecutionService:
       4. Queue semi-auto intents for human approval.
       5. Handle order updates and fills from the WebSocket feed.
       6. Record every state transition to the :class:`StateCache`.
+      7. Notify agents and the position sizer of fill outcomes.
+      8. Persist orders, fills, and risk events to the database.
     """
 
     def __init__(
@@ -43,15 +45,26 @@ class ExecutionService:
         rest_client: KalshiRestClient,
         risk_gateway: RiskGateway,
         state_cache: StateCache,
+        *,
+        position_sizer: Any | None = None,
+        database: Any | None = None,
+        agents: dict[str, Any] | None = None,
     ) -> None:
         self.config = config
         self.rest_client = rest_client
         self.risk_gateway = risk_gateway
         self.state_cache = state_cache
+        self.position_sizer = position_sizer
+        self.database = database
+        self.agents = agents or {}
 
         # Pending semi-auto approvals keyed by client_order_id
         self.pending_approvals: dict[str, TradeIntent] = {}
         self._pending_timestamps: dict[str, float] = {}
+
+        # Map submitted orders back to the originating agent so fills can
+        # be attributed correctly.  Keyed by client_order_id.
+        self._order_agent_map: dict[str, str] = {}
 
     # ------------------------------------------------------------------
     # Primary entry point
@@ -111,6 +124,9 @@ class ExecutionService:
         client_order_id = _generate_client_order_id()
         order_request = self._build_order_request(intent, client_order_id)
 
+        # Track which agent placed this order so we can attribute fills later
+        self._order_agent_map[client_order_id] = intent.agent_name
+
         log.info(
             "order_submitting",
             agent=intent.agent_name,
@@ -149,7 +165,16 @@ class ExecutionService:
         self.risk_gateway.record_submit_success()
 
         order_id = order_response.get("order_id", "")
+
+        # Also map by exchange order_id so fills (which carry order_id but not
+        # always client_order_id) can be attributed to the agent.
+        if order_id:
+            self._order_agent_map[order_id] = intent.agent_name
+
         await self.state_cache.update_order(order_id, order_response)
+
+        # Persist order to database
+        await self._db_upsert_order(order_id, order_response)
 
         log.info(
             "order_submitted",
@@ -316,9 +341,11 @@ class ExecutionService:
 
         if order_id:
             await self.state_cache.update_order(order_id, order_data)
+            # Persist order update to database
+            await self._db_upsert_order(order_id, order_data)
 
     async def process_fill(self, fill_data: dict[str, Any]) -> None:
-        """Handle a fill notification — update state and record PnL."""
+        """Handle a fill notification — update state, record PnL, and notify agents."""
         fill_id = fill_data.get("fill_id", "")
         order_id = fill_data.get("order_id", "")
         ticker = fill_data.get("ticker", "")
@@ -335,10 +362,139 @@ class ExecutionService:
 
         await self.state_cache.add_fill(fill_data)
 
+        # Persist fill to database
+        await self._db_insert_fill(fill_id, fill_data)
+
         # Compute realized PnL contribution for the risk gateway's daily tally.
         pnl = self._compute_fill_pnl(fill_data)
         if pnl != Decimal("0"):
             self.risk_gateway.record_pnl(pnl)
+
+        # --- Agent feedback loop ---
+        # Determine which agent placed this order and notify it of the outcome.
+        agent_name = self._resolve_fill_agent(fill_data)
+        won = pnl > Decimal("0")
+
+        if agent_name and agent_name != "user":
+            await self._notify_agent_of_fill(agent_name, won, pnl, fill_data)
+
+        # Record trade result in position sizer so dynamic sizing can scale
+        if agent_name and self.position_sizer is not None:
+            try:
+                self.position_sizer.record_trade_result(agent_name, pnl)
+            except Exception:
+                log.exception(
+                    "position_sizer_record_failed",
+                    agent=agent_name,
+                    fill_id=fill_id,
+                )
+
+        # Evict old filled/cancelled orders from cache to bound memory
+        self.state_cache.evict_terminal_orders()
+
+    # ------------------------------------------------------------------
+    # Agent feedback & DB persistence helpers
+    # ------------------------------------------------------------------
+
+    def _resolve_fill_agent(self, fill_data: dict[str, Any]) -> str:
+        """Determine which agent placed the order that generated this fill.
+
+        Checks the ``order_id`` and ``client_order_id`` fields against the
+        internal attribution map.  Returns an empty string if unknown.
+        """
+        order_id = fill_data.get("order_id", "")
+        client_order_id = fill_data.get("client_order_id", "")
+
+        agent = self._order_agent_map.get(order_id, "")
+        if not agent and client_order_id:
+            agent = self._order_agent_map.get(client_order_id, "")
+        return agent
+
+    async def _notify_agent_of_fill(
+        self,
+        agent_name: str,
+        won: bool,
+        pnl: Decimal,
+        fill_data: dict[str, Any],
+    ) -> None:
+        """Notify the originating agent of a fill outcome."""
+        agent = self.agents.get(agent_name)
+        if agent is None:
+            return
+
+        try:
+            # Peritia exposes both record_trade_pnl (async, for PnL tracking)
+            # and record_outcome (sync, for per-pattern tracking).
+            # Prime and Praxis expose only record_outcome (async, for PnL tracking).
+            #
+            # We call record_trade_pnl first if present (Peritia path), then
+            # record_outcome.  For Prime/Praxis, record_outcome is an async
+            # coroutine taking (won, pnl).  For Peritia, it is a sync method
+            # taking (pattern_name, won).
+            import inspect
+
+            has_trade_pnl = (
+                hasattr(agent, "record_trade_pnl")
+                and callable(getattr(agent, "record_trade_pnl", None))
+            )
+            has_outcome = (
+                hasattr(agent, "record_outcome")
+                and callable(getattr(agent, "record_outcome", None))
+            )
+
+            if has_trade_pnl:
+                result = agent.record_trade_pnl(won, pnl)
+                if inspect.isawaitable(result):
+                    await result
+
+            if has_outcome:
+                if has_trade_pnl:
+                    # Peritia path: record_outcome(pattern_name, won) — sync
+                    pattern = fill_data.get("pattern_detected", "unknown")
+                    agent.record_outcome(pattern, won)
+                else:
+                    # Prime/Praxis path: record_outcome(won, pnl) — async
+                    result = agent.record_outcome(won, pnl)
+                    if inspect.isawaitable(result):
+                        await result
+
+            log.info(
+                "agent_fill_notified",
+                agent=agent_name,
+                won=won,
+                pnl=str(pnl),
+                fill_id=fill_data.get("fill_id", ""),
+            )
+        except Exception:
+            log.exception(
+                "agent_fill_notification_failed",
+                agent=agent_name,
+                fill_id=fill_data.get("fill_id", ""),
+            )
+
+    async def _db_upsert_order(
+        self, order_id: str, order_data: dict[str, Any],
+    ) -> None:
+        """Persist an order to the database (best-effort)."""
+        if self.database is None:
+            return
+        try:
+            env = self.config.environment
+            await self.database.upsert_order(env, order_id, order_data)
+        except Exception:
+            log.exception("db_upsert_order_failed", order_id=order_id)
+
+    async def _db_insert_fill(
+        self, fill_id: str, fill_data: dict[str, Any],
+    ) -> None:
+        """Persist a fill to the database (best-effort)."""
+        if self.database is None or not fill_id:
+            return
+        try:
+            env = self.config.environment
+            await self.database.insert_fill(env, fill_id, fill_data)
+        except Exception:
+            log.exception("db_insert_fill_failed", fill_id=fill_id)
 
     # ------------------------------------------------------------------
     # Private helpers

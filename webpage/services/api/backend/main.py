@@ -284,6 +284,11 @@ class Application:
         }
         log.info("agents_initialised", agents=list(self.agents.keys()))
 
+        # Keep the execution service's agent reference in sync so that
+        # fill notifications reach the correct agent instances.
+        if self.execution_service is not None:
+            self.execution_service.agents = self.agents
+
     async def start_agents(self) -> None:
         """Start agent evaluation loops as asyncio tasks."""
         await self.stop_agents()
@@ -599,6 +604,8 @@ class Application:
             risk_gateway=self.risk_gateway,
             reconciliation_service=recon_adapter,
             config=self.config,
+            position_sizer=self.position_sizer,
+            database=self.database,
         )
 
         self._broadcaster = broadcaster
@@ -766,6 +773,9 @@ class Application:
             self.rest_client,
             self.risk_gateway,
             self.state_cache,
+            position_sizer=self.position_sizer,
+            database=self.database,
+            agents=self.agents,
         )
 
         self.reconciliation_service = ReconciliationService(
