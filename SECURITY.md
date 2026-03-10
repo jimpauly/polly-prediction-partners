@@ -40,6 +40,33 @@
 
 ---
 
+## Contribution Policy — Bot-Only Pull Requests
+
+This repository enforces a **bot-only pull request policy**. Human contributors outside of the repository owner are not permitted to open or merge pull requests.
+
+### Trusted authors
+
+| Account | Type | Role |
+| ------- | ---- | ---- |
+| `jimpauly` | Owner | Repository owner — full access |
+| `copilot-swe-agent[bot]` | Bot | GitHub Copilot — AI code generation |
+| `dependabot[bot]` | Bot | Dependency security updates |
+| `github-actions[bot]` | Bot | CI/CD automation |
+| `renovate[bot]` | Bot | Dependency updates |
+
+### How it works
+
+1. **PR Guardian workflow** — Every pull request is checked against the trusted author allowlist. PRs from unrecognized accounts are automatically flagged and blocked.
+2. **CODEOWNERS** — The repository owner (`@jimpauly`) is required to approve all changes before they can be merged.
+3. **Malicious pattern scanning** — Every PR diff is scanned for obfuscation, data exfiltration, credential harvesting, supply-chain attacks, and filesystem tampering.
+4. **Sensitive file monitoring** — Changes to security-critical files (workflows, SECURITY.md, PRIVACY.md, LICENSE, CODEOWNERS, .gitignore) trigger additional warnings.
+
+### For human contributors
+
+If you want to suggest a feature or report a bug, please [open an issue](https://github.com/jimpauly/paulies-prediction-partners/issues). Do not open a pull request — it will be automatically rejected.
+
+---
+
 ## Found something wrong?
 
 Two ways to reach us:

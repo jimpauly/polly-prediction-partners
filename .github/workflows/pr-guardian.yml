@@ -1,0 +1,239 @@
+name: 🛡️ PR Guardian — Bot-Only Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  verify-author:
+    name: Verify PR Author Identity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────
+      # STEP 1 — Identify the PR author type
+      # ─────────────────────────────────────────────
+      - name: 🔍 Check PR author
+        id: author_check
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+        shell: bash
+        run: |
+          echo "## 🛡️ PR Author Verification" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "- **Author:** \`$PR_AUTHOR\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Account type:** \`$PR_AUTHOR_TYPE\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          # ── Trusted bot allowlist ──
+          # Repository owner is always trusted
+          # All [bot] suffixed accounts from GitHub's platform are trusted
+          TRUSTED_BOTS=(
+            "jimpauly"
+            "copilot-swe-agent[bot]"
+            "dependabot[bot]"
+            "github-actions[bot]"
+            "renovate[bot]"
+          )
+
+          IS_TRUSTED=false
+
+          for BOT in "${TRUSTED_BOTS[@]}"; do
+            if [ "$PR_AUTHOR" = "$BOT" ]; then
+              IS_TRUSTED=true
+              break
+            fi
+          done
+
+          # Also trust any account GitHub identifies as type "Bot"
+          if [ "$PR_AUTHOR_TYPE" = "Bot" ]; then
+            IS_TRUSTED=true
+          fi
+
+          if [ "$IS_TRUSTED" = true ]; then
+            echo "✅ **Trusted author** — \`$PR_AUTHOR\` is on the allowlist or is a verified bot account." >> "$GITHUB_STEP_SUMMARY"
+            echo "is_trusted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "⛔ **Untrusted author** — \`$PR_AUTHOR\` is not a recognized bot or the repository owner." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "> This repository only accepts pull requests from AI bot collaborators and the repository owner." >> "$GITHUB_STEP_SUMMARY"
+            echo "> If you believe this is an error, contact the repository owner." >> "$GITHUB_STEP_SUMMARY"
+            echo "is_trusted=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 2 — Warn on untrusted human PRs
+      # ─────────────────────────────────────────────
+      - name: ⛔ Flag untrusted PR
+        if: steps.author_check.outputs.is_trusted == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        shell: bash
+        run: |
+          gh pr comment "$PR_NUMBER" --body "## ⛔ Untrusted PR Author
+
+          **Author:** \`$PR_AUTHOR\`
+
+          This repository has a **bot-only contribution policy**. Pull requests from unrecognized human accounts are not accepted and will not be merged.
+
+          **Trusted contributors:**
+          - \`jimpauly\` (repository owner)
+          - \`copilot-swe-agent[bot]\` (GitHub Copilot)
+          - \`dependabot[bot]\` (Dependency updates)
+          - \`github-actions[bot]\` (CI/CD automation)
+          - \`renovate[bot]\` (Dependency updates)
+
+          If you have a feature request or bug report, please [open an issue](https://github.com/${{ github.repository }}/issues) instead.
+
+          ---
+          *🛡️ PR Guardian — protecting this repository from unauthorized changes*"
+
+          echo "::error::PR author '$PR_AUTHOR' is not on the trusted bot allowlist. This repository only accepts PRs from AI bots and the repository owner."
+          exit 1
+
+  # ─────────────────────────────────────────────────
+  # JOB 2 — Scan for suspicious / malicious patterns
+  # ─────────────────────────────────────────────────
+  scan-changes:
+    name: Scan PR for Suspicious Changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔬 Scan diff for malicious patterns
+        id: malicious_scan
+        shell: bash
+        run: |
+          echo "## 🔬 Malicious Pattern Scan" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          FINDINGS=0
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          # Get the diff of this PR (exclude binary / generated files)
+          DIFF=$(git diff "$BASE_SHA".."$HEAD_SHA" -- . \
+            ':!*.lock' ':!*.png' ':!*.jpg' ':!*.gif' ':!*.ico' \
+            ':!*.svg' ':!*.pdf' ':!*.zip' ':!*.tar.gz' ':!*.exe' \
+            ':!*.woff' ':!*.woff2' ':!*.ttf' ':!*.eot' \
+            2>/dev/null || echo "")
+
+          if [ -z "$DIFF" ]; then
+            echo "No diff available — skipping malicious scan." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          check_diff_pattern() {
+            local LABEL="$1"
+            local PATTERN="$2"
+
+            MATCHES=$(echo "$DIFF" | grep "^+" | grep -iE "$PATTERN" || true)
+
+            if [ -n "$MATCHES" ]; then
+              echo "- ⚠️ **$LABEL**" >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              echo "$MATCHES" | head -5 >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              FINDINGS=$((FINDINGS + 1))
+            else
+              echo "- ✅ **$LABEL** — clean" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          }
+
+          # ── Obfuscation & evasion ──
+          check_diff_pattern "Base64-encoded payloads" "atob\(|btoa\(|base64[._\-]decode|from_base64"
+          check_diff_pattern "eval / dynamic code execution" "\beval\s*\(|new\s+Function\s*\(|exec\s*\(|compile\s*\("
+          check_diff_pattern "Obfuscated variable names" "(_0x[a-f0-9]{4,}|\\\\x[0-9a-f]{2}|\\\\u00[0-9a-f]{2})"
+
+          # ── Data exfiltration ──
+          check_diff_pattern "Outbound data to suspicious endpoints" "\.(php|aspx|jsp)\b"
+          check_diff_pattern "Webhook / exfil endpoints" "webhook\.|ngrok\.io|pipedream\.net|requestbin|hookbin"
+          check_diff_pattern "Encoded data in URL params" "encodeURIComponent.*token|encodeURIComponent.*key|encodeURIComponent.*secret"
+
+          # ── Credential harvesting ──
+          check_diff_pattern "Credential interception" "addEventListener.*password|\.value.*password|keylog|keystroke"
+          check_diff_pattern "Cookie / storage theft" "document\.cookie.*(fetch|XMLHttp)|localStorage.*(fetch|XMLHttp)|sessionStorage.*(fetch|XMLHttp)"
+
+          # ── Supply chain attacks ──
+          check_diff_pattern "CDN script injection" "<script.*src=.*http"
+          check_diff_pattern "Dynamic script loading" "createElement.*script|appendChild.*script|document\.write.*script"
+
+          # ── Filesystem attacks ──
+          check_diff_pattern "Dangerous filesystem operations" "rm\s+-[rf]{2}\s*/|rmdir.*force|unlink.*__|shutil\.rmtree\s*\(\s*['\"]/"
+          check_diff_pattern "Environment variable exfiltration" "process\.env\[|os\.environ\[.*\].*fetch|os\.environ\[.*\].*request"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$FINDINGS" -gt 0 ]; then
+            echo "---" >> "$GITHUB_STEP_SUMMARY"
+            echo "⚠️ **$FINDINGS suspicious pattern(s) found.** Review each carefully before merging." >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::$FINDINGS suspicious code pattern(s) detected in this PR. Manual review required."
+          else
+            echo "✅ No suspicious patterns detected in this PR." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # ─────────────────────────────────────────────
+      # STEP 2 — Check for sensitive file modifications
+      # ─────────────────────────────────────────────
+      - name: 🗂️ Check for sensitive file modifications
+        id: sensitive_files
+        shell: bash
+        run: |
+          echo "## 🗂️ Sensitive File Modification Check" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          CHANGED_FILES=$(git diff --name-only "$BASE_SHA".."$HEAD_SHA" 2>/dev/null || echo "")
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changed files detected — skipping." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          WARNINGS=0
+
+          # Files that should only be changed by the repo owner or with extreme care
+          SENSITIVE_PATTERNS=(
+            ".github/workflows/"
+            "SECURITY.md"
+            "PRIVACY.md"
+            "LICENSE"
+            ".github/CODEOWNERS"
+            ".gitignore"
+          )
+
+          for PATTERN in "${SENSITIVE_PATTERNS[@]}"; do
+            MATCHES=$(echo "$CHANGED_FILES" | grep "$PATTERN" || true)
+            if [ -n "$MATCHES" ]; then
+              echo "- ⚠️ **Sensitive file(s) modified:** \`$PATTERN\`" >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              echo "$MATCHES" >> "$GITHUB_STEP_SUMMARY"
+              echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+              WARNINGS=$((WARNINGS + 1))
+            fi
+          done
+
+          if [ "$WARNINGS" -gt 0 ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "⚠️ **$WARNINGS sensitive area(s) modified.** Ensure changes to security-critical files are intentional." >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::$WARNINGS sensitive file area(s) were modified in this PR. Review carefully."
+          else
+            echo "✅ No sensitive files modified." >> "$GITHUB_STEP_SUMMARY"
+          fi

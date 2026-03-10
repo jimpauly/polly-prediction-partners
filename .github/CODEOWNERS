@@ -1,0 +1,16 @@
+# ─────────────────────────────────────────────────────────────
+# CODEOWNERS — Paulie's Prediction Partners
+# ─────────────────────────────────────────────────────────────
+# The repository owner must approve ALL changes.
+# This is a security measure — see SECURITY.md § Contribution Policy.
+# ─────────────────────────────────────────────────────────────
+
+# Default: repo owner reviews everything
+*                           @jimpauly
+
+# Security-critical files require explicit owner approval
+SECURITY.md                 @jimpauly
+PRIVACY.md                  @jimpauly
+LICENSE                     @jimpauly
+.github/CODEOWNERS          @jimpauly
+.github/workflows/          @jimpauly
