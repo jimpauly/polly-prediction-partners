@@ -334,7 +334,7 @@ body {
 
 /* ---------- Axis buttons (Action Bar P/L graph) ------------------------- */
 .axis-btn {
-  font-size: 0.4rem;
+  font-size: clamp(0.5rem, 0.08vw + 0.46rem, 0.6rem);
   padding: 1px 4px;
   border: 1px solid var(--color-border-muted);
   border-radius: 2px;
@@ -3006,4 +3006,155 @@ textarea.input {
 }
 .region-foot .ignition-panel .ign-btn__desc {
   font-size: clamp(0.4rem, 0.48vw, 0.52rem);
+}
+
+/* ==========================================================================
+   RESPONSIVE — MOBILE LANDSCAPE & SMALL VIEWPORTS
+   ==========================================================================
+   Targets landscape phones and small tablets (~900px wide, ~500px tall).
+   Keeps all seven cockpit regions visible; tightens spacing & font sizes.
+   ========================================================================== */
+
+/* ---- Small-width viewports (phones and narrow tablets) ------------------ */
+@media (max-width: 1024px) {
+  :root {
+    --layout-sidebar-width: clamp(60px, 14vw, 200px);
+    --layout-shell-padding: clamp(2px, 0.4vw, 10px);
+    --layout-shell-gap: clamp(2px, 0.4vw, 10px);
+    --layout-foot-height: clamp(80px, 18vh, 200px);
+    --layout-nav-height: clamp(26px, 3.2vh, 42px);
+  }
+
+  html {
+    font-size: clamp(13px, 1.4vw, 17px);
+  }
+
+  .app-title {
+    font-size: clamp(0.72rem, 1.1vw, 1.2rem);
+  }
+
+  .region {
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .region-main {
+    padding: var(--space-2);
+  }
+
+  .card-header {
+    padding: var(--space-1) var(--space-2);
+    font-size: clamp(0.62rem, 0.14vw + 0.58rem, 0.78rem);
+  }
+
+  .card-body {
+    padding: clamp(4px, 0.5vw, 10px);
+  }
+
+  .card--compact .card-header {
+    padding: 2px var(--space-1);
+  }
+
+  .card--compact .card-body {
+    padding: var(--space-1);
+  }
+
+  .region-title {
+    font-size: 0.6rem;
+  }
+
+  .nav-tab {
+    font-size: clamp(0.62rem, 0.12vw + 0.58rem, 0.76rem);
+    padding: var(--space-1) var(--space-2);
+    min-height: clamp(24px, 2.4vh, 34px);
+  }
+
+  .status-bar {
+    font-size: 0.6rem;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .btn {
+    min-height: 24px;
+    min-width: 24px;
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.78rem;
+  }
+
+  .btn-sm {
+    min-height: 20px;
+    min-width: 20px;
+    padding: 2px var(--space-1);
+    font-size: 0.68rem;
+  }
+
+  .input,
+  .select,
+  textarea.input {
+    min-height: 24px;
+    font-size: 0.78rem;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .sidebar-panel__title {
+    font-size: clamp(0.6rem, 0.1vw + 0.56rem, 0.72rem);
+  }
+
+  /* Bento grid: stack on narrow viewports */
+  .main-bento-grid--top {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+    gap: var(--space-2);
+  }
+
+  .main-bento-right-bottom {
+    gap: var(--space-2);
+  }
+
+  .main-bento-right-stack {
+    gap: var(--space-2);
+  }
+
+  /* Palette swatches: tighter grid */
+  .palette-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+/* ---- Landscape orientation on short viewports (mobile landscape) -------- */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --layout-sidebar-width: clamp(50px, 12vw, 160px);
+    --layout-shell-padding: clamp(2px, 0.3vw, 8px);
+    --layout-shell-gap: clamp(2px, 0.3vw, 8px);
+    --layout-nav-height: clamp(22px, 4vh, 36px);
+    --layout-foot-height: clamp(70px, 20vh, 160px);
+  }
+
+  html {
+    font-size: clamp(12px, 1.5vw, 16px);
+  }
+
+  .region-header {
+    padding: 2px var(--space-2);
+  }
+
+  .card-header {
+    padding: 2px var(--space-2);
+    font-size: clamp(0.58rem, 0.12vw + 0.54rem, 0.72rem);
+  }
+
+  .card-body {
+    padding: clamp(3px, 0.4vw, 8px);
+  }
+
+  .nav-tab {
+    font-size: clamp(0.58rem, 0.1vw + 0.54rem, 0.7rem);
+    padding: 2px var(--space-2);
+    min-height: clamp(20px, 3.6vh, 30px);
+  }
+
+  .region-title {
+    font-size: 0.55rem;
+    margin-bottom: var(--space-1);
+  }
 }

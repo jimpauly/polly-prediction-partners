@@ -68,7 +68,7 @@
     0 0 calc(var(--fx-glow-text-primary) * 6px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-text-primary) * 16px) var(--color-accent-primary),
     0 0 calc(var(--fx-glow-text-primary) * 30px) var(--color-accent-primary);
-  opacity: calc(0.7 + var(--fx-glow-text-primary) * 0.3);
+  opacity: calc(0.88 + var(--fx-glow-text-primary) * 0.12);
   transition:
     text-shadow var(--_glow-transition),
     opacity var(--_glow-transition);
@@ -79,7 +79,7 @@
   text-shadow:
     0 0 calc(var(--fx-glow-text-secondary) * 5px) var(--color-accent-secondary),
     0 0 calc(var(--fx-glow-text-secondary) * 14px) var(--color-accent-secondary);
-  opacity: calc(0.5 + var(--fx-glow-text-secondary) * 0.5);
+  opacity: calc(0.75 + var(--fx-glow-text-secondary) * 0.25);
   transition:
     text-shadow var(--_glow-transition),
     opacity var(--_glow-transition);
@@ -132,7 +132,7 @@
     0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
     inset 0 0 calc(var(--fx-glow-display) * 12px)
       color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
-  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+  filter: brightness(calc(0.92 + var(--fx-glow-display) * 0.08));
   transition:
     box-shadow var(--_glow-transition),
     filter var(--_glow-transition);
@@ -150,7 +150,7 @@
     inset 0 0 calc(var(--fx-glow-display) * 12px)
       color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   border-color: var(--color-accent-secondary);
-  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+  filter: brightness(calc(0.92 + var(--fx-glow-display) * 0.08));
 }
 
 /* ---- 3h. COMBINED — display + bars-primary (don't override shadows) ---- */
@@ -165,7 +165,7 @@
     inset 0 0 calc(var(--fx-glow-display) * 12px)
       color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   border-color: var(--color-accent-primary);
-  filter: brightness(calc(0.6 + var(--fx-glow-display) * 0.4));
+  filter: brightness(calc(0.92 + var(--fx-glow-display) * 0.08));
 }
 
 /* ==========================================================================
