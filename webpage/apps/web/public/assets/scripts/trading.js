@@ -1,8 +1,7 @@
 /* ============================================================
    Paulie's Prediction Partners — Trading Studio Module
-   Manages market cards, category filtering, series grouping,
-   real-time updates, expanded card overlay, and approval flow.
-   Kalshi-style navigation: top category bar + left sidebar.
+   Manages market cards, category filtering, Kalshi-style layout,
+   real-time updates, and approval flow.
    ============================================================ */
 
 const TradingStudio = (() => {
@@ -13,23 +12,24 @@ const TradingStudio = (() => {
 
   let markets = [];
   let events = {};
-  let seriesData = {};
   let displayedCount = 0;
   let currentCategory = "all";
   let currentSubcategory = "all";
+  let currentSort = "volume";
+  let currentFrequency = "all";
+  let currentStatus = "active";
+  let filtersCollapsed = false;
   let connected = false;
   let websocket = null;
   let approvalExpiryTimeout =
     null; /* stores approval overlay auto-close timer */
-  let currentSeriesDetail = null; /* series key when in detail view */
-  let seriesDetailFreqFilter = "all"; /* frequency filter inside detail view */
 
   /* Kalshi-style category mapping — matches Kalshi platform top nav.
      Each category maps to Kalshi event categories and keyword matchers. */
   const KALSHI_CATEGORIES = {
-    all: { label: "Trending", keywords: [] },
+    all: { label: "All", keywords: [] },
     new: { label: "New", keywords: [] },
-    all_markets: { label: "All", keywords: [] },
+    all_markets: { label: "Trending", keywords: [] },
     politics: {
       label: "Politics",
       keywords: [
@@ -254,21 +254,7 @@ const TradingStudio = (() => {
     tech_and_science: ["AI", "Space", "EVs", "Biotech"],
   };
 
-  /* Series display names and icons for section headers */
-  const SERIES_DISPLAY = {
-    kxbtc: { label: "Bitcoin (BTC)", icon: "₿", priority: 1 },
-    kxeth: { label: "Ethereum (ETH)", icon: "⬡", priority: 2 },
-    kxsol: { label: "Solana (SOL)", icon: "◎", priority: 3 },
-    nfl: { label: "NFL Football", icon: "🏈", priority: 10 },
-    nba: { label: "NBA Basketball", icon: "🏀", priority: 11 },
-    mlb: { label: "MLB Baseball", icon: "⚾", priority: 12 },
-    nhl: { label: "NHL Hockey", icon: "🏒", priority: 13 },
-    fed: { label: "Federal Reserve", icon: "🏦", priority: 20 },
-    cpi: { label: "CPI Inflation", icon: "📈", priority: 21 },
-    gdp: { label: "GDP", icon: "📊", priority: 22 },
-  };
-
-  /* Frequency display labels — shared by series detail view and event panels */
+  /* Frequency display labels */
   const FREQ_LABELS = {
     "15min": "15 Min",
     "1h": "Hourly",
@@ -281,13 +267,14 @@ const TradingStudio = (() => {
 
   function initialize() {
     bindCategoryTabs();
-    bindSidebarNav();
-    bindFilters();
+    bindPillRow();
+    bindFilterBar();
     bindRefreshButton();
-    bindShowMore();
+    bindLoadMore();
     bindApprovalButtons();
-    bindOverlayClose();
     bindBuySellDelegation();
+    renderPillRow();
+    updateFilterLabels();
 
     /* Show trading interface immediately with public data.
        The pre-connect prompt becomes a small inline banner rather than
@@ -296,10 +283,6 @@ const TradingStudio = (() => {
     const iface = document.getElementById("trading-interface");
     if (preConnect) preConnect.style.display = "none";
     if (iface) iface.style.display = "flex";
-
-    /* Hide account bar until connected (no balance data without API keys) */
-    const accountBar = document.getElementById("trading-account-bar");
-    if (accountBar) accountBar.style.display = "none";
 
     /* Fetch public market data from backend with retry polling */
     pollForPublicData();
@@ -314,101 +297,142 @@ const TradingStudio = (() => {
     const nav = document.getElementById("trading-category-nav");
     if (!nav) return;
     nav.addEventListener("click", (e) => {
-      const tab = e.target.closest(".ks-cat-tab");
+      const tab = e.target.closest(".ts-cat-btn");
       if (!tab) return;
 
-      /* Close series detail view if open */
-      if (currentSeriesDetail) {
-        currentSeriesDetail = null;
-        const detailView = document.getElementById("series-detail-view");
-        const grid = document.getElementById("series-cards-grid");
-        const filtersRow = document.querySelector(".trading-filters");
-        if (detailView) detailView.style.display = "none";
-        if (grid) grid.style.display = "";
-        if (filtersRow) filtersRow.style.display = "";
-      }
-
       nav
-        .querySelectorAll(".ks-cat-tab")
+        .querySelectorAll(".ts-cat-btn")
         .forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
       currentCategory = tab.dataset.category;
       currentSubcategory = "all";
       displayedCount = 0;
-      updateSidebar();
+      renderPillRow();
       renderCards();
     });
   }
 
-  function bindSidebarNav() {
-    const nav = document.getElementById("trading-subcategory-nav");
-    if (!nav) return;
-    nav.addEventListener("click", (e) => {
-      const item = e.target.closest(".ks-sidebar-item");
-      if (!item) return;
+  function bindPillRow() {
+    const row = document.getElementById("trading-pill-row");
+    if (!row) return;
+    row.addEventListener("click", (e) => {
+      const pill = e.target.closest(".ts-pill");
+      if (!pill) return;
+      const action = pill.dataset.action;
+      if (action === "toggle-filters") {
+        toggleFilterBar();
+        return;
+      }
+      const subcategory = pill.dataset.subcategory;
+      if (!subcategory) return;
+      currentSubcategory = subcategory;
+      displayedCount = 0;
+      renderPillRow();
+      renderCards();
+    });
+  }
 
-      /* If in series detail view, series-nav items have their own handlers */
-      if (item.dataset.seriesNav) return;
+  function bindFilterBar() {
+    const bar = document.getElementById("trading-filter-bar");
+    if (!bar) return;
 
-      /* Handle expandable items with children */
-      if (item.classList.contains("ks-sidebar-parent")) {
-        item.classList.toggle("ks-sidebar-expanded");
+    bar.addEventListener("click", (e) => {
+      const item = e.target.closest(".ts-dropdown-item");
+      if (item) {
+        const dropdown = item.closest(".ts-dropdown");
+        if (!dropdown) return;
+        const filterType = dropdown.dataset.filter;
+        const value = item.dataset.value;
+        if (filterType === "sort") currentSort = value;
+        if (filterType === "frequency") currentFrequency = value;
+        if (filterType === "status") currentStatus = value;
+        displayedCount = 0;
+        updateFilterLabels();
+        closeAllDropdowns();
+        renderCards();
         return;
       }
 
-      /* Close series detail view if open */
-      if (currentSeriesDetail) closeSeriesDetail();
+      const btn = e.target.closest(".ts-dropdown-btn");
+      if (btn) {
+        const dropdown = btn.closest(".ts-dropdown");
+        if (!dropdown) return;
+        const alreadyOpen = dropdown.classList.contains("open");
+        closeAllDropdowns();
+        if (!alreadyOpen) dropdown.classList.add("open");
+      }
+    });
 
-      nav
-        .querySelectorAll(".ks-sidebar-item")
-        .forEach((t) => t.classList.remove("active"));
-      item.classList.add("active");
-      currentSubcategory = item.dataset.subcategory;
-      displayedCount = 0;
-      renderCards();
+    document.addEventListener("click", (e) => {
+      if (!bar.contains(e.target)) closeAllDropdowns();
     });
   }
 
-  function bindFilters() {
-    ["filter-volume", "filter-time-to-close", "filter-status"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el)
-        el.addEventListener("change", () => {
-          displayedCount = 0;
-          renderCards();
-        });
+  function closeAllDropdowns() {
+    document.querySelectorAll(".ts-dropdown.open").forEach((dropdown) => {
+      dropdown.classList.remove("open");
     });
+  }
 
-    /* Frequency pill buttons (Kalshi-style) */
-    const pillGroup = document.getElementById("freq-pill-group");
-    if (pillGroup) {
-      pillGroup.addEventListener("click", (e) => {
-        const pill = e.target.closest(".ks-freq-pill");
-        if (!pill) return;
-        pillGroup
-          .querySelectorAll(".ks-freq-pill")
-          .forEach((p) => p.classList.remove("active"));
-        pill.classList.add("active");
-        displayedCount = 0;
-        renderCards();
+  function updateFilterLabels() {
+    const sortLabel = currentSort === "volume" ? "Volume" : "Closing soon";
+    const freqLabel =
+      currentFrequency === "all"
+        ? "Frequency"
+        : FREQ_LABELS[currentFrequency] || currentFrequency;
+    const statusLabel =
+      currentStatus === "active"
+        ? "Open markets"
+        : currentStatus === "closed"
+          ? "Closed markets"
+          : "All markets";
+
+    const sortBtn = document.querySelector('[data-dropdown="sort"]');
+    const freqBtn = document.querySelector('[data-dropdown="frequency"]');
+    const statusBtn = document.querySelector('[data-dropdown="status"]');
+
+    if (sortBtn) sortBtn.textContent = sortLabel;
+    if (freqBtn) freqBtn.textContent = freqLabel;
+    if (statusBtn) statusBtn.textContent = statusLabel;
+
+    setDropdownActive("sort", currentSort);
+    setDropdownActive("frequency", currentFrequency);
+    setDropdownActive("status", currentStatus);
+  }
+
+  function setDropdownActive(filterType, value) {
+    document
+      .querySelectorAll(
+        `.ts-dropdown[data-filter="${filterType}"] .ts-dropdown-item`,
+      )
+      .forEach((item) => {
+        item.classList.toggle("active", item.dataset.value === value);
       });
-    }
+  }
+
+  function toggleFilterBar() {
+    const bar = document.getElementById("trading-filter-bar");
+    if (!bar) return;
+    filtersCollapsed = !filtersCollapsed;
+    bar.classList.toggle("is-collapsed", filtersCollapsed);
   }
 
   function bindRefreshButton() {
     const btn = document.getElementById("market-refresh-button");
     if (!btn) return;
     btn.addEventListener("click", async () => {
-      btn.classList.add("spin");
-      await fetchMarkets();
-      setTimeout(() => btn.classList.remove("spin"), 600);
+      btn.classList.add("ts-spin");
+      await fetchPublicData();
+      setTimeout(() => btn.classList.remove("ts-spin"), 600);
     });
   }
 
-  function bindShowMore() {
-    const btn = document.getElementById("show-more-markets");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
+  function bindLoadMore() {
+    const main = document.getElementById("trading-main");
+    if (!main) return;
+    main.addEventListener("click", (e) => {
+      const btn = e.target.closest("#trading-load-more");
+      if (!btn) return;
       displayedCount += CARDS_PER_PAGE;
       renderCards();
     });
@@ -435,12 +459,88 @@ const TradingStudio = (() => {
     }
   }
 
-  function bindOverlayClose() {
-    const overlay = document.getElementById("expanded-card-overlay");
-    if (!overlay) return;
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) overlay.style.display = "none";
+  /* ---- Buy/Sell Button Delegation ---- */
+
+  function bindBuySellDelegation() {
+    /* Delegate clicks on .yes-button / .no-button anywhere in the trading studio */
+    const tradingSection = document.getElementById("studio-trading");
+    if (!tradingSection) return;
+    tradingSection.addEventListener("click", (e) => {
+      const button = e.target.closest(
+        ".yes-button[data-ticker], .no-button[data-ticker]",
+      );
+      if (!button || button.disabled) return;
+      e.stopPropagation();
+      const ticker = button.dataset.ticker;
+      const side = button.dataset.side;
+      if (ticker && side) {
+        handleManualOrder(ticker, side);
+      }
     });
+  }
+
+  async function handleManualOrder(ticker, side) {
+    if (!connected) {
+      showToast("Connect your Kalshi API keys to place trades", "info");
+      return;
+    }
+    const market = markets.find((m) => m.ticker === ticker);
+    if (!market) {
+      showToast("Market not found", "error");
+      return;
+    }
+
+    const rawQty = 1;
+    const countFp = rawQty.toFixed(2);
+
+    const priceDollars =
+      side === "yes"
+        ? market.yes_ask_dollars || market.yes_bid_dollars || ""
+        : market.no_ask_dollars || market.no_bid_dollars || "";
+
+    if (!priceDollars) {
+      showToast("Price data unavailable — cannot place order", "error");
+      return;
+    }
+
+    const priceNum = parseFloat(priceDollars);
+    if (isNaN(priceNum) || priceNum <= 0 || priceNum > 0.99) {
+      showToast("Invalid price data from backend", "error");
+      return;
+    }
+
+    showToast(
+      `Submitting ${side.toUpperCase()} ×${rawQty} order for ${ticker}…`,
+      "info",
+    );
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/trading/manual-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ticker: ticker,
+          side: side,
+          action: "buy",
+          count_fp: countFp,
+          price_dollars: priceDollars,
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        showToast(
+          errorData.detail || `Order failed (${response.status})`,
+          "error",
+        );
+        return;
+      }
+      showToast(
+        `✓ Order submitted: ${side.toUpperCase()} ×${rawQty} on ${ticker}`,
+        "success",
+      );
+    } catch (networkError) {
+      showToast("Backend not reachable — cannot place orders", "error");
+    }
   }
 
   /* ---- Connection Lifecycle ---- */
@@ -489,8 +589,6 @@ const TradingStudio = (() => {
     }
     /* Keep the trading interface visible — show markets from public API.
        Only hide account summary data and update button states. */
-    const accountBar = document.getElementById("trading-account-bar");
-    if (accountBar) accountBar.style.display = "none";
     updateConnectionState();
 
     if (websocket) {
@@ -527,8 +625,9 @@ const TradingStudio = (() => {
       if (!response.ok) return;
       const data = await response.json();
       events = data || {};
-      /* Build dynamic sidebar from event categories */
-      updateSidebar();
+      /* Build dynamic pill row from event categories */
+      renderPillRow();
+      renderCards();
     } catch (e) {
       console.warn("Failed to fetch events:", e);
     }
@@ -537,18 +636,7 @@ const TradingStudio = (() => {
   async function fetchPublicData() {
     /* Fetch markets and events from the backend's state cache which is
        populated from Kalshi's public (unauthenticated) API on startup. */
-    await Promise.all([fetchMarkets(), fetchEvents(), fetchSeries()]);
-  }
-
-  async function fetchSeries() {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/state/series`);
-      if (!response.ok) return;
-      const data = await response.json();
-      seriesData = data || {};
-    } catch (e) {
-      console.warn("Failed to fetch series:", e);
-    }
+    await Promise.all([fetchMarkets(), fetchEvents()]);
   }
 
   let _publicDataPollTimer = null;
@@ -588,14 +676,9 @@ const TradingStudio = (() => {
   function updateConnectionState() {
     /* Update UI elements to reflect connection status.
        When not connected, buy/sell buttons show "Connect to Trade". */
-    const accountBar = document.getElementById("trading-account-bar");
-    if (accountBar) {
-      accountBar.style.display = connected ? "flex" : "none";
-    }
-
     /* Update all action buttons based on connection state */
     document
-      .querySelectorAll(".ks-action-btn, .yes-button, .no-button")
+      .querySelectorAll(".yes-button, .no-button")
       .forEach((btn) => {
         if (!connected && !btn.disabled) {
           btn.dataset.needsConnection = "true";
@@ -624,7 +707,7 @@ const TradingStudio = (() => {
   };
 
   function categoryMatchesLabel(category, label) {
-    const lower = label.toLowerCase();
+    const lower = (label || "").toLowerCase();
     const rules = CATEGORY_MATCH_RULES[category];
     if (!rules) return false;
     return rules.some((r) => lower.includes(r));
@@ -707,26 +790,12 @@ const TradingStudio = (() => {
   function filterMarkets() {
     let filtered = [...markets];
 
-    /* "all" = trending (sort by volume), "new" = sort by creation,
-       "all_markets" = no category filter */
-    if (currentCategory === "new") {
-      filtered.sort((a, b) => {
-        const ta = a.created_time ? new Date(a.created_time).getTime() : 0;
-        const tb = b.created_time ? new Date(b.created_time).getTime() : 0;
-        return tb - ta;
-      });
-    } else if (currentCategory === "all" || currentCategory === "all_markets") {
-      /* "all" = trending — sort by volume descending */
-      if (currentCategory === "all") {
-        filtered.sort((a, b) => {
-          return (
-            (parseFloat(b.volume_24h_fp) || 0) -
-            (parseFloat(a.volume_24h_fp) || 0)
-          );
-        });
-      }
-    } else {
-      /* Category filter */
+    /* Category filter (except All/New) */
+    if (
+      currentCategory !== "all" &&
+      currentCategory !== "all_markets" &&
+      currentCategory !== "new"
+    ) {
       filtered = filtered.filter((m) => matchesCategory(m, currentCategory));
     }
 
@@ -736,61 +805,23 @@ const TradingStudio = (() => {
       filtered = filtered.filter((m) => {
         const ticker = (m.ticker || "").toLowerCase();
         const event = (m.event_ticker || "").toLowerCase();
-        return ticker.includes(sub) || event.includes(sub);
+        const title = (m.yes_sub_title || "").toLowerCase();
+        return (
+          ticker.includes(sub) || event.includes(sub) || title.includes(sub)
+        );
       });
     }
 
-    /* Volume filter */
-    const volumeFilter = document.getElementById("filter-volume")?.value;
-    if (volumeFilter && volumeFilter !== "all") {
-      filtered = filtered.filter((m) => {
-        const vol = parseFloat(m.volume_24h_fp) || 0;
-        if (volumeFilter === "high") return vol >= 10000;
-        if (volumeFilter === "medium") return vol >= 1000 && vol < 10000;
-        if (volumeFilter === "low") return vol < 1000;
-        return true;
-      });
-    }
-
-    /* Frequency filter (pill buttons) */
-    const activePill = document.querySelector(
-      "#freq-pill-group .ks-freq-pill.active",
-    );
-    const freqFilter = activePill ? activePill.dataset.freq : "all";
-    if (freqFilter && freqFilter !== "all") {
-      filtered = filtered.filter((m) => detectFrequency(m) === freqFilter);
-    }
-
-    /* Time-to-close filter */
-    const timeFilter = document.getElementById("filter-time-to-close")?.value;
-    if (timeFilter && timeFilter !== "all") {
-      const now = Date.now();
-      filtered = filtered.filter((m) => {
-        if (!m.close_time) return false;
-        const diff = new Date(m.close_time).getTime() - now;
-        if (diff <= 0) return timeFilter === "closed";
-        const hours = diff / 3600000;
-        if (timeFilter === "1h") return hours < 1;
-        if (timeFilter === "24h") return hours < 24;
-        if (timeFilter === "7d") return hours < 168;
-        if (timeFilter === "30d") return hours < 720;
-        return true;
-      });
+    /* Frequency filter */
+    if (currentFrequency && currentFrequency !== "all") {
+      filtered = filtered.filter((m) => detectFrequency(m) === currentFrequency);
     }
 
     /* Status filter */
-    const statusFilter = document.getElementById("filter-status")?.value;
-    if (statusFilter && statusFilter !== "all") {
+    if (currentStatus && currentStatus !== "all") {
       filtered = filtered.filter((m) => {
-        const status = (m.status || "").toLowerCase();
-        if (statusFilter === "active")
-          return status === "active" || status === "open";
-        if (statusFilter === "closed")
-          return (
-            status === "closed" ||
-            status === "finalized" ||
-            status === "settled"
-          );
+        if (currentStatus === "active") return !isMarketClosed(m);
+        if (currentStatus === "closed") return isMarketClosed(m);
         return true;
       });
     }
@@ -798,74 +829,458 @@ const TradingStudio = (() => {
     return filtered;
   }
 
-  /* ---- Group markets by series ---- */
+  /* ---- Group markets by event (Kalshi-style cards) ---- */
 
-  function groupBySeries(marketList) {
+  function groupMarketsByEvent(marketList) {
     const groups = new Map();
     marketList.forEach((market) => {
-      const seriesKey = market.series_ticker || market.event_ticker || "other";
-      if (!groups.has(seriesKey)) groups.set(seriesKey, []);
-      groups.get(seriesKey).push(market);
+      const key = market.event_ticker || market.series_ticker || market.ticker;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(market);
     });
+    return groups;
+  }
 
-    /* Sort groups: known series first (by priority), then alphabetically */
-    const sorted = [...groups.entries()].sort((a, b) => {
-      const keyA = a[0].toLowerCase();
-      const keyB = b[0].toLowerCase();
-      const prioA = getSeriesPriority(keyA);
-      const prioB = getSeriesPriority(keyB);
-      if (prioA !== prioB) return prioA - prioB;
-      return keyA.localeCompare(keyB);
+  function getEventMetrics(eventMarkets) {
+    const volume = eventMarkets.reduce(
+      (sum, m) =>
+        sum + (parseFloat(m.volume_24h_fp || m.volume_fp || "0") || 0),
+      0,
+    );
+    const closeTimes = eventMarkets
+      .map((m) => (m.close_time ? new Date(m.close_time).getTime() : null))
+      .filter(Boolean);
+    const createdTimes = eventMarkets
+      .map((m) => (m.created_time ? new Date(m.created_time).getTime() : null))
+      .filter(Boolean);
+    return {
+      volume,
+      earliestClose: closeTimes.length ? Math.min(...closeTimes) : null,
+      latestCreated: createdTimes.length ? Math.max(...createdTimes) : 0,
+    };
+  }
+
+  function getEventTitle(eventTicker, eventMarkets) {
+    const eventData = events[eventTicker];
+    if (eventData && eventData.title) return eventData.title;
+    const fallback =
+      eventMarkets[0]?.yes_sub_title || eventMarkets[0]?.ticker || eventTicker;
+    return fallback || "Untitled";
+  }
+
+  const CATEGORY_ICONS = {
+    politics: "🏛",
+    sports: "⚽",
+    culture: "🎬",
+    crypto: "₿",
+    climate: "🌍",
+    economics: "📊",
+    mentions: "📣",
+    companies: "🏢",
+    financials: "📈",
+    tech_and_science: "💡",
+  };
+
+  function deriveCategoryKey(label) {
+    const lower = (label || "").toLowerCase();
+    if (!lower) return "";
+    for (const [key, rules] of Object.entries(CATEGORY_MATCH_RULES)) {
+      if (rules.some((r) => lower.includes(r))) return key;
+    }
+    if (lower.includes("tech") || lower.includes("science"))
+      return "tech_and_science";
+    return "";
+  }
+
+  function getEventCategoryLabel(eventTicker, eventMarkets) {
+    const eventData = events[eventTicker];
+    const raw = eventData?.category || eventMarkets[0]?.category || "";
+    if (raw) return raw;
+    return deriveCategoryBreadcrumb(eventTicker);
+  }
+
+  function deriveCategoryBreadcrumb(seriesKey) {
+    const lower = (seriesKey || "").toLowerCase();
+
+    for (const market of markets) {
+      if (
+        (market.series_ticker || "").toLowerCase() === lower ||
+        (market.event_ticker || "").toLowerCase() === lower
+      ) {
+        const eventData = events[market.event_ticker];
+        if (eventData && eventData.category) {
+          return eventData.category;
+        }
+      }
+    }
+
+    if (
+      lower.includes("btc") ||
+      lower.includes("eth") ||
+      lower.includes("sol") ||
+      lower.includes("crypto")
+    )
+      return "Crypto";
+    if (
+      lower.includes("nfl") ||
+      lower.includes("nba") ||
+      lower.includes("mlb") ||
+      lower.includes("nhl") ||
+      lower.includes("soccer") ||
+      lower.includes("tennis") ||
+      lower.includes("golf") ||
+      lower.includes("mma") ||
+      lower.includes("ufc")
+    )
+      return "Sports";
+    if (lower.includes("fed") || lower.includes("cpi") || lower.includes("gdp"))
+      return "Economics";
+    if (lower.includes("temp") || lower.includes("weather")) return "Climate";
+    if (
+      lower.includes("elect") ||
+      lower.includes("president") ||
+      lower.includes("congress")
+    )
+      return "Politics";
+    return "Markets";
+  }
+
+  function getEventIcon(categoryLabel) {
+    const key = deriveCategoryKey(categoryLabel) || currentCategory;
+    return CATEGORY_ICONS[key] || "◈";
+  }
+
+  function detectEventFrequency(eventMarkets) {
+    const counts = new Map();
+    eventMarkets.forEach((m) => {
+      const freq = detectFrequency(m);
+      if (freq === "other") return;
+      counts.set(freq, (counts.get(freq) || 0) + 1);
     });
-
-    return sorted;
+    let best = "other";
+    let bestCount = 0;
+    counts.forEach((count, freq) => {
+      if (count > bestCount) {
+        best = freq;
+        bestCount = count;
+      }
+    });
+    return best;
   }
 
-  function getSeriesPriority(seriesKey) {
-    const lower = seriesKey.toLowerCase();
-    for (const [key, info] of Object.entries(SERIES_DISPLAY)) {
-      if (lower.includes(key)) return info.priority;
-    }
-    return 99;
-  }
+  function renderCards() {
+    const main = document.getElementById("trading-main");
+    if (!main) return;
 
-  function getSeriesDisplay(seriesKey) {
-    const lower = seriesKey.toLowerCase();
-    for (const [key, info] of Object.entries(SERIES_DISPLAY)) {
-      if (lower.includes(key)) return info;
-    }
-    return { label: seriesKey, icon: "📋", priority: 99 };
-  }
+    const filtered = filterMarkets();
 
-  /* ---- Sidebar Nav ---- */
-
-  function updateSidebar() {
-    const nav = document.getElementById("trading-subcategory-nav");
-    const sidebar = document.getElementById("trading-subcategory-sidebar");
-    if (!nav) return;
-
-    /* Determine subcategories to display */
-    const subs = buildSubcategoriesFromEvents(currentCategory);
-    const staticSubs = SUBCATEGORY_MAP[currentCategory] || [];
-
-    /* Merge: live event data + static defaults, deduplicated */
-    const allSubs = [...new Set([...subs, ...staticSubs])];
-
-    if (allSubs.length === 0) {
-      /* No subcategories for this category — hide sidebar */
-      if (sidebar) sidebar.classList.add("ks-sidebar-hidden");
-      nav.innerHTML = "";
+    if (filtered.length === 0) {
+      if (markets.length === 0) {
+        main.innerHTML = `
+          <div class="ts-loader">
+            <div class="ts-spinner"></div>
+            <div class="ts-empty">Loading markets…</div>
+          </div>
+        `;
+      } else {
+        main.innerHTML = `<div class="ts-empty">No markets match this filter.</div>`;
+      }
       return;
     }
 
-    if (sidebar) sidebar.classList.remove("ks-sidebar-hidden");
+    const groups = groupMarketsByEvent(filtered);
+    const entries = [...groups.entries()].map(([eventTicker, eventMarkets]) => {
+      const metrics = getEventMetrics(eventMarkets);
+      return { eventTicker, eventMarkets, ...metrics };
+    });
 
-    nav.innerHTML = allSubs
-      .map(
-        (s) =>
-          `<button class="ks-sidebar-item${currentSubcategory === s.toLowerCase() ? " active" : ""}" data-subcategory="${s.toLowerCase()}">${escapeHtml(s)}</button>`,
-      )
+    if (currentCategory === "new") {
+      entries.sort((a, b) => b.latestCreated - a.latestCreated);
+    } else if (currentSort === "volume") {
+      entries.sort((a, b) => b.volume - a.volume);
+    } else {
+      entries.sort((a, b) => {
+        const aClose = a.earliestClose ?? Infinity;
+        const bClose = b.earliestClose ?? Infinity;
+        return aClose - bClose;
+      });
+    }
+
+    const limit = Math.max(CARDS_PER_PAGE, displayedCount + CARDS_PER_PAGE);
+    const visible = entries.slice(0, limit);
+    displayedCount = visible.length;
+
+    const sections = new Map();
+    visible.forEach((entry) => {
+      let sectionLabel = KALSHI_CATEGORIES[currentCategory]?.label || "Markets";
+      if (
+        currentCategory === "all" ||
+        currentCategory === "all_markets"
+      ) {
+        const catLabel = getEventCategoryLabel(
+          entry.eventTicker,
+          entry.eventMarkets,
+        );
+        sectionLabel = formatCategoryLabel(catLabel);
+      }
+      if (!sections.has(sectionLabel)) sections.set(sectionLabel, []);
+      sections.get(sectionLabel).push(entry);
+    });
+
+    let html = "";
+    sections.forEach((sectionEntries, label) => {
+      html += `<section class="ts-section">`;
+      if (sections.size > 1) {
+        html += `<div class="ts-section-head">${escapeHtml(label)}</div>`;
+      }
+      html += `<div class="ts-grid">`;
+      sectionEntries.forEach((entry) => {
+        html += buildEventCardHtml(entry.eventTicker, entry.eventMarkets);
+      });
+      html += `</div></section>`;
+    });
+
+    if (visible.length < entries.length) {
+      html += `<button id="trading-load-more" class="ts-load-more">Load more</button>`;
+    }
+
+    main.innerHTML = html;
+    updateConnectionState();
+  }
+
+  function buildEventCardHtml(eventTicker, eventMarkets) {
+    const eventData = events[eventTicker] || {};
+    const eventTitle = getEventTitle(eventTicker, eventMarkets);
+    const categoryLabel = getEventCategoryLabel(eventTicker, eventMarkets);
+    const icon = getEventIcon(categoryLabel);
+    const iconHtml = eventData.icon_url
+      ? `<img src="${escapeAttr(eventData.icon_url)}" alt="">`
+      : icon;
+    const freq = detectEventFrequency(eventMarkets);
+    const freqLabel = FREQ_LABELS[freq] || "";
+    const volume = eventMarkets.reduce(
+      (sum, m) =>
+        sum + (parseFloat(m.volume_24h_fp || m.volume_fp || "0") || 0),
+      0,
+    );
+    const closeMs = eventMarkets
+      .map((m) => (m.close_time ? new Date(m.close_time).getTime() : null))
+      .filter(Boolean)
+      .sort((a, b) => a - b)[0];
+    const closeLabel = closeMs ? formatTimeRemaining(new Date(closeMs)) : "";
+    const isBinary = eventMarkets.length === 1;
+    const badge = freq === "15min" ? `<div class="ts-badge-15">15</div>` : "";
+    const cardTicker = isBinary ? eventMarkets[0].ticker : "";
+
+    const pct =
+      isBinary && getMarketPercent(eventMarkets[0]) !== null
+        ? `${getMarketPercent(eventMarkets[0])}%`
+        : "";
+
+    const bodyHtml = isBinary
+      ? buildBinaryBodyHtml(eventMarkets[0])
+      : buildMultiBodyHtml(eventMarkets);
+
+    return `
+      <div class="ts-card glow-display glow-bars-secondary"${cardTicker ? ` data-ticker="${escapeAttr(cardTicker)}"` : ""}>
+        <div class="ts-card-top">
+          <div class="ts-icon-wrap">${iconHtml}${badge}</div>
+          <div class="ts-card-title">${escapeHtml(eventTitle)}</div>
+          ${pct ? `<div class="ts-card-pct">${escapeHtml(pct)}</div>` : ""}
+        </div>
+        ${bodyHtml}
+        ${buildFooterHtml(volume, freqLabel, closeLabel)}
+      </div>
+    `;
+  }
+
+  function buildBinaryBodyHtml(market) {
+    const isClosed = isMarketClosed(market);
+    const yesCents = getCents(market.yes_ask_dollars, market.yes_bid_dollars);
+    const noCents = getCents(market.no_ask_dollars, market.no_bid_dollars);
+    const yesLabel = yesCents ? `${yesCents}¢` : "";
+    const noLabel = noCents ? `${noCents}¢` : "";
+
+    const payoutYes = yesCents ? formatPayout(yesCents) : null;
+    const payoutNo = noCents ? formatPayout(noCents) : null;
+    const noOffers = !payoutYes && !payoutNo;
+
+    return `
+      <div class="ts-binary-body">
+        <div class="ts-binary-buttons">
+          <button class="ts-action-btn yes-button" data-ticker="${escapeAttr(market.ticker)}" data-side="yes" ${isClosed ? "disabled" : ""}>
+            <span class="ts-btn-label">Yes</span>${yesLabel ? `<span class="ts-btn-price">${yesLabel}</span>` : ""}
+          </button>
+          <button class="ts-action-btn no-button" data-ticker="${escapeAttr(market.ticker)}" data-side="no" ${isClosed ? "disabled" : ""}>
+            <span class="ts-btn-label">No</span>${noLabel ? `<span class="ts-btn-price">${noLabel}</span>` : ""}
+          </button>
+        </div>
+        <div class="ts-payout-row">
+          <span>$100 → ${payoutYes ? `<span class="ts-payout-value">${escapeHtml(payoutYes)}</span>` : "No offers"}</span>
+          <span>$100 → ${payoutNo ? `<span class="ts-payout-value">${escapeHtml(payoutNo)}</span>` : "No offers"}</span>
+        </div>
+        ${noOffers ? `<div class="ts-no-offers">No offers</div>` : ""}
+      </div>
+    `;
+  }
+
+  function buildMultiBodyHtml(eventMarkets) {
+    const sortedMarkets = [...eventMarkets].sort((a, b) => {
+      const aClose = a.close_time ? new Date(a.close_time).getTime() : Infinity;
+      const bClose = b.close_time ? new Date(b.close_time).getTime() : Infinity;
+      return aClose - bClose;
+    });
+    const rows = sortedMarkets.slice(0, 3).map((market) => {
+      const isClosed = isMarketClosed(market);
+      const yesCents = getCents(
+        market.yes_ask_dollars,
+        market.yes_bid_dollars,
+      );
+      const noCents = getCents(
+        market.no_ask_dollars,
+        market.no_bid_dollars,
+      );
+      const pct = getMarketPercent(market);
+      const yesLabel = yesCents ? `${yesCents}¢` : "Yes";
+      const noLabel = noCents ? `${noCents}¢` : "No";
+      const yesEmpty = yesCents ? "" : " ts-combo-empty";
+      const noEmpty = noCents ? "" : " ts-combo-empty";
+
+      return `
+        <div class="ts-market-row" data-ticker="${escapeAttr(market.ticker)}">
+          <div class="ts-market-label">${escapeHtml(
+            market.yes_sub_title || market.ticker || "Untitled",
+          )}</div>
+          <div class="ts-market-pct">${pct !== null ? `${pct}%` : "—"}</div>
+          <div class="ts-combo">
+            <button class="ts-combo-btn yes-button${yesEmpty}" data-ticker="${escapeAttr(
+              market.ticker,
+            )}" data-side="yes" ${isClosed ? "disabled" : ""}>${escapeHtml(
+              yesLabel,
+            )}</button>
+            <span class="ts-combo-sep">/</span>
+            <button class="ts-combo-btn no-button${noEmpty}" data-ticker="${escapeAttr(
+              market.ticker,
+            )}" data-side="no" ${isClosed ? "disabled" : ""}>${escapeHtml(
+              noLabel,
+            )}</button>
+          </div>
+        </div>
+      `;
+    });
+
+    const extra =
+      eventMarkets.length > 3
+        ? `<div class="ts-more-markets">More markets</div>`
+        : "";
+
+    return `<div class="ts-multi-body">${rows.join("")}${extra}</div>`;
+  }
+
+  function buildFooterHtml(volume, freqLabel, closeLabel) {
+    const volStr = volume > 0 ? formatVolume(String(volume)) : "";
+    const refreshSvg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M23 4v6h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1 20v-6h6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1 14l4.64 4.36A9 9 0 0020.49 15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    const leftParts = [];
+    if (volStr) leftParts.push(`<span>${escapeHtml(volStr)}</span>`);
+    if (freqLabel) {
+      leftParts.push(
+        `<span style="display:flex;align-items:center;gap:3px;color:var(--ts-text-subtle)">${refreshSvg}${escapeHtml(
+          freqLabel,
+        )}</span>`,
+      );
+    }
+    const leftHtml = leftParts.join(`<span class="ts-footer-dot">·</span>`);
+
+    const hasVol = volume > 100;
+    const iconSvg = hasVol
+      ? `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="9 12 11 14 15 10" fill="none" stroke="currentColor" stroke-width="2"/></svg>`
+      : `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="2"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"/></svg>`;
+
+    return `
+      <div class="ts-card-footer">
+        <span class="ts-footer-left">${leftHtml}</span>
+        <span class="ts-footer-right">
+          ${closeLabel ? escapeHtml(closeLabel) : ""}
+          <span class="ts-footer-icon">${iconSvg}</span>
+        </span>
+      </div>
+    `;
+  }
+
+  function formatCategoryLabel(label) {
+    if (!label) return "Markets";
+    const key = deriveCategoryKey(label);
+    if (key && KALSHI_CATEGORIES[key]?.label) {
+      return KALSHI_CATEGORIES[key].label;
+    }
+    return label
+      .replace(/[_-]+/g, " ")
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  }
+
+  function getCents(primaryValue, fallbackValue) {
+    const primary = parseFloat(primaryValue || "");
+    if (!isNaN(primary) && primary > 0) return Math.round(primary * 100);
+    const fallback = parseFloat(fallbackValue || "");
+    if (!isNaN(fallback) && fallback > 0) return Math.round(fallback * 100);
+    return null;
+  }
+
+  function getMarketPercent(market) {
+    const price = parseFloat(
+      market.last_price_dollars ||
+        market.yes_ask_dollars ||
+        market.yes_bid_dollars ||
+        "",
+    );
+    if (isNaN(price) || price <= 0) return null;
+    return Math.round(price * 100);
+  }
+
+  function formatPayout(cents) {
+    if (!cents || cents <= 0) return null;
+    const payout = Math.round(10000 / cents);
+    return `$${payout}`;
+  }
+
+  /* ---- Pill Row (Subcategory Chips) ---- */
+
+  function renderPillRow() {
+    const row = document.getElementById("trading-pill-row");
+    if (!row) return;
+
+    const subs = buildSubcategoriesFromEvents(currentCategory);
+    const staticSubs = SUBCATEGORY_MAP[currentCategory] || [];
+    const allSubs = [...new Set([...staticSubs, ...subs])].filter(Boolean);
+    if (
+      currentSubcategory !== "all" &&
+      !allSubs.some((s) => s.toLowerCase() === currentSubcategory)
+    ) {
+      currentSubcategory = "all";
+    }
+
+    const pills = allSubs
+      .map((s) => {
+        const key = s.toLowerCase();
+        const active = currentSubcategory === key ? " active" : "";
+        return `<button class="ts-pill${active}" data-subcategory="${escapeAttr(key)}">${escapeHtml(s)}</button>`;
+      })
       .join("");
+
+    row.innerHTML = `
+      <div class="ts-pill-ham" aria-hidden="true"><span></span><span></span><span></span></div>
+      <button class="ts-pill${currentSubcategory === "all" ? " active" : ""}" data-subcategory="all">All</button>
+      ${pills}
+      <button class="ts-pill ts-pill-action" data-action="toggle-filters">Sort / Filter</button>
+    `;
   }
 
   function buildSubcategoriesFromEvents(category) {
@@ -912,486 +1327,6 @@ const TradingStudio = (() => {
     return null;
   }
 
-  /* ---- Rendering (Kalshi-style series panels) ---- */
-
-  /* How many outcome rows to show per series panel before "More markets" */
-  const INITIAL_ROWS_PER_SERIES = 3;
-
-  /* Track which series are expanded (showing all rows) */
-  const expandedSeries = new Set();
-
-  function renderCards() {
-    const grid = document.getElementById("series-cards-grid");
-    if (!grid) return;
-
-    const filtered = filterMarkets();
-
-    if (filtered.length === 0) {
-      if (markets.length === 0) {
-        /* Show skeleton loading panels that match Kalshi's layout */
-        grid.innerHTML = Array(6)
-          .fill(null)
-          .map(
-            () => `
-            <div class="ks-series-panel ks-skeleton-panel">
-                <div class="ks-panel-header">
-                    <div class="ks-panel-header-left">
-                        <span class="ks-skeleton-circle"></span>
-                        <div class="ks-panel-title-group">
-                            <span class="ks-skeleton-line" style="width:60px;height:10px"></span>
-                            <span class="ks-skeleton-line" style="width:180px;height:14px"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="ks-panel-chart" style="padding:8px 14px">
-                    <div class="ks-skeleton-line" style="width:100%;height:60px;border-radius:4px"></div>
-                </div>
-                <div class="ks-outcome-table" style="padding:4px 14px 8px">
-                    <div class="ks-skeleton-line" style="width:100%;height:32px;margin-bottom:6px;border-radius:4px"></div>
-                    <div class="ks-skeleton-line" style="width:100%;height:32px;margin-bottom:6px;border-radius:4px"></div>
-                    <div class="ks-skeleton-line" style="width:100%;height:32px;border-radius:4px"></div>
-                </div>
-                <div class="ks-panel-footer" style="padding:6px 14px">
-                    <span class="ks-skeleton-line" style="width:120px;height:10px"></span>
-                </div>
-            </div>
-        `,
-          )
-          .join("");
-      } else {
-        grid.innerHTML =
-          '<div class="no-markets-message" style="grid-column:1/-1;">No markets match your current filters</div>';
-      }
-      const showMoreContainer = document.getElementById("show-more-container");
-      if (showMoreContainer) showMoreContainer.style.display = "none";
-      return;
-    }
-
-    /* Group by series for Kalshi-style panels */
-    const groups = groupBySeries(filtered);
-
-    /* Calculate how many total series to show */
-    const seriesLimit = Math.max(
-      CARDS_PER_PAGE,
-      displayedCount + CARDS_PER_PAGE,
-    );
-    let seriesRendered = 0;
-
-    grid.innerHTML = "";
-
-    groups.forEach(([seriesKey, seriesMarkets]) => {
-      if (seriesRendered >= seriesLimit) return;
-
-      const panel = createSeriesPanel(seriesKey, seriesMarkets);
-      grid.appendChild(panel);
-      seriesRendered++;
-    });
-
-    displayedCount = seriesRendered;
-
-    const showMoreContainer = document.getElementById("show-more-container");
-    if (showMoreContainer) {
-      showMoreContainer.style.display =
-        seriesRendered < groups.length ? "flex" : "none";
-    }
-  }
-
-  /* ---- Create a Kalshi-style series panel ---- */
-
-  function createSeriesPanel(seriesKey, seriesMarkets) {
-    const panel = document.createElement("div");
-    panel.className = "ks-series-panel card-enter";
-    panel.dataset.series = seriesKey;
-
-    const seriesDisplay = getSeriesDisplay(seriesKey);
-    const isExpanded = expandedSeries.has(seriesKey);
-    const rowLimit = isExpanded
-      ? seriesMarkets.length
-      : INITIAL_ROWS_PER_SERIES;
-    const visibleMarkets = seriesMarkets.slice(0, rowLimit);
-    const hasMore = seriesMarkets.length > INITIAL_ROWS_PER_SERIES;
-
-    /* Representative market for the series chart */
-    const repMarket = seriesMarkets[0];
-
-    /* Build title from event data, then series data, then ticker */
-    let seriesTitle = seriesDisplay.label;
-
-    /* Try event title first (most accurate for Kalshi-style display) */
-    const eventData = events[repMarket.event_ticker];
-    if (eventData && eventData.title) {
-      seriesTitle = eventData.title;
-    } else if (repMarket.yes_sub_title) {
-      seriesTitle = deriveSeriesTitle(repMarket);
-    }
-
-    /* Try series data for even better context */
-    const seriesInfo =
-      seriesData[seriesKey] || seriesData[repMarket.series_ticker];
-    if (seriesInfo && seriesInfo.title && !eventData) {
-      seriesTitle = seriesInfo.title;
-    }
-
-    /* Category breadcrumb */
-    const catBreadcrumb = deriveCategoryBreadcrumb(seriesKey);
-
-    /* Build close time from representative market (Kalshi shows this at panel bottom) */
-    const closeTimeStr = repMarket.close_time
-      ? formatEventCloseTime(new Date(repMarket.close_time))
-      : "";
-
-    panel.innerHTML = `
-      <div class="ks-panel-header">
-        <div class="ks-panel-header-left">
-          <span class="ks-panel-icon">${seriesDisplay.icon}</span>
-          <div class="ks-panel-title-group">
-            <span class="ks-panel-breadcrumb">${escapeHtml(catBreadcrumb)}</span>
-            <span class="ks-panel-title">${escapeHtml(seriesTitle)}</span>
-          </div>
-        </div>
-        <div class="ks-panel-header-right">
-          <span class="ks-panel-market-count">${seriesMarkets.length} market${seriesMarkets.length !== 1 ? "s" : ""}</span>
-        </div>
-      </div>
-      <div class="ks-panel-chart">
-        <canvas class="ks-panel-canvas" width="600" height="80"></canvas>
-      </div>
-      <div class="ks-outcome-table">
-        <div class="ks-outcome-header-row">
-          <span class="ks-outcome-header-cell ks-outcome-cell-desc">Chance</span>
-          <span class="ks-outcome-header-cell ks-outcome-cell-chance"></span>
-          <span class="ks-outcome-header-cell ks-outcome-cell-actions"></span>
-        </div>
-        ${visibleMarkets.map((m) => buildOutcomeRow(m)).join("")}
-      </div>
-      <div class="ks-panel-footer">
-        ${closeTimeStr ? `<span class="ks-panel-close-time">${escapeHtml(closeTimeStr)}</span>` : ""}
-        <span class="ks-panel-footer-spacer"></span>
-        ${seriesMarkets.length > 1 ? `<span class="ks-panel-spread-total">Spread and Total ▾</span>` : ""}
-      </div>
-      ${
-        hasMore
-          ? `<button class="ks-more-markets-btn" data-series="${escapeAttr(seriesKey)}">${
-              isExpanded
-                ? "Show fewer"
-                : `More markets (${seriesMarkets.length - INITIAL_ROWS_PER_SERIES})`
-            }</button>`
-          : ""
-      }
-    `;
-
-    /* Draw sparkline on the panel canvas */
-    const canvas = panel.querySelector(".ks-panel-canvas");
-    if (canvas) drawMiniSparkline(canvas, repMarket);
-
-    /* Bind "More markets" toggle */
-    const moreBtn = panel.querySelector(".ks-more-markets-btn");
-    if (moreBtn) {
-      moreBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (expandedSeries.has(seriesKey)) {
-          expandedSeries.delete(seriesKey);
-        } else {
-          expandedSeries.add(seriesKey);
-        }
-        renderCards();
-      });
-    }
-
-    /* Bind outcome row expand clicks */
-    panel.querySelectorAll(".ks-outcome-row").forEach((row) => {
-      row.addEventListener("click", (e) => {
-        if (e.target.closest("button")) return; /* let buy buttons handle */
-        const ticker = row.dataset.ticker;
-        const market = seriesMarkets.find((m) => m.ticker === ticker);
-        if (market) expandCard(market);
-      });
-    });
-
-    /* Bind series panel header click → open series detail view */
-    const header = panel.querySelector(".ks-panel-header");
-    if (header) {
-      header.style.cursor = "pointer";
-      header.addEventListener("click", (e) => {
-        if (e.target.closest("button")) return;
-        openSeriesDetail(seriesKey);
-      });
-    }
-
-    return panel;
-  }
-
-  /* ---- Build an outcome row (one per market within a series) ---- */
-
-  function buildOutcomeRow(market) {
-    const isClosed = isMarketClosed(market);
-    const title = market.yes_sub_title || market.ticker || "Untitled";
-    const yesPrice = market.yes_bid_dollars || null;
-    const noPrice = market.no_bid_dollars || null;
-    const chancePercent = yesPrice
-      ? Math.round(parseFloat(yesPrice) * 100)
-      : null;
-    const yesCents = yesPrice
-      ? (parseFloat(yesPrice) * 100).toFixed(0) + "¢"
-      : "—";
-    const noCents = noPrice
-      ? (parseFloat(noPrice) * 100).toFixed(0) + "¢"
-      : "—";
-
-    /* Kalshi uses green pill for high certainty, outlined for moderate */
-    let chanceClass = "ks-chance-badge";
-    if (chancePercent !== null) {
-      if (chancePercent >= 90 || chancePercent <= 10) {
-        chanceClass += " ks-chance-badge--strong";
-      }
-    }
-
-    const closeTime = market.close_time ? new Date(market.close_time) : null;
-    const timeRemaining = closeTime ? formatTimeRemaining(closeTime) : "";
-    const isClosingSoon =
-      closeTime && closeTime - Date.now() < 3600000 && !isClosed;
-    const timerClass = isClosingSoon
-      ? "ks-outcome-timer ks-outcome-timer--urgent"
-      : "ks-outcome-timer";
-    const freqBadge = renderFrequencyBadge(market);
-
-    /* Format chance display like Kalshi: "<1%" or ">99%" */
-    let chanceDisplay = "—";
-    if (chancePercent !== null) {
-      if (chancePercent <= 0) chanceDisplay = "<1%";
-      else if (chancePercent < 1) chanceDisplay = "<1%";
-      else if (chancePercent >= 100) chanceDisplay = ">99%";
-      else if (chancePercent > 99) chanceDisplay = ">99%";
-      else chanceDisplay = chancePercent + "%";
-    }
-
-    return `
-      <div class="ks-outcome-row${isClosed ? " ks-outcome-row--closed" : ""}" data-ticker="${escapeAttr(market.ticker)}">
-        <div class="ks-outcome-cell-desc">
-          <span class="ks-outcome-title">${escapeHtml(title)}</span>
-          ${timeRemaining ? `<span class="${timerClass}">${escapeHtml(timeRemaining)}</span>` : ""}
-          ${freqBadge}
-        </div>
-        <div class="ks-outcome-cell-chance">
-          <span class="${chanceClass}">${chanceDisplay}</span>
-        </div>
-        <div class="ks-outcome-cell-actions">
-          <button class="yes-button ks-action-btn${!connected ? " ks-needs-connection" : ""}" data-ticker="${escapeAttr(market.ticker)}" data-side="yes" ${isClosed ? "disabled" : ""}>Yes ${escapeHtml(yesCents)}</button>
-          <button class="no-button ks-action-btn${!connected ? " ks-needs-connection" : ""}" data-ticker="${escapeAttr(market.ticker)}" data-side="no" ${isClosed ? "disabled" : ""}>No ${escapeHtml(noCents)}</button>
-        </div>
-      </div>
-    `;
-  }
-
-  /* ---- Series title derivation ---- */
-
-  /* Pattern that matches price/percentage thresholds like "$87,500 or above" or "50% or below" */
-  const THRESHOLD_PATTERN =
-    /(\$[\d,.]+|\d+(\.\d+)?%?) or (above|below|more|less)/gi;
-
-  function deriveSeriesTitle(market) {
-    /* Kalshi titles look like "Bitcoin price today at 8am EST?"
-       We try to derive a meaningful series-level title from the first market */
-    const eventTicker = market.event_ticker || "";
-    const subtitle = market.yes_sub_title || "";
-
-    /* Strip price/percentage thresholds to get the base question */
-    const baseTitle = subtitle
-      .replace(THRESHOLD_PATTERN, "")
-      .replace(/^\s*(—|-)\s*/, "")
-      .trim();
-
-    if (baseTitle.length > 10) return baseTitle;
-
-    /* Fallback to event ticker in human form */
-    return eventTicker
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
-  }
-
-  function deriveCategoryBreadcrumb(seriesKey) {
-    const lower = seriesKey.toLowerCase();
-
-    /* Check event data first for accurate category */
-    for (const market of markets) {
-      if (
-        (market.series_ticker || "").toLowerCase() === lower ||
-        (market.event_ticker || "").toLowerCase() === lower
-      ) {
-        const eventData = events[market.event_ticker];
-        if (eventData && eventData.category) {
-          return eventData.category;
-        }
-      }
-    }
-
-    if (
-      lower.includes("btc") ||
-      lower.includes("eth") ||
-      lower.includes("sol") ||
-      lower.includes("crypto")
-    )
-      return "Crypto";
-    if (
-      lower.includes("nfl") ||
-      lower.includes("nba") ||
-      lower.includes("mlb") ||
-      lower.includes("nhl") ||
-      lower.includes("soccer") ||
-      lower.includes("tennis") ||
-      lower.includes("golf") ||
-      lower.includes("mma") ||
-      lower.includes("ufc")
-    )
-      return "Sports";
-    if (lower.includes("fed") || lower.includes("cpi") || lower.includes("gdp"))
-      return "Economics";
-    if (lower.includes("temp") || lower.includes("weather")) return "Climate";
-    if (
-      lower.includes("elect") ||
-      lower.includes("president") ||
-      lower.includes("congress")
-    )
-      return "Politics";
-    return "Markets";
-  }
-
-  /* ---- Potential Returns Calculator ---- */
-
-  function calcPotentialReturn(priceDollars, notional) {
-    const price = parseFloat(priceDollars);
-    if (!price || price <= 0 || price > 0.99) return null;
-    /* If we invest $notional and win: payout = notional / price */
-    const payout = notional / price;
-    const profit = payout - notional;
-    return { payout: payout.toFixed(0), profit: profit.toFixed(0) };
-  }
-
-  function renderPotentialReturns(market) {
-    const notional = 100; /* $100 base calculation */
-    const yesReturn = market.yes_ask_dollars
-      ? calcPotentialReturn(market.yes_ask_dollars, notional)
-      : null;
-    const noReturn = market.no_ask_dollars
-      ? calcPotentialReturn(market.no_ask_dollars, notional)
-      : null;
-
-    if (!yesReturn && !noReturn) return "";
-
-    const yesStr = yesReturn ? `+$${yesReturn.profit}` : "—";
-    const noStr = noReturn ? `+$${noReturn.profit}` : "—";
-
-    return `
-      <div class="series-card-returns">
-        <span class="returns-label">$${notional} wins →</span>
-        <span class="returns-yes" title="YES potential profit on $${notional}">${escapeHtml(yesStr)}</span>
-        <span class="returns-sep">/</span>
-        <span class="returns-no" title="NO potential profit on $${notional}">${escapeHtml(noStr)}</span>
-      </div>
-    `;
-  }
-
-  /* ---- Frequency Badge ---- */
-
-  function renderFrequencyBadge(market) {
-    const freq = detectFrequency(market);
-    if (freq === "other") return "";
-    const labels = {
-      "15min": "15m",
-      "1h": "1hr",
-      "6h": "6hr",
-      "24h": "24hr",
-      "7d": "7d",
-    };
-    return `<span class="series-card-freq-badge">${escapeHtml(labels[freq] || freq)}</span>`;
-  }
-
-  /* ---- Series Card Creation ---- */
-
-  function createSeriesCard(market) {
-    const card = document.createElement("div");
-    const isClosed = isMarketClosed(market);
-    card.className = `series-card card-enter${isClosed ? " series-card--closed" : ""}`;
-    card.dataset.ticker = market.ticker;
-
-    const yesPrice = market.yes_bid_dollars || null;
-    const noPrice = market.no_bid_dollars || null;
-    const lastPrice = market.last_price_dollars || null;
-    const volume = formatVolume(market.volume_24h_fp || "0");
-    const status = market.status || "unknown";
-    const title = market.yes_sub_title || market.ticker || "Untitled";
-    const closeTime = market.close_time ? new Date(market.close_time) : null;
-    const timeRemaining = closeTime ? formatTimeRemaining(closeTime) : "—";
-    const isClosingSoon =
-      closeTime && closeTime - Date.now() < 3600000 && !isClosed;
-    const chancePercent = yesPrice
-      ? Math.round(parseFloat(yesPrice) * 100)
-      : null;
-    const yesCents = yesPrice
-      ? (parseFloat(yesPrice) * 100).toFixed(0) + "¢"
-      : "—";
-    const noCents = noPrice
-      ? (parseFloat(noPrice) * 100).toFixed(0) + "¢"
-      : "—";
-
-    const timerClass = isClosingSoon
-      ? "series-card-timer series-card-timer--urgent"
-      : "series-card-timer";
-    const chanceColor =
-      chancePercent !== null
-        ? chancePercent > 60
-          ? "var(--color-state-success)"
-          : chancePercent < 40
-            ? "var(--color-state-error)"
-            : "var(--color-accent-primary)"
-        : "";
-
-    card.innerHTML = `
-      <div class="series-card-header">
-        <span class="series-card-category">${escapeHtml(market.event_ticker || "")}</span>
-        <div style="display:flex;align-items:center;gap:3px">
-          ${renderFrequencyBadge(market)}
-          <span class="${timerClass}">${escapeHtml(timeRemaining)}</span>
-        </div>
-      </div>
-      <div class="series-card-title">${escapeHtml(title)}</div>
-      <div class="series-card-chart">
-        <canvas class="series-card-canvas" width="280" height="52"></canvas>
-        <div class="series-card-price-row">
-          <span class="series-card-volume">Vol: ${escapeHtml(String(volume))}</span>
-          <span class="series-card-oi">OI: ${escapeHtml(formatVolume(market.open_interest_fp || "0"))}</span>
-        </div>
-      </div>
-      <div class="series-card-chance">
-        <span class="chance-label">Chance</span>
-        <span class="chance-value" style="color:${chanceColor}">${chancePercent !== null ? chancePercent + "%" : "—"}</span>
-        <div class="chance-bar">
-          <div class="chance-bar__fill" style="width:${chancePercent !== null ? chancePercent : 50}%;background:${chanceColor || "var(--color-accent-primary)"}"></div>
-        </div>
-      </div>
-      ${renderPotentialReturns(market)}
-      <div class="series-card-buttons">
-        <button class="yes-button${isClosed ? " disabled" : ""}" data-ticker="${escapeAttr(market.ticker)}" data-side="yes" ${isClosed ? "disabled" : ""}>Yes ${escapeHtml(yesCents)}</button>
-        <button class="no-button${isClosed ? " disabled" : ""}" data-ticker="${escapeAttr(market.ticker)}" data-side="no" ${isClosed ? "disabled" : ""}>No ${escapeHtml(noCents)}</button>
-      </div>
-      ${isClosed ? '<div class="series-card-closed-overlay"><span>CLOSED</span></div>' : ""}
-      <button class="expand-button" data-ticker="${escapeAttr(market.ticker)}" title="Expand card">⤢</button>
-    `;
-
-    card.querySelector(".expand-button").addEventListener("click", (e) => {
-      e.stopPropagation();
-      expandCard(market);
-    });
-
-    /* Render mini sparkline on the card canvas */
-    const miniCanvas = card.querySelector(".series-card-canvas");
-    if (miniCanvas) {
-      drawMiniSparkline(miniCanvas, market);
-    }
-
-    return card;
-  }
-
   function isMarketClosed(market) {
     const status = (market.status || "").toLowerCase();
     if (status === "closed" || status === "finalized" || status === "settled")
@@ -1404,295 +1339,43 @@ const TradingStudio = (() => {
 
   function formatVolume(value) {
     const num = parseFloat(value) || 0;
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
-    if (num >= 1000) return (num / 1000).toFixed(1) + "K";
-    return String(Math.round(num));
+    if (num >= 1000000) return "$" + (num / 1000000).toFixed(1) + "M";
+    if (num >= 1000) return "$" + Math.round(num / 1000) + "K";
+    if (num >= 1) return "$" + Math.round(num);
+    return "";
   }
 
-  /* ---- Mini Sparkline for Series Cards ---- */
+  /* ---- Trading Status ---- */
 
-  function drawMiniSparkline(canvas, market) {
-    const context = canvas.getContext("2d");
-    const width = canvas.width;
-    const height = canvas.height;
-    context.clearRect(0, 0, width, height);
+  async function fetchAccountSummary() {
+    try {
+      const tradingResponse = await fetch(
+        `${BACKEND_URL}/api/trading/status`,
+      ).catch(() => null);
 
-    /* Generate a plausible price curve from the market's current price */
-    const currentPrice = parseFloat(
-      market.last_price_dollars || market.yes_bid_dollars || "0.50",
-    );
-    const dataPoints = 30;
-    const prices = [];
-    let price = currentPrice * (0.85 + Math.random() * 0.15);
+      if (!tradingResponse || !tradingResponse.ok) return;
+      const tradingData = await tradingResponse.json();
 
-    for (let i = 0; i < dataPoints; i++) {
-      const drift = (currentPrice - price) * 0.08;
-      const noise = (Math.random() - 0.5) * 0.04;
-      price = Math.max(0.01, Math.min(0.99, price + drift + noise));
-      prices.push(price);
+      /* Update circuit breaker indicator */
+      const cbEl = document.getElementById("circuit-breaker-status");
+      if (cbEl) {
+        cbEl.textContent = tradingData.circuit_breaker_open
+          ? "⚡ CIRCUIT OPEN"
+          : "";
+        cbEl.style.color = tradingData.circuit_breaker_open
+          ? "var(--color-state-error)"
+          : "";
+      }
+    } catch (error) {
+      /* Silently fail — backend may not be reachable */
     }
-    /* Ensure last point matches current price */
-    prices[prices.length - 1] = currentPrice;
-
-    const minPrice = Math.min(...prices);
-    const maxPrice = Math.max(...prices);
-    const priceRange = maxPrice - minPrice || 0.01;
-    const padding = 4;
-
-    const computedStyle = getComputedStyle(document.documentElement);
-    const successColor =
-      computedStyle.getPropertyValue("--color-state-success").trim() ||
-      "#22c55e";
-    const errorColor =
-      computedStyle.getPropertyValue("--color-state-error").trim() ||
-      computedStyle.getPropertyValue("--color-state-danger").trim() ||
-      "#ef4444";
-    const isUpTrend = prices[prices.length - 1] >= prices[0];
-    const lineColor = isUpTrend ? successColor : errorColor;
-
-    /* Draw line */
-    context.beginPath();
-    context.lineWidth = 1.5;
-    context.lineJoin = "round";
-    context.lineCap = "round";
-    context.strokeStyle = lineColor;
-
-    prices.forEach((pricePoint, index) => {
-      const x = padding + (index / (dataPoints - 1)) * (width - padding * 2);
-      const y =
-        padding +
-        (1 - (pricePoint - minPrice) / priceRange) * (height - padding * 2);
-      if (index === 0) context.moveTo(x, y);
-      else context.lineTo(x, y);
-    });
-    context.stroke();
-
-    /* Draw gradient fill */
-    const lastX = padding + (width - padding * 2);
-    const gradient = context.createLinearGradient(
-      0,
-      padding,
-      0,
-      height - padding,
-    );
-    gradient.addColorStop(0, lineColor + "30");
-    gradient.addColorStop(1, lineColor + "05");
-
-    context.lineTo(lastX, height - padding);
-    context.lineTo(padding, height - padding);
-    context.closePath();
-    context.fillStyle = gradient;
-    context.fill();
   }
-
-  /* ---- Expand Card Overlay ---- */
-
-  function expandCard(market) {
-    const overlay = document.getElementById("expanded-card-overlay");
-    const content = document.getElementById("expanded-card-content");
-    if (!overlay || !content) return;
-
-    const title = market.yes_sub_title || market.ticker || "Untitled";
-    const isClosed = isMarketClosed(market);
-
-    const yesAsk = market.yes_ask_dollars
-      ? `${(parseFloat(market.yes_ask_dollars) * 100).toFixed(0)}¢`
-      : "—";
-    const noBid = market.no_bid_dollars
-      ? `${(parseFloat(market.no_bid_dollars) * 100).toFixed(0)}¢`
-      : "—";
-    const yesReturn = market.yes_ask_dollars
-      ? calcPotentialReturn(market.yes_ask_dollars, 100)
-      : null;
-    const noReturn = market.no_ask_dollars
-      ? calcPotentialReturn(market.no_ask_dollars, 100)
-      : null;
-
-    content.innerHTML = `
-      <div class="expanded-card-header">
-        <div>
-          <h3 style="margin:0;font-size:14px;line-height:1.3">${escapeHtml(title)}</h3>
-          <div style="font-size:10px;opacity:0.6;margin-top:2px">${escapeHtml(market.ticker || "")}</div>
-        </div>
-        <button class="close-expanded" id="close-expanded" aria-label="Close expanded card">✕</button>
-      </div>
-      <div class="expanded-card-body">
-        <div class="expanded-chart">
-          <canvas id="expanded-chart-canvas" width="600" height="160"></canvas>
-        </div>
-        <div class="expanded-two-col">
-          <div class="expanded-details">
-            <div class="detail-section-title">Market Info</div>
-            <div class="detail-row"><span>Event</span><span>${escapeHtml(market.event_ticker || "—")}</span></div>
-            <div class="detail-row"><span>Series</span><span>${escapeHtml(market.series_ticker || "—")}</span></div>
-            <div class="detail-row"><span>Status</span><span class="${isMarketClosed(market) ? "status-inactive" : "status-active"}">${escapeHtml(market.status || "—")}</span></div>
-            <div class="detail-row"><span>Closes</span><span>${market.close_time ? new Date(market.close_time).toLocaleString() : "—"}</span></div>
-            <div class="detail-row"><span>Volume 24h</span><span>${escapeHtml(formatVolume(market.volume_24h_fp || "0"))}</span></div>
-            <div class="detail-row"><span>Open Interest</span><span>${escapeHtml(formatVolume(market.open_interest_fp || "0"))}</span></div>
-          </div>
-          <div class="expanded-orderbook">
-            <div class="detail-section-title">Order Book</div>
-            <div class="orderbook-row yes">
-              <span class="ob-side">YES</span>
-              <span class="ob-bid">Bid: ${escapeHtml(market.yes_bid_dollars ? (parseFloat(market.yes_bid_dollars) * 100).toFixed(0) + "¢" : "—")}</span>
-              <span class="ob-ask">Ask: ${escapeHtml(yesAsk)}</span>
-            </div>
-            <div class="orderbook-row no">
-              <span class="ob-side">NO</span>
-              <span class="ob-bid">Bid: ${escapeHtml(noBid)}</span>
-              <span class="ob-ask">Ask: ${escapeHtml(market.no_ask_dollars ? (parseFloat(market.no_ask_dollars) * 100).toFixed(0) + "¢" : "—")}</span>
-            </div>
-            ${
-              yesReturn || noReturn
-                ? `
-            <div class="detail-section-title" style="margin-top:8px">Potential Returns (per $100)</div>
-            ${yesReturn ? `<div class="detail-row"><span>YES wins</span><span class="text-success">+$${yesReturn.profit} ($${yesReturn.payout} total)</span></div>` : ""}
-            ${noReturn ? `<div class="detail-row"><span>NO wins</span><span class="text-success">+$${noReturn.profit} ($${noReturn.payout} total)</span></div>` : ""}
-            `
-                : ""
-            }
-            <div class="detail-row"><span>Last Price</span><span>${escapeHtml(market.last_price_dollars ? "$" + parseFloat(market.last_price_dollars).toFixed(2) : "—")}</span></div>
-          </div>
-        </div>
-        <div class="expanded-order-row">
-          <label class="expanded-qty-label" for="expanded-order-qty">Contracts</label>
-          <input
-            id="expanded-order-qty"
-            class="expanded-qty-input"
-            type="number"
-            min="1"
-            max="100"
-            step="1"
-            value="1"
-            ${isClosed ? "disabled" : ""}
-            aria-label="Number of contracts to order"
-          />
-        </div>
-        <div class="expanded-actions">
-          <button class="yes-button large${!connected ? " ks-needs-connection" : ""}" data-ticker="${escapeAttr(market.ticker)}" data-side="yes" ${isClosed ? "disabled" : ""}>
-            ${connected ? "Buy YES " + yesAsk : "🔒 Connect to Buy YES"}
-          </button>
-          <button class="no-button large${!connected ? " ks-needs-connection" : ""}" data-ticker="${escapeAttr(market.ticker)}" data-side="no" ${isClosed ? "disabled" : ""}>
-            ${connected ? "Buy NO " + noBid : "🔒 Connect to Buy NO"}
-          </button>
-        </div>
-        ${isClosed ? '<div class="expanded-closed-notice">⚠ This market is closed. Orders cannot be placed.</div>' : ""}
-        ${!connected && !isClosed ? '<div class="expanded-closed-notice" style="color:var(--color-accent-primary)">🔑 Connect your Kalshi API keys in the bottom bar to place trades</div>' : ""}
-      </div>
-    `;
-
-    overlay.style.display = "flex";
-    document.getElementById("close-expanded").addEventListener("click", () => {
-      overlay.style.display = "none";
-    });
-
-    /* Draw expanded sparkline */
-    requestAnimationFrame(() => {
-      const expandedCanvas = document.getElementById("expanded-chart-canvas");
-      if (expandedCanvas) drawExpandedChart(expandedCanvas, market);
-    });
-  }
-
-  function drawExpandedChart(canvas, market) {
-    const context = canvas.getContext("2d");
-    const width = canvas.width;
-    const height = canvas.height;
-    context.clearRect(0, 0, width, height);
-
-    const computedStyle = getComputedStyle(document.documentElement);
-    const bgColor = computedStyle.getPropertyValue("--color-bg-canvas").trim();
-    const gridColor = computedStyle
-      .getPropertyValue("--color-border-muted")
-      .trim();
-    const successColor =
-      computedStyle.getPropertyValue("--color-state-success").trim() ||
-      "#22c55e";
-    const errorColor =
-      computedStyle.getPropertyValue("--color-state-error").trim() ||
-      computedStyle.getPropertyValue("--color-state-danger").trim() ||
-      "#ef4444";
-
-    context.fillStyle = bgColor;
-    context.fillRect(0, 0, width, height);
-
-    /* Draw grid lines */
-    context.strokeStyle = gridColor;
-    context.lineWidth = 0.5;
-    context.setLineDash([3, 4]);
-    [0.25, 0.5, 0.75].forEach((fraction) => {
-      const y = fraction * height;
-      context.beginPath();
-      context.moveTo(0, y);
-      context.lineTo(width, y);
-      context.stroke();
-    });
-    context.setLineDash([]);
-
-    /* Generate price series */
-    const currentPrice = parseFloat(
-      market.last_price_dollars || market.yes_bid_dollars || "0.50",
-    );
-    const dataPoints = 60;
-    const prices = [];
-    let price = currentPrice * (0.8 + Math.random() * 0.2);
-
-    for (let i = 0; i < dataPoints; i++) {
-      const drift = (currentPrice - price) * 0.06;
-      const noise = (Math.random() - 0.5) * 0.03;
-      price = Math.max(0.01, Math.min(0.99, price + drift + noise));
-      prices.push(price);
-    }
-    prices[prices.length - 1] = currentPrice;
-
-    const minPrice = Math.min(...prices);
-    const maxPrice = Math.max(...prices);
-    const priceRange = maxPrice - minPrice || 0.01;
-    const padding = 8;
-    const isUpTrend = prices[prices.length - 1] >= prices[0];
-    const lineColor = isUpTrend ? successColor : errorColor;
-
-    /* Draw line */
-    context.beginPath();
-    context.lineWidth = 2;
-    context.lineJoin = "round";
-    context.strokeStyle = lineColor;
-
-    prices.forEach((pricePoint, index) => {
-      const x = padding + (index / (dataPoints - 1)) * (width - padding * 2);
-      const y =
-        padding +
-        (1 - (pricePoint - minPrice) / priceRange) * (height - padding * 2);
-      if (index === 0) context.moveTo(x, y);
-      else context.lineTo(x, y);
-    });
-    context.stroke();
-
-    /* Fill */
-    const gradient = context.createLinearGradient(
-      0,
-      padding,
-      0,
-      height - padding,
-    );
-    gradient.addColorStop(0, lineColor + "40");
-    gradient.addColorStop(1, lineColor + "05");
-    context.lineTo(width - padding, height - padding);
-    context.lineTo(padding, height - padding);
-    context.closePath();
-    context.fillStyle = gradient;
-    context.fill();
-
-    /* Current price label */
-    context.fillStyle = lineColor;
-    context.font = "bold 11px monospace";
-    context.fillText(`${(currentPrice * 100).toFixed(0)}¢`, width - 32, 14);
-  }
-
-  /* ---- Real-time Updates ---- */
 
   function connectWebSocket() {
     try {
-      websocket = new WebSocket("ws://127.0.0.1:8000/api/events");
+      websocket = new WebSocket(
+        BACKEND_URL.replace(/^http/, "ws") + "/api/events",
+      );
       websocket.onmessage = (event) => {
         try {
           handleRealtimeEvent(JSON.parse(event.data));
@@ -1796,21 +1479,15 @@ const TradingStudio = (() => {
   /* ---- Agent Activity Display (Semi-Auto & Full-Auto) ---- */
 
   function showAgentActivity(data) {
-    /* In semi-auto mode, agents analyze markets and display their analysis
-       around the yes/no contracts. This shows bot analysis on relevant cards. */
     const ticker = data.ticker || "";
     const agentName = data.agent_name || "Agent";
     const side = (data.side || "").toUpperCase();
     const reasoning = data.reasoning || "";
 
-    /* Find the outcome row for this ticker and show agent analysis indicator */
-    const row = document.querySelector(
-      `.ks-outcome-row[data-ticker="${ticker}"]`,
-    );
-    if (!row) return;
+    const container = findMarketContainer(ticker);
+    if (!container) return;
 
-    /* Remove any existing agent badge */
-    const existing = row.querySelector(".ks-agent-badge");
+    const existing = container.querySelector(".ks-agent-badge");
     if (existing) existing.remove();
 
     const badge = document.createElement("span");
@@ -1818,27 +1495,24 @@ const TradingStudio = (() => {
     badge.title = `${agentName}: ${reasoning}`;
     badge.textContent = `🤖 ${agentName} → ${side}`;
 
-    const descCell = row.querySelector(".ks-outcome-cell-desc");
-    if (descCell) descCell.appendChild(badge);
+    const target =
+      container.querySelector(".ts-market-label") ||
+      container.querySelector(".ts-card-title") ||
+      container;
+    target.appendChild(badge);
 
-    /* Auto-remove after 10 seconds */
     setTimeout(() => badge.remove(), 10000);
   }
 
   function flashTradeActivity(data) {
-    /* In full-auto mode, briefly flash buy/sell activity on the relevant card
-       to show what is being traded by the autonomous agents. */
     const ticker = data.data?.ticker || data.ticker || "";
     const side = (data.data?.side || data.side || "").toLowerCase();
 
-    const row = document.querySelector(
-      `.ks-outcome-row[data-ticker="${ticker}"]`,
-    );
-    if (!row) return;
+    const container = findMarketContainer(ticker);
+    if (!container) return;
 
-    /* Flash the appropriate button */
     const btnSelector = side === "yes" ? ".yes-button" : ".no-button";
-    const btn = row.querySelector(btnSelector);
+    const btn = container.querySelector(btnSelector);
     if (!btn) return;
 
     btn.classList.add("ks-trade-flash");
@@ -1851,7 +1525,6 @@ const TradingStudio = (() => {
     const overlay = document.getElementById("approval-overlay");
     if (!overlay) return;
 
-    /* Build richer approval display */
     const agentName = data.agent_name || "Agent";
     const ticker = data.ticker || "—";
     const side = (data.side || "?").toUpperCase();
@@ -1860,7 +1533,6 @@ const TradingStudio = (() => {
       : "?";
     const reasoning = data.reasoning || "No reasoning provided";
 
-    /* Set a 60-second auto-expiry timer (no countdown shown per PRD) */
     if (approvalExpiryTimeout) clearTimeout(approvalExpiryTimeout);
     approvalExpiryTimeout = setTimeout(() => {
       if (overlay.style.display !== "none") {
@@ -1900,189 +1572,12 @@ const TradingStudio = (() => {
     }
   }
 
-  /* ---- Buy/Sell Button Delegation ---- */
-
-  function bindBuySellDelegation() {
-    /* Delegate clicks on .yes-button / .no-button anywhere in the trading studio */
-    const tradingSection = document.getElementById("studio-trading");
-    if (!tradingSection) return;
-    tradingSection.addEventListener("click", (e) => {
-      const button = e.target.closest(
-        ".yes-button[data-ticker], .no-button[data-ticker]",
-      );
-      if (!button || button.disabled) return;
-      e.stopPropagation();
-      const ticker = button.dataset.ticker;
-      const side = button.dataset.side;
-      if (ticker && side) {
-        handleManualOrder(ticker, side);
-      }
-    });
-  }
-
-  async function handleManualOrder(ticker, side) {
-    if (!connected) {
-      showToast("Connect your Kalshi API keys to place trades", "info");
-      return;
-    }
-    const market = markets.find((m) => m.ticker === ticker);
-    if (!market) {
-      showToast("Market not found", "error");
-      return;
-    }
-
-    /* Read order quantity from expanded-card input (defaults to 1) */
-    const qtyInput = document.getElementById("expanded-order-qty");
-    const rawQty = qtyInput ? parseFloat(qtyInput.value) : 1;
-    if (!Number.isInteger(rawQty) || rawQty < 1 || rawQty > 100) {
-      showToast("Quantity must be a whole number between 1 and 100", "error");
-      return;
-    }
-    const countFp = rawQty.toFixed(2);
-
-    const priceDollars =
-      side === "yes"
-        ? market.yes_ask_dollars || market.yes_bid_dollars || ""
-        : market.no_ask_dollars || market.no_bid_dollars || "";
-
-    if (!priceDollars) {
-      showToast("Price data unavailable — cannot place order", "error");
-      return;
-    }
-
-    const priceNum = parseFloat(priceDollars);
-    /* Kalshi contracts are priced $0.01–$0.99 (exclusive 0 and 1) */
-    if (isNaN(priceNum) || priceNum <= 0 || priceNum > 0.99) {
-      showToast("Invalid price data from backend", "error");
-      return;
-    }
-
-    showToast(
-      `Submitting ${side.toUpperCase()} ×${rawQty} order for ${ticker}…`,
-      "info",
+  function findMarketContainer(ticker) {
+    if (!ticker) return null;
+    return (
+      document.querySelector(`.ts-market-row[data-ticker="${ticker}"]`) ||
+      document.querySelector(`.ts-card[data-ticker="${ticker}"]`)
     );
-
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/trading/manual-order`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ticker: ticker,
-          side: side,
-          action: "buy",
-          count_fp: countFp,
-          price_dollars: priceDollars,
-        }),
-      });
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        showToast(
-          errorData.detail || `Order failed (${response.status})`,
-          "error",
-        );
-        return;
-      }
-      showToast(
-        `✓ Order submitted: ${side.toUpperCase()} ×${rawQty} on ${ticker}`,
-        "success",
-      );
-    } catch (networkError) {
-      showToast("Backend not reachable — cannot place orders", "error");
-    }
-  }
-
-  /**
-   * Cancel a resting order by its exchange-assigned order ID.
-   * @param {string} orderId
-   */
-  async function cancelOrder(orderId) {
-    if (!connected) {
-      showToast("Not connected — cannot cancel orders", "error");
-      return;
-    }
-    if (!orderId) return;
-
-    try {
-      const response = await fetch(
-        `${BACKEND_URL}/api/orders/${encodeURIComponent(orderId)}/cancel`,
-        { method: "POST", headers: { "Content-Type": "application/json" } },
-      );
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        showToast(
-          errorData.detail || `Cancel failed (${response.status})`,
-          "error",
-        );
-        return;
-      }
-      showToast(`✓ Order ${orderId} cancelled`, "success");
-    } catch (networkError) {
-      showToast("Backend not reachable — cannot cancel order", "error");
-    }
-  }
-
-  /* ---- Account Summary ---- */
-
-  async function fetchAccountSummary() {
-    try {
-      const [balanceResponse, tradingResponse] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/state/balance`).catch(() => null),
-        fetch(`${BACKEND_URL}/api/trading/status`).catch(() => null),
-      ]);
-
-      if (balanceResponse && balanceResponse.ok) {
-        const balanceData = await balanceResponse.json();
-        const balanceElement = document.getElementById(
-          "account-balance-display",
-        );
-        const portfolioElement = document.getElementById(
-          "portfolio-value-display",
-        );
-        if (balanceElement && balanceData.balance !== undefined) {
-          const balanceValue = parseFloat(balanceData.balance);
-          balanceElement.textContent = isNaN(balanceValue)
-            ? "—"
-            : "$" + balanceValue.toFixed(2);
-        }
-        if (portfolioElement && balanceData.portfolio_value !== undefined) {
-          const portfolioValue = parseFloat(balanceData.portfolio_value);
-          portfolioElement.textContent = isNaN(portfolioValue)
-            ? "—"
-            : "$" + portfolioValue.toFixed(2);
-        }
-      }
-
-      if (tradingResponse && tradingResponse.ok) {
-        const tradingData = await tradingResponse.json();
-        const pnlElement = document.getElementById("daily-pnl-display");
-        if (pnlElement && tradingData.daily_pnl !== undefined) {
-          const pnl = parseFloat(tradingData.daily_pnl);
-          if (isNaN(pnl)) {
-            pnlElement.textContent = "—";
-          } else {
-            const sign = pnl >= 0 ? "+" : "";
-            pnlElement.textContent = sign + "$" + pnl.toFixed(2);
-            pnlElement.style.color =
-              pnl >= 0
-                ? "var(--color-state-success)"
-                : "var(--color-state-error, var(--color-state-danger))";
-          }
-        }
-
-        /* Update circuit breaker indicator */
-        const cbEl = document.getElementById("circuit-breaker-status");
-        if (cbEl) {
-          cbEl.textContent = tradingData.circuit_breaker_open
-            ? "⚡ CIRCUIT OPEN"
-            : "";
-          cbEl.style.color = tradingData.circuit_breaker_open
-            ? "var(--color-state-error)"
-            : "";
-        }
-      }
-    } catch (error) {
-      /* Silently fail — backend may not be reachable */
-    }
   }
 
   /* ---- Toast Notification System ---- */
@@ -2137,290 +1632,6 @@ const TradingStudio = (() => {
     }, 4000);
   }
 
-  /* ============================================================
-     Series Detail View — Kalshi-style drill-down into a series
-     Shows all events/markets for a given series_ticker, grouped
-     by event, with breadcrumb navigation and related-series sidebar.
-     ============================================================ */
-
-  function openSeriesDetail(seriesKey) {
-    currentSeriesDetail = seriesKey;
-    seriesDetailFreqFilter = "all";
-
-    const grid = document.getElementById("series-cards-grid");
-    const detailView = document.getElementById("series-detail-view");
-    const showMore = document.getElementById("show-more-container");
-    const filtersRow = document.querySelector(".trading-filters");
-    if (!detailView) return;
-
-    /* Hide grid, show detail view */
-    if (grid) grid.style.display = "none";
-    if (showMore) showMore.style.display = "none";
-    if (filtersRow) filtersRow.style.display = "none";
-    detailView.style.display = "flex";
-
-    renderSeriesDetail();
-    updateSeriesDetailSidebar();
-  }
-
-  function closeSeriesDetail() {
-    currentSeriesDetail = null;
-
-    const grid = document.getElementById("series-cards-grid");
-    const detailView = document.getElementById("series-detail-view");
-    const filtersRow = document.querySelector(".trading-filters");
-    if (grid) grid.style.display = "";
-    if (detailView) detailView.style.display = "none";
-    if (filtersRow) filtersRow.style.display = "";
-
-    /* Restore sidebar to category subcategories */
-    updateSidebar();
-    renderCards();
-  }
-
-  function renderSeriesDetail() {
-    if (!currentSeriesDetail) return;
-
-    const seriesKey = currentSeriesDetail;
-    const seriesDisplay = getSeriesDisplay(seriesKey);
-    const catBreadcrumb = deriveCategoryBreadcrumb(seriesKey);
-
-    /* Collect all markets belonging to this series */
-    const seriesMarkets = markets.filter((m) => {
-      const st = (m.series_ticker || m.event_ticker || "").toLowerCase();
-      return st === seriesKey.toLowerCase();
-    });
-
-    /* -- Breadcrumb -- */
-    const breadcrumbEl = document.getElementById("series-detail-breadcrumb");
-    if (breadcrumbEl) {
-      breadcrumbEl.innerHTML = `
-        <button class="ks-detail-back-btn" id="series-detail-back" aria-label="Back to market grid">
-          ← Back
-        </button>
-        <span class="ks-detail-crumb">${escapeHtml(catBreadcrumb)}</span>
-        <span class="ks-detail-crumb-sep">›</span>
-        <span class="ks-detail-crumb-current">${escapeHtml(seriesDisplay.label)}</span>
-      `;
-      document
-        .getElementById("series-detail-back")
-        .addEventListener("click", closeSeriesDetail);
-    }
-
-    /* -- Header with series icon, title, and stats -- */
-    const headerEl = document.getElementById("series-detail-header");
-    if (headerEl) {
-      const totalVolume = seriesMarkets.reduce(
-        (sum, m) => sum + (parseFloat(m.volume_24h_fp) || 0),
-        0,
-      );
-      const activeCount = seriesMarkets.filter(
-        (m) => !isMarketClosed(m),
-      ).length;
-      const eventCount = new Set(seriesMarkets.map((m) => m.event_ticker)).size;
-
-      headerEl.innerHTML = `
-        <div class="ks-detail-hero">
-          <span class="ks-detail-icon">${seriesDisplay.icon}</span>
-          <div class="ks-detail-hero-text">
-            <h2 class="ks-detail-title">${escapeHtml(seriesDisplay.label)}</h2>
-            <span class="ks-detail-subtitle">${escapeHtml(seriesKey.toUpperCase())} · ${eventCount} event${eventCount !== 1 ? "s" : ""} · ${activeCount} active market${activeCount !== 1 ? "s" : ""}</span>
-          </div>
-        </div>
-        <div class="ks-detail-stats">
-          <div class="ks-detail-stat">
-            <span class="ks-detail-stat-label">Markets</span>
-            <span class="ks-detail-stat-value">${seriesMarkets.length}</span>
-          </div>
-          <div class="ks-detail-stat">
-            <span class="ks-detail-stat-label">24h Volume</span>
-            <span class="ks-detail-stat-value">${formatVolume(String(totalVolume))}</span>
-          </div>
-          <div class="ks-detail-stat">
-            <span class="ks-detail-stat-label">Active</span>
-            <span class="ks-detail-stat-value">${activeCount}</span>
-          </div>
-        </div>
-      `;
-    }
-
-    /* -- Frequency filter pills for series detail -- */
-    const filtersEl = document.getElementById("series-detail-filters");
-    if (filtersEl) {
-      const frequencies = detectSeriesFrequencies(seriesMarkets);
-      filtersEl.innerHTML = `
-        <div class="ks-freq-pills">
-          <button class="ks-freq-pill${seriesDetailFreqFilter === "all" ? " active" : ""}" data-detail-freq="all">All</button>
-          ${frequencies.map((f) => `<button class="ks-freq-pill${seriesDetailFreqFilter === f.key ? " active" : ""}" data-detail-freq="${escapeAttr(f.key)}">${escapeHtml(f.label)}</button>`).join("")}
-        </div>
-        <span class="ks-detail-market-count">${seriesMarkets.length} total market${seriesMarkets.length !== 1 ? "s" : ""}</span>
-      `;
-      filtersEl.querySelectorAll(".ks-freq-pill").forEach((pill) => {
-        pill.addEventListener("click", () => {
-          seriesDetailFreqFilter = pill.dataset.detailFreq;
-          renderSeriesDetail();
-        });
-      });
-    }
-
-    /* -- Event groups (grouped by event_ticker, sorted by close time) -- */
-    const eventsEl = document.getElementById("series-detail-events");
-    if (!eventsEl) return;
-
-    /* Apply frequency filter */
-    let filteredMarkets = seriesMarkets;
-    if (seriesDetailFreqFilter !== "all") {
-      filteredMarkets = seriesMarkets.filter(
-        (m) => detectFrequency(m) === seriesDetailFreqFilter,
-      );
-    }
-
-    /* Group by event_ticker */
-    const eventGroups = new Map();
-    filteredMarkets.forEach((m) => {
-      const ek = m.event_ticker || "unknown";
-      if (!eventGroups.has(ek)) eventGroups.set(ek, []);
-      eventGroups.get(ek).push(m);
-    });
-
-    /* Sort events: open events first (by close time ascending), then closed */
-    const sortedGroups = [...eventGroups.entries()].sort((a, b) => {
-      const aClose = a[1][0].close_time
-        ? new Date(a[1][0].close_time).getTime()
-        : Infinity;
-      const bClose = b[1][0].close_time
-        ? new Date(b[1][0].close_time).getTime()
-        : Infinity;
-      const aClosed = aClose < Date.now();
-      const bClosed = bClose < Date.now();
-      if (aClosed !== bClosed) return aClosed ? 1 : -1;
-      return aClose - bClose;
-    });
-
-    if (sortedGroups.length === 0) {
-      eventsEl.innerHTML = `
-        <div class="ks-detail-empty">No markets match the selected frequency filter.</div>
-      `;
-      return;
-    }
-
-    eventsEl.innerHTML = "";
-    sortedGroups.forEach(([eventTicker, eventMarkets]) => {
-      const eventPanel = buildSeriesEventPanel(eventTicker, eventMarkets);
-      eventsEl.appendChild(eventPanel);
-    });
-  }
-
-  function buildSeriesEventPanel(eventTicker, eventMarkets) {
-    const panel = document.createElement("div");
-    panel.className = "ks-detail-event-panel";
-
-    const eventData = events[eventTicker];
-    const eventTitle = eventData?.title || eventTicker.replace(/-/g, " ");
-    const repMarket = eventMarkets[0];
-    const closeTime = repMarket.close_time
-      ? new Date(repMarket.close_time)
-      : null;
-    const isClosed = closeTime && closeTime.getTime() < Date.now();
-    const closeStr = closeTime ? formatEventCloseTime(closeTime) : "";
-    const freq = detectFrequency(repMarket);
-    const freqLabel = FREQ_LABELS[freq] || "";
-    const timeRemaining = closeTime ? formatTimeRemaining(closeTime) : "";
-
-    panel.innerHTML = `
-      <div class="ks-detail-event-header${isClosed ? " ks-detail-event-header--closed" : ""}">
-        <div class="ks-detail-event-title-row">
-          <span class="ks-detail-event-title">${escapeHtml(eventTitle)}</span>
-          ${freqLabel ? `<span class="series-card-freq-badge">${escapeHtml(freqLabel)}</span>` : ""}
-        </div>
-        <div class="ks-detail-event-meta">
-          ${closeStr ? `<span class="ks-detail-event-close">${escapeHtml(closeStr)}</span>` : ""}
-          ${timeRemaining ? `<span class="ks-detail-event-remaining">${escapeHtml(timeRemaining)}</span>` : ""}
-          ${isClosed ? '<span class="ks-detail-event-status--closed">Closed</span>' : '<span class="ks-detail-event-status--open">Open</span>'}
-        </div>
-      </div>
-      <div class="ks-outcome-table">
-        <div class="ks-outcome-header-row">
-          <span class="ks-outcome-header-cell ks-outcome-cell-desc">Outcome</span>
-          <span class="ks-outcome-header-cell ks-outcome-cell-chance">Chance</span>
-          <span class="ks-outcome-header-cell ks-outcome-cell-actions"></span>
-        </div>
-        ${eventMarkets.map((m) => buildOutcomeRow(m)).join("")}
-      </div>
-    `;
-
-    /* Bind outcome row clicks */
-    panel.querySelectorAll(".ks-outcome-row").forEach((row) => {
-      row.addEventListener("click", (e) => {
-        if (e.target.closest("button")) return;
-        const ticker = row.dataset.ticker;
-        const market = eventMarkets.find((m) => m.ticker === ticker);
-        if (market) expandCard(market);
-      });
-    });
-
-    return panel;
-  }
-
-  function detectSeriesFrequencies(seriesMarkets) {
-    const found = new Set();
-    seriesMarkets.forEach((m) => {
-      const f = detectFrequency(m);
-      if (f !== "other") found.add(f);
-    });
-    return Object.entries(FREQ_LABELS)
-      .map(([key, label]) => ({ key, label }))
-      .filter((f) => found.has(f.key));
-  }
-
-  function updateSeriesDetailSidebar() {
-    const nav = document.getElementById("trading-subcategory-nav");
-    const sidebar = document.getElementById("trading-subcategory-sidebar");
-    if (!nav || !currentSeriesDetail) return;
-
-    /* Show related series in the same category */
-    const catBreadcrumb = deriveCategoryBreadcrumb(currentSeriesDetail);
-
-    /* Collect all unique series tickers from markets in same category */
-    const relatedSeries = new Map();
-    markets.forEach((m) => {
-      const st = m.series_ticker || m.event_ticker || "";
-      if (!st) return;
-      const mCat = deriveCategoryBreadcrumb(st);
-      if (mCat.toLowerCase() === catBreadcrumb.toLowerCase()) {
-        if (!relatedSeries.has(st)) {
-          const display = getSeriesDisplay(st);
-          relatedSeries.set(st, {
-            key: st,
-            label: display.label,
-            icon: display.icon,
-            priority: display.priority,
-          });
-        }
-      }
-    });
-
-    const sortedRelated = [...relatedSeries.values()].sort(
-      (a, b) => a.priority - b.priority,
-    );
-
-    if (sidebar) sidebar.classList.remove("ks-sidebar-hidden");
-
-    nav.innerHTML = sortedRelated
-      .map(
-        (s) =>
-          `<button class="ks-sidebar-item${s.key.toLowerCase() === currentSeriesDetail.toLowerCase() ? " active" : ""}" data-series-nav="${escapeAttr(s.key)}">${s.icon} ${escapeHtml(s.label)}</button>`,
-      )
-      .join("");
-
-    /* Bind clicks to navigate between related series */
-    nav.querySelectorAll("[data-series-nav]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openSeriesDetail(btn.dataset.seriesNav);
-      });
-    });
-  }
-
   /* ---- Utility Functions ---- */
 
   function formatTimeRemaining(closeTime) {
@@ -2428,39 +1639,12 @@ const TradingStudio = (() => {
     if (diff <= 0) return "Closed";
     const hours = Math.floor(diff / 3600000);
     const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
     if (hours > 24 * 7) return Math.floor(hours / 24) + "d";
     if (hours > 24) return Math.floor(hours / 24) + "d " + (hours % 24) + "h";
     if (hours > 0) return hours + "h " + minutes + "m";
-    return minutes + "m";
-  }
-
-  function formatEventCloseTime(date) {
-    /* Kalshi-style close time: "Jan 25 @ 5:30am EST" */
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const month = months[date.getMonth()];
-    const day = date.getDate();
-    let hours = date.getHours();
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const ampm = hours >= 12 ? "pm" : "am";
-    hours = hours % 12 || 12;
-    const tzAbbr = new Date()
-      .toLocaleTimeString("en-us", { timeZoneName: "short" })
-      .split(" ")
-      .pop();
-    return `${month} ${day} @ ${hours}:${minutes}${ampm} ${tzAbbr}`;
+    if (minutes > 0) return minutes + "m " + seconds + "s";
+    return seconds + "s";
   }
 
   function setText(id, text) {
@@ -2488,6 +1672,8 @@ const TradingStudio = (() => {
     onConnected,
     onDisconnected,
     fetchPublicData,
-    cancelOrder,
   };
 })();
+
+
+

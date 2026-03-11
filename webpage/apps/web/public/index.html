@@ -105,9 +105,6 @@
         </h1>
       </div>
 
-      <!-- Placeholder circle in center of header -->
-      <div class="header-center-placeholder" aria-hidden="true"></div>
-
     <!-- ╔══════════════════════════════════════════════════╗
          ║   ILLUMINATION CONTROL PANEL (COCKPIT STYLE)   ║
          ╚══════════════════════════════════════════════════╝ -->
@@ -259,22 +256,67 @@
     <!-- ================================================================== -->
     <!-- NAV BAR                                                            -->
     <!-- ================================================================== -->
-    <nav id="nav-bar" class="region region-nav glow-bars-secondary" role="navigation" aria-label="Studio navigation">
-      <span class="region-title glow-text-secondary" style="margin:0;white-space:nowrap">HUD</span>
+    <nav id="nav-bar" class="region region-nav glow-bars-secondary hud-bar" role="navigation" aria-label="Studio navigation">
+      <span class="region-title glow-text-secondary hud-title">HUD</span>
+      <ul class="nav-tabs" role="tablist" aria-label="Studios">
+        <li role="presentation">
+          <button
+            class="nav-tab active glow-text-secondary"
+            role="tab"
+            id="tab-design"
+            aria-selected="true"
+            aria-controls="studio-design"
+            data-studio="design"
+          >🎨 Design</button>
+        </li>
+        <li role="presentation">
+          <button
+            class="nav-tab glow-text-secondary"
+            role="tab"
+            id="tab-trading"
+            aria-selected="false"
+            aria-controls="studio-trading"
+            data-studio="trading"
+            tabindex="-1"
+          >📈 Trade</button>
+        </li>
+        <li role="presentation">
+          <button
+            class="nav-tab glow-text-secondary"
+            role="tab"
+            id="tab-fly"
+            aria-selected="false"
+            aria-controls="studio-fly"
+            data-studio="fly"
+            tabindex="-1"
+          >✈️ Fly</button>
+        </li>
+        <li role="presentation">
+          <button
+            class="nav-tab glow-text-secondary"
+            role="tab"
+            id="tab-converter"
+            aria-selected="false"
+            aria-controls="studio-converter"
+            data-studio="converter"
+            tabindex="-1"
+          >🔄 Convert</button>
+        </li>
+      </ul>
       <!-- Telemetry Card (right-aligned) -->
-      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-family:var(--font-family-mono);white-space:nowrap;font-size:var(--type-label)">
-        <div class="flex items-center gap-1" title="Network latency">
-          <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">PING</span>
-          <canvas id="ping-sparkline" width="48" height="16" style="display:block"></canvas>
-          <span id="ping-label" style="color:var(--color-fg-muted);min-width:32px">—ms</span>
+      <div class="hud-telemetry" aria-label="HUD telemetry">
+        <div class="hud-item hud-item--ping" title="Network latency">
+          <span class="hud-label glow-text-secondary">PING</span>
+          <canvas id="ping-sparkline" width="24" height="16" class="hud-sparkline"></canvas>
+          <span id="ping-label" class="hud-value hud-value--ping">—</span>
         </div>
-        <div title="Backend health" style="display:flex;align-items:center;gap:3px">
-          <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">SVC</span>
-          <div id="backend-health-dot" style="width:6px;height:6px;border-radius:50%;background:var(--color-fg-subtle);transition:all 0.5s" title="Backend offline"></div>
+        <div class="hud-item hud-item--mach" title="Mach number">
+          <span class="hud-label glow-text-secondary">Mach</span>
+          <span class="hud-value hud-value--mach">4.20</span>
         </div>
-        <div title="Date and time">
-          <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">DATE/TIME</span>
-          <span id="datetime-display" style="color:var(--color-fg-default)">--/-- --:--:--</span>
+        <div class="hud-item hud-item--time" title="Date and time">
+          <span class="hud-label glow-text-secondary">DATE/TIME</span>
+          <span id="datetime-display" class="hud-value hud-value--time">--/-- --:--</span>
         </div>
       </div>
     </nav>
@@ -323,55 +365,6 @@
     <!-- MAIN REGION                                                        -->
     <!-- ================================================================== -->
     <main id="main-region" class="region region-main glow-flood" role="main" aria-label="Main content area">
-
-      <!-- Studio Tabs (moved from nav bar into main region header) -->
-      <div class="main-region-header">
-        <ul class="nav-tabs" role="tablist">
-          <li role="presentation">
-            <button
-              class="nav-tab active glow-text-secondary"
-              role="tab"
-              id="tab-design"
-              aria-selected="true"
-              aria-controls="studio-design"
-              data-studio="design"
-            >🎨 Design</button>
-          </li>
-          <li role="presentation">
-            <button
-              class="nav-tab glow-text-secondary"
-              role="tab"
-              id="tab-trading"
-              aria-selected="false"
-              aria-controls="studio-trading"
-              data-studio="trading"
-              tabindex="-1"
-            >📈 Trade</button>
-          </li>
-          <li role="presentation">
-            <button
-              class="nav-tab glow-text-secondary"
-              role="tab"
-              id="tab-fly"
-              aria-selected="false"
-              aria-controls="studio-fly"
-              data-studio="fly"
-              tabindex="-1"
-            >✈️ Fly</button>
-          </li>
-          <li role="presentation">
-            <button
-              class="nav-tab glow-text-secondary"
-              role="tab"
-              id="tab-converter"
-              aria-selected="false"
-              aria-controls="studio-converter"
-              data-studio="converter"
-              tabindex="-1"
-            >🔄 Convert</button>
-          </li>
-        </ul>
-      </div>
 
       <!-- Design Studio -->
       <section
@@ -544,117 +537,72 @@
           </div>
         </div>
 
-        <!-- Trading interface (shown immediately with public market data) -->
-        <div id="trading-interface" class="trading-interface">
-
-          <!-- Account summary bar -->
-          <div id="trading-account-bar" class="trading-account-bar" style="display:flex;align-items:center;gap:16px;padding:4px 8px;font-family:var(--font-family-mono);border-bottom:1px solid var(--color-border-muted)">
-            <span style="font-weight:700;color:var(--color-fg-muted)">BALANCE:</span>
-            <span id="account-balance-display" style="font-weight:700;color:var(--color-state-success)">—</span>
-            <span style="font-weight:700;color:var(--color-fg-muted);margin-left:12px">PORTFOLIO:</span>
-            <span id="portfolio-value-display" style="font-weight:700">—</span>
-            <span style="font-weight:700;color:var(--color-fg-muted);margin-left:12px">DAILY P/L:</span>
-            <span id="daily-pnl-display" style="font-weight:700">—</span>
-            <span style="flex:1"></span>
-            <button id="market-refresh-button" class="category-tab" title="Refresh markets" style="padding:2px 8px">🔄</button>
-          </div>
-
-          <!-- Kalshi-style category bar -->
-          <nav id="trading-category-nav" class="trading-category-nav ks-category-bar" aria-label="Market categories">
-            <button class="ks-cat-tab active" data-category="all">Trending</button>
-            <span class="ks-cat-dot">·</span>
-            <button class="ks-cat-tab" data-category="new">New</button>
-            <span class="ks-cat-dot">·</span>
-            <button class="ks-cat-tab" data-category="all_markets">All</button>
-            <span class="ks-cat-sep"></span>
-            <button class="ks-cat-tab" data-category="politics">Politics</button>
-            <button class="ks-cat-tab" data-category="sports">Sports</button>
-            <button class="ks-cat-tab" data-category="culture">Culture</button>
-            <button class="ks-cat-tab" data-category="crypto">Crypto</button>
-            <button class="ks-cat-tab" data-category="climate">Climate</button>
-            <button class="ks-cat-tab" data-category="economics">Economics</button>
-            <button class="ks-cat-tab" data-category="mentions">Mentions</button>
-            <button class="ks-cat-tab" data-category="companies">Companies</button>
-            <button class="ks-cat-tab" data-category="financials">Financials</button>
-            <button class="ks-cat-tab" data-category="tech_and_science">Tech &amp; Science</button>
+        <!-- Trading interface (Kalshi-style) -->
+        <div id="trading-interface" class="trading-interface trading-kalshi">
+          <!-- Category nav -->
+          <nav id="trading-category-nav" class="ts-cat-nav" aria-label="Market categories">
+            <button class="ts-cat-btn active" data-category="all">All</button>
+            <span class="ts-cat-dot">·</span>
+            <button class="ts-cat-btn" data-category="new">New</button>
+            <span class="ts-cat-dot">·</span>
+            <button class="ts-cat-btn" data-category="all_markets">Trending</button>
+            <span class="ts-cat-sep"></span>
+            <button class="ts-cat-btn" data-category="politics">Politics</button>
+            <button class="ts-cat-btn" data-category="sports">Sports</button>
+            <button class="ts-cat-btn" data-category="culture">Culture</button>
+            <button class="ts-cat-btn" data-category="crypto">Crypto</button>
+            <button class="ts-cat-btn" data-category="climate">Climate</button>
+            <button class="ts-cat-btn" data-category="economics">Economics</button>
+            <button class="ts-cat-btn" data-category="mentions">Mentions</button>
+            <button class="ts-cat-btn" data-category="companies">Companies</button>
+            <button class="ts-cat-btn" data-category="financials">Financials</button>
+            <button class="ts-cat-btn" data-category="tech_and_science">Tech &amp; Science</button>
           </nav>
 
-          <!-- Kalshi-style layout: sidebar + main content -->
-          <div class="ks-layout-body">
+          <!-- Pill row (subcategory chips) -->
+          <div id="trading-pill-row" class="ts-pill-row" aria-label="Category filters">
+            <!-- Dynamically populated by trading.js -->
+          </div>
 
-            <!-- Left sidebar for subcategories -->
-            <aside id="trading-subcategory-sidebar" class="ks-sidebar" aria-label="Market subcategories">
-              <nav id="trading-subcategory-nav" class="ks-sidebar-nav">
-                <!-- Dynamically populated by trading.js -->
-              </nav>
-            </aside>
-
-            <!-- Main content area -->
-            <div class="ks-main-content">
-
-              <!-- Filters -->
-              <div class="trading-filters" style="display:flex;gap:8px;align-items:center;padding:4px 0;flex-shrink:0;flex-wrap:wrap">
-                <div class="ks-freq-pills" id="freq-pill-group" aria-label="Frequency filter">
-                  <button class="ks-freq-pill active" data-freq="all">All</button>
-                  <button class="ks-freq-pill" data-freq="15min">15 Min</button>
-                  <button class="ks-freq-pill" data-freq="1h">Hourly</button>
-                  <button class="ks-freq-pill" data-freq="6h">6 Hour</button>
-                  <button class="ks-freq-pill" data-freq="24h">Daily</button>
-                  <button class="ks-freq-pill" data-freq="7d">Weekly</button>
-                </div>
-                <span style="width:1px;height:16px;background:var(--color-border-muted);flex-shrink:0"></span>
-                <label class="filter-label-group">
-                  <span>Volume:</span>
-                  <select id="filter-volume">
-                    <option value="all">All</option>
-                    <option value="high">High (10k+)</option>
-                    <option value="medium">Medium (1k-10k)</option>
-                    <option value="low">Low (&lt;1k)</option>
-                  </select>
-                </label>
-                <label class="filter-label-group">
-                  <span>Closes:</span>
-                  <select id="filter-time-to-close">
-                    <option value="all">Any time</option>
-                    <option value="1h">&lt; 1 hour</option>
-                    <option value="24h">&lt; 24 hours</option>
-                    <option value="7d">&lt; 7 days</option>
-                    <option value="30d">&lt; 30 days</option>
-                  </select>
-                </label>
-                <label class="filter-label-group">
-                  <span>Status:</span>
-                  <select id="filter-status">
-                    <option value="all">All</option>
-                    <option value="active">Open</option>
-                    <option value="closed">Closed</option>
-                  </select>
-                </label>
-                <span id="circuit-breaker-status" style="font-size:var(--type-caption);font-weight:700;margin-left:auto"></span>
-              </div>
-
-              <!-- Market cards grid -->
-              <div id="series-cards-grid" class="series-cards-grid"></div>
-
-              <!-- Series detail view (Kalshi-style drill-down into a series) -->
-              <div id="series-detail-view" class="ks-series-detail" style="display:none">
-                <div class="ks-detail-breadcrumb" id="series-detail-breadcrumb"></div>
-                <div class="ks-detail-header" id="series-detail-header"></div>
-                <div class="ks-detail-filters" id="series-detail-filters"></div>
-                <div class="ks-detail-events" id="series-detail-events"></div>
-              </div>
-
-              <!-- Show more button -->
-              <div id="show-more-container" style="display:none;justify-content:center;padding:8px 0;flex-shrink:0">
-                <button id="show-more-markets" class="category-tab" style="padding:6px 24px">Show More Markets</button>
+          <!-- Filter bar -->
+          <div id="trading-filter-bar" class="ts-filter-bar" aria-label="Market filters">
+            <div class="ts-dropdown" data-filter="sort">
+              <button class="ts-dropdown-btn" type="button" data-dropdown="sort">Closing soon</button>
+              <div class="ts-dropdown-menu">
+                <button class="ts-dropdown-item" data-value="closing">Closing soon</button>
+                <button class="ts-dropdown-item" data-value="volume">Volume</button>
               </div>
             </div>
+            <div class="ts-dropdown" data-filter="frequency">
+              <button class="ts-dropdown-btn" type="button" data-dropdown="frequency">Frequency</button>
+              <div class="ts-dropdown-menu">
+                <button class="ts-dropdown-item" data-value="all">All</button>
+                <button class="ts-dropdown-item" data-value="15min">15 Min</button>
+                <button class="ts-dropdown-item" data-value="1h">Hourly</button>
+                <button class="ts-dropdown-item" data-value="6h">6 Hour</button>
+                <button class="ts-dropdown-item" data-value="24h">Daily</button>
+                <button class="ts-dropdown-item" data-value="7d">Weekly</button>
+              </div>
+            </div>
+            <div class="ts-dropdown" data-filter="status">
+              <button class="ts-dropdown-btn" type="button" data-dropdown="status">Open markets</button>
+              <div class="ts-dropdown-menu">
+                <button class="ts-dropdown-item" data-value="active">Open markets</button>
+                <button class="ts-dropdown-item" data-value="all">All markets</button>
+                <button class="ts-dropdown-item" data-value="closed">Closed markets</button>
+              </div>
+            </div>
+            <button id="market-refresh-button" class="ts-filter-icon" title="Refresh markets" aria-label="Refresh markets">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 3v6h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <span id="circuit-breaker-status" class="ts-circuit-status"></span>
           </div>
-        </div>
 
-        <!-- Expanded card overlay -->
-        <div id="expanded-card-overlay" class="expanded-card-overlay" style="display:none">
-          <div id="expanded-card-content" class="expanded-card glow-display glow-bars-secondary"></div>
+          <!-- Main scroll area -->
+          <div id="trading-main" class="ts-main" aria-live="polite"></div>
         </div>
 
         <!-- Semi-auto approval overlay -->
@@ -910,14 +858,18 @@
           <div class="hangar-bar__row">
 
             <!-- Agent Access Card (~40% of bottom bar) -->
-            <div class="card card--compact hangar-card hangar-agent-card glow-display glow-bars-secondary">
-              <div class="card-header hangar-card__header">
-                <span class="glow-text-primary hangar-card__title">🤖 Agent Access</span>
-                <span class="glow-text-secondary hangar-card__legend" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
+            <div class="card card--compact hangar-card hangar-agent-card glow-display glow-bars-secondary agent-access-panel">
+              <div class="agent-access-panel__header-strip" aria-hidden="true"></div>
+              <div class="card-header hangar-card__header agent-access-panel__header">
+                <span class="glow-text-primary hangar-card__title agent-access-panel__title">🤖 Agent Access</span>
+                <span class="hangar-card__legend agent-access-panel__legend" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
               </div>
-              <div class="card-body hangar-card__body hangar-agent-body">
+              <div class="card-body hangar-card__body hangar-agent-body agent-access-panel__body">
                 <!-- Dynamic agent cards rendered by AgentDashboard module -->
-                <div id="agent-cards-container" class="agent-cards-grid"></div>
+                <div id="agent-cards-container" class="agent-cards-grid agent-cards-grid--panel"></div>
+              </div>
+              <div class="agent-access-panel__label-strip">
+                <span class="agent-access-panel__label-text">AGENT ACCESS BAY</span>
               </div>
             </div>
 
@@ -953,13 +905,13 @@
                     <div class="mfd-readout-col">
                       <span class="mfd-label" style="white-space:nowrap;text-align:center;line-height:1">HEAT</span>
                       <div id="agent-heatmap" class="mfd-heatmap">
-                        <div data-agent-heat="peritia" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-success);opacity:0.8" title="PERITIA — Active"></div>
-                        <div data-agent-heat="prime" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-warning);opacity:0.8" title="PRIME — Semi"></div>
-                        <div data-agent-heat="praxis" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.3" title="PRAXIS — Safe"></div>
-                        <div data-agent-heat="patiens" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="PATIENS — Construction"></div>
-                        <div data-agent-heat="pavis" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="PAVIS — Construction"></div>
-                        <div data-agent-heat="byob" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="BYOB — Awaiting Config"></div>
-                        <div data-agent-heat="agnt007" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="AGNT007 — Construction"></div>
+                        <div data-agent-heat="prime-01" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-warning);opacity:0.8" title="VOLUME — Semi"></div>
+                        <div data-agent-heat="peritia-02" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-success);opacity:0.8" title="CRYPTO — Active"></div>
+                        <div data-agent-heat="praxis-03" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.3" title="SPORTS — Safe"></div>
+                        <div data-agent-heat="patiens-04" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="FINANCIALS — Construction"></div>
+                        <div data-agent-heat="pavis-05" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="POLITICS — Construction"></div>
+                        <div data-agent-heat="byob-06" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="BYOB — Awaiting Config"></div>
+                        <div data-agent-heat="agnt007-07" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="COMPANIES — Construction"></div>
                       </div>
                       <span class="mfd-label" style="white-space:nowrap;text-align:center;line-height:1">WIN%</span>
                       <div id="win-rate-gauge" class="mfd-win-gauge">
@@ -1051,80 +1003,32 @@
       <!-- ACTION BAR — "Ignition" (~1/3 width) -->
       <div id="action-bar" class="region region-action glow-bars-secondary" role="toolbar" aria-label="Ignition controls">
         <div class="ignition-panel" data-ignition-state="stop">
-
-          <!-- Panel header with title and serial -->
-          <div class="ignition-panel__header">
-            <span class="ignition-panel__corner ignition-panel__corner--tl">◤</span>
-            <span class="ignition-panel__title glow-text-secondary">IGNITION</span>
-            <span class="ignition-panel__serial glow-text-secondary">PPP·CTRL·MK4</span>
-            <span class="ignition-panel__corner ignition-panel__corner--tr">◥</span>
-          </div>
-
-          <div class="ignition-body">
-            <!-- Status readout strip -->
-            <div class="ignition-status-bar ignition-status-bar--deco">
+          <div class="ignition-header">
+            <span class="ignition-title glow-text-secondary">IGNITION</span>
+            <div class="ignition-status">
               <span class="ignition-status-key">MODE</span>
-              <span class="ignition-status-sep">╠═</span>
               <span class="ignition-status-value" id="ignition-mode-display">FULL·STOP</span>
               <span class="ignition-status-dot" id="ignition-status-dot" data-state="stop"></span>
             </div>
-
-            <div class="ignition-core" aria-hidden="true">
-              <div class="ignition-core__rim"></div>
-              <div class="ignition-core__glass">
-                <span class="ignition-core__mark ignition-core__mark--auto">AUTO</span>
-                <span class="ignition-core__mark ignition-core__mark--semi">SEMI</span>
-                <span class="ignition-core__mark ignition-core__mark--stop">STOP</span>
-                <span class="ignition-core__needle"></span>
-                <span class="ignition-core__hub"></span>
-              </div>
-              <div class="ignition-core__plaque" aria-hidden="true">
-                <span class="ignition-core__plaque-title glow-text-secondary">AETHER IGNITION</span>
-                <span class="ignition-core__plaque-serial">DECO-DRIVE · 7A</span>
-              </div>
-            </div>
-
-            <!-- ── The three state selector buttons ── -->
-            <div class="ignition-controls" role="group" aria-label="Global agent throttle">
-
-              <!-- FULL AUTO -->
-              <button class="ign-btn ign-btn--auto" id="ign-btn-auto" data-ign-state="auto"
-                      aria-label="Global: Full Auto — all agents trade autonomously">
-                <span class="ign-btn__cap" aria-hidden="true"></span>
-                <span class="ign-btn__mode">FULL AUTO</span>
-                <span class="ign-btn__desc">AUTONOMOUS OPS</span>
-                <span class="ign-btn__spec">ALL AGENTS</span>
-              </button>
-
-              <!-- SEMI AUTO -->
-              <button class="ign-btn ign-btn--semi" id="ign-btn-semi" data-ign-state="semi"
-                      aria-label="Global: Semi Auto — agents require operator confirmation">
-                <span class="ign-btn__cap" aria-hidden="true"></span>
-                <span class="ign-btn__mode">SEMI AUTO</span>
-                <span class="ign-btn__desc">CONFIRM REQ.</span>
-                <span class="ign-btn__spec">THRESHOLD 95%</span>
-              </button>
-
-              <!-- FULL STOP -->
-              <button class="ign-btn ign-btn--stop ign-btn--active" id="ign-btn-stop" data-ign-state="stop"
-                      aria-label="Global: Full Stop — all agents halted, safe mode">
-                <span class="ign-btn__cap" aria-hidden="true"></span>
-                <span class="ign-btn__mode">FULL STOP</span>
-                <span class="ign-btn__desc">AGENTS HALTED</span>
-                <span class="ign-btn__spec">RISK LOCKED</span>
-              </button>
-
-            </div><!-- /.ignition-controls -->
-          </div><!-- /.ignition-body -->
-
-          <!-- Panel footer nameplate -->
-          <div class="ignition-panel__footer">
-            <span class="ignition-panel__corner ignition-panel__corner--bl">◣</span>
-            <span class="ignition-panel__foot-text">PPP-TH-MK4-REV2 · 2026 · GLOBAL THROTTLE</span>
-            <span class="ignition-panel__corner ignition-panel__corner--br">◢</span>
           </div>
 
-        </div><!-- /.ignition-panel -->
+          <div class="ignition-switch" role="group" aria-label="Global agent throttle">
+            <button class="ign-btn ign-btn--auto" id="ign-btn-auto" data-ign-state="auto"
+                    aria-label="Global: Full Auto — all agents trade autonomously">
+              <span class="ign-btn__label">AUTO</span>
+            </button>
+            <button class="ign-btn ign-btn--semi" id="ign-btn-semi" data-ign-state="semi"
+                    aria-label="Global: Semi Auto — agents require operator confirmation">
+              <span class="ign-btn__label">SEMI</span>
+            </button>
+            <button class="ign-btn ign-btn--stop ign-btn--active" id="ign-btn-stop" data-ign-state="stop"
+                    aria-label="Global: Full Stop — all agents halted, safe mode">
+              <span class="ign-btn__label">STOP</span>
+            </button>
+          </div>
+
+          <div class="ignition-footer">GLOBAL THROTTLE</div>
+        </div>
       </div>
 
     </div><!-- /.region-foot -->
@@ -1455,7 +1359,11 @@
         };
 
         /* Active agent names to control via ignition throttle */
-        const ACTIVE_AGENTS = ['peritia', 'prime', 'praxis'];
+        const ACTIVE_AGENTS = ['prime-01', 'peritia-02', 'praxis-03'];
+        const resolveApiName = (name) =>
+          typeof AgentDashboard !== 'undefined' && AgentDashboard.resolveApiName
+            ? AgentDashboard.resolveApiName(name)
+            : name;
 
         let currentState = 'stop';
 
@@ -1481,11 +1389,12 @@
              The /api/agents/{name}/mode endpoint now also sets status to
              "running" (for auto/semi-auto) or "idle" (for safe). */
           ACTIVE_AGENTS.forEach(agentName => {
-            fetch(`${BACKEND_URL}/api/agents/${encodeURIComponent(agentName)}/mode`, {
+            const apiName = resolveApiName(agentName);
+            fetch(`${BACKEND_URL}/api/agents/${encodeURIComponent(apiName)}/mode`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ mode: cfg.agentMode }),
-            }).catch(err => { console.warn(`Ignition: failed to set ${agentName} to ${cfg.agentMode}:`, err.message); });
+            }).catch(err => { console.warn(`Ignition: failed to set ${apiName} to ${cfg.agentMode}:`, err.message); });
           });
 
           /* Also enable/disable global trading via risk gateway */

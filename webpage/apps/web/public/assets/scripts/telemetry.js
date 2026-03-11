@@ -4,7 +4,7 @@
 
 const Telemetry = (() => {
   let pingData = [];
-  const MAX_PING_POINTS = 30; /* ~30 seconds at 1-second intervals */
+  const MAX_PING_POINTS = 15; /* ~15 seconds at 1-second intervals */
   const PING_Y_MIN = 0;
   const PING_Y_MAX = 300;
   let animationFrameId = null;
@@ -12,7 +12,7 @@ const Telemetry = (() => {
 
   function initialize() {
     updateDateTime();
-    setInterval(updateDateTime, 1000); /* 1-second resolution */
+    setInterval(updateDateTime, 1000); /* refresh every second for minute-accurate display */
     startPingSparkline();
     startBackendHealthCheck();
   }
@@ -25,8 +25,7 @@ const Telemetry = (() => {
     const day = String(now.getDate()).padStart(2, "0");
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    element.textContent = `${month}/${day} ${hours}:${minutes}:${seconds}`;
+    element.textContent = `${month}/${day} ${hours}:${minutes}`;
   }
 
   function startPingSparkline() {
@@ -54,7 +53,7 @@ const Telemetry = (() => {
       const pingLabel = document.getElementById("ping-label");
       if (pingLabel) {
         const lastPing = Math.round(rtt);
-        pingLabel.textContent = lastPing + "ms";
+        pingLabel.textContent = String(lastPing);
         pingLabel.style.color =
           lastPing < 50
             ? "var(--color-state-success)"
@@ -121,14 +120,15 @@ const Telemetry = (() => {
     }
 
     collectPing();
-    setInterval(collectPing, 1000); /* 1-second intervals for ~30s history */
+    setInterval(collectPing, 1000); /* 1-second intervals for ~15s history */
     drawSparkline();
   }
 
   function startBackendHealthCheck() {
+    const statusEl = document.getElementById("backend-health-dot");
+    if (!statusEl) return;
+
     async function checkBackend() {
-      const statusEl = document.getElementById("backend-health-dot");
-      if (!statusEl) return;
 
       try {
         const startTime = performance.now();

@@ -63,7 +63,6 @@ export function AppShell({
         <h1 className="app-title">
           <span className="app-title__accent">Paulie's</span> Prediction Partners 🤖
         </h1>
-        <div className="header-center-placeholder" />
         <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", fontSize: 12, color: "var(--color-fg-muted)" }}>
           {connectionState.connected && (
             <span className="badge badge--success" style={{ textTransform: "capitalize" }}>
@@ -77,24 +76,60 @@ export function AppShell({
       </header>
 
       {/* NAV BAR — spans all 3 columns */}
-      <nav className="region region-nav" style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 16, padding: "0 16px" }}>
-        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "var(--color-fg-muted)", textTransform: "uppercase" }}>
-          HUD
-        </span>
-        <div style={{ flex: 1 }} />
-        <span style={{ fontSize: 11, color: "var(--color-fg-subtle)" }}>PING:</span>
-        <span style={{ fontSize: 11, fontFamily: "var(--font-family-mono)", color: pingMs !== null ? "var(--color-state-success)" : "var(--color-fg-subtle)" }}>
-          {pingMs !== null ? `${pingMs}ms` : "—"}
-        </span>
-        <span
-          title={backendHealthy ? "Backend healthy" : "Backend unreachable"}
-          style={{
-            width: 8, height: 8, borderRadius: "50%",
-            background: backendHealthy ? "var(--color-state-success)" : "var(--color-state-error)",
-            display: "inline-block",
-          }}
-        />
-        <span style={{ fontSize: 11, fontFamily: "var(--font-family-mono)", color: "var(--color-fg-muted)" }}>{dateTimeStr}</span>
+      <nav
+        className="region region-nav hud-bar"
+        style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 16, padding: "0 16px" }}
+        aria-label="Studio navigation"
+      >
+        <span className="region-title hud-title">HUD</span>
+        <ul className="nav-tabs" role="tablist" aria-label="Studios">
+          {STUDIO_TABS.map((tab) => {
+            const isActive = activeStudioTab === tab.id;
+            return (
+              <li key={tab.id} role="presentation">
+                <button
+                  className={`nav-tab ${isActive ? "active" : ""}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => setActiveStudioTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="hud-telemetry" aria-label="HUD telemetry">
+          <div className="hud-item" title="Network latency">
+            <span className="hud-label">PING</span>
+            <span
+              className="hud-value hud-value--ping"
+              style={{ color: pingMs !== null ? "var(--color-state-success)" : "var(--color-fg-subtle)" }}
+            >
+              {pingMs !== null ? `${pingMs}ms` : "—"}
+            </span>
+          </div>
+          <div className="hud-item" title={backendHealthy ? "Backend healthy" : "Backend unreachable"}>
+            <span className="hud-label">SVC</span>
+            <span className="hud-value" style={{ display: "inline-flex", alignItems: "center" }}>
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: backendHealthy ? "var(--color-state-success)" : "var(--color-state-error)",
+                  display: "inline-block",
+                }}
+              />
+            </span>
+          </div>
+          <div className="hud-item" title="Date and time">
+            <span className="hud-label">DATE/TIME</span>
+            <span className="hud-value hud-value--time">{dateTimeStr}</span>
+          </div>
+        </div>
       </nav>
 
       {/* LEFT SIDEBAR — System Design */}
@@ -125,17 +160,6 @@ export function AppShell({
 
       {/* MAIN — Studio */}
       <main className="region region-main" style={{ gridColumn: "2", gridRow: "3", overflowY: "auto" }}>
-        <div className="main-region-header" style={{ display: "flex", gap: 4, padding: "8px 12px", borderBottom: "1px solid var(--color-border-muted)" }}>
-          {STUDIO_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              className={`axis-btn ${activeStudioTab === tab.id ? "active" : ""}`}
-              onClick={() => setActiveStudioTab(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
         <div className="studio-view" style={{ padding: 12 }}>
           {activeStudioTab === "Trade" && (
             <TradingView

@@ -10,69 +10,103 @@ const AgentDashboard = (() => {
   const BACKEND_URL = "http://127.0.0.1:8000";
   const POLL_INTERVAL_MS = 10000;
 
-  /* Agent configuration (icons and colours match PRD) */
+  /* Agent configuration (internal IDs include bot numbers) */
   const AGENT_CONFIG = {
-    peritia: {
-      displayName: "PERITIA",
-      icon: "🎯",
-      description: "BTC 15-min Candlestick",
-      chartColorVar: "--color-state-success" /* green */,
-      defaultMode: "semi-auto",
-      active: true,
-    },
-    prime: {
-      displayName: "PRIME",
+    "prime-01": {
+      apiName: "prime",
+      displayName: "volume",
       icon: "📊",
-      description: "Majority Signal",
+      description: "Volume + liquidity pulse",
       chartColorVar: "--color-accent-primary" /* blue / primary accent */,
       defaultMode: "semi-auto",
       active: true,
     },
-    praxis: {
-      displayName: "PRAXIS",
+    "peritia-02": {
+      apiName: "peritia",
+      displayName: "crypto",
+      icon: "🎯",
+      description: "BTC 15m momentum",
+      chartColorVar: "--color-state-success" /* green */,
+      defaultMode: "semi-auto",
+      active: true,
+    },
+    "praxis-03": {
+      apiName: "praxis",
+      displayName: "sports",
       icon: "🧠",
-      description: "Sports Markets",
+      description: "Sports markets",
       chartColorVar: "--color-accent-secondary" /* purple / secondary accent */,
       defaultMode: "safe",
       active: true,
     },
-    patiens: {
-      displayName: "PATIENS",
+    "patiens-04": {
+      apiName: "patiens",
+      displayName: "financials",
       icon: "🕰️",
-      description: "Long-term Holds",
+      description: "Oil up/down (Y/N)",
       chartColorVar: "--color-state-warning" /* amber */,
       defaultMode: "safe",
       active: false,
       underConstruction: true,
     },
-    pavis: {
-      displayName: "PAVIS",
+    "pavis-05": {
+      apiName: "pavis",
+      displayName: "politics",
       icon: "🛡️",
-      description: "Defensive Strategy",
+      description: "Policy + election focus",
       chartColorVar: "--color-fg-subtle" /* slate */,
       defaultMode: "safe",
       active: false,
       underConstruction: true,
     },
-    byob: {
-      displayName: "BRING-YOUR-OWN-BOT",
+    "byob-06": {
+      apiName: "byob",
+      displayName: "byob",
       icon: "🤖",
-      description: "Custom LLM Agent",
+      description: "Custom LLM agent",
       chartColorVar: "--color-state-info" /* cyan */,
       defaultMode: "safe",
       active: true,
       isByob: true,
     },
-    agnt007: {
-      displayName: "AGNT007",
+    "agnt007-07": {
+      apiName: "agnt007",
+      displayName: "companies",
       icon: "🕵️",
-      description: "Stealth Operations",
+      description: "Company event focus",
       chartColorVar: "--color-fg-muted" /* neutral */,
       defaultMode: "safe",
       active: false,
       underConstruction: true,
     },
   };
+
+  const AGENT_API_MAP = Object.entries(AGENT_CONFIG).reduce(
+    (acc, [internalName, config]) => {
+      acc[internalName] = config.apiName || internalName;
+      return acc;
+    },
+    {},
+  );
+
+  const AGENT_INTERNAL_MAP = Object.entries(AGENT_API_MAP).reduce(
+    (acc, [internalName, apiName]) => {
+      acc[apiName] = internalName;
+      return acc;
+    },
+    {},
+  );
+
+  const BYOB_KEY =
+    Object.keys(AGENT_CONFIG).find((key) => AGENT_CONFIG[key].isByob) || "byob";
+
+  function resolveApiName(internalName) {
+    return AGENT_API_MAP[internalName] || internalName;
+  }
+
+  function resolveInternalName(apiName) {
+    return AGENT_INTERNAL_MAP[apiName] || apiName;
+  }
 
   /* Canvas fallback color — only used when no CSS variables are available */
   const CHART_COLOR_FALLBACK = "#6b7280";
@@ -138,9 +172,13 @@ const AgentDashboard = (() => {
       if (config.underConstruction) {
         card.className = "agent-card agent-card--construction";
         card.innerHTML = `
-          <span class="agent-card__avatar">${config.icon}</span>
-          <span class="agent-card__name">${config.displayName}</span>
-          <span class="agent-card__role">${config.description}</span>
+          <div class="agent-card__cap">
+            <span class="agent-card__avatar">${config.icon}</span>
+            <div class="agent-card__identity">
+              <span class="agent-card__name">${config.displayName}</span>
+              <span class="agent-card__role">${config.description}</span>
+            </div>
+          </div>
           <div class="agent-card__construction">
             <span class="agent-card__construction-emoji">🚧</span>
             <span class="agent-card__construction-label">Under<br>Construction</span>
@@ -150,24 +188,44 @@ const AgentDashboard = (() => {
       } else if (config.isByob) {
         card.className = "agent-card agent-card--byob";
         card.innerHTML = `
-          <span class="agent-card__avatar">${config.icon}</span>
-          <span class="agent-card__name">${config.displayName}</span>
-          <span class="agent-card__role">${config.description}</span>
-          <div class="agent-card__status-dot" id="agent-dot-${agentName}" title="Status: Awaiting Config"></div>
+          <div class="agent-card__cap">
+            <span class="agent-card__avatar">${config.icon}</span>
+            <div class="agent-card__identity">
+              <span class="agent-card__name">${config.displayName}</span>
+              <span class="agent-card__role">${config.description}</span>
+            </div>
+          </div>
+          <div class="agent-card__status-row">
+            <span class="agent-card__status-label">LINK</span>
+            <div class="agent-card__status-dot" id="agent-dot-${agentName}" title="Status: Awaiting Config"></div>
+          </div>
           <button class="byob-menu-toggle" id="byob-toggle-btn" title="Configure your own bot">⚙️ Configure</button>
         `;
       } else if (config.active) {
         card.className = "agent-card";
         card.innerHTML = `
-          <span class="agent-card__avatar">${config.icon}</span>
-          <span class="agent-card__name">${config.displayName}</span>
-          <span class="agent-card__role">${config.description}</span>
-          <div class="agent-card__status-dot" id="agent-dot-${agentName}" title="Status: Offline"></div>
-          <div class="agent-card__stats" id="agent-stats-${agentName}">
-            <span class="agent-card__wr" id="agent-wr-${agentName}">—%</span>
-            <span class="agent-card__pnl" id="agent-pnl-${agentName}">$—</span>
+          <div class="agent-card__cap">
+            <span class="agent-card__avatar">${config.icon}</span>
+            <div class="agent-card__identity">
+              <span class="agent-card__name">${config.displayName}</span>
+              <span class="agent-card__role">${config.description}</span>
+            </div>
           </div>
-          <div class="agent-mode-buttons" id="agent-modes-${agentName}">
+          <div class="agent-card__status-row">
+            <span class="agent-card__status-label">LINK</span>
+            <div class="agent-card__status-dot" id="agent-dot-${agentName}" title="Status: Offline"></div>
+          </div>
+          <div class="agent-card__stats" id="agent-stats-${agentName}">
+            <div class="agent-card__stat">
+              <span class="agent-card__stat-label">WR</span>
+              <span class="agent-card__wr" id="agent-wr-${agentName}">—%</span>
+            </div>
+            <div class="agent-card__stat">
+              <span class="agent-card__stat-label">PNL</span>
+              <span class="agent-card__pnl" id="agent-pnl-${agentName}">$—</span>
+            </div>
+          </div>
+          <div class="agent-card__modes agent-mode-buttons" id="agent-modes-${agentName}">
             <button
               class="agent-mode-btn"
               data-agent="${agentName}"
@@ -194,9 +252,13 @@ const AgentDashboard = (() => {
       } else {
         card.className = "agent-card agent-card--inactive";
         card.innerHTML = `
-          <span class="agent-card__avatar">${config.icon}</span>
-          <span class="agent-card__name">${config.displayName}</span>
-          <span class="agent-card__role">${config.description}</span>
+          <div class="agent-card__cap">
+            <span class="agent-card__avatar">${config.icon}</span>
+            <div class="agent-card__identity">
+              <span class="agent-card__name">${config.displayName}</span>
+              <span class="agent-card__role">${config.description}</span>
+            </div>
+          </div>
           <span class="agent-card__locked">LOCKED</span>
         `;
       }
@@ -299,7 +361,7 @@ const AgentDashboard = (() => {
     /* When API key is entered, activate BYOB agent */
     if (apiKeyInput) {
       apiKeyInput.addEventListener("input", () => {
-        const dot = document.getElementById("agent-dot-byob");
+        const dot = document.getElementById(`agent-dot-${BYOB_KEY}`);
         if (apiKeyInput.value.trim().length > 8) {
           if (dot) {
             dot.className = "agent-card__status-dot dot-live";
@@ -338,8 +400,9 @@ const AgentDashboard = (() => {
     updateModeButtonHighlight(agentName, mode);
 
     try {
+      const apiName = resolveApiName(agentName);
       const response = await fetch(
-        `${BACKEND_URL}/api/agents/${encodeURIComponent(agentName)}/mode`,
+        `${BACKEND_URL}/api/agents/${encodeURIComponent(apiName)}/mode`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -348,7 +411,7 @@ const AgentDashboard = (() => {
       );
 
       if (!response.ok) {
-        console.warn(`Failed to set mode for ${agentName}: ${response.status}`);
+        console.warn(`Failed to set mode for ${apiName}: ${response.status}`);
         /* Revert to what the backend thinks (re-fetch on next poll) */
       }
     } catch (error) {
@@ -408,54 +471,13 @@ const AgentDashboard = (() => {
     if (!agentsData || typeof agentsData !== "object") return;
 
     Object.entries(AGENT_CONFIG).forEach(([agentName, config]) => {
-      const agentData = agentsData[agentName];
+      const apiName = resolveApiName(agentName);
+      const agentData = agentsData[apiName];
       if (!agentData) return;
 
       /* Update mode button highlight */
       const mode = agentData.mode || "safe";
       updateModeButtonHighlight(agentName, mode);
-
-      /* Update win rate (from win_count / total_trades) */
-      const wrElement = document.getElementById(`agent-wr-${agentName}`);
-      if (wrElement) {
-        const winCount = parseInt(agentData.win_count, 10) || 0;
-        const totalTrades = parseInt(agentData.total_trades, 10) || 0;
-        let winRateStr = "—%";
-        if (totalTrades > 0) {
-          const wr = Math.round((winCount / totalTrades) * 100);
-          winRateStr = `${wr}% (${winCount}/${totalTrades})`;
-          /* Color-code win rate */
-          wrElement.style.color =
-            wr >= 55
-              ? "var(--color-state-success)"
-              : wr >= 45
-                ? "var(--color-state-warning)"
-                : "var(--color-state-error)";
-        } else {
-          winRateStr = `0T`;
-        }
-        wrElement.textContent = winRateStr;
-      }
-
-      /* Update P&L */
-      const pnlElement = document.getElementById(`agent-pnl-${agentName}`);
-      if (pnlElement) {
-        const pnl =
-          agentData.realized_pnl !== undefined
-            ? parseFloat(agentData.realized_pnl)
-            : null;
-        if (pnl !== null && !isNaN(pnl)) {
-          const sign = pnl >= 0 ? "+" : "";
-          pnlElement.textContent = `${sign}$${Math.abs(pnl).toFixed(2)}`;
-          pnlElement.style.color =
-            pnl >= 0
-              ? "var(--color-state-success)"
-              : "var(--color-state-error)";
-        } else {
-          pnlElement.textContent = "$—";
-          pnlElement.style.color = "";
-        }
-      }
 
       /* Accumulate PnL history for multi-line chart */
       const pnl =
@@ -482,7 +504,7 @@ const AgentDashboard = (() => {
               ? "var(--color-state-warning)"
               : "var(--color-fg-subtle)";
         heatBar.style.opacity = mode === "safe" ? "0.3" : "0.8";
-        heatBar.title = `${agentName.toUpperCase()} — ${mode}`;
+        heatBar.title = `${config.displayName.toUpperCase()} — ${mode}`;
       }
     });
 
@@ -495,15 +517,8 @@ const AgentDashboard = (() => {
 
   function resetAgentDisplays() {
     Object.keys(AGENT_CONFIG).forEach((agentName) => {
-      const wrElement = document.getElementById(`agent-wr-${agentName}`);
-      const pnlElement = document.getElementById(`agent-pnl-${agentName}`);
       const dot = document.getElementById(`agent-dot-${agentName}`);
 
-      if (wrElement) wrElement.textContent = "—%";
-      if (pnlElement) {
-        pnlElement.textContent = "$—";
-        pnlElement.style.color = "";
-      }
       if (dot) {
         dot.className = "agent-card__status-dot";
       }
@@ -611,7 +626,7 @@ const AgentDashboard = (() => {
     let totalWins = 0;
     let totalTrades = 0;
     Object.keys(AGENT_CONFIG).forEach((agentName) => {
-      const agentData = agentsData[agentName];
+      const agentData = agentsData[resolveApiName(agentName)];
       if (!agentData) return;
       totalWins += parseInt(agentData.win_count, 10) || 0;
       totalTrades += parseInt(agentData.total_trades, 10) || 0;
@@ -649,9 +664,10 @@ const AgentDashboard = (() => {
 
     bars.forEach((bar, index) => {
       const agentName = agentNames[index];
-      if (!agentName || !agentsData[agentName]) return;
+      const apiName = resolveApiName(agentName);
+      if (!agentName || !agentsData[apiName]) return;
 
-      const mode = agentsData[agentName].mode || "safe";
+      const mode = agentsData[apiName].mode || "safe";
       bar.style.background =
         mode === "auto"
           ? "var(--color-state-success)"
@@ -672,7 +688,8 @@ const AgentDashboard = (() => {
     if (event.type === "agent_mode_changed" && event.data) {
       const { agent_name, mode } = event.data;
       if (agent_name && mode) {
-        updateModeButtonHighlight(agent_name, mode);
+        const internalName = resolveInternalName(agent_name);
+        updateModeButtonHighlight(internalName, mode);
       }
     }
   }
@@ -682,5 +699,7 @@ const AgentDashboard = (() => {
     onConnected,
     onDisconnected,
     onEvent,
+    resolveApiName,
+    resolveInternalName,
   };
 })();
