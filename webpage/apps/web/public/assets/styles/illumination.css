@@ -11,7 +11,7 @@
    -------------------------------------------------------------------------- */
 :root {
   /* ---- Master control -------------------------------------------------- */
-  --fx-master-switch: 1; /* 1 = ON (default), 0 = OFF              */
+  --fx-master-switch: 0; /* 1 = ON, 0 = OFF (default)              */
   --fx-master-dim: 1; /* dimmer: 0.25 – 1.00              */
   --fx-mode-base: 0.6; /* DAY (light) mode base intensity   */
 
@@ -132,10 +132,7 @@
     0 0 calc(var(--fx-glow-display) * 24px) var(--color-accent-primary),
     inset 0 0 calc(var(--fx-glow-display) * 12px)
       color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
-  filter: brightness(calc(0.92 + var(--fx-glow-display) * 0.08));
-  transition:
-    box-shadow var(--_glow-transition),
-    filter var(--_glow-transition);
+  transition: box-shadow var(--_glow-transition);
 }
 
 /* ---- 3g. COMBINED — display + bars-secondary (don't override shadows) -- */
@@ -150,7 +147,6 @@
     inset 0 0 calc(var(--fx-glow-display) * 12px)
       color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   border-color: var(--color-accent-secondary);
-  filter: brightness(calc(0.92 + var(--fx-glow-display) * 0.08));
 }
 
 /* ---- 3h. COMBINED — display + bars-primary (don't override shadows) ---- */
@@ -165,7 +161,6 @@
     inset 0 0 calc(var(--fx-glow-display) * 12px)
       color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
   border-color: var(--color-accent-primary);
-  filter: brightness(calc(0.92 + var(--fx-glow-display) * 0.08));
 }
 
 /* ==========================================================================

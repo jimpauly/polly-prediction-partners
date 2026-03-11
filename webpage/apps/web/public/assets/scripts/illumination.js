@@ -47,7 +47,7 @@
 
   const DEFAULT_STATE = {
     mode: "day", // 'day' | 'nvg'
-    master: { on: true, dim: 1.0 },
+    master: { on: false, dim: 1.0 },
     textPrimary: { on: true, dim: 1.0 },
     textSecondary: { on: true, dim: 1.0 },
     textDim: 1.0,
@@ -59,6 +59,15 @@
   };
 
   let state = loadState();
+
+  function cloneState(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function applyStartupDefaults() {
+    state = cloneState(DEFAULT_STATE);
+    saveState();
+  }
 
   /* ------------------------------------------------------------------------
      Storage helpers
@@ -364,6 +373,9 @@
      ------------------------------------------------------------------------ */
 
   function init() {
+    // Force a consistent startup state (no illumination flash).
+    applyStartupDefaults();
+
     // Wire switches
     document.querySelectorAll(".flip-switch[data-channel]").forEach(wireSwitch);
 

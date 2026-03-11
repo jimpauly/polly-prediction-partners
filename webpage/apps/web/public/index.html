@@ -56,7 +56,7 @@
     }
     .palette-swatch__label {
       font-family: var(--font-family-mono);
-      font-size: 0.6rem;
+      font-size: var(--type-caption);
       color: var(--color-fg-muted);
       word-break: break-all;
       transition: color 0.15s;
@@ -83,7 +83,7 @@
     }
     .gauge__label {
       font-family: var(--font-family-mono);
-      font-size: 0.6rem;
+      font-size: var(--type-caption);
       color: var(--color-fg-muted);
     }
   </style>
@@ -111,7 +111,7 @@
     <!-- ╔══════════════════════════════════════════════════╗
          ║   ILLUMINATION CONTROL PANEL (COCKPIT STYLE)   ║
          ╚══════════════════════════════════════════════════╝ -->
-    <div class="illum-panel" id="illum-panel" data-master="on" role="region" aria-label="Illumination Control Panel">
+    <div class="illum-panel" id="illum-panel" data-master="off" role="region" aria-label="Illumination Control Panel">
 
       <!-- Top header strip — thin blank bar mirroring the bottom nameplate -->
       <div class="illum-panel-header-strip" aria-hidden="true"></div>
@@ -138,7 +138,7 @@
       <div class="illum-group" data-dial-style="b" title="Master illumination power">
         <div class="illum-group-label">MASTER</div>
         <div class="illum-switches-row">
-          <div class="flip-switch master-switch" data-channel="master" data-state="on" title="Master ON/OFF">
+          <div class="flip-switch master-switch" data-channel="master" data-state="off" title="Master ON/OFF">
             <div class="switch-housing">
               <div class="switch-guard-ring"></div>
               <div class="switch-lever"></div>
@@ -262,7 +262,7 @@
     <nav id="nav-bar" class="region region-nav glow-bars-secondary" role="navigation" aria-label="Studio navigation">
       <span class="region-title glow-text-secondary" style="margin:0;white-space:nowrap">HUD</span>
       <!-- Telemetry Card (right-aligned) -->
-      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-family:var(--font-family-mono);white-space:nowrap;font-size:11px">
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;font-family:var(--font-family-mono);white-space:nowrap;font-size:var(--type-label)">
         <div class="flex items-center gap-1" title="Network latency">
           <span class="glow-text-secondary" style="font-weight:700;color:var(--color-fg-muted)">PING</span>
           <canvas id="ping-sparkline" width="48" height="16" style="display:block"></canvas>
@@ -299,8 +299,8 @@
           <span class="sidebar-panel__title glow-text-secondary">Modes</span>
         </div>
         <div class="sidebar-panel__body" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);justify-items:center">
-          <button id="mode-toggle-btn" class="btn btn-sm" aria-label="Toggle light/dark mode" style="width:88%;font-size:0.85rem">🌙 Dark</button>
-          <button id="toggle-3d" class="btn btn-sm" aria-label="Toggle 3D/2D mode" style="width:88%;font-size:0.85rem">🧊 3D Off</button>
+          <button id="mode-toggle-btn" class="btn btn-sm" aria-label="Toggle light/dark mode" style="width:88%">🌙 Dark</button>
+          <button id="toggle-3d" class="btn btn-sm" aria-label="Toggle 3D/2D mode" style="width:88%">🧊 3D Off</button>
         </div>
       </div>
 
@@ -604,8 +604,8 @@
                 </div>
                 <span style="width:1px;height:16px;background:var(--color-border-muted);flex-shrink:0"></span>
                 <label class="filter-label-group">
-                  <span style="color:var(--color-fg-muted);font-size:10px;font-weight:700;text-transform:uppercase">Volume:</span>
-                  <select id="filter-volume" style="padding:2px 4px;background:var(--color-bg-surface);color:var(--color-fg-default);border:1px solid var(--color-border-muted);border-radius:4px;font-size:10px">
+                  <span>Volume:</span>
+                  <select id="filter-volume">
                     <option value="all">All</option>
                     <option value="high">High (10k+)</option>
                     <option value="medium">Medium (1k-10k)</option>
@@ -613,8 +613,8 @@
                   </select>
                 </label>
                 <label class="filter-label-group">
-                  <span style="color:var(--color-fg-muted);font-size:10px;font-weight:700;text-transform:uppercase">Closes:</span>
-                  <select id="filter-time-to-close" style="padding:2px 4px;background:var(--color-bg-surface);color:var(--color-fg-default);border:1px solid var(--color-border-muted);border-radius:4px;font-size:10px">
+                  <span>Closes:</span>
+                  <select id="filter-time-to-close">
                     <option value="all">Any time</option>
                     <option value="1h">&lt; 1 hour</option>
                     <option value="24h">&lt; 24 hours</option>
@@ -623,14 +623,14 @@
                   </select>
                 </label>
                 <label class="filter-label-group">
-                  <span style="color:var(--color-fg-muted);font-size:10px;font-weight:700;text-transform:uppercase">Status:</span>
-                  <select id="filter-status" style="padding:2px 4px;background:var(--color-bg-surface);color:var(--color-fg-default);border:1px solid var(--color-border-muted);border-radius:4px;font-size:10px">
+                  <span>Status:</span>
+                  <select id="filter-status">
                     <option value="all">All</option>
                     <option value="active">Open</option>
                     <option value="closed">Closed</option>
                   </select>
                 </label>
-                <span id="circuit-breaker-status" style="font-size:10px;font-weight:700;margin-left:auto"></span>
+                <span id="circuit-breaker-status" style="font-size:var(--type-caption);font-weight:700;margin-left:auto"></span>
               </div>
 
               <!-- Market cards grid -->
@@ -762,7 +762,7 @@
                 <label class="form-label" for="calc-price">Contract Price (cents, 1–99)</label>
                 <input id="calc-price" class="input" type="number" min="1" max="99" value="50" step="1">
               </div>
-              <div class="calc-results" id="calc-results" style="background:var(--color-bg-canvas);border:1px solid var(--color-border-muted);border-radius:6px;padding:12px;font-family:var(--font-family-mono);font-size:12px;display:flex;flex-direction:column;gap:4px">
+              <div class="calc-results" id="calc-results">
                 <!-- populated by JS -->
               </div>
               <div class="flex gap-2 flex-wrap">
@@ -791,7 +791,7 @@
                 <label class="form-label" for="kelly-bankroll">Bankroll ($)</label>
                 <input id="kelly-bankroll" class="input" type="number" min="1" value="1000" step="10">
               </div>
-              <div id="kelly-results" style="background:var(--color-bg-canvas);border:1px solid var(--color-border-muted);border-radius:6px;padding:12px;font-family:var(--font-family-mono);font-size:12px;display:flex;flex-direction:column;gap:4px">
+              <div id="kelly-results">
                 <!-- populated by JS -->
               </div>
               <button class="btn btn-sm btn-primary" onclick="runKelly()">Calculate</button>
@@ -819,7 +819,7 @@
                   <input id="conv-percent" class="input" type="number" min="1" max="99" placeholder="50" oninput="syncConvert('percent')">
                 </div>
               </div>
-              <div id="conv-implied" style="font-size:11px;color:var(--color-fg-muted);font-family:var(--font-family-mono)"></div>
+              <div id="conv-implied"></div>
             </div>
           </div>
 
@@ -828,7 +828,7 @@
             <div class="card-header">
               <span class="glow-text-primary">📚 Quick Reference</span>
             </div>
-            <div class="card-body" style="font-size:11px;display:flex;flex-direction:column;gap:6px">
+            <div class="card-body" style="display:flex;flex-direction:column;gap:6px">
               <div style="font-weight:700;margin-bottom:4px;color:var(--color-accent-primary)">Kalshi Contract Basics</div>
               <div class="detail-row"><span>YES wins</span><span>Pays $1.00 per contract</span></div>
               <div class="detail-row"><span>NO wins</span><span>Pays $1.00 per contract</span></div>
@@ -837,7 +837,7 @@
               <div class="detail-row"><span>NO @ 40¢</span><span>Win $0.60 if correct</span></div>
               <hr class="divider" style="margin:4px 0">
               <div style="font-weight:700;margin-bottom:4px;color:var(--color-accent-primary)">Kelly Criterion</div>
-              <div style="font-family:var(--font-family-mono);background:var(--color-bg-canvas);padding:6px;border-radius:4px;font-size:10px">
+              <div style="font-family:var(--font-family-mono);background:var(--color-bg-canvas);padding:6px;border-radius:4px;font-size:var(--type-caption)">
                 f* = (p × b − q) / b<br>
                 <span style="opacity:0.6">p=win prob, q=1−p, b=net odds (1/price − 1)</span>
               </div>
@@ -903,36 +903,36 @@
     <div class="region-foot">
 
       <!-- BOTTOM BAR — "Hangar Bay" (full width, scrolls horizontally) -->
-      <footer id="bottom-bar" class="region region-bottom glow-bars-primary" role="contentinfo" aria-label="Hangar Bay">
-        <div style="display:flex;flex-direction:column;gap:var(--space-1);width:100%;padding:var(--space-1);min-height:0">
-          <span class="region-title glow-text-primary" style="margin:0;flex-shrink:0">Hangar Bay</span>
+      <footer id="bottom-bar" class="region region-bottom glow-bars-primary hangar-bar" role="contentinfo" aria-label="Hangar Bay">
+        <div class="hangar-bar__inner">
+          <span class="region-title glow-text-primary hangar-bar__title">Hangar Bay</span>
 
-          <div style="display:flex;gap:var(--space-2);align-items:stretch;flex-wrap:nowrap;overflow-x:auto;flex:1;min-height:0">
+          <div class="hangar-bar__row">
 
             <!-- Agent Access Card (~40% of bottom bar) -->
-            <div class="card card--compact hangar-agent-card glow-display glow-bars-secondary" style="min-width:200px">
-              <div class="card-header" style="padding:3px 6px">
-                <span class="glow-text-primary" style="font-weight:700">🤖 Agent Access</span>
-                <span class="glow-text-secondary" style="font-family:var(--font-family-mono);font-size:10px;font-weight:700;color:var(--color-fg-subtle);margin-left:auto" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
+            <div class="card card--compact hangar-card hangar-agent-card glow-display glow-bars-secondary">
+              <div class="card-header hangar-card__header">
+                <span class="glow-text-primary hangar-card__title">🤖 Agent Access</span>
+                <span class="glow-text-secondary hangar-card__legend" title="A=Auto S=Semi-Auto ⛔=Safe">A / S / ⛔</span>
               </div>
-              <div class="card-body" style="padding:3px 6px;flex:1;display:flex;flex-direction:column">
+              <div class="card-body hangar-card__body hangar-agent-body">
                 <!-- Dynamic agent cards rendered by AgentDashboard module -->
-                <div id="agent-cards-container" style="display:flex;gap:var(--space-1);flex-wrap:nowrap;align-items:stretch;flex:1;min-width:0"></div>
+                <div id="agent-cards-container" class="agent-cards-grid"></div>
               </div>
             </div>
 
             <!-- P/L Multi-Function Display (~30% of bottom bar) -->
-            <div class="card card--compact hangar-mfd-card glow-display glow-bars-secondary" style="min-width:180px">
-              <div class="card-header mfd-header" style="padding:3px 6px">
+            <div class="card card--compact hangar-card hangar-mfd-card glow-display glow-bars-secondary">
+              <div class="card-header mfd-header hangar-card__header">
                 <span class="glow-text-primary" style="font-weight:700">📟 P/L MFD</span>
               </div>
-              <div class="card-body mfd-body" style="padding:4px 6px;flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
+              <div class="card-body mfd-body hangar-card__body">
 
                 <!-- MFD Display Area: Top buttons | Canvas + Right readouts | Bottom buttons -->
-                <div class="mfd-display" style="flex:1;display:flex;flex-direction:column;gap:0;min-height:0">
+                <div class="mfd-display">
 
                   <!-- TOP: Y-Axis scale buttons -->
-                  <div class="mfd-btn-row" style="display:flex;gap:2px;justify-content:space-evenly;margin-bottom:2px">
+                  <div class="mfd-btn-row mfd-btn-row--top">
                     <button class="mfd-btn active" data-axis="y" aria-label="Y-axis: $10">$10</button>
                     <button class="mfd-btn" data-axis="y" aria-label="Y-axis: $100">$100</button>
                     <button class="mfd-btn" data-axis="y" aria-label="Y-axis: $1k">$1k</button>
@@ -941,18 +941,18 @@
                   </div>
 
                   <!-- CENTER: Chart + Right readouts -->
-                  <div style="flex:1;display:flex;gap:4px;min-height:0;align-items:stretch">
+                  <div class="mfd-center-row">
 
                     <!-- Chart Canvas -->
-                    <div style="flex:1;display:flex;flex-direction:column;min-width:0;min-height:0">
-                      <span class="mfd-label" style="text-align:center">+/- $</span>
-                      <canvas id="pl-graph" width="300" height="80" style="width:100%;flex:1;border:1px solid var(--color-border-muted);border-radius:2px;background:var(--color-bg-canvas)"></canvas>
+                    <div class="mfd-chart-col">
+                      <span class="mfd-label mfd-label--center">+/- $</span>
+                      <canvas id="pl-graph" width="300" height="80" class="mfd-chart"></canvas>
                     </div>
 
                     <!-- RIGHT: Readouts — Heatmap & Win Rate -->
-                    <div class="mfd-readout-col" style="display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:space-evenly">
+                    <div class="mfd-readout-col">
                       <span class="mfd-label" style="white-space:nowrap;text-align:center;line-height:1">HEAT</span>
-                      <div id="agent-heatmap" style="display:flex;flex-direction:column;gap:1px">
+                      <div id="agent-heatmap" class="mfd-heatmap">
                         <div data-agent-heat="peritia" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-success);opacity:0.8" title="PERITIA — Active"></div>
                         <div data-agent-heat="prime" style="width:20px;height:4px;border-radius:1px;background:var(--color-state-warning);opacity:0.8" title="PRIME — Semi"></div>
                         <div data-agent-heat="praxis" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.3" title="PRAXIS — Safe"></div>
@@ -962,8 +962,8 @@
                         <div data-agent-heat="agnt007" style="width:20px;height:4px;border-radius:1px;background:var(--color-fg-subtle);opacity:0.15" title="AGNT007 — Construction"></div>
                       </div>
                       <span class="mfd-label" style="white-space:nowrap;text-align:center;line-height:1">WIN%</span>
-                      <div id="win-rate-gauge" style="position:relative;width:20px;height:24px;border:1px solid var(--color-border-muted);border-radius:2px;background:var(--color-bg-canvas);overflow:hidden;display:flex;align-items:flex-end">
-                        <div style="width:100%;height:0%;background:linear-gradient(180deg,var(--color-state-success),var(--color-accent-primary));border-radius:1px;transition:height 0.5s" id="win-rate-fill"></div>
+                      <div id="win-rate-gauge" class="mfd-win-gauge">
+                        <div id="win-rate-fill" class="mfd-win-gauge__fill"></div>
                       </div>
                       <span id="win-rate-label" class="mfd-label" style="color:var(--color-fg-muted)">—</span>
                     </div>
@@ -971,7 +971,7 @@
                   </div>
 
                   <!-- BOTTOM: X-Axis time buttons -->
-                  <div class="mfd-btn-row" style="display:flex;gap:2px;justify-content:space-evenly;margin-top:2px">
+                  <div class="mfd-btn-row mfd-btn-row--bottom">
                     <button class="mfd-btn active" data-axis="x" aria-label="X-axis: 24 hours">24h</button>
                     <button class="mfd-btn" data-axis="x" aria-label="X-axis: 1 week">1w</button>
                     <button class="mfd-btn" data-axis="x" aria-label="X-axis: 1 month">1m</button>
@@ -985,12 +985,12 @@
             </div>
 
             <!-- Connect API Keys Card (~20% of bottom bar) -->
-            <div id="api-key-card" class="card card--compact glow-display glow-bars-secondary" style="min-width:130px">
-              <div class="card-header" style="padding:3px 6px">
+            <div id="api-key-card" class="card card--compact hangar-card hangar-api-card glow-display glow-bars-secondary">
+              <div class="card-header hangar-card__header">
                 <span class="glow-text-primary" style="font-weight:700">🔑 Connect API Keys</span>
               </div>
-              <div class="card-body card-inner" style="padding:4px 6px;display:flex;flex-direction:column;gap:3px;flex:1">
-                <div class="api-mode-selector" style="display:flex;gap:var(--space-2);align-items:center">
+              <div class="card-body card-inner hangar-card__body hangar-api-body">
+                <div class="api-mode-selector api-grid-mode">
                   <label class="radio">
                     <input type="radio" name="api-mode" value="live"> Live
                   </label>
@@ -998,9 +998,9 @@
                     <input type="radio" name="api-mode" value="demo"> Demo
                   </label>
                 </div>
-                <input id="api-key-input" class="input api-input" type="text" placeholder="API Key" disabled style="padding:3px 6px;height:22px">
-                <textarea id="rsa-key-input" class="input api-input" placeholder="RSA Private Key (PEM)" disabled rows="2" style="padding:3px 6px;resize:none;flex:1;-webkit-text-security:disc"></textarea>
-                <button id="connect-button" class="btn btn-sm btn-primary connect-button" disabled style="padding:3px 8px">Connect Kalshi Stream</button>
+                <input id="api-key-input" class="input api-input api-grid-key" type="text" placeholder="API Key" disabled>
+                <textarea id="rsa-key-input" class="input api-input api-textarea api-grid-rsa" placeholder="RSA Private Key (PEM)" disabled rows="1"></textarea>
+                <button id="connect-button" class="btn btn-sm btn-primary connect-button api-grid-connect" disabled>Connect Kalshi Stream</button>
               </div>
             </div>
 
@@ -1030,16 +1030,16 @@
             </div>
 
             <!-- Market Mode Indicator (~10% of bottom bar) -->
-            <div class="card card--compact hangar-market-mode-card glow-display glow-bars-secondary" style="min-width:70px;text-align:center">
-              <div class="card-header" style="padding:3px 6px">
+            <div class="card card--compact hangar-card hangar-market-mode-card glow-display glow-bars-secondary">
+              <div class="card-header hangar-card__header">
                 <span class="glow-text-primary" style="font-weight:700">Market Mode</span>
               </div>
-              <div class="card-body" style="padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;justify-content:center">
-                <div id="connection-light" class="indicator-light" style="width:22px;height:22px;border-radius:50%;background:var(--color-fg-subtle);box-shadow:0 0 6px var(--color-fg-subtle)"></div>
-                <span id="connection-status" style="font-family:var(--font-family-mono);font-weight:700;color:var(--color-fg-muted)">OFFLINE</span>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:auto">
-                  <span style="font-family:var(--font-family-mono);font-size:9px;color:var(--color-fg-subtle)">UPTIME</span>
-                  <span id="connection-uptime" style="font-family:var(--font-family-mono);font-weight:700;font-size:10px;color:var(--color-fg-muted)">—</span>
+              <div class="card-body hangar-card__body hangar-market-body">
+                <div id="connection-light" class="indicator-light"></div>
+                <span id="connection-status" class="hangar-market-status">OFFLINE</span>
+                <div class="hangar-uptime">
+                  <span class="hangar-uptime__label">UPTIME</span>
+                  <span id="connection-uptime" class="hangar-uptime__value">—</span>
                 </div>
               </div>
             </div>
@@ -1050,7 +1050,7 @@
 
       <!-- ACTION BAR — "Ignition" (~1/3 width) -->
       <div id="action-bar" class="region region-action glow-bars-secondary" role="toolbar" aria-label="Ignition controls">
-        <div class="ignition-panel">
+        <div class="ignition-panel" data-ignition-state="stop">
 
           <!-- Panel header with title and serial -->
           <div class="ignition-panel__header">
@@ -1060,51 +1060,62 @@
             <span class="ignition-panel__corner ignition-panel__corner--tr">◥</span>
           </div>
 
-          <!-- Status readout strip -->
-          <div class="ignition-status-bar">
-            <span class="ignition-status-key">MODE</span>
-            <span class="ignition-status-sep">╠═</span>
-            <span class="ignition-status-value" id="ignition-mode-display">FULL·STOP</span>
-            <span class="ignition-status-dot" id="ignition-status-dot" data-state="stop"></span>
-          </div>
+          <div class="ignition-body">
+            <!-- Status readout strip -->
+            <div class="ignition-status-bar ignition-status-bar--deco">
+              <span class="ignition-status-key">MODE</span>
+              <span class="ignition-status-sep">╠═</span>
+              <span class="ignition-status-value" id="ignition-mode-display">FULL·STOP</span>
+              <span class="ignition-status-dot" id="ignition-status-dot" data-state="stop"></span>
+            </div>
 
-          <!-- ── The three state selector buttons ── -->
-          <div class="ignition-states" role="group" aria-label="Global agent throttle">
+            <div class="ignition-core" aria-hidden="true">
+              <div class="ignition-core__rim"></div>
+              <div class="ignition-core__glass">
+                <span class="ignition-core__mark ignition-core__mark--auto">AUTO</span>
+                <span class="ignition-core__mark ignition-core__mark--semi">SEMI</span>
+                <span class="ignition-core__mark ignition-core__mark--stop">STOP</span>
+                <span class="ignition-core__needle"></span>
+                <span class="ignition-core__hub"></span>
+              </div>
+              <div class="ignition-core__plaque" aria-hidden="true">
+                <span class="ignition-core__plaque-title glow-text-secondary">AETHER IGNITION</span>
+                <span class="ignition-core__plaque-serial">DECO-DRIVE · 7A</span>
+              </div>
+            </div>
 
-            <!-- FULL AUTO -->
-            <button class="ign-btn ign-btn--auto" id="ign-btn-auto" data-ign-state="auto"
-                    aria-label="Global: Full Auto — all agents trade autonomously">
-              <div class="ign-btn__row ign-btn__row--top">
-                <span class="ign-btn__indicator" aria-hidden="true">◉</span>
+            <!-- ── The three state selector buttons ── -->
+            <div class="ignition-controls" role="group" aria-label="Global agent throttle">
+
+              <!-- FULL AUTO -->
+              <button class="ign-btn ign-btn--auto" id="ign-btn-auto" data-ign-state="auto"
+                      aria-label="Global: Full Auto — all agents trade autonomously">
+                <span class="ign-btn__cap" aria-hidden="true"></span>
                 <span class="ign-btn__mode">FULL AUTO</span>
-              </div>
-              <div class="ign-btn__desc">AUTONOMOUS OPS</div>
-              <div class="ign-btn__spec">CTRL-BUS·LIVE · ALL AGENTS ENGAGED</div>
-            </button>
+                <span class="ign-btn__desc">AUTONOMOUS OPS</span>
+                <span class="ign-btn__spec">ALL AGENTS</span>
+              </button>
 
-            <!-- SEMI AUTO -->
-            <button class="ign-btn ign-btn--semi" id="ign-btn-semi" data-ign-state="semi"
-                    aria-label="Global: Semi Auto — agents require operator confirmation">
-              <div class="ign-btn__row ign-btn__row--top">
-                <span class="ign-btn__indicator" aria-hidden="true">◉</span>
+              <!-- SEMI AUTO -->
+              <button class="ign-btn ign-btn--semi" id="ign-btn-semi" data-ign-state="semi"
+                      aria-label="Global: Semi Auto — agents require operator confirmation">
+                <span class="ign-btn__cap" aria-hidden="true"></span>
                 <span class="ign-btn__mode">SEMI AUTO</span>
-              </div>
-              <div class="ign-btn__desc">CONFIRM REQ.</div>
-              <div class="ign-btn__spec">THRESHOLD·95% · ALERT ARMED</div>
-            </button>
+                <span class="ign-btn__desc">CONFIRM REQ.</span>
+                <span class="ign-btn__spec">THRESHOLD 95%</span>
+              </button>
 
-            <!-- FULL STOP -->
-            <button class="ign-btn ign-btn--stop ign-btn--active" id="ign-btn-stop" data-ign-state="stop"
-                    aria-label="Global: Full Stop — all agents halted, safe mode">
-              <div class="ign-btn__row ign-btn__row--top">
-                <span class="ign-btn__indicator" aria-hidden="true">⊘</span>
+              <!-- FULL STOP -->
+              <button class="ign-btn ign-btn--stop ign-btn--active" id="ign-btn-stop" data-ign-state="stop"
+                      aria-label="Global: Full Stop — all agents halted, safe mode">
+                <span class="ign-btn__cap" aria-hidden="true"></span>
                 <span class="ign-btn__mode">FULL STOP</span>
-              </div>
-              <div class="ign-btn__desc">AGENTS HALTED</div>
-              <div class="ign-btn__spec">RISK LOCKED · SAFE ARMED</div>
-            </button>
+                <span class="ign-btn__desc">AGENTS HALTED</span>
+                <span class="ign-btn__spec">RISK LOCKED</span>
+              </button>
 
-          </div><!-- /.ignition-states -->
+            </div><!-- /.ignition-controls -->
+          </div><!-- /.ignition-body -->
 
           <!-- Panel footer nameplate -->
           <div class="ignition-panel__footer">
@@ -1450,6 +1461,7 @@
 
         const modeDisplay  = document.getElementById('ignition-mode-display');
         const statusDot    = document.getElementById('ignition-status-dot');
+        const ignitionPanel = document.querySelector('.ignition-panel');
 
         function applyState(state) {
           currentState = state;
@@ -1458,6 +1470,7 @@
           /* Update status strip */
           if (modeDisplay) modeDisplay.textContent = cfg.label;
           if (statusDot)   statusDot.dataset.state = cfg.dot;
+          if (ignitionPanel) ignitionPanel.dataset.ignitionState = state;
 
           /* Highlight active button, dim others */
           document.querySelectorAll('.ign-btn').forEach(btn => {
@@ -1614,7 +1627,7 @@
           <span style="opacity:0.6">EV on bankroll</span>
           <span style="font-weight:800;color:var(${ev > 0 ? '--color-state-success' : '--color-state-error'})">${ev > 0 ? '+' : ''}$${ev.toFixed(2)}</span>
         </div>
-        ${kelly <= 0 ? '<div style="color:var(--color-state-warning);font-size:10px;margin-top:4px">⚠ Negative edge — Kelly says skip this trade</div>' : ''}
+        ${kelly <= 0 ? '<div style="color:var(--color-state-warning);font-size:var(--type-caption);margin-top:4px">⚠ Negative edge — Kelly says skip this trade</div>' : ''}
       `;
     }
 
