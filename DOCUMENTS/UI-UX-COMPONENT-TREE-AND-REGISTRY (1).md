@@ -124,6 +124,7 @@ COMPONENT TREE
 ```
 
 > **R01 Accessibility**
+>
 > - All interactive controls (switches, dials, tabs) must expose `aria-*` labels and be reachable by keyboard
 > - Focus ring visible on each control; colors chosen to meet WCAG contrast
 > - Contrast ratios for ON states must meet WCAG AA for text over illuminated surfaces
@@ -183,6 +184,7 @@ COMPONENT TREE
 ```
 
 > **R02 Accessibility**
+>
 > - HUD label: `aria-hidden="true"` or `role="presentation"`
 > - Tab group: `role="tablist"`; each tab: `role="tab"` with `aria-selected` and `tabindex` management
 > - DESIGN: `role="tab" aria-selected="true" tabindex="0"`
@@ -221,6 +223,7 @@ COMPONENT TREE
 ```
 
 > **R03 Accessibility**
+>
 > - Sidebar container: `aria-label="System Design"`, `role="complementary"`
 > - Light/Dark and 3D/2D toggles: focusable, `aria-pressed` announces state
 > - 3D/2D toggle: visible focus style and `aria-describedby` tooltip
@@ -278,6 +281,7 @@ COMPONENT TREE
 ```
 
 > **R04 Accessibility**
+>
 > - Tablist: `role="tablist"`; Notes tab: `role="tab" aria-selected="true" tabindex="0"`; Positions and History tabs: `role="tab" aria-selected="false" tabindex="-1"`
 > - Pagination dots and file-upload button: `aria-label` and keyboard focus
 > - Inactive panels (Positions, History): `aria-hidden="true"`; active panel: `aria-live="polite"`
@@ -333,6 +337,7 @@ COMPONENT TREE
 ```
 
 > **R05 Accessibility**
+>
 > - Container: `role="region"` with `aria-label="Hangar Bay"`
 > - Agent cards: switches have descriptive `aria-label`; indicator lights are decorative (`aria-hidden`)
 > - Hover details reachable via keyboard focus: `aria-describedby` or `aria-expanded` state
@@ -368,6 +373,7 @@ COMPONENT TREE
 ```
 
 > **R06 Accessibility**
+>
 > - Panel: `role="region"` + `aria-label="Ignition"`
 > - Status dot: `aria-live="polite"`
 > - Lock toggle: `aria-pressed`
@@ -479,6 +485,7 @@ COMPONENT TREE
 ```
 
 > **R07 Accessibility**
+>
 > - Container: `role="main"`; each studio section has `aria-labelledby` linking to its header
 > - Region label "PERISCOPE VIEWING PORT": `aria-hidden="true"`
 > - All interactive controls (toggles, nav buttons, filters): keyboard focusable with visible focus rings; `aria-pressed` or `aria-selected` expose state
@@ -499,6 +506,7 @@ GLOBAL
 ```
 
 > **Global**
+>
 > - Unified design token system for borders, shadows, and illumination — no ad-hoc values
 > - `-webkit-font-smoothing: antialiased` applied globally
 > - Consistent global gap values between all top-level regions
