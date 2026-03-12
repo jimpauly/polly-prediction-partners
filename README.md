@@ -1,5 +1,9 @@
 # Paulie's Prediction Partners
 
+> ⚠️ **Front-end Removed & Backend Deprecated**
+>
+> All website and application code has been erased. The backend is frozen and is only to be modified after an explicit request to support a new front end (see `BACKEND_DEPRECATED.md`).
+
 Prediction market trading platform built on custom algorithms (web + desktop + API services).
 
 ---
@@ -131,25 +135,19 @@ Prediction market trading platform built on custom algorithms (web + desktop + A
 
 ## Quick Start
 
-```bash
-git clone https://github.com/jimpauly/paulies-prediction-partners.git
-cd paulies-prediction-partners/webpage
-npm install
-npm start
-```
+The front-end tooling has been removed. To work with the backend services, please refer to `BACKEND_DEPRECATED.md` and await further direction.
 
 ## Backend Only
 
 ```bash
-cd webpage
-npm run start:backend
+# backend development is currently deprecated
+# no commands are provided until a new frontend is specified
 ```
 
 ## Web Preview Only
 
 ```bash
-cd webpage
-npm run start:web
+# frontend code no longer exists in this repo
 ```
 
 ## Run Backend Tests

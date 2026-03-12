@@ -1,14 +1,16 @@
 # Paulie's Prediction Partners
 
-## Element Tree + Polish Register
+## Component Tree + Polish Register
 
 _Updated: 03-11-26 · Incorporates Octo-Issue feedback_
 
+*This document describes the target state of every UI component as if the site were fully built; it is a requirements outline rather than a set of tasks.*
+
 ---
 
-# PART I — ELEMENT TREE
+## PART I — ELEMENT TREE
 
-> Region → Card → Element → Sub-element
+> Region → Card → Component → Element
 
 ---
 
@@ -111,7 +113,7 @@ HEADER BAR
     │   └── Implementation notes
     │       ├── Use GPU friendly gradients and avoid full‑screen postprocessing bloom; prefer local glows composited with CSS/SVG layers
     │  # Notes: `masterScale` (0 or 1) multiplies all channel intensities at render time.
-    └── Bottom nameplate  "ILLUMINATION SWITCHBOARD""
+    └── Bottom nameplate  "ILLUMINATION SWITCHBOARD"
 ```
 
 ### Accessibility notes — Header Bar
@@ -465,7 +467,7 @@ GLOBAL
 
 ---
 
-# PART II — POLISH REGISTER
+## PART II — POLISH REGISTER
 
 ---
 
@@ -473,24 +475,24 @@ GLOBAL
 
 **Brand Logo**
 
-- [ ] should fill the first 1/3 space
-- [ ] Default should now say "Paulies Studios" — design studio is default
-- [ ] When switching studios: "Paulie's Prediction Partners" / "Paulies Flight Simulator" / "Paulie's File Converting Studio"
-- [ ] Append robot emoji (🤖) to the trade‑studio title version
-- [ ] Include the placeholder circle element centred between the title and illumination panel
+- should fill the first 1/3 space
+- Default should now say "Paulies Studios" — design studio is default
+- When switching studios: "Paulie's Prediction Partners" / "Paulies Flight Simulator" / "Paulie's File Converting Studio"
+- Append robot emoji (🤖) to the trade‑studio title version
+- Include the placeholder circle element centred between the title and illumination panel
 
 **Illumination Panel Container**
 
-- [ ] Floats and completely obscures the main viewport content beneath it — header should fit fully around it
-- [ ] Add vertical "ILLUMINATION" sticker label on left edge of panel card
-- [ ] Dimmer readouts should show 10‑to‑2.5 values with no percentage sign
-- [ ] Master switch logic: OFF by default, once flipped ON the rest of the channels fully illuminate
+- Floats and completely obscures the main viewport content beneath it — header should fit fully around it
+- Add vertical "ILLUMINATION" sticker label on left edge of panel card
+- Dimmer readouts should show 10‑to‑2.5 values with no percentage sign
+- Master switch logic: OFF by default, once flipped ON the rest of the channels fully illuminate
 
 **Flip-Switches & Dimmer-Dials (DAY/NVG, MASTER, TEXT, BARS, FLOOD, DISPLAY)**
 
-- [ ] Text labels are squished and misaligned horizontally with their dials
-- [ ] Indicator dots below dials have uneven spacing
-- [ ] Standardize label alignment relative to dials and space dots uniformly
+- Text labels are squished and misaligned horizontally with their dials
+- Indicator dots below dials have uneven spacing
+- Standardize label alignment relative to dials and space dots uniformly
 
 ---
 
@@ -498,26 +500,26 @@ GLOBAL
 
 **Left Tabs (HUD, DESIGN, TRADE, FLY, CONVERT)**
 
-- [ ] The blue active indicator line under "DESIGN" is faint and slightly misaligned — could fill more space and be more noticeable
-- [ ] Increase contrast and thickness of the active tab line to make the current location obvious, make centered under tab script
-- [ ] The miniature icons next to HUD, DESIGN, etc., are scaled poorly and look slightly blurry
-- [ ] Replace with crisp, uniform SVGs sized consistently with the nav text
-- [ ] If SVGs will help more things look the same proportions no matter what size of landscape viewport, then let's implement SVGs
+- The blue active indicator line under "DESIGN" is faint and slightly misaligned — could fill more space and be more noticeable
+- Increase contrast and thickness of the active tab line to make the current location obvious, make centered under tab script
+- The miniature icons next to HUD, DESIGN, etc., are scaled poorly and look slightly blurry
+- Replace with crisp, uniform SVGs sized consistently with the nav text
+- If SVGs will help more things look the same proportions no matter what size of landscape viewport, then let's implement SVGs
 
 **Panel Visibility Toggles**
 
-- [ ] Remove collapse/expand arrows from sidebars — do 4 toggles in the nav bar after the clock instead
-- [ ] Panel visibility toggles in the nav bar should show/hide: Header Bar, Left Side Bar, Right Side Bar, and Bottom Bar
-- [ ] The Nav Bar, Main Region, and Action Bar (Ignition) — these 3 regions should not be toggled away
-- [ ] These 3 regions should actually be the 3 that are shown if the viewport feels it is in Portrait mode, the remaining 4 regions should auto-hide
+- Remove collapse/expand arrows from sidebars — do 4 toggles in the nav bar after the clock instead
+- Panel visibility toggles in the nav bar should show/hide: Header Bar, Left Side Bar, Right Side Bar, and Bottom Bar
+- The Nav Bar, Main Region, and Action Bar (Ignition) — these 3 regions should not be toggled away
+- These 3 regions should actually be the 3 that are shown if the viewport feels it is in Portrait mode, the remaining 4 regions should auto-hide
 
 **Right Metrics (PING, Mach, DATE/TIME)**
 
-- [ ] We could add another component in here — if we take the idea from the market mode card, and develop an indicator that would go first, before ping, this indicator shows 'market mode', live/demo/or no illumination
-- [ ] Market Mode card removed from Bottom Bar; content absorbed here
-- [ ] The "PING" graphic feels cramped
-- [ ] Vertical centering between "Mach 4.20" and the time is uneven
-- [ ] Normalize padding and lock vertical alignment for all right-side text and graphics
+- We could add another component in here — if we take the idea from the market mode card, and develop an indicator that would go first, before ping, this indicator shows 'market mode', live/demo/or no illumination
+- Market Mode card removed from Bottom Bar; content absorbed here
+- The "PING" graphic feels cramped
+- Vertical centering between "Mach 4.20" and the time is uneven
+- Normalize padding and lock vertical alignment for all right-side text and graphics
 
 ---
 
@@ -525,12 +527,12 @@ GLOBAL
 
 **MODES card**
 
-- [ ] Spacing between "Dark" and "3D Off" buttons and the card edges feels slightly unbalanced — a lot of vertical space underneath
-- [ ] Refactor for minimum padding and spacing for left/right and top/bottom and inner margins for these toggle buttons, the script in them
+- Spacing between "Dark" and "3D Off" buttons and the card edges feels slightly unbalanced — a lot of vertical space underneath
+- Refactor for minimum padding and spacing for left/right and top/bottom and inner margins for these toggle buttons, the script in them
 
 **SYSTEM THEME card**
 
-- [ ] Theme selection buttons crammed too tightly vertically — increase vertical margin
+- Theme selection buttons crammed too tightly vertically — increase vertical margin
 
 ---
 
@@ -538,23 +540,23 @@ GLOBAL
 
 **Tabs**
 
-- [ ] The icons for Notes, Positions, and History mix flat and 3D illustration styles — use a single, monochromatic icon library for all UI tabs
-- [ ] Center tiny nav icons above the notepad
+- The icons for Notes, Positions, and History mix flat and 3D illustration styles — use a single, monochromatic icon library for all UI tabs
+- Center tiny nav icons above the notepad
 
 **Note Editor**
 
-- [ ] Top decorative rings graphic is physically cut off/clipping at the top — adjust the container height or SVG scaling to prevent cutoff
-- [ ] Notebook background horizontal lines run completely edge-to-edge — add a subtle left/right margin to the repeating line background to mimic real paper margins
-- [ ] Editor toolbar (B, H1, bullets) & pagination not centered horizontally relative to the notepad paper lines — apply flexbox or text-align center to the toolbar container
+- Top decorative rings graphic is physically cut off/clipping at the top — adjust the container height or SVG scaling to prevent cutoff
+- Notebook background horizontal lines run completely edge-to-edge — add a subtle left/right margin to the repeating line background to mimic real paper margins
+- Editor toolbar (B, H1, bullets) & pagination not centered horizontally relative to the notepad paper lines — apply flexbox or text-align center to the toolbar container
 
 **Input Box ("ideas and requests")**
 
-- [ ] _(details TBD)_
+- _(details TBD)_
 
 **"Send email" Button**
 
-- [ ] Increase size of script
-- [ ] Rename to 'Send to Paulie'
+- Increase size of script
+- Rename to 'Send to Paulie'
 
 ---
 
@@ -562,32 +564,32 @@ GLOBAL
 
 **AGENT ACCESS card**
 
-- [ ] Remove sublabels that are the descriptions — only leave the one-worded category specialty for agents. Volume is just Volume. Crypto is just Crypto.
-- [ ] If hovered over for a pause, then we can have all these elements in the hover window:
-  - [ ] Put the sub-label description in this window
-  - [ ] Set the win rate and PNL elements in the window and their value indicators
-  - [ ] Remove the link script. Keep the light.
-- [ ] Default agent card view: H1 agent emoji inline with one-word category name · indicator light · 3-position switch
-- [ ] Ensure all 7 agent modules have only one svg + script header at the top then a 3-switch component underneath
-- [ ] Horizontal scrollbar in the Agent Access bay overlaps the container's bottom padding — increase bottom padding on the scroll container so the bar doesn't sit directly on the outer border
+- Remove sublabels that are the descriptions — only leave the one-worded category specialty for agents. Volume is just Volume. Crypto is just Crypto.
+- If hovered over for a pause, then we can have all these elements in the hover window:
+  -  Put the sub-label description in this window
+  -  Set the win rate and PNL elements in the window and their value indicators
+  -  Remove the link script. Keep the light.
+- Default agent card view: H1 agent emoji inline with one-word category name · indicator light · 3-position switch
+- Ensure all 7 agent modules have only one svg + script header at the top then a 3-switch component underneath
+- Horizontal scrollbar in the Agent Access bay overlaps the container's bottom padding — increase bottom padding on the scroll container so the bar doesn't sit directly on the outer border
 
 **P/L MFD card**
 
-- [ ] Remove the heat chart component to the right of the line chart
-- [ ] Remove the script '+/- $' we do not need this
-- [ ] Dollar/Timeframe Buttons: total width should be the width of the line chart
+- Remove the heat chart component to the right of the line chart
+- Remove the script '+/- $' we do not need this
+- Dollar/Timeframe Buttons: total width should be the width of the line chart
 
 **CONNECT API KEYS card**
 
-- [ ] It should be auto filled to Demo Mode
-- [ ] Live and Demo script font could be larger, the left margin could be increased
-- [ ] "Connect Kalshi Stream" Button: script could fill more space in the button and the right margin could increase the same amount
-- [ ] Input fields have different corner radii — unify border-radius for all text inputs
-- [ ] Center-top align default scripts for both fields
+- It should be auto filled to Demo Mode
+- Live and Demo script font could be larger, the left margin could be increased
+- "Connect Kalshi Stream" Button: script could fill more space in the button and the right margin could increase the same amount
+- Input fields have different corner radii — unify border-radius for all text inputs
+- Center-top align default scripts for both fields
 
 **MARKET MODE card**
 
-- [ ] Move into nav bar as a component that is placed first in the telemetry card, so it would be before ping
+- Move into nav bar as a component that is placed first in the telemetry card, so it would be before ping
 
 ---
 
@@ -595,39 +597,37 @@ GLOBAL
 
 **Main Toggle Pill (AUTO, SEMI, STOP)**
 
-- [ ] Should look like a 4 quartered pie, with the third slice not present, but is instead connected to the body of an old timey cruise-liner throttle engine-order-telegraph
+- Should look like a 4 quartered pie, with the third slice not present, but is instead connected to the body of an old timey cruise-liner throttle engine-order-telegraph
 
 ---
 
 ## Chapter 7 · Main Region
 
-## Chapter 7 · Main Region
-
 **ACTIVE PALETTE card**
 
-- [ ] Let's get the swatches smaller, like a swatch, not regular shaped, and randomly shaped like a splotch
-- [ ] Make the card itself also an irregular illogical shape like a palette
-- [ ] Use the internet for inspiration
-- [ ] Color swatches must be accurate to the active theme
+- Let's get the swatches smaller, like a swatch, not regular shaped, and randomly shaped like a splotch
+- Make the card itself also an irregular illogical shape like a palette
+- Use the internet for inspiration
+- Color swatches must be accurate to the active theme
 
 **MAN-O'-METERS card**
 
-- [ ] Remove the value labels underneath each meter — it should instead show in the meter
-- [ ] The main-label itself should be integrated into the meter's body
-- [ ] Make meters close together like a wide 4 leaf clover with art deco plumbing running behind them, 3 meters arching underneath the main 'Batt' meter
-- [ ] All 3 should be unique in architecture like they measure completely different things
+- Remove the value labels underneath each meter — it should instead show in the meter
+- The main-label itself should be integrated into the meter's body
+- Make meters close together like a wide 4 leaf clover with art deco plumbing running behind them, 3 meters arching underneath the main 'Batt' meter
+- All 3 should be unique in architecture like they measure completely different things
 
 **SYSTEM LOGS card**
 
-- [ ] Log text jammed directly against the left inner border of the box — increase inner padding (specifically padding-left) on the log container
-- [ ] Make look like an old-curved-terminal-monitor, square with rounded edges
-- [ ] Log window is also jammed in the system logs card, and the card should wrap around the log window
+- Log text jammed directly against the left inner border of the box — increase inner padding (specifically padding-left) on the log container
+- Make look like an old-curved-terminal-monitor, square with rounded edges
+- Log window is also jammed in the system logs card, and the card should wrap around the log window
 
 **WEB ELEMENTS card**
 
-- [ ] Inputs (Text, Select, Checkbox, Radio): _(details TBD)_
-- [ ] Web Elements Buttons: _(details TBD)_
-- [ ] Alert Contrast: _(details TBD)_
+- Inputs (Text, Select, Checkbox, Radio): _(details TBD)_
+- Web Elements Buttons: _(details TBD)_
+- Alert Contrast: _(details TBD)_
 
 ---
 
@@ -635,40 +635,26 @@ GLOBAL
 
 **Global Borders**
 
-- [ ] Use of solid lines, drop shadows, and glowing effects makes the UI look disjointed with inconsistencies
-- [ ] Audit all borders, and establish a unified design token system for borders, shadows, and illumination tokens
-- [ ] Read chapter 1 in PRD for requested illumination physics
+- Use of solid lines, drop shadows, and glowing effects makes the UI look disjointed with inconsistencies
+- Audit all borders, and establish a unified design token system for borders, shadows, and illumination tokens
+- Read chapter 1 in PRD for requested illumination physics
 
 **Global Typography**
 
-- [ ] Font weights vary arbitrarily
+- Font weights vary arbitrarily
 
 **Font Rendering**
 
-- [ ] Small text across the UI looks heavily pixelated/aliased
-- [ ] Apply `-webkit-font-smoothing: antialiased;` globally to clean up small text rendering
+- Small text across the UI looks heavily pixelated/aliased
+- Apply `-webkit-font-smoothing: antialiased;` globally to clean up small text rendering
 
 **Panel Spacing**
 
-- [ ] The negative space between major region containers is uneven
-- [ ] Apply consistent global gap values (e.g., 16px or 24px) between all top-level regions
+- The negative space between major region containers is uneven
+- Apply consistent global gap values (e.g., 16px or 24px) between all top-level regions
 
 ---
 
 ## Chapter 9 · Backend
 
-- [ ] **BUG: Markets not loading after successful API connect** — investigate:
-  - [ ] Does auto-navigate to Trading Studio fire after successful handshake?
-  - [ ] Is the initial market fetch triggered post-auth?
-  - [ ] Are WebSocket channels subscribing correctly?
-  - [ ] Check Live vs Demo — wrong environment returns empty sets
-  - [ ] Surface raw API response in System Logs to identify error
-- [ ] cache.get() argument order — audit across all 3 agents (known past bug)
-- [ ] cache.subscribe() — no unsupported `environment` argument
-- [ ] Event loop tuple unpacking — `(ticker, environment)` not `(ticker, state)` — audit all agents
-- [ ] Agent Peritia: BTC ticker set persists across restarts
-- [ ] Hard stop: all agents blocked when balance < floor; floor configurable
-- [ ] Fill-to-agent attribution intact on all fills
-- [ ] API keys not stored in plaintext
-- [ ] Agent state + P/L history survive app restart
-- [ ] SVC dot in Nav Bar reflects real backend health, not just page load
+
