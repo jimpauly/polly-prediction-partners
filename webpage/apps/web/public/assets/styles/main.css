@@ -132,7 +132,8 @@ body {
   grid-template-columns: var(--layout-sidebar-width) minmax(0, 1fr) var(
       --layout-sidebar-width
     );
-  grid-template-rows: var(--layout-header-height) var(--layout-nav-height)
+  grid-template-rows:
+    var(--layout-header-height) var(--layout-nav-height)
     minmax(0, 1fr) var(--layout-foot-height);
   grid-template-areas:
     "header  header  header"
@@ -231,7 +232,11 @@ body {
   padding: 2px 8px;
   border-radius: var(--border-radius-sm);
   border: 1px solid var(--color-border-muted);
-  background: color-mix(in srgb, var(--color-bg-surface-raised) 70%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-bg-surface-raised) 70%,
+    transparent
+  );
   letter-spacing: 0.22em;
 }
 
@@ -243,8 +248,13 @@ body {
   padding: 2px 10px;
   border-radius: var(--border-radius-md);
   border: 1px solid var(--color-border-muted);
-  background: color-mix(in srgb, var(--color-bg-surface-raised) 82%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 6%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-bg-surface-raised) 82%,
+    transparent
+  );
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--color-fg-default) 6%, transparent);
   font-family: var(--font-family-mono);
   font-size: var(--type-label);
   white-space: nowrap;
@@ -1882,8 +1892,13 @@ textarea.input {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--color-fg-subtle) 70%, var(--color-bg-canvas));
-  border: 1px solid color-mix(in srgb, var(--color-border-default) 60%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-fg-subtle) 70%,
+    var(--color-bg-canvas)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--color-border-default) 60%, transparent);
   box-shadow:
     0 0 6px rgba(0, 0, 0, 0.25),
     inset 0 0 2px color-mix(in srgb, var(--color-bg-canvas) 30%, transparent);
@@ -1892,19 +1907,22 @@ textarea.input {
 .agent-card__status-dot.dot-live {
   background: var(--color-state-success);
   border-color: color-mix(in srgb, var(--color-state-success) 80%, black);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-success) 60%, transparent);
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-success) 60%, transparent);
 }
 
 .agent-card__status-dot.dot-warning {
   background: var(--color-state-warning);
   border-color: color-mix(in srgb, var(--color-state-warning) 80%, black);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-warning) 60%, transparent);
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-warning) 60%, transparent);
 }
 
 .agent-card__status-dot.dot-stopped {
   background: var(--color-state-error);
   border-color: color-mix(in srgb, var(--color-state-error) 80%, black);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-error) 60%, transparent);
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-error) 60%, transparent);
 }
 
 .agent-card__stats {
@@ -1971,7 +1989,11 @@ textarea.input {
   padding: 0;
   border-radius: 3px;
   border: 1px solid var(--color-border-muted);
-  background: color-mix(in srgb, var(--color-bg-canvas) 70%, var(--color-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--color-bg-canvas) 70%,
+    var(--color-bg-surface)
+  );
   color: var(--color-fg-subtle);
   cursor: pointer;
   position: relative;
@@ -1999,7 +2021,8 @@ textarea.input {
     color-mix(in srgb, var(--color-fg-subtle) 20%, transparent),
     color-mix(in srgb, var(--color-bg-surface-raised) 80%, transparent)
   );
-  border: 1px solid color-mix(in srgb, var(--color-border-default) 70%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--color-border-default) 70%, transparent);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--color-fg-default) 12%, transparent),
     inset 0 -1px 0 color-mix(in srgb, var(--color-bg-canvas) 60%, transparent);
@@ -2018,7 +2041,8 @@ textarea.input {
 .agent-mode-btn.active {
   border-color: var(--color-accent-primary);
   color: var(--color-accent-primary);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
 }
 
 .agent-mode-btn.active::before {
@@ -2030,20 +2054,35 @@ textarea.input {
 
 .agent-mode-btn[data-mode="auto"].active {
   color: var(--color-state-success);
-  border-color: color-mix(in srgb, var(--color-state-success) 70%, var(--color-border-muted));
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-success) 30%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--color-state-success) 70%,
+    var(--color-border-muted)
+  );
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-success) 30%, transparent);
 }
 
 .agent-mode-btn[data-mode="semi-auto"].active {
   color: var(--color-state-warning);
-  border-color: color-mix(in srgb, var(--color-state-warning) 70%, var(--color-border-muted));
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-warning) 30%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--color-state-warning) 70%,
+    var(--color-border-muted)
+  );
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-warning) 30%, transparent);
 }
 
 .agent-mode-btn[data-mode="safe"].active {
   color: var(--color-state-error);
-  border-color: color-mix(in srgb, var(--color-state-error) 70%, var(--color-border-muted));
-  box-shadow: 0 0 6px color-mix(in srgb, var(--color-state-error) 30%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--color-state-error) 70%,
+    var(--color-border-muted)
+  );
+  box-shadow: 0 0 6px
+    color-mix(in srgb, var(--color-state-error) 30%, transparent);
 }
 
 .agent-card__locked {
@@ -2109,7 +2148,11 @@ textarea.input {
   padding: 2px 4px;
   border: 1px solid var(--color-accent-primary);
   border-radius: 3px;
-  background: color-mix(in srgb, var(--color-bg-surface) 80%, var(--color-bg-canvas));
+  background: color-mix(
+    in srgb,
+    var(--color-bg-surface) 80%,
+    var(--color-bg-canvas)
+  );
   color: var(--color-accent-primary);
   cursor: pointer;
   transition: all 0.15s;
@@ -3115,7 +3158,11 @@ textarea.input {
 .mfd-win-gauge__fill {
   width: 100%;
   height: 0%;
-  background: linear-gradient(180deg, var(--color-state-success), var(--color-accent-primary));
+  background: linear-gradient(
+    180deg,
+    var(--color-state-success),
+    var(--color-accent-primary)
+  );
   border-radius: 1px;
   transition: height 0.5s;
 }
@@ -3437,9 +3484,15 @@ textarea.input {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
-.ignition-panel[data-ignition-state="auto"] { --ign-accent: var(--color-state-success); }
-.ignition-panel[data-ignition-state="semi"] { --ign-accent: var(--color-state-warning); }
-.ignition-panel[data-ignition-state="stop"] { --ign-accent: var(--color-state-error); }
+.ignition-panel[data-ignition-state="auto"] {
+  --ign-accent: var(--color-state-success);
+}
+.ignition-panel[data-ignition-state="semi"] {
+  --ign-accent: var(--color-state-warning);
+}
+.ignition-panel[data-ignition-state="stop"] {
+  --ign-accent: var(--color-state-error);
+}
 
 .ignition-header {
   display: flex;
@@ -3522,16 +3575,30 @@ textarea.input {
 
 .ign-btn:hover {
   color: var(--btn-accent);
-  border-color: color-mix(in srgb, var(--btn-accent) 35%, var(--color-border-muted));
+  border-color: color-mix(
+    in srgb,
+    var(--btn-accent) 35%,
+    var(--color-border-muted)
+  );
 }
 
-.ign-btn--auto { --btn-accent: var(--color-state-success); }
-.ign-btn--semi { --btn-accent: var(--color-state-warning); }
-.ign-btn--stop { --btn-accent: var(--color-state-error); }
+.ign-btn--auto {
+  --btn-accent: var(--color-state-success);
+}
+.ign-btn--semi {
+  --btn-accent: var(--color-state-warning);
+}
+.ign-btn--stop {
+  --btn-accent: var(--color-state-error);
+}
 
 .ign-btn--active {
   color: var(--btn-accent);
-  background: color-mix(in srgb, var(--btn-accent) 15%, var(--color-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--btn-accent) 15%,
+    var(--color-bg-surface)
+  );
   border-color: color-mix(in srgb, var(--btn-accent) 55%, transparent);
   box-shadow: 0 0 8px color-mix(in srgb, var(--btn-accent) 25%, transparent);
 }
@@ -3974,21 +4041,13 @@ textarea.input {
     var(--color-accent-primary) 28%,
     var(--color-bg-canvas)
   );
-  --ts-yes-text: color-mix(
-    in srgb,
-    var(--color-accent-primary) 70%,
-    #ffffff
-  );
+  --ts-yes-text: color-mix(in srgb, var(--color-accent-primary) 70%, #ffffff);
   --ts-no-bg: color-mix(
     in srgb,
     var(--color-accent-secondary) 28%,
     var(--color-bg-canvas)
   );
-  --ts-no-text: color-mix(
-    in srgb,
-    var(--color-accent-secondary) 70%,
-    #ffffff
-  );
+  --ts-no-text: color-mix(in srgb, var(--color-accent-secondary) 70%, #ffffff);
   --ts-radius: var(--border-radius-md);
   --ts-radius-sm: var(--border-radius-sm);
   color: var(--ts-text);
@@ -4193,7 +4252,9 @@ textarea.input {
   background: transparent;
   cursor: pointer;
   text-align: left;
-  transition: background 0.12s ease, color 0.12s ease;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
 }
 .ts-dropdown-item::before {
   content: "";
@@ -4227,7 +4288,9 @@ textarea.input {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.12s ease, color 0.12s ease;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease;
   margin-left: auto;
 }
 .ts-filter-icon svg {
@@ -4418,7 +4481,9 @@ textarea.input {
   border-radius: 7px;
   border: none;
   cursor: pointer;
-  transition: opacity 0.12s ease, transform 0.12s ease;
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
   font-size: var(--type-label);
   font-weight: 700;
   display: inline-flex;
@@ -4566,7 +4631,9 @@ textarea.input {
   border-radius: 999px;
   padding: 7px 22px;
   cursor: pointer;
-  transition: color 0.12s ease, border-color 0.12s ease;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
 }
 .ts-load-more:hover {
   color: var(--ts-text);
@@ -4618,7 +4685,8 @@ textarea.input {
 
 /* Live activity */
 .ks-trade-flash {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ts-green) 65%, transparent),
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--ts-green) 65%, transparent),
     0 0 12px color-mix(in srgb, var(--ts-green) 60%, transparent);
 }
 .ks-agent-badge {
@@ -4635,4 +4703,3 @@ textarea.input {
   border-radius: 999px;
   white-space: nowrap;
 }
-

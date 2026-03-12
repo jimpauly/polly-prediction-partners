@@ -677,15 +677,13 @@ const TradingStudio = (() => {
     /* Update UI elements to reflect connection status.
        When not connected, buy/sell buttons show "Connect to Trade". */
     /* Update all action buttons based on connection state */
-    document
-      .querySelectorAll(".yes-button, .no-button")
-      .forEach((btn) => {
-        if (!connected && !btn.disabled) {
-          btn.dataset.needsConnection = "true";
-        } else {
-          delete btn.dataset.needsConnection;
-        }
-      });
+    document.querySelectorAll(".yes-button, .no-button").forEach((btn) => {
+      if (!connected && !btn.disabled) {
+        btn.dataset.needsConnection = "true";
+      } else {
+        delete btn.dataset.needsConnection;
+      }
+    });
   }
 
   /* ---- Filtering ---- */
@@ -814,7 +812,9 @@ const TradingStudio = (() => {
 
     /* Frequency filter */
     if (currentFrequency && currentFrequency !== "all") {
-      filtered = filtered.filter((m) => detectFrequency(m) === currentFrequency);
+      filtered = filtered.filter(
+        (m) => detectFrequency(m) === currentFrequency,
+      );
     }
 
     /* Status filter */
@@ -1013,10 +1013,7 @@ const TradingStudio = (() => {
     const sections = new Map();
     visible.forEach((entry) => {
       let sectionLabel = KALSHI_CATEGORIES[currentCategory]?.label || "Markets";
-      if (
-        currentCategory === "all" ||
-        currentCategory === "all_markets"
-      ) {
+      if (currentCategory === "all" || currentCategory === "all_markets") {
         const catLabel = getEventCategoryLabel(
           entry.eventTicker,
           entry.eventMarkets,
@@ -1132,14 +1129,8 @@ const TradingStudio = (() => {
     });
     const rows = sortedMarkets.slice(0, 3).map((market) => {
       const isClosed = isMarketClosed(market);
-      const yesCents = getCents(
-        market.yes_ask_dollars,
-        market.yes_bid_dollars,
-      );
-      const noCents = getCents(
-        market.no_ask_dollars,
-        market.no_bid_dollars,
-      );
+      const yesCents = getCents(market.yes_ask_dollars, market.yes_bid_dollars);
+      const noCents = getCents(market.no_ask_dollars, market.no_bid_dollars);
       const pct = getMarketPercent(market);
       const yesLabel = yesCents ? `${yesCents}¢` : "Yes";
       const noLabel = noCents ? `${noCents}¢` : "No";
@@ -1674,6 +1665,3 @@ const TradingStudio = (() => {
     fetchPublicData,
   };
 })();
-
-
-

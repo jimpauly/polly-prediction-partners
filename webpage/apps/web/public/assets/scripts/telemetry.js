@@ -12,7 +12,10 @@ const Telemetry = (() => {
 
   function initialize() {
     updateDateTime();
-    setInterval(updateDateTime, 1000); /* refresh every second for minute-accurate display */
+    setInterval(
+      updateDateTime,
+      1000,
+    ); /* refresh every second for minute-accurate display */
     startPingSparkline();
     startBackendHealthCheck();
   }
@@ -129,7 +132,6 @@ const Telemetry = (() => {
     if (!statusEl) return;
 
     async function checkBackend() {
-
       try {
         const startTime = performance.now();
         /* AbortSignal.timeout is available in modern browsers and Electron 20+;
