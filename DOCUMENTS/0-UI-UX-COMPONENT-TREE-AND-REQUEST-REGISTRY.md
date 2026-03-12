@@ -303,13 +303,13 @@ COMPONENT TREE
 │       │   ├── Card header  "Agent Access"  +  A / S / ⛔ legend
 │       │   ├── Agent grid  [7 cards — one per module]
 │       │   │   │   Default card view: H1 agent emoji inline with one-word category name · indicator light · 3-position switch
-│       │   │   │   Hover window: sub-label description + win rate + PNL elements + value indicators (indicator light remains; link script removed)
+│       │   │   │   Hover window: sub-label description + win rate + PNL elements + value indicators (indicator light is built into the face of the switch-component; link script removed)
 │       │   │   ├── Agent card 1 — 🔮 Peritia
 │       │   │   │   ├── Header: emoji + name centered at top
 │       │   │   │   └── Telegraph switch component  [three vertical panels]
 │       │   │   │       ├── Panel 1: AUTO (top) with centered LED indicator
 │       │   │   │       ├── Panel 2: STANDBY (middle) with centered LED indicator
-│       │   │   │       └── Panel 3: OFF (bottom) with centered LED indicator
+│       │   │   │       ├── Panel 3: OFF (bottom) with centered LED indicator
 │       │   │   │       └── Behavior: selecting a panel lights its LED and sets agent state
 │       │   │   ├── Agent card 2 — ⚙️ Volume  [same header & telegraph structure]
 │       │   │   ├── Agent card 3 — 🚀 Crypto  [same header & telegraph structure]
@@ -446,6 +446,8 @@ COMPONENT TREE
     │   │   ├── Mirrors Kalshi's primary header links (Crypto, Sports, Finance, Politics, etc.) — Kalshi does not use the word "markets", so we avoid it here too
     │   │   ├── Each pill acts as a section selector; selecting changes the dataset shown below
     │   │   ├── Keyboard left/right to change selection; selected pill has `aria-selected="true"` and focus highlight
+    │   │   ├── Back/Forward history buttons (hidden on small screens)
+    │   │   ├── Collapse/expand toggle for secondary nav when viewport narrow
     │   │   └── Icons may accompany text for visual clarity; pills wrap/responsive on narrow viewports
     │   │
     │   ├── SECONDARY NAV / TAGS  [row beneath top‑level nav]
@@ -455,11 +457,25 @@ COMPONENT TREE
     │   │
     │   ├── FILTER CONTROLS  [row of selectors and search tools]
     │   │   ├── Volume dropdown  [Any/High→Low/Low→High]
-    │   │   ├── Frequency dropdown  [choices such as Hourly, Daily, Weekly, Monthly]
-    │   │   ├── Time‑to‑expiration slider  [range input with min/max labels; allows trimming soon‑closing items]
-    │   │   ├── Keyword search field  [placeholder "Search..." allows free‑text matching across titles]
-    │   │   ├── Sort toggle  [cycles through preset orderings; icon reflects current direction]
-    │   │   └── Advanced filter panel  [expandable/collapsible; contains additional knobs like price range, tags]
+│   │   │   └── Popup list items with checkboxes
+│   │   ├── Frequency dropdown  [choices such as Hourly, Daily, Weekly, Monthly]
+│   │   │   └── Popup list items with radio icons
+│   │   ├── Time‑to‑expiration slider  [range input with min/max labels; allows trimming soon‑closing items]
+│   │   │   ├── Range input track
+│   │   │   ├── Low handle
+│   │   │   └── High handle
+│   │   ├── Keyword search field  [placeholder "Search..." allows free‑text matching across titles]
+│   │   │   ├── input box
+│   │   │   ├── clear (x) button
+│   │   │   └── submit/search icon
+│   │   ├── Sort toggle  [cycles through preset orderings; icon reflects current direction]
+│   │   │   ├── icon button
+│   │   │   └── current mode label
+│   │   └── Advanced filter panel  [expandable/collapsible; contains additional knobs like price range, tags]
+│   │       ├── toggle chevron
+│   │       ├── price range inputs
+│   │       ├── tag multiselect
+│   │       └── apply/cancel buttons
     │   │
     │   ├── MARKET GRID  [primary content area]
     │   │   ├── Layout: responsive card columns; each market card is a semantic `<article>` with `role="region"` and `aria-labelledby` pointing to its title
@@ -474,7 +490,7 @@ COMPONENT TREE
     │   │   ├── Grid updates live via WebSocket; entire grid region marked `aria-live="polite"`
     │   │   └── Empty state  [displayed when no markets match filters; text "no markets"]
     │   │
-    │   └── FOOTER  [optional pagination or load-more button]
+    │   └── FOOTER  [load-more button]
     │
     ├── ── FLY STUDIO ──  [locked until $2k profit]
     │   ├── Lock screen  [progress bar toward $2k]
