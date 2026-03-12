@@ -200,10 +200,11 @@ _End Chapter 0._
 
 **Begin with:**
 
-- JavaScript Vanilla
-- Tailwind CSS
+- Typescript
+- CSS, No-Tailwind
 - HTML5
-- Native desktop app: **Electron** for cross-platform distribution (Windows, macOS, Linux)
+- Only one index file.
+- Native desktop and mobile apps later: **Electron** for cross-platform distribution (Windows, macOS, Linux)
 
 ### Desktop App Architecture:
 
@@ -218,18 +219,13 @@ _End Chapter 0._
   - Environment selection (Live/Demo)
   - Opt-in for anonymous telemetry
 
-#### File System & Data Storage
-
-- **App Root Directory:**
-  - **Windows:** `%APPDATA%/Paulies/` (e.g., `C:\Users\username\AppData\Roaming\Paulies\`)
-  - **macOS:** `~/Library/Application Support/Paulies/`
-  - **Linux:** `~/.config/paulies/`
-
-- **Subdirectories:**
-  - `config/` — environment variables, theme preferences, illumination state
-  - `keys/` — encrypted API keys (never stored as plain text)
+- **helpul Subdirectories:**
+  - `frontend/`
+    - `config/`
+  - `backend/`
+  - `keys/` — encrypted API keys (never stored as plain text if ever)
   - `logs/` — application logs and audit trails
-  - `data/` — local database or cache (if applicable)
+  - `data/` — local database or cache
   - `docs/` — user-facing documentation
 
 - **State Persistence:**
@@ -242,46 +238,12 @@ _End Chapter 0._
 
 #### API Key Management
 
-- **Input:** Bottom Bar text inputs appear only before successful connection
-- **After Connection:** Inputs disappear; only live/demo indicator remains visible
+- **After Connection:** Inputs disappear; card shows a `forget keys` button.
 - **Secure Handling:**
   - Keys cleared from memory on disconnect or app close
   - Page refresh clears all keys from session
   - No keys logged in console, analytics, or debug traces
   - Auto-fill from `.env` file (optional, for dev/testing only)
-
-#### Background Service
-
-- **Backend Process:**
-  - Runs continuously as a hidden background process (asyncio Python daemon)
-  - Persists even if UI window is closed (minimize/maximize button behavior only)
-  - Auto-restart if it crashes (via app supervisor or systemd)
-  - Accessible only via local IPC (127.0.0.1, no external network binding)
-
-- **UI-Backend Communication:**
-  - Local HTTP (`http://127.0.0.1:8000/api/...`) or WebSocket for real-time updates
-  - No cross-origin concerns (same machine)
-  - Full control API access: start/stop agents, switch environment, trigger reconciliation, read state
-
-#### Updates & Versioning
-
-- **Update Check:** On startup, contact `https://api.paulies.ai/release/check` (stubs if offline)
-- **Delta Updates:** Use DEB/PKG native update mechanisms or Electron's built-in auto-updater
-- **Graceful Degradation:** If update check fails, app launches normally with cached version info
-
-#### Multi-Instance Prevention
-
-- **Singleton Pattern:** Only one instance of the app may run at a time
-  - Mutex lock file created at `~/.paulies/paulies.lock` on startup
-  - If lock exists, prompt user and optionally reuse existing window
-  - Prevents duplicate agent executions or data races
-
-#### Security Considerations
-
-- **Local-Only Binding:** Backend listens only on `127.0.0.1`, never `0.0.0.0`
-- **Window Handling:** No DevTools in production build (disable with `nodeIntegration: false`)
-- **Code Signing:** Production builds signed with developer certificate
-- **Logs:** Redact all secrets from logs automatically
 
 ### WebPage:
 
@@ -309,33 +271,31 @@ _End Chapter 0._
 +-------------------------------------------------------------+
 ```
 
-- **Viewport:** `1920px` wide × `1080px` tall
-  - Full desktop window (titlebar + minimize/maximize/close buttons only; no browser bars)
-  - All measurements are device pixels, not CSS pixels
+- **Viewport:**
+  - Full desktop window
 - **Resize Behavior**
   - **Vertical resize** (viewport raised / lowered):
     - Only the **two sidebars** and the **main region** grow or shrink vertically.
     - The **Header**, **Nav Bar**, **Bottom Bar**, and **Action Bar** remain vertically static (fixed heights).
   - **Horizontal resize** (viewport wider / narrower):
     - The **Header**, **Nav Bar**, **Main Region**, and **Bottom Bar** (including **Action Bar**) stretch or shrink horizontally.
-    - The **two sidebars** remain horizontally static (fixed widths of 320 px).
+    - The **two sidebars** remain horizontally static (fixed widths).
   - **Zoom** (Ctrl +/−, pinch):
-    - Region proportions remain fixed; content within cards shrinks/expands.
-    - The grid itself does not reflow — only the rendered scale of text, icons, and card internals changes.
+    - wherever mouse is pointing is where the scaling should focus 
 - **Region Spacing**
-  - `18px` equal gap between every pair of adjacent regions
-  - `18px` padding from viewport edges to outermost regions
-  - Applies to the CSS Grid `gap` property and inner flex gap for the Bottom Bar ↔ Action Bar split
-- **Bezel Logic**
-  - Regions: `6px` inner wrapper, `12px` outer wrapper
-  - Cards or special components: `6px` inner wrapper, `6px` outer wrapper
-- **Arrangement:** Use Flexbox, Masonry, Bento, Grid, or other techniques to creatively fit content with minimal negative space
-  - Think compact Command Bridge, cockpit, trading floor dashboard suite — dense, compact, professional control interfaces
-  - Multiple tools or techniques are allowed
+  - equal gap between every pair of adjacent regions
+  - padding from viewport edges to outermost regions
+  - Applies to the gap for the Bottom Bar ↔ Action Bar split
+- **Bezel Logic** for natural padding and realistic material feel.
+  - Regions: inner padding and outer padding
+  - Cards and special components: inner padding and outer padding
+- **Arrangement:** Creatively fit content with minimal negative space
+  - Think compact-Command-Bridge, cockpit, trading-floor-dashboard-suite- — dense, compact, professional control interfaces.
+  - Multiple techniques are allowed.
   - Suggest improvements and teach us new techniques while developing
 - **Typography**
   - Larger headers/titles should look like physical etched text on an actual control panel
-  - Smaller headers/labels should look like label maker stickers
+  - Smaller headers/labels should look like label maker stickers and have sharp script borders.
   - **Font-Size Normalization:** Each theme may use a unique font, but visual text size must stay within ±1 size of the Webpage (modern default) baseline. A per-theme `--font-size-scale` CSS variable compensates for fonts that render visually larger or smaller than Inter.
 
 ### Regions & Elements:
@@ -564,9 +524,10 @@ _End Chapter 0._
 
 - Read theme name explanations carefully.
 - Develop one theme at a time, slowly.
-- Create diverse, unique spectrums with complex color palettes.
-- Light and dark modes can share many colors (borders, illumination, state colors, etc.).
-- Pause developing themes at holographic during stage 1; finish remaining themes in stage 2.
+- Use the Internet and Theme names to insipre Color Palette choices.
+- Light and dark modes can share many colors (borders, illumination, etc.).
+- Only Develop first two themes during stage 1; finish remaining themes in stage 2.
+- Try to stay accesibility industry standard.
 
 | Theme Name           | Name Explanation                                                          |
 | :------------------- | :------------------------------------------------------------------------ |
@@ -639,6 +600,7 @@ _Intentional misnaming preserved_
 
 - `modern-webpage`
 - `mosaic-1993`
+  - Pause developing themes at holographic during stage 1; finish remaining themes in stage 2.
 - `gen7-cockpit`
 - `ussr-cockpit`
 - `neonvice-1985`
@@ -647,7 +609,6 @@ _Intentional misnaming preserved_
 - `raneforest`
 - `art-deco`
 - `holographic`
-  - Pause developing themes at holographic during stage 1; finish remaining themes in stage 2.
 - `vapor`
 - `paper`
 - `ledger-1920`

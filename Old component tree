@@ -1,0 +1,203 @@
+#### Header Bar:
+
+- **`Paulie's Prediction Partners 🤖`** — Title with robot emoji after the name. No subtext. Aligned left, vertically centered.
+  - **Placeholder circle** — centered in the header bar between title and illumination panel.
+  - **Illumination Control Panel** — Right-aligned, vertically centered. Overhead control panel aesthetic.
+    - **"ILLUMINATION" sticker label** — vertical text on the left side of the panel card, reads bottom-to-top like a stickered label.
+    - **Channels & Groups:** Horizontal flip switches (up=on, down=off) and rotary dimmer dials. No on/off text labels — let users discover.
+    - **Channel labels** — positioned to the left of their channel, read vertically (bottom-to-top). Frees vertical height for detail.
+    - **DAY/NVG:** Single flip switch toggling DAY (light) / NVG (dark) mode. Same circuit as the Light/Dark sidebar toggle.
+    - **Master:** Switch OFF; dimmer at max (displayed as 10).
+    - **Text:** Primary & secondary ON; dimmer at max.
+    - **Bars:** Primary & secondary ON; dimmer at max.
+    - **Flood:** ON; dimmer at max.
+    - **Display:** ON; dimmer at max.
+    - **Dimmer display values:** 10 (max) to 2.5 (min), nearest round number. No percent sign.
+    - **Flip-switch housing height** matches dimmer dial + intensity sub-label height.
+    - **Theming:** All panel colours pull from the active theme palette via CSS custom properties — no static hex colours.
+    - Everything set to ON and MAX except Master ON/OFF.
+    - Once Master is flipped ON, full illumination effects applied.
+    - Must be accurate to real physics and electronics for illumination controls.
+
+#### Nav Bar:
+
+- **No header** in nav bar
+  - **`HUD`** text label — Aligned left, vertically centered
+  - **Telemetry** card — Aligned right, vertically centered
+    - **PING:** Live `<canvas>` tiny sparkline using `navigator.connection.rtt`
+      - Smooth bezier curves (curvy up-and-down motion, not jagged lines)
+      - Static Y axis from 0ms (top) to 300ms (bottom) — values are inverted/flipped
+      - X axis shows ~30 seconds of history (1-second sample intervals)
+      - No axis labels, no axis lines — keep the sparkline minimal and cute
+      - Shorter width canvas; only "PING" as a text label beside it
+    - **SVC:** Backend health indicator dot
+    - **DATE/TIME:** Real-time clock — Format `M/D` and 24-hour `HH:MM:SS`
+
+#### Left Sidebar:
+
+- **`System Design`** header — Aligned top, centered
+  - **`Modes`:** Single card containing Light/Dark toggle and 3D/2D toggle side-by-side in one row.
+  - **`System Theme`:** Buttons to select system design theme
+- **Modes Card**
+  - **Light/Dark Toggle:** Single button that toggles between modes. In light mode it displays "🌙 Dark" (invitation to switch); in dark mode it displays "☀️ Light".
+  - **3D/2D Toggle:** Single button next to the Light/Dark toggle. Alters architectural elevation effects. Bezels automatically enhance appearance.
+- **24-Theme Selector Button Card**
+  - 24 theme buttons representing 48 total palettes (24 themes × light/dark modes).
+  - The Light/Dark mode toggle controls which variant displays.
+  - Styled to represent each respective theme.
+  - Affected by light and dark mode.
+  - Button selectors accurately pull from and represent their theme regardless of current selection.
+  - **When in light or day mode:** all theme buttons display in light mode.
+  - **When in dark or night mode:** all theme buttons display in dark mode.
+  - **Button structure:** Each button has a right-angle outer border (border-radius: 0) colored with the theme's accent color, with the button background showing the theme's background color. Inside each button is a shrinkwrapped text `<span>` label with a slightly rounded border (3px radius) showing the theme's surface/body color as background, the theme's foreground as text color, and the theme's border-default as the label border color. This displays 4 theme colors per button: bg, surface, accent border, and border-default.
+  - **Layout:** Single column, equal widths, buttons almost touching (1px gap). Widths reactive to widest text label. The grid, card, and sidebar shrinkwrap reactively.
+  - **Button styling:** `font-size: 12px`, padding `4px`, `font-weight: 700`, centered.
+- **Simple Visibility Toggles** for tools while developing
+  - **Rulers:** X-axis and Y-axis precision rulers. Hidden by default; toggle to show/hide for alignment assistance during development.
+  - **Grid:** Toggleable `60×60px` overlay for layout assistance during development.
+
+#### Right Sidebar:
+
+- **`Inspector Panel`** header — Aligned top, centered
+  - **`To-Do List` App** (card, `width: 100%`)
+    - **Spiral Notebook** — Spiral ring binding strip along top edge.
+    - **File Dropdown Menu** — Top-left of notepad, above the editor.
+      - **New Page** — Creates a new blank notebook page.
+      - **Save as .txt** — Downloads all pages as plain text.
+    - **Notebook Paper** — College-ruled lines; fills vertical space dynamically with inspector panel height. Line width stays constant (does not stretch horizontally).
+    - **Text Toggle Toolbar** — Positioned underneath the notepad editor area.
+      - **Bold Text Toggle:** Small square button. Can bold H1 and Aa sizes.
+      - **H1 / Aa Toggle:** H1 size default; auto-switch to regular Aa style after first paragraph.
+      - **Bullet List Toggler** (icon button) — Toggling preserves other paragraph lines.
+      - **Task Checkbox** — Inserts a checkbox task line.
+    - **Cannot load files**.
+  - **Suggestion Box Card** — Pinned to bottom of inspector panel (visible across all tabs).
+    - **Complaint Textarea** — Placeholder text: "type complaints here". Cynical tone, not hostile.
+    - **Submit Grievance Button** — Exports textarea content via mailto to `chickensaurusrex@outlook.com`.
+    - Display only the button and textarea (do not display email address).
+
+#### Bottom Bar:
+
+- **`Hangar Bay`** header — Aligned left, vertically centered
+  - **Layout:** Agent Access Card (~50% width) + P/L Multi-Function Display (~50% width) side-by-side. Remaining cards (API Keys, Account, MODE) visible via horizontal scroll.
+  - **`Agent Access`** card — For elements to control trading agents and their algorithms
+    - **7 agents total.** 3 agents active on first build. Agents 4, 5, 7 under construction. Agent 6 is user-configurable.
+      - 1. **`PERITIA`** — 🎯 BTC 15-min Candlestick. Active.
+      - 2. **`PRIME`** — 📊 Majority Signal. Active.
+      - 3. **`PRAXIS`** — 🧠 Sports Markets. Active.
+      - 4. **`PATIENS`** — 🕰️ Long-term Holds. Under construction (🚧🏗️ cute display).
+      - 5. **`PAVIS`** — 🛡️ Defensive Strategy. Under construction (🚧🏗️ cute display).
+      - 6. **`BRING-YOUR-OWN-BOT`** — 🤖 Custom LLM Agent. Configurable via menu.
+        - **⚙️ Configure button** opens overlay panel (does not change agent card size; all agent cards are equal size).
+          - **Code editor** — Numbered lines, basic vim-like text area. No fancy features, just clean and pretty.
+          - **`🔌 Plug in Algorithm` button** — Grayed out / disabled. Placeholder for future functionality.
+          - **LLM API Keys selector** — Radio buttons for the 7 top-performing LLM models (Feb 2026):
+            - GPT (OpenAI), Claude (Anthropic — all Claude models under one button), Gemini (Google), Grok (xAI), DeepSeek, Qwen (Alibaba), Llama (Meta).
+          - **API key text input** — Disabled until a model is selected. Placeholder updates per model.
+          - Once a valid LLM API key is entered, Agent 6 is fully hooked up and functional through the user's personal LLM API keys.
+      - 7. **`AGNT007`** — 🕵️ Stealth Operations. Under construction (🚧🏗️ cute display).
+    - **Individual Agent Control Dials:** `Auto`, `Semi-Auto`, `Safe`.
+    - **Agent Status Display** — Shows agent status in multiple ways.
+  - **`P/L Multi-Function Display`** card — Moved from Action Bar into Bottom Bar, directly after Agent Access card.
+    - Equal height with all bottom bar cards. Styled like a real cockpit MFD.
+    - **Throttle Control** — Oceanliner/Submarine throttle design: `Full-Auto`, `Semi-Auto`, `Full-Stop` (default).
+    - **Profit/Loss Line Graph** — Display `No data` if no data available.
+      - **`+/- $`** professionally labeled.
+      - Each agent gets their own colored line.
+      - Five small buttons for X-axis views: `24h`, `1w`, `1m`, `1y`, `all`.
+      - Five small buttons for Y-axis views: `$10`, `$100`, `$1k`, `$10k`, `all`.
+    - **Agent Heatmap** — 7 heat bars (one per agent), color-coded by mode.
+    - **Win Rate Gauge** — Aggregated win % across all agents.
+- **Connect API Keys**
+  - After successful key login, all trading cards and components appear in bottom bar and main region.
+  - Card with text inputs for user API keys
+    - **Live/Demo mode selection:** After selection, text boxes ungray and can receive input.
+    - **Single-line text box** for API key.
+    - **Multi-line text box** for larger RSA key.
+    - **`Connect Kalshi Stream` button** ungrays once correctly-formatted keys are entered.
+- **Live/Demo Trading Mode Indicator Lights** — Pulsing, glowing indicator.
+
+#### Action Bar:
+
+- **`Ignition`** header — Aligned top, centered
+  - **Do not align gutter lines** between main region/sidebar with gutter lines between bottom bars.
+  - P/L MFD content moved to Hangar Bay bottom bar. Ignition bar now serves as a lightweight status/reference panel.
+
+#### Main Region:
+
+- **Studio Tabs** header — Row of tab buttons at top of main region, horizontally aligned
+  - **`Design`**, **`Trade`**, **`Fly`**, **`Convert`** — Switching tabs changes only the main region content (no page reload)
+    - **Design:** Default studio. Creative modern webpage.
+    - **Trading:** Trading active; main region switches to markets or series cards.
+    - **Flight SIM:** Dashboard morphs into a cockpit (Agents must earn $2k profit to unlock).
+      - **ISS live video feeds**
+    - **Converter:** File converters, image converters, PDF filler, URL to MP3/MP4 converter.
+- **`Viewing Port`** header — Aligned top, centered (within Design Studio)
+
+##### Design Studio
+
+- Creative cards and content showcasing UI/UX design.
+- Keep main stage content centered horizontally and vertically.
+- Prevent overflow and excessive scrolling; arrange content creatively.
+- Keep main stage stocked with diverse elements, cards, and displays for visual testing.
+- Prevent cards from overflowing region bounds; be creative with design.
+- Fill full width and height; center both horizontally and vertically.
+- **Layout — Top Bento Grid (2 columns):**
+  - **Left column — Active Palette card (first card):**
+    - Renamed from "Theme Palette Viewer" to "Active Palette."
+    - Accurate with each theme selection and light/dark mode.
+    - Friendly swatch labels (e.g., "Page Background", "Text", "Main Color") — no code-speak.
+    - No hex codes displayed; clicking a swatch silently copies its hex value to clipboard.
+      - Brief "color copied to clipboard" toast on click — no upfront explanation, let users discover it.
+  - **Right column — stacked vertically:**
+    - **Man-o-meters** (renamed from "System Gauges"): Battery, Network, Memory, CPU.
+      - Diverse mechanical manometers and plumbing.
+      - Immediately redraws on theme/mode change (no lag).
+    - **Live Logs** (below Man-o-meters): Terminal printing 7 events at a time (click, resize, focus). Keep compact; include errors/warnings.
+- **Below top grid — full width:**
+  - **MS Paint 1998 Clone:** Fully functional with tools (New, Open, Save, Save As, etc.). Should look exactly like Microsoft Paint 1998.
+    - should have the maximize toggle in the top right that makes it fill to take up the entire main region. All other components leave the main region until the maximized is retoggled.
+  - **Web Elements Showcase:** Assorted, non-functional elements for visual testing.
+  - What else should we have in the design studio?
+
+##### Trading Studio
+
+- **Display:** `No data` until after successful API key connection, then auto-navigate to trading studio state.
+- **No mock data ever.** Empty cards with full formatting, `No data` placeholder until API keys connect.
+- **Sleek initialization animations** and glowing effects with brief glow intensity spikes.
+- **Live vs Demo mode indicator and light:** Completely different data sets based on mode.
+- **Category Nav Menu:** Horizontal scrolling
+  - **Sub-Category Nav Menu:** Horizontal scrolling.
+  - **Filter Options:** Volume, frequency, time-to-close.
+- **Account Summary Bar:** Compact top strip showing live BALANCE, PORTFOLIO value, DAILY P/L. Updates on data refresh.
+  - **Market Refresh Button** — manual refresh trigger in the summary bar; re-fetches series and resets greyed-out expired cards.
+- **Series Cards:** 3 columns, full width of main region. Scroll down allowed.
+  - Cards show information similar to Kalshi cards (see photos folder).
+  - Tiny expand button in bottom right to expand card to fill main region.
+  - After successful API key connection: collect as much data as allowed, as frequently as allowed.
+  - Render only first 18 series cards to keep UI fast.
+  - `Show More Markets` button at bottom loads additional 18 series cards.
+  - **Markets that close mid-session grey out** in place; do not disappear. Clear on next refresh.
+
+##### Fly Studio
+
+- **Display:** `No data` until after successful API key connection.
+- **ISS live feed** displayed (once API keys connected; Agents must earn $2k profit to unlock).
+
+##### Converter Studio
+
+- jpg to png converter. plus other common file converts.
+- pdf filler
+- url to mp3/mp4 converter
+
+#### Precision Tools:
+
+- **Rulers:** X-axis (top) and Y-axis (left); 18px wide
+  - **Tick heights:** `6px` / `8px` / `12px` at every 10px.
+  - **Shared Zero-square.**
+  - **Accurate to device pixels.**
+- **X-Axis End px Label:** Located in ruler at end of X-axis.
+- **Y-Axis End px Label:** Located in ruler at end of Y-axis.
+- **Grid:** Toggleable `60×60px` overlay aligned with rulers.
+- **Dynamic Tracking:** Recalculate on `resize` and `visualViewport` change events.
+- **Device-Pixel Assignment:** Align measurements to actual device pixels.
