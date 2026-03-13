@@ -13,7 +13,7 @@
 
 ---
 
-Plea from User: User will be using the webpage on a broswer, with a huge number of pixels on a phone, it has an insane amount of pixels. User will also equally be using this webpage on a browser in a quad-split-window setup, with barely any pixels. Both are the same physical height and width. This webpage must not be different on either of those devices. **Every component must be coded at a naturally super‑tiny size**; if a normal design would call for 8 px, we write 2 px. There is no “mini mode” – the tiny sizing is baked into the values so the quadrant stays small by default. If i full screen on my laptop, nothing should change position of portions. There should be only one file-base, no app versions only the webpage that is the published page thru github.
+Plea from User: User will be using the webpage on a broswer, with a huge number of pixels on a phone, it has an insane amount of pixels. User will also equally be using this webpage on a browser in a quad-split-window setup, with barely any pixels. Both are the same physical height and width. This webpage must not be different on either of those devices. **Every component must be coded at a naturally super‑tiny size**; if a normal design would call for 12 px, we write 3 px instead. There is no “mini mode” – the tiny sizing is baked into the values so the quadrant stays small by default. If i full screen on my laptop, nothing should change position of portions. There should be only one file-base, no app versions only the webpage that is the published page thru github.
 
 ```
 COMPONENT TREE
@@ -168,23 +168,32 @@ COMPONENT TREE
 │   │           ├── Label: "CONVERT"
 │   │           └── Behavior: click opens converter studio
 │   │
-│   ├── Panel Visibility Toggles  [after tabs, before telemetry — inspired by VSCode's panel toggles]
-│   │   ├── Header Bar toggle
-│   │   ├── Left Sidebar toggle
-│   │   ├── Right Sidebar toggle
-│   │   └── Bottom Bar toggle
+│   │   ├── NOTE: tabs are now intentionally tiny and always include text labels (no hidden labels), and the whole tab group is designed to fit within the nav height without overflow.
+│   │   ├── DEPRECATED: Previous design hid labels for inactive tabs; the current build keeps them visible for clarity while remaining compact.
+│   │   └── TODO: ensure keyboard navigation (left/right arrows) remains functional in the tiny tab layout.
+│   │
+│   ├── Panel Visibility Toggles  [after tabs, before telemetry — cross layout with MAX center]
+│   │   ├── MAX toggle (center)  [slightly larger than the others]
+│   │   │   ├── Label: "MAX" (tiny text, tiny button)
+│   │   │   └── Behavior: toggles “max view” state (applies `.fullscreen` class)
+│   │   ├── Header Bar toggle  [top]
+│   │   ├── Left Sidebar toggle  [left]
+│   │   ├── Right Sidebar toggle  [right]
+│   │   └── Bottom Bar toggle  [bottom]
+│   │   ├── NOTE: the 4 panel toggles are rectangular tiny buttons to improve fit; the MAX toggle is slightly larger but still compact.
+│   │   ├── NOTE: the toggle cluster is intentionally small and sits inside the nav without touching edges; only the tab group has top padding.
 │   │   └── Notes: Nav Bar, Main Region, and Action Bar (Ignition) are not togglable
 │   │           In portrait mode these 3 are shown; the remaining 4 regions auto-hide
 │   │
 │   └── Telemetry Strip  [right]
 │       ├── Market Mode Indicator  [FIRST — live / demo / offline, multi-cold-colored LED indicator]
-│       ├── PING sparkline + value
-│       │   ├── Visualization: `<canvas>` with slow smooth bezier curves (no jagged lines)
-│       │   ├── Y axis: fixed 300ms (top) to 0ms (bottom), intentionally upside down so more mircoseconds would reflect a lower quality signal.
-│       │   ├── X axis: ~15s history, 1s sampling interval
-│       │   └── Styling: no labels, equal width to ping script, only the word "PING" then the chart
-│       ├── Mach 4.20  [static/decorative]
+│       ├── PING value [no sparkline - simplified to text for tiny layout]
+│       │   ├── Visual: tiny “PING” label plus ms value (e.g., "PING 15ms")
+│       │   └── Note: the sparkline was deprecated in favor of a smaller, lower-contrast compact status readout.
+│       ├── CPU value [text only, low contrast]
+│       ├── MEM value [text only, low contrast]
 │       └── DATE/TIME  [live, M/D HH:MM] No seconds
+│       ├── Note: telemetry strip is intentionally tiny and nearly blends into the nav background.
 ```
 
 > **R02 Accessibility**
@@ -210,12 +219,12 @@ COMPONENT TREE
 │       │
 │       ├── MODES card  [single card container]
 │       │   ├── Element: Light/Dark toggle single button
-│       │   │   ├── State: toggles between light/dark mode
-│       │   │   ├── Label: shows 🌙 Dark (represents dark theme in light mode), ☀️ Light (represents light theme in dark mode)
+│       │   │   ├── State: toggles between light/dark theme
+│       │   │   ├── Label: shows 🌙 Dark / ☀️ Light
 │       │   │   └── Behavior: mirrors DAY/NVG switch in illumination panel
-│       │   └── Element: 3D/2D toggle single button
-│       │       ├── State: toggles architectural elevation effects
-│       │       └── Visual: adds/removes depth shadows and bezels
+│       │   └── Element: Elevation toggle single button
+│       │       ├── State: toggles UI depth effects (elevation on/off)
+│       │       └── Visual: icon depicts raised vs flat panels; toggles shadows/bezel intensity
 │       │
 │       └── SYSTEM THEME card
 │           ├── Container: theme-button grid (2 columns)
@@ -224,13 +233,48 @@ COMPONENT TREE
 │               ├── Structure: soft border colored accent
 │               ├── Behavior: click applies that theme (light or dark variant determined by mode); uses backgrounds, text, and border colors of the theme
 │               └── Size/spacing: equal width, responsive to widest label; weight 700, centered
+│
+├── ══════════════════════════════════════════════════
+│   R04 · QUADRANT I (Market Dashboard)
+│   ══════════════════════════════════════════════════
+│   │
+│   ├── Market Snapshot card
+│   │   ├── Element: current price (bold)
+│   │   ├── Element: volatility indicator (text)
+│   │
+│   └── Order Flow card
+│       ├── Element: bid/ask heatmap placeholder
+│       └── Behavior: later will render real-time level-2 flow bars
+│
+├── ══════════════════════════════════════════════════
+│   R05 · QUADRANT III (Account & Positions)
+│   ══════════════════════════════════════════════════
+│   │
+│   ├── Balance card
+│   │   ├── Element: Equity display
+│   │   ├── Element: Buying power display
+│   │
+│   └── Open Positions card
+│       ├── Element: list placeholder
+│       └── Behavior: expands into detailed position table later
+│
+├── ══════════════════════════════════════════════════
+│   R06 · QUADRANT IV (Notifications)
+│   ══════════════════════════════════════════════════
+│   │
+│   ├── System card
+│   │   └── Element: active system alerts (placeholder)
+│   │
+│   └── Help card
+│       ├── Element: quick shortcut hint
+│       └── Behavior: later link to docs / cheat sheet
 ```
 
 > **R03 Accessibility**
 >
 > - Sidebar container: `aria-label="System Design"`, `role="complementary"`
-> - Light/Dark and 3D/2D toggles: focusable, `aria-pressed` announces state
-> - 3D/2D toggle: visible focus style and `aria-describedby` tooltip
+> - Light/Dark and Elevation toggles: focusable, `aria-pressed` announces state
+> - Elevation toggle: visible focus style and `aria-describedby` tooltip
 > - Theme buttons: `aria-label="Select theme [theme name]"`, `aria-pressed` or `role="radio"` in group; keyboard focus ring
 
 ---

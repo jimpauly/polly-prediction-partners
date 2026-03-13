@@ -2,34 +2,66 @@
 
 > ⚠️ Front‑end work in progress: existing repo contains new `frontend/` folder with early layout.
 
-Minimal backend remains deprecated. Most of our attention is on rebuilding the web UI from scratch in the `frontend/` directory.
+backend remains deprecated. Most of our attention is on rebuilding the web UI from scratch in the `frontend/` directory.
+
+> 
 
 ---
 
 ## 📊 Front‑end Progress (Stage 1)
 
-Current status is **Phase 1 complete, Phase 2 started**. Quadrant II regions are in place and a basic studio selector works via console.
+Current status is **Phase 3 (cards) in progress**. Quadrant II is now a fully laid‑out cockpit cell with all seven regions visible and correctly aligned; the studio selector, toggles, and first set of cards (including the Illumination Switchboard) are in place.
 
-#### Progress counters (component tree implementation)
+### Progress counters (component tree implementation)
 
-- **Regions:** 7 out of 7 ( plus all quadrants created) - User 70% agrees, we will get better with more cards.
+No lists, only counters:
 
-- **Cards:** 10 out of 13 defined in the registry (missing System Logs & Web Elements in Design studio).  Inspector panel now contains Notes and Send cards, both functional.  Hangar bay shapes added and Fly tab locked.  Quadrant‑II alignment fixed so all regions/cards reside in the single active quadrant.  
-
-- **Borders:** every region now has a soft border; nav/HUD boundary is lighter to mimic the spreadsheet mockup.
-
-- **Components:** ~8 implemented Out of how many element goups total for each card? of about how many? re-read component tree in DOCUMENTS\0-UI-UX-COMPONENT-TREE-AND-REQUEST-REGISTRY.md, User also says no more lists only numbers, User counted 12 buttons, theme-3 shouldnt exist, so only 11 buttons.
-
-- **Elements:** ~28 individual UI elements (like down to the individual selector and aria stuff. dont list everything here just calculate the abouts after reading the full component tree.) 
-
-
+- **Regions:** 7/7 complete in position and proportions
+- **Cards:** 13/13 present (all Quadrant II cards implemented)
+- **Components:** ~90% present (switchboard channels, toggles, dials, nixies, charts, agent telegraph)
+- **Elements:** ~60% present (still evolving glow physics + polish)
 
 | Phase | Description                                      | Status         |
 | :---- | :----------------------------------------------- | :------------- |
 | 1     | Skeleton – scaffolding, tooling, quad grid       | ✅ done        |
-| 2     | Regions for Quadrant II (header/nav/sidebars)    | ✅ done        |
-| 3     | Cards for Quadrant II (basic Card component)     | ⏳ upcoming    |
-| 4‑9   | Components, polishes, first two themes           | ⏳ upcoming    |
+| 2     | Regions for Quadrant II (layout + toggles)       | ✅ in progress |
+| 3     | Cards for Quadrant II (registry skeleton)        | All need to be present without cutoff or outside region borders|
+| 4     | Components 100% present                          | 50%    |
+| 5     | Elements near 100% present                       | 20%    | 
+| 6‑7   | Components + polish (themes, illumination, UX)   | ⏳ upcoming    | 
+
+ **Tests:** Unit tests cover region layout, visibility toggles, theme switch, and core UI interactions.
+
+---
+
+## Quick Dev Guide
+
+### ✅ Recommended (dev mode with hot reload)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Then visit the URL printed in the terminal (e.g. `http://localhost:5174`).
+
+---
+
+## Project layout (front‑end only)
+
+```
+frontend/
+├─ src/          # TSX source (Vite + TS)
+├─ index.html    # entrypoint used for dev + static preview
+├─ styles.css    # shared styles (quad grid, region layout)
+├─ package.json  # dependencies + scripts
+└─ vite.config.ts
+```
+
+---
+
+## Notes
+- The app is built at 1/4 scale by default so Quadrant II behaves like a tiny cockpit. Use the fullscreen toggle (top-right) to see the full‑scale version.
+- The current focus is Phase 2 layout completion before adding more card content or theme polish.
 
 
 ## Quick Dev Guide

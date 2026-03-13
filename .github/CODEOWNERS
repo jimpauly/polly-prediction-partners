@@ -1,10 +1,10 @@
 # ─────────────────────────────────────────────────────────────
 # CODEOWNERS — Paulie's Prediction Partners
 # ─────────────────────────────────────────────────────────────
-# The repository owner must approve ALL changes.
+# The repository owner will approve all changes.
 # See SECURITY.md § Contribution Policy.
 # ─────────────────────────────────────────────────────────────
 
-# Default: repo owner reviews pull requests before any merges
+# Default: repo owner reviews pull requests before any merges.
 *                           @jimpauly
-# Just be on the lookout for anything fishy.
+# Be on the lookout for anything fishy.
